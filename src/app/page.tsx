@@ -1,26 +1,59 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import Footer from '@/components/footer';
-import { Banknote } from 'lucide-react';
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      setTime(format(now, "h:mm a"));
+      setDate(format(now, "EEEE, MMMM d"));
+    }, 1000);
+
+    // Set initial time and date to avoid flash of empty content
+    const now = new Date();
+    setTime(format(now, "h:mm a"));
+    setDate(format(now, "EEEE, MMMM d"));
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <main className="flex-grow flex items-center justify-center">
-        <div className="text-center space-y-6 px-4">
-           <Banknote className="inline-block h-16 w-16 text-primary" />
-          <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
-            Welcome to Stride
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+      <Image
+        src="https://picsum.photos/seed/stride-bg/1920/1080"
+        alt="Abstract background"
+        fill
+        className="object-cover blur-sm scale-105"
+        data-ai-hint="abstract background"
+      />
+      <div className="absolute inset-0 bg-black/30" />
+
+      <div className="relative z-10 flex h-full flex-col items-center text-white">
+        <div className="flex-grow flex flex-col items-center justify-center text-center -mt-20">
+          <h1 className="text-8xl md:text-9xl font-bold tracking-tighter">
+            {time}
           </h1>
-          <p className="max-w-xl mx-auto text-lg text-muted-foreground">
-            Seamlessly connecting customers and banks with trust and reliability at the core.
-          </p>
-          <Button asChild size="lg">
-            <Link href="/login">Get Started</Link>
+          <p className="text-2xl md:text-3xl font-medium">{date}</p>
+        </div>
+
+        <div className="w-full px-4 pb-20 md:pb-24">
+           <Button
+            asChild
+            size="lg"
+            className="w-full max-w-sm mx-auto h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-100"
+          >
+            <Link href="/login">Login</Link>
           </Button>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }
