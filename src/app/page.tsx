@@ -19,13 +19,13 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1">
-        <section className="container grid items-center gap-8 px-4 py-12 md:grid-cols-2 md:py-24 lg:gap-12">
+      <main className="flex flex-1 items-center">
+        <section className="container grid w-full items-center gap-6 px-4 py-12 md:grid-cols-2 md:gap-10 md:py-24 lg:gap-16">
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="text-balance text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               Stride — Seamless Bank Appointments
             </h1>
-            <p className="mt-4 max-w-[700px] text-lg text-muted-foreground md:text-xl">
+            <p className="mt-4 max-w-[600px] text-balance text-muted-foreground md:text-xl">
               Manage your appointments with ease. Book, reschedule, and get reminders all in one place.
             </p>
             <Button asChild size="lg" className="mt-6">
@@ -39,7 +39,7 @@ export default function Home() {
                 alt={heroImage.description}
                 width={500}
                 height={500}
-                className="rounded-lg object-cover shadow-lg"
+                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover object-center shadow-lg sm:w-full"
                 data-ai-hint={heroImage.imageHint}
                 priority
               />
