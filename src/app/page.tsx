@@ -4,7 +4,6 @@ import { Banknote } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { ScrollAwareFooter } from "@/components/scroll-aware-footer";
 
 export default function Home() {
   const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
@@ -44,7 +43,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-      <ScrollAwareFooter />
     </div>
   );
 }

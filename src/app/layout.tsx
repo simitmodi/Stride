@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
+import { ScrollAwareFooter } from '@/components/scroll-aware-footer';
 
 export const metadata: Metadata = {
   title: 'Stride',
@@ -19,8 +20,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased h-full">
-        {children}
+      <body className="font-body antialiased h-full flex flex-col">
+        <div className="flex-grow">
+          {children}
+        </div>
+        <ScrollAwareFooter />
         <Toaster />
       </body>
     </html>
