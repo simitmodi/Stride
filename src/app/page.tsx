@@ -19,16 +19,16 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col justify-center">
-        <section className="container grid items-center gap-6 lg:grid-cols-2">
-          <div className="flex flex-col items-start gap-4">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
+      <main className="flex-1">
+        <section className="container grid items-center gap-8 px-4 py-12 md:grid-cols-2 md:py-24 lg:gap-12">
+          <div className="flex flex-col items-center text-center md:items-start md:text-left">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
               Stride — Seamless Bank Appointments
             </h1>
-            <p className="max-w-[700px] text-lg text-muted-foreground">
+            <p className="mt-4 max-w-[700px] text-lg text-muted-foreground md:text-xl">
               Manage your appointments with ease. Book, reschedule, and get reminders all in one place.
             </p>
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="mt-6">
               <Link href="/login">Login / Get Started</Link>
             </Button>
           </div>
