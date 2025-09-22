@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Banknote } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import Footer from "@/components/footer";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function Home() {
@@ -44,8 +43,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
