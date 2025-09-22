@@ -18,29 +18,29 @@ export default function Footer({ className }: { className?: string }) {
             Stride
           </span>
         </div>
-        <ul className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-foreground sm:gap-6">
+        <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-foreground sm:gap-4">
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
               About
             </Link>
           </li>
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
               Features
             </Link>
           </li>
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
               Privacy Policy
             </Link>
           </li>
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
               Contact
             </Link>
           </li>
           <li>
-            <Link href="#" className="hover:underline">
+            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
               Meet the Team
             </Link>
           </li>
