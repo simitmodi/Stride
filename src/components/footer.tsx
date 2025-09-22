@@ -6,7 +6,7 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "z-20 w-full border-t border-border/50 bg-card/80 p-4 shadow md:flex md:items-center md:justify-between md:p-6",
+        "z-20 w-full border-t border-border/50 bg-card/5 p-4 shadow md:flex md:items-center md:justify-between md:p-6",
         className
       )}
       style={{ backdropFilter: 'blur(12px)' }}
