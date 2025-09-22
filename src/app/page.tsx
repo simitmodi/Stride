@@ -37,11 +37,11 @@ export default function Home() {
       <div className="absolute inset-0 bg-black/30" />
 
       <div className="relative z-10 flex h-full w-full flex-col items-center text-white">
-        <div className="flex-grow flex flex-col items-center justify-center text-center -mt-20">
-          <h1 className="text-7xl md:text-8xl font-bold tracking-tighter">
+        <div className="flex-grow flex flex-col items-center justify-center text-center">
+          <h1 className="text-6xl md:text-7xl font-bold tracking-tighter">
             {time}
           </h1>
-          <p className="text-xl md:text-2xl font-medium">{date}</p>
+          <p className="text-lg md:text-xl font-medium">{date}</p>
         </div>
 
         <div className="w-full flex justify-center px-4 pb-20 md:pb-24">
