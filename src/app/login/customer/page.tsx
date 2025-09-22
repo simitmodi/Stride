@@ -35,7 +35,7 @@ export default function CustomerLoginPage() {
           >
             <CardHeader className="text-center">
               <CardTitle className="text-2xl text-foreground">Customer Login</CardTitle>
-              <CardDescription className="text-muted-foreground">
+              <CardDescription className="text-foreground/80">
                 Welcome back! Please enter your details.
               </CardDescription>
             </CardHeader>

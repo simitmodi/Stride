@@ -35,7 +35,7 @@ export default function BankLoginPage() {
           >
             <CardHeader className="text-center">
               <CardTitle className="text-2xl text-foreground">Bank Portal Login</CardTitle>
-              <CardDescription className="text-muted-foreground">
+              <CardDescription className="text-foreground/80">
                 For authorized personnel only.
               </CardDescription>
             </CardHeader>

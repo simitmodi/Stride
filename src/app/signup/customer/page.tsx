@@ -35,7 +35,7 @@ export default function CustomerSignUpPage() {
           >
             <CardHeader className="text-center">
               <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
-              <CardDescription className="text-muted-foreground">
+              <CardDescription className="text-foreground/80">
                 Enter your details below to get started.
               </CardDescription>
             </CardHeader>
