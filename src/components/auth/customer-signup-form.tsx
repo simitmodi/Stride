@@ -228,7 +228,7 @@ export function CustomerSignUpForm() {
           />
           <Button 
             type="submit" 
-            className="w-full h-11"
+            className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
             disabled={isLoading || isGoogleLoading}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
