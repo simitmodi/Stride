@@ -35,7 +35,7 @@ export default function LoginOptionsPage() {
             <div className="text-center text-foreground">
               <Banknote className="mb-4 inline-block h-12 w-12 text-primary" />
               <h1 className="text-3xl font-bold">Select your login type</h1>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-2 text-foreground">
                 Choose your role to continue.
               </p>
             </div>
