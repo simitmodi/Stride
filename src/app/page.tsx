@@ -4,6 +4,7 @@ import { Banknote } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import Footer from "@/components/footer";
 
 export default function Home() {
   const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
@@ -21,7 +22,7 @@ export default function Home() {
       />}
       <div className="absolute inset-0 bg-background/60" />
 
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4">
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4 pb-24">
         <div 
           className="w-full max-w-2xl rounded-xl border border-border bg-card/80 p-8 text-center shadow-lg md:p-12"
           style={{ backdropFilter: 'blur(12px)' }}
@@ -43,6 +44,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
