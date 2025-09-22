@@ -27,7 +27,7 @@ export default function LoginOptionsPage() {
 
       <main className="relative z-10 flex w-full max-w-lg flex-col items-center">
         <div
-          className="w-full rounded-xl border border-border bg-card/80 p-8 shadow-lg"
+          className="w-full rounded-xl border border-border bg-card/15 p-8 shadow-lg"
           style={{ backdropFilter: 'blur(12px)' }}
         >
           <div className="text-center text-foreground">

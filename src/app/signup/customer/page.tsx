@@ -28,7 +28,7 @@ export default function CustomerSignUpPage() {
 
       <main className="relative z-10 flex w-full max-w-md flex-col items-center">
         <Card
-          className="w-full transform-gpu border-border bg-card/80 shadow-lg"
+          className="w-full transform-gpu border-border bg-card/15 shadow-lg"
           style={{ backdropFilter: 'blur(12px)' }}
         >
           <CardHeader className="text-center">

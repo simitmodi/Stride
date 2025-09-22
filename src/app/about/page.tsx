@@ -26,7 +26,7 @@ export default function AboutPage() {
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div
-          className="w-full rounded-xl border border-border bg-card/80 p-8 shadow-lg md:p-12"
+          className="w-full rounded-xl border border-border bg-card/15 p-8 shadow-lg md:p-12"
           style={{ backdropFilter: 'blur(12px)' }}
         >
           <div className="flex flex-col gap-6 text-foreground">
