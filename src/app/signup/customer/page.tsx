@@ -41,7 +41,7 @@ export default function CustomerSignUpPage() {
             </CardHeader>
             <CardContent>
               <CustomerSignUpForm />
-              <p className="mt-6 text-center text-sm text-muted-foreground">
+              <p className="mt-6 text-center text-sm text-foreground/80">
                 Already have an account?{" "}
                 <Link href="/login/customer" className="font-medium text-primary underline-offset-4 hover:underline">
                   Log in

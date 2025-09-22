@@ -41,7 +41,7 @@ export default function BankLoginPage() {
             </CardHeader>
             <CardContent>
               <BankLoginForm />
-              <p className="mt-6 text-center text-sm text-muted-foreground">
+              <p className="mt-6 text-center text-sm text-foreground/80">
                 <Link href="/login" className="font-medium text-primary hover:underline">
                   Not a bank employee?
                 </Link>
