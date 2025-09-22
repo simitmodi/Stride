@@ -20,7 +20,9 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  fullName: z.string().min(1, { message: "Full name is required." }),
+  firstName: z.string().min(1, { message: "First name is required." }),
+  lastName: z.string().min(1, { message: "Last name is required." }),
+  username: z.string().min(3, { message: "Username must be at least 3 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
 });
@@ -33,7 +35,9 @@ export function CustomerSignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      firstName: "",
+      lastName: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -42,7 +46,7 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await signUpWithEmail(values.email, values.password, values.fullName);
+      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username);
       if (user) {
         toast({
           title: "Success!",
@@ -63,16 +67,52 @@ export function CustomerSignUpForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white/90">First Name</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="John" 
+                      {...field} 
+                      className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white/90">Last Name</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="Doe" 
+                      {...field} 
+                      className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+        </div>
         <FormField
           control={form.control}
-          name="fullName"
+          name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white/90">Full Name</FormLabel>
+              <FormLabel className="text-white/90">Username</FormLabel>
               <FormControl>
                 <Input 
-                  placeholder="John Doe" 
+                  placeholder="johndoe" 
                   {...field} 
                   className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
                 />

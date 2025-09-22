@@ -12,16 +12,26 @@ import {
 import { auth, db } from "./config";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-export async function signUpWithEmail(email: string, password: string, fullName: string): Promise<User | null> {
+export async function signUpWithEmail(
+  email: string, 
+  password: string, 
+  firstName: string,
+  lastName: string,
+  username: string
+): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
   if (userCredential.user) {
+    const fullName = `${firstName} ${lastName}`;
     await updateProfile(userCredential.user, { displayName: fullName });
 
     await setDoc(doc(db, "users", userCredential.user.uid), {
       email: userCredential.user.email,
       uid: userCredential.user.uid,
       displayName: fullName,
+      firstName,
+      lastName,
+      username,
       role: 'customer' // default role
     });
     return userCredential.user;
