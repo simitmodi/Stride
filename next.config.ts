@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'static8.depositphotos.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
