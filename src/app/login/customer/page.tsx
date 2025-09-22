@@ -43,7 +43,7 @@ export default function CustomerLoginPage() {
               <CustomerLoginForm />
               <p className="mt-6 text-center text-sm text-foreground/80">
                 Don't have an account?{" "}
-                <Link href="/signup/customer" className="font-medium text-primary underline-offset-4 hover:underline">
+                <Link href="/signup/customer" className="font-medium text-primary underline-offset-4 hover:text-accent hover:underline transition-colors">
                   Sign up
                 </Link>
               </p>

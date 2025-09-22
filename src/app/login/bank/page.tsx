@@ -42,7 +42,7 @@ export default function BankLoginPage() {
             <CardContent>
               <BankLoginForm />
               <p className="mt-6 text-center text-sm text-foreground/80">
-                <Link href="/login" className="font-medium text-primary hover:underline">
+                <Link href="/login" className="font-medium text-primary hover:text-accent hover:underline transition-colors">
                   Not a bank employee?
                 </Link>
               </p>
