@@ -63,9 +63,13 @@ export function CustomerLoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-white/90">Email</FormLabel>
               <FormControl>
-                <Input placeholder="name@example.com" {...field} />
+                <Input 
+                  placeholder="name@example.com" 
+                  {...field} 
+                  className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,15 +80,24 @@ export function CustomerLoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-white/90">Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  {...field} 
+                  className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full h-11 bg-white/10 border border-white/20 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 active:scale-100"
+          disabled={isLoading}
+        >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Login
         </Button>
