@@ -18,7 +18,7 @@ export default function Footer({ className }: { className?: string }) {
             Stride
           </span>
         </div>
-        <ul className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-muted-foreground sm:gap-6">
+        <ul className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-foreground sm:gap-6">
           <li>
             <Link href="#" className="hover:underline">
               About
