@@ -6,7 +6,6 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Home() {
   const [time, setTime] = useState("");
@@ -55,13 +54,9 @@ export default function Home() {
           <p className="text-xl font-medium text-white/80">{date}</p>
         </div>
 
-        {/* Center Section: Avatar and Name */}
+        {/* Center Section: Name */}
         <div className="flex flex-col items-center">
-          <Avatar className="h-28 w-28 border-2 border-white/50 shadow-lg">
-            <AvatarImage src="https://picsum.photos/seed/user-avatar/200" data-ai-hint="person portrait" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <h2 className="mt-4 text-3xl font-semibold tracking-wide text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+          <h2 className="text-3xl font-semibold tracking-wide text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
             Stride
           </h2>
         </div>
@@ -71,7 +66,7 @@ export default function Home() {
            <Button
             asChild
             size="lg"
-            className="h-14 w-full max-w-xs rounded-full border border-white/30 bg-white/20 text-lg font-semibold text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30 active:scale-100 active:bg-white/25"
+            className="h-14 w-full max-w-xs rounded-full border border-white/20 bg-white/5 text-lg font-semibold text-white shadow-xl backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/10 active:scale-100 active:bg-white/5"
           >
             <Link href="/login">Login</Link>
           </Button>
