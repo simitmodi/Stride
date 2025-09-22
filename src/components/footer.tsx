@@ -6,48 +6,26 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        'z-20 w-full border-t border-border/5 p-6 shadow md:p-8',
+        'z-20 w-full border-t border-border/5 bg-card/5 p-6 shadow md:p-8',
         className
       )}
       style={{ backdropFilter: 'blur(12px)' }}
     >
-      <div className="container mx-auto grid grid-cols-1 gap-8 text-center md:grid-cols-3 md:text-left">
-        {/* About Section */}
-        <div className="col-span-1 md:col-span-2">
-          <h3 className="mb-4 text-lg font-semibold text-foreground">
-            About Stride
-          </h3>
-          <p className="text-sm text-foreground/80">
-            Stride is a data-driven platform designed to simplify the process of
-            banking appointments for users across India. It enables users to
-            schedule appointments efficiently, provides step-by-step guidance
-            on required documents, and reduces unnecessary trips to the bank.
-            Users can access a personalized dashboard displaying upcoming
-            visits, appointment reminders, and important notifications. Stride
-            also integrates a calendar view to track all scheduled activities,
-            ensuring users never miss a banking task. By connecting users with
-            banks digitally, Stride streamlines the workflow for both customers
-            and bank staff, making the entire process transparent, organized,
-            and hassle-free. With Stride, banking becomes faster, smarter, and
-            more predictable.
-          </p>
-        </div>
-
-        {/* Links Section */}
-        <div className="col-span-1">
-          <div className="mb-4 flex items-center justify-center gap-2 md:justify-start">
+      <div className="container mx-auto flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:gap-8">
+          <div className="flex items-center gap-2">
             <Banknote className="h-6 w-6 text-primary" />
             <span className="self-center whitespace-nowrap text-xl font-semibold text-foreground">
               Stride
             </span>
           </div>
-          <ul className="flex flex-col items-center gap-2 text-sm font-medium text-foreground md:items-start">
+          <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-foreground">
             <li>
               <Link
-                href="#"
+                href="/about"
                 className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
               >
-                Features
+                About
               </Link>
             </li>
             <li>
