@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function CustomerSignUpPage() {
-  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg");
+  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
