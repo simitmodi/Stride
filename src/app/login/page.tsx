@@ -47,7 +47,7 @@ export default function LoginOptionsPage() {
                     <User className="h-8 w-8 text-primary" />
                     <div className="flex-1">
                       <CardTitle className="text-foreground">Customer Login</CardTitle>
-                      <CardDescription className="text-muted-foreground">
+                      <CardDescription className="group-hover:text-accent-foreground">
                         Access your personal account.
                       </CardDescription>
                     </div>
@@ -61,7 +61,7 @@ export default function LoginOptionsPage() {
                     <Banknote className="h-8 w-8 text-primary" />
                     <div className="flex-1">
                       <CardTitle className="text-foreground">Bank Login</CardTitle>
-                      <CardDescription className="text-muted-foreground">
+                      <CardDescription className="group-hover:text-accent-foreground">
                         Access the employee portal.
                       </CardDescription>
                     </div>
