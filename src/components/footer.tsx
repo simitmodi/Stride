@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { Banknote } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export default function Footer() {
+export default function Footer({ className }: { className?: string }) {
   return (
-    <footer 
-      className="fixed bottom-0 left-0 z-20 w-full p-4 bg-card/80 border-t border-border shadow md:flex md:items-center md:justify-between md:p-6"
+    <footer
+      className={cn(
+        "z-20 w-full p-4 bg-card/80 border-t border-border shadow md:flex md:items-center md:justify-between md:p-6",
+        className
+      )}
       style={{ backdropFilter: 'blur(12px)' }}
     >
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
