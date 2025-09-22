@@ -23,7 +23,7 @@ export default function Home() {
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4">
         <div 
-          className="w-full max-w-2xl rounded-xl border border-border bg-card/15 p-8 text-center shadow-lg md:p-12"
+          className="w-full max-w-2xl rounded-xl border border-border bg-card/15 p-8 text-center shadow-lg md:p-12 transform-gpu"
           style={{ backdropFilter: 'blur(12px)' }}
         >
           <div className="flex flex-col items-center gap-6">
