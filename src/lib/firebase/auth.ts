@@ -17,7 +17,8 @@ export async function signUpWithEmail(
   password: string, 
   firstName: string,
   lastName: string,
-  username: string
+  username: string,
+  dateOfBirth: Date,
 ): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
@@ -32,6 +33,7 @@ export async function signUpWithEmail(
       firstName,
       lastName,
       username,
+      dateOfBirth,
       role: 'customer' // default role
     });
     return userCredential.user;
@@ -56,10 +58,17 @@ export async function signInWithGoogle(): Promise<User | null> {
 
     if (!userDoc.exists()) {
       // If user is new, create a new document in Firestore
+      const displayName = user.displayName || "";
+      const [firstName, ...lastNameParts] = displayName.split(" ");
+      const lastName = lastNameParts.join(" ");
+
       await setDoc(userDocRef, {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
+        firstName: firstName,
+        lastName: lastName,
+        username: user.email?.split('@')[0] || `user${user.uid.substring(0,5)}`,
         photoURL: user.photoURL,
         role: 'customer', // default role
         createdAt: new Date(),
