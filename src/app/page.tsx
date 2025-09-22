@@ -24,8 +24,8 @@ export default function Home() {
 
       <header className="sticky top-0 z-40 w-full bg-transparent">
         <div className="container flex h-16 items-center">
-          <Link href="/" className="flex items-center gap-2 font-bold text-white">
-            <Banknote className="h-6 w-6 text-white" />
+          <Link href="/" className="flex items-center gap-2 font-bold text-foreground">
+            <Banknote className="h-6 w-6 text-primary" />
             <span className="text-lg">Stride</span>
           </Link>
         </div>
@@ -34,10 +34,10 @@ export default function Home() {
       <main className="relative z-10 flex flex-1 items-center">
         <section className="container grid w-full flex-1 items-center gap-8 px-4 py-12 md:grid-cols-2 lg:gap-16">
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
-            <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl lg:text-6xl">
               Stride — Seamless Bank Appointments
             </h1>
-            <p className="mt-4 max-w-[600px] text-balance text-gray-200 md:text-lg">
+            <p className="mt-4 max-w-[600px] text-balance text-muted-foreground md:text-lg">
               Manage your appointments with ease. Book, reschedule, and get reminders all in one place.
             </p>
             <Button asChild size="lg" className="mt-6 bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500">
