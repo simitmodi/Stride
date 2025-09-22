@@ -36,19 +36,19 @@ export default function Home() {
       />
       <div className="absolute inset-0 bg-black/30" />
 
-      <div className="relative z-10 flex h-full flex-col items-center text-white">
+      <div className="relative z-10 flex h-full w-full flex-col items-center text-white">
         <div className="flex-grow flex flex-col items-center justify-center text-center -mt-20">
-          <h1 className="text-8xl md:text-9xl font-bold tracking-tighter">
+          <h1 className="text-7xl md:text-8xl font-bold tracking-tighter">
             {time}
           </h1>
-          <p className="text-2xl md:text-3xl font-medium">{date}</p>
+          <p className="text-xl md:text-2xl font-medium">{date}</p>
         </div>
 
-        <div className="w-full px-4 pb-20 md:pb-24">
+        <div className="w-full flex justify-center px-4 pb-20 md:pb-24">
            <Button
             asChild
             size="lg"
-            className="w-full max-w-sm mx-auto h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-100"
+            className="w-full max-w-sm h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-100"
           >
             <Link href="/login">Login</Link>
           </Button>
