@@ -4,22 +4,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowRight, Banknote, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function LoginOptionsPage() {
+  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg");
+
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
-      <Image
-        src="https://picsum.photos/seed/professional-bg/1920/1080"
-        alt="professional background"
+      {professionalBg && <Image
+        src={professionalBg.imageUrl}
+        alt={professionalBg.description}
         fill
         className="object-cover"
         style={{ filter: 'blur(8px)' }}
-        data-ai-hint="professional background"
+        data-ai-hint={professionalBg.imageHint}
         priority
-      />
+      />}
       <div className="absolute inset-0 bg-background/60" />
 
       <main className="relative z-10 flex w-full max-w-lg flex-col items-center">

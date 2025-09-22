@@ -2,6 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,8 @@ export default function Home() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg");
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -30,9 +33,9 @@ export default function Home() {
 
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
-      <Image
-        src="https://picsum.photos/seed/professional-bg/1920/1080"
-        alt="professional background"
+      {professionalBg && <Image
+        src={professionalBg.imageUrl}
+        alt={professionalBg.description}
         fill
         className="object-cover transition-all duration-1000 ease-in-out"
         style={{
@@ -40,9 +43,9 @@ export default function Home() {
             transform: isLoaded ? 'scale(1)' : 'scale(1.1)',
             opacity: isLoaded ? 1 : 0,
         }}
-        data-ai-hint="professional background"
+        data-ai-hint={professionalBg.imageHint}
         priority
-      />
+      />}
       <div className="absolute inset-0 bg-black/30" />
 
       <main className={`relative z-10 flex h-full w-full flex-col items-center justify-between p-4 text-white transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
