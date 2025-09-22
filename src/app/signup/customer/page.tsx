@@ -27,26 +27,29 @@ export default function CustomerSignUpPage() {
       <div className="absolute inset-0 bg-background/60" />
 
       <main className="relative z-10 flex w-full max-w-md flex-col items-center">
-        <Card
-          className="w-full transform-gpu border-border bg-card/15 shadow-lg"
-          style={{ backdropFilter: 'blur(12px)' }}
-        >
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
-            <CardDescription className="text-muted-foreground">
-              Enter your details below to get started.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CustomerSignUpForm />
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link href="/login/customer" className="font-medium text-primary underline-offset-4 hover:underline">
-                Log in
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
+        <div className="group relative w-full">
+          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"></div>
+          <Card
+            className="relative w-full transform-gpu bg-card/15 shadow-lg"
+            style={{ backdropFilter: 'blur(12px)' }}
+          >
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
+              <CardDescription className="text-muted-foreground">
+                Enter your details below to get started.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CustomerSignUpForm />
+              <p className="mt-6 text-center text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link href="/login/customer" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Log in
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </main>
     </div>
   );

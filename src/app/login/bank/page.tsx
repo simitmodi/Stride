@@ -27,25 +27,28 @@ export default function BankLoginPage() {
       <div className="absolute inset-0 bg-background/60" />
       
       <main className="relative z-10 flex w-full max-w-md flex-col items-center">
-        <Card 
-          className="w-full transform-gpu border-border bg-card/15 shadow-lg"
-          style={{ backdropFilter: 'blur(12px)' }}
-        >
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-foreground">Bank Portal Login</CardTitle>
-            <CardDescription className="text-muted-foreground">
-              For authorized personnel only.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <BankLoginForm />
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              <Link href="/login" className="font-medium text-primary hover:underline">
-                Not a bank employee?
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
+        <div className="group relative w-full">
+          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"></div>
+          <Card 
+            className="relative w-full transform-gpu bg-card/15 shadow-lg"
+            style={{ backdropFilter: 'blur(12px)' }}
+          >
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-foreground">Bank Portal Login</CardTitle>
+              <CardDescription className="text-muted-foreground">
+                For authorized personnel only.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <BankLoginForm />
+              <p className="mt-6 text-center text-sm text-muted-foreground">
+                <Link href="/login" className="font-medium text-primary hover:underline">
+                  Not a bank employee?
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </main>
     </div>
   );
