@@ -54,19 +54,20 @@ export default function Home() {
           <p className="text-xl font-medium text-white/80">{date}</p>
         </div>
 
-        {/* Center Section: Name */}
-        <div className="flex flex-col items-center">
-          <h2 className="text-3xl font-semibold tracking-wide text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-            Stride
-          </h2>
-        </div>
+        {/* Center Section: Empty */}
+        <div />
+
 
         {/* Bottom Section: Login Button */}
         <div className="w-full flex-shrink-0 flex justify-center pb-20 md:pb-24">
            <Button
             asChild
             size="lg"
-            className="h-14 w-full max-w-xs rounded-full border border-white/20 bg-white/5 text-lg font-semibold text-white shadow-xl backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/10 active:scale-100 active:bg-white/5"
+            className="h-14 w-full max-w-xs rounded-full border border-white/20 bg-white/5 text-lg font-semibold text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/10 active:scale-100 active:bg-white/5"
+            style={{
+                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                willChange: 'transform',
+            }}
           >
             <Link href="/login">Login</Link>
           </Button>
