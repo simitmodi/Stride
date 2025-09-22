@@ -3,8 +3,14 @@
     {
       "id": "professional-bg",
       "description": "A professional background image for login and signup pages.",
-      "imageUrl": "https://static8.depositphotos.com/1000715/1006/i/450/depositphotos_10069266-stock-photo-studio-in-old-wooden-room.jpg",
+      "imageUrl": "https://picsum.photos/seed/prof-bg/1200/800",
       "imageHint": "professional background"
+    },
+    {
+      "id": "hero-calendar",
+      "description": "An illustration of a calendar for the hero section.",
+      "imageUrl": "https://picsum.photos/seed/calendar-hero/500/500",
+      "imageHint": "calendar illustration"
     }
   ]
 }

@@ -1,77 +1,54 @@
-
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Banknote } from "lucide-react";
+import Footer from "@/components/footer";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function Home() {
-  const [time, setTime] = useState("");
-  const [date, setDate] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg");
-
-  useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      setTime(format(now, "h:mm"));
-      setDate(format(now, "EEEE, MMMM d"));
-    };
-
-    updateDateTime();
-    const timer = setInterval(updateDateTime, 1000);
-    
-    // Trigger fade-in animation
-    setIsLoaded(true);
-
-    return () => clearInterval(timer);
-  }, []);
+  const heroImage = PlaceHolderImages.find(p => p.id === "hero-calendar");
 
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
-      {professionalBg && <Image
-        src={professionalBg.imageUrl}
-        alt={professionalBg.description}
-        fill
-        className="object-cover transition-all duration-1000 ease-in-out"
-        style={{
-            filter: 'blur(8px)',
-            transform: isLoaded ? 'scale(1)' : 'scale(1.1)',
-            opacity: isLoaded ? 1 : 0,
-        }}
-        data-ai-hint={professionalBg.imageHint}
-        priority
-      />}
-      <div className="absolute inset-0 bg-black/30" />
-
-      <main className={`relative z-10 flex h-full w-full flex-col items-center justify-between p-4 text-white transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-        {/* Top Section: Time and Date */}
-        <div className="flex-shrink-0 pt-16 text-center">
-          <h1 className="text-7xl font-bold tracking-tight text-white/90" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
-            {time}
-          </h1>
-          <p className="text-xl font-medium text-white/80">{date}</p>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center">
+          <Link href="/" className="flex items-center gap-2 font-bold">
+            <Banknote className="h-6 w-6 text-primary" />
+            <span className="text-lg">Stride</span>
+          </Link>
         </div>
+      </header>
 
-        {/* Center Section: Empty */}
-        <div />
-
-
-        {/* Bottom Section: Login Button */}
-        <div className="w-full flex-shrink-0 flex justify-center pb-20 md:pb-24">
-           <Button
-            asChild
-            size="lg"
-            className="h-14 w-full max-w-xs rounded-lg border border-white/20 bg-primary text-primary-foreground transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 active:scale-100"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-        </div>
+      <main className="flex-1">
+        <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10 lg:grid-cols-2">
+          <div className="flex flex-col items-start gap-4">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
+              Stride — Seamless Bank Appointments
+            </h1>
+            <p className="max-w-[700px] text-lg text-muted-foreground">
+              Manage your appointments with ease. Book, reschedule, and get reminders all in one place.
+            </p>
+            <Button asChild size="lg">
+              <Link href="/login">Login / Get Started</Link>
+            </Button>
+          </div>
+          <div className="flex justify-center">
+            {heroImage && (
+              <Image
+                src={heroImage.imageUrl}
+                alt={heroImage.description}
+                width={500}
+                height={500}
+                className="rounded-lg object-cover shadow-lg"
+                data-ai-hint={heroImage.imageHint}
+                priority
+              />
+            )}
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
