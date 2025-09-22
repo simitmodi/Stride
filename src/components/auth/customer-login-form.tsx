@@ -68,12 +68,8 @@ export function CustomerLoginForm() {
   async function handleGoogleSignIn() {
     setIsGoogleLoading(true);
     try {
-      const user = await signInWithGoogle();
-      if (user) {
-        router.push('/dashboard/customer');
-      } else {
-        throw new Error("Google sign-in failed.");
-      }
+      await signInWithGoogle();
+      router.push('/dashboard/customer');
     } catch (error: any) {
       toast({
         variant: "destructive",
