@@ -52,25 +52,31 @@ export async function signInWithGoogle(): Promise<User | null> {
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
 
-    // Check if user already exists in Firestore
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-      // If user is new, create a new document in Firestore
       const displayName = user.displayName || "";
-      const [firstName, ...lastNameParts] = displayName.split(" ");
-      const lastName = lastNameParts.join(" ");
+      const emailUsername = user.email?.split('@')[0] || `user${user.uid.substring(0, 5)}`;
+      
+      let firstName = "";
+      let lastName = "";
+
+      if (displayName) {
+        const nameParts = displayName.split(" ");
+        firstName = nameParts[0];
+        lastName = nameParts.slice(1).join(" ");
+      }
 
       await setDoc(userDocRef, {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName,
+        displayName: displayName,
         firstName: firstName,
         lastName: lastName,
-        username: user.email?.split('@')[0] || `user${user.uid.substring(0,5)}`,
+        username: emailUsername,
         photoURL: user.photoURL,
-        role: 'customer', // default role
+        role: 'customer',
         createdAt: new Date(),
       });
     }
