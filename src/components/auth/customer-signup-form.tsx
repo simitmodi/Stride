@@ -108,12 +108,11 @@ export function CustomerSignUpForm() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white/90">First Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="John" 
-                        {...field} 
-                        className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -125,12 +124,11 @@ export function CustomerSignUpForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white/90">Last Name</FormLabel>
+                    <FormLabel>Last Name</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="Doe" 
-                        {...field} 
-                        className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -143,12 +141,11 @@ export function CustomerSignUpForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">Username</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input 
                     placeholder="johndoe" 
-                    {...field} 
-                    className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -160,15 +157,15 @@ export function CustomerSignUpForm() {
             name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-white/90">Date of birth</FormLabel>
+                <FormLabel>Date of birth</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full pl-3 text-left font-normal border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40",
-                          !field.value && "text-white/70"
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value ? (
@@ -201,12 +198,11 @@ export function CustomerSignUpForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">Email</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input 
                     placeholder="name@example.com" 
-                    {...field} 
-                    className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -218,13 +214,12 @@ export function CustomerSignUpForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">Password</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input 
                     type="password" 
                     placeholder="••••••••" 
-                    {...field} 
-                    className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -233,7 +228,7 @@ export function CustomerSignUpForm() {
           />
           <Button 
             type="submit" 
-            className="w-full h-11 bg-white/10 border border-white/20 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 active:scale-100"
+            className="w-full h-11"
             disabled={isLoading || isGoogleLoading}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -243,10 +238,10 @@ export function CustomerSignUpForm() {
       </Form>
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-white/20" />
+          <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white/10 px-2 text-white/70" style={{ backdropFilter: 'blur(32px)' }}>
+          <span className="bg-card px-2 text-muted-foreground" style={{ transform: 'translateY(-0.1rem)' }}>
             Or continue with
           </span>
         </div>
@@ -255,7 +250,7 @@ export function CustomerSignUpForm() {
         variant="outline"
         onClick={handleGoogleSignIn}
         disabled={isLoading || isGoogleLoading}
-        className="w-full h-11 bg-white/10 border border-white/20 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 active:scale-100"
+        className="w-full h-11"
       >
         {isGoogleLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

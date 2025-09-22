@@ -31,19 +31,19 @@ export default function Home() {
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
       <Image
-        src="https://picsum.photos/seed/macos-bg/1920/1080"
-        alt="macOS-style wallpaper"
+        src="https://picsum.photos/seed/professional-bg/1920/1080"
+        alt="professional background"
         fill
         className="object-cover transition-all duration-1000 ease-in-out"
         style={{
-            filter: 'blur(16px)',
+            filter: 'blur(8px)',
             transform: isLoaded ? 'scale(1)' : 'scale(1.1)',
             opacity: isLoaded ? 1 : 0,
         }}
-        data-ai-hint="abstract background"
+        data-ai-hint="professional background"
         priority
       />
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-black/30" />
 
       <main className={`relative z-10 flex h-full w-full flex-col items-center justify-between p-4 text-white transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         {/* Top Section: Time and Date */}
@@ -63,11 +63,7 @@ export default function Home() {
            <Button
             asChild
             size="lg"
-            className="h-14 w-full max-w-xs rounded-full border border-white/20 bg-white/5 text-lg font-semibold text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/10 active:scale-100 active:bg-white/5"
-            style={{
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-                willChange: 'transform',
-            }}
+            className="h-14 w-full max-w-xs rounded-lg border border-white/20 bg-primary text-primary-foreground transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 active:scale-100"
           >
             <Link href="/login">Login</Link>
           </Button>
