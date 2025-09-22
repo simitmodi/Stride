@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     {
@@ -7,10 +8,10 @@
       "imageHint": "professional background"
     },
     {
-      "id": "hero-calendar",
-      "description": "An illustration of a calendar for the hero section.",
-      "imageUrl": "https://picsum.photos/seed/calendar-hero/500/500",
-      "imageHint": "calendar illustration"
+      "id": "professional-bg-new",
+      "description": "A new professional background image for the landing page.",
+      "imageUrl": "https://picsum.photos/seed/prof-bg-new/1920/1080",
+      "imageHint": "corporate office"
     }
   ]
 }
