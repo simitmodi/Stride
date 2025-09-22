@@ -36,7 +36,7 @@ export default function Home() {
               <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
                 Seamless Bank Appointments
               </h1>
-              <p className="max-w-[600px] text-balance text-muted-foreground md:text-xl">
+              <p className="max-w-[600px] text-balance text-foreground md:text-xl">
                 Manage your appointments quickly and efficiently.
               </p>
               <Button asChild size="lg" className="mt-4 h-12 px-8 text-base">
