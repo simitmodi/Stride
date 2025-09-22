@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -5,55 +6,77 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Home() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const updateDateTime = () => {
       const now = new Date();
-      setTime(format(now, "h:mm a"));
+      setTime(format(now, "h:mm"));
       setDate(format(now, "EEEE, MMMM d"));
-    }, 1000);
+    };
 
-    // Set initial time and date to avoid flash of empty content
-    const now = new Date();
-    setTime(format(now, "h:mm a"));
-    setDate(format(now, "EEEE, MMMM d"));
+    updateDateTime();
+    const timer = setInterval(updateDateTime, 1000);
+    
+    // Trigger fade-in animation
+    setIsLoaded(true);
 
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
       <Image
-        src="https://picsum.photos/seed/stride-bg/1920/1080"
-        alt="Abstract background"
+        src="https://picsum.photos/seed/macos-bg/1920/1080"
+        alt="macOS-style wallpaper"
         fill
-        className="object-cover blur-sm scale-105"
+        className="object-cover transition-all duration-1000 ease-in-out"
+        style={{
+            filter: 'blur(16px)',
+            transform: isLoaded ? 'scale(1)' : 'scale(1.1)',
+            opacity: isLoaded ? 1 : 0,
+        }}
         data-ai-hint="abstract background"
+        priority
       />
-      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-0 bg-black/20" />
 
-      <div className="relative z-10 flex h-full w-full flex-col items-center text-white">
-        <div className="flex-grow flex flex-col items-center justify-center text-center">
-          <h1 className="text-6xl md:text-7xl font-bold tracking-tighter">
+      <main className={`relative z-10 flex h-full w-full flex-col items-center justify-between p-4 text-white transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Top Section: Time and Date */}
+        <div className="flex-shrink-0 pt-16 text-center">
+          <h1 className="text-7xl font-bold tracking-tight text-white/90" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
             {time}
           </h1>
-          <p className="text-lg md:text-xl font-medium">{date}</p>
+          <p className="text-xl font-medium text-white/80">{date}</p>
         </div>
 
-        <div className="w-full flex justify-center px-4 pb-20 md:pb-24">
+        {/* Center Section: Avatar and Name */}
+        <div className="flex flex-col items-center">
+          <Avatar className="h-28 w-28 border-2 border-white/50 shadow-lg">
+            <AvatarImage src="https://picsum.photos/seed/user-avatar/200" data-ai-hint="person portrait" />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+          <h2 className="mt-4 text-3xl font-semibold tracking-wide text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+            Stride
+          </h2>
+        </div>
+
+        {/* Bottom Section: Login Button */}
+        <div className="w-full flex-shrink-0 flex justify-center pb-20 md:pb-24">
            <Button
             asChild
             size="lg"
-            className="w-full max-w-sm h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-lg font-semibold shadow-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-100"
+            className="h-14 w-full max-w-xs rounded-full border border-white/30 bg-white/20 text-lg font-semibold text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30 active:scale-100 active:bg-white/25"
           >
             <Link href="/login">Login</Link>
           </Button>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
