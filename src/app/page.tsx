@@ -19,8 +19,8 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1">
-        <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10 lg:grid-cols-2">
+      <main className="flex-1 flex flex-col justify-center">
+        <section className="container grid items-center gap-6 lg:grid-cols-2">
           <div className="flex flex-col items-start gap-4">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
               Stride — Seamless Bank Appointments
