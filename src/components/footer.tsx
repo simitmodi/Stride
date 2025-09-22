@@ -20,27 +20,27 @@ export default function Footer({ className }: { className?: string }) {
         </div>
         <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-foreground sm:gap-4">
           <li>
-            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link href="#" className="inline-block transform rounded-md px-3 py-2 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-black">
               About
             </Link>
           </li>
           <li>
-            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link href="#" className="inline-block transform rounded-md px-3 py-2 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-black">
               Features
             </Link>
           </li>
           <li>
-            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link href="#" className="inline-block transform rounded-md px-3 py-2 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-black">
               Privacy Policy
             </Link>
           </li>
           <li>
-            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link href="#" className="inline-block transform rounded-md px-3 py-2 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-black">
               Contact
             </Link>
           </li>
           <li>
-            <Link href="#" className="inline-block rounded-md px-3 py-2 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <Link href="#" className="inline-block transform rounded-md px-3 py-2 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-black">
               Meet the Team
             </Link>
           </li>
