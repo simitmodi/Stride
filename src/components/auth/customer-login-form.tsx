@@ -139,7 +139,7 @@ export function CustomerLoginForm() {
           <span className="w-full border-t border-white/20" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-transparent px-2 text-white/70" style={{ backdropFilter: 'blur(32px)' }}>
+          <span className="bg-white/10 px-2 text-white/70" style={{ backdropFilter: 'blur(32px)' }}>
             Or continue with
           </span>
         </div>
