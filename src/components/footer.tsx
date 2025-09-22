@@ -6,15 +6,15 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "z-20 w-full p-4 bg-card/80 border-t border-border shadow md:flex md:items-center md:justify-between md:p-6",
+        "z-20 w-full border-t border-border/50 bg-card/80 p-4 shadow md:flex md:items-center md:justify-between md:p-6",
         className
       )}
       style={{ backdropFilter: 'blur(12px)' }}
     >
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-        <div className="flex items-center gap-2 mb-4 md:mb-0">
+      <div className="container mx-auto flex flex-col items-center justify-between text-center md:flex-row md:text-left">
+        <div className="mb-4 flex items-center gap-2 md:mb-0">
           <Banknote className="h-6 w-6 text-primary" />
-          <span className="self-center text-xl font-semibold whitespace-nowrap text-foreground">
+          <span className="self-center whitespace-nowrap text-xl font-semibold text-foreground">
             Stride
           </span>
         </div>
