@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
+  fullName: z.string().min(1, { message: "Full name is required." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
 });
@@ -32,6 +33,7 @@ export function CustomerSignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
     },
@@ -40,7 +42,7 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await signUpWithEmail(values.email, values.password);
+      const user = await signUpWithEmail(values.email, values.password, values.fullName);
       if (user) {
         toast({
           title: "Success!",
@@ -64,12 +66,33 @@ export function CustomerSignUpForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">Full Name</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="John Doe" 
+                  {...field} 
+                  className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-white/90">Email</FormLabel>
               <FormControl>
-                <Input placeholder="name@example.com" {...field} />
+                <Input 
+                  placeholder="name@example.com" 
+                  {...field} 
+                  className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,15 +103,24 @@ export function CustomerSignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-white/90">Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  {...field} 
+                  className="border-white/20 bg-white/5 text-white placeholder:text-white/50 focus:ring-offset-0 focus-visible:ring-1 focus-visible:ring-white/40"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full h-11 bg-white/10 border border-white/20 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 active:scale-100"
+          disabled={isLoading}
+        >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Sign Up
         </Button>

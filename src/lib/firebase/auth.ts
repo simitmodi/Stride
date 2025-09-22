@@ -7,17 +7,21 @@ import {
   User,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { auth, db } from "./config";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-export async function signUpWithEmail(email: string, password: string): Promise<User | null> {
+export async function signUpWithEmail(email: string, password: string, fullName: string): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
   if (userCredential.user) {
+    await updateProfile(userCredential.user, { displayName: fullName });
+
     await setDoc(doc(db, "users", userCredential.user.uid), {
       email: userCredential.user.email,
       uid: userCredential.user.uid,
+      displayName: fullName,
       role: 'customer' // default role
     });
     return userCredential.user;
