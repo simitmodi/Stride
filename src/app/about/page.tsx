@@ -2,7 +2,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Banknote } from 'lucide-react';
+import { Banknote, Home } from 'lucide-react';
 
 export default function AboutPage() {
   const professionalBg = PlaceHolderImages.find(
@@ -87,8 +87,11 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-8">
-          <Button asChild variant="outline" className="bg-card/80">
-            <Link href="/">Back to Home</Link>
+          <Button asChild variant="outline" size="icon" className="bg-card/80">
+            <Link href="/">
+              <Home className="h-4 w-4" />
+              <span className="sr-only">Back to Home</span>
+            </Link>
           </Button>
         </div>
       </main>
