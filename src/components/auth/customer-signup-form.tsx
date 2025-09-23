@@ -50,6 +50,7 @@ export function CustomerSignUpForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const currentYear = new Date().getFullYear();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -185,6 +186,9 @@ export function CustomerSignUpForm() {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      captionLayout="dropdown-buttons"
+                      fromYear={currentYear - 100}
+                      toYear={currentYear}
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
@@ -267,5 +271,3 @@ export function CustomerSignUpForm() {
     </>
   );
 }
-
-    
