@@ -9,7 +9,7 @@ export default function Home() {
   const slideshowImages = PlaceHolderImages.filter(p => p.id.startsWith("professional-bg"));
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col">
+    <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
       <BackgroundSlideshow images={slideshowImages} />
       <div className="absolute inset-0 bg-background/60" />
 

@@ -3,62 +3,62 @@
     {
       "id": "professional-bg-1",
       "description": "A professional background image showing a modern office interior.",
-      "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070",
       "imageHint": "corporate office"
     },
     {
       "id": "professional-bg-2",
       "description": "A professional background image of a corporate meeting room.",
-      "imageUrl": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2084",
+      "imageHint": "team meeting"
     },
     {
       "id": "professional-bg-new",
       "description": "A new professional background image for the landing page.",
-      "imageUrl": "https://images.unsplash.com/photo-1606836591695-4d58a73eba1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1974",
+      "imageHint": "business collaboration"
     },
     {
       "id": "professional-bg-4",
       "description": "A professional background image of a modern building exterior.",
-      "imageUrl": "https://images.unsplash.com/photo-1686100510379-942c0f855ba9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069",
+      "imageHint": "modern workspace"
     },
     {
       "id": "professional-bg-5",
       "description": "A modern office lounge area.",
-      "imageUrl": "https://images.unsplash.com/photo-1606857521015-7f9fcf423740?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070",
+      "imageHint": "creative office"
     },
     {
       "id": "professional-bg-6",
       "description": "A low-angle shot of a corporate skyscraper.",
-      "imageUrl": "https://images.unsplash.com/photo-1606857521015-7f9fcf423740?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047",
+      "imageHint": "office interior"
     },
     {
       "id": "professional-bg-7",
       "description": "A person working on a laptop in a bright, modern office.",
-      "imageUrl": "https://images.unsplash.com/photo-1686100510379-942c0f855ba9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=2070",
+      "imageHint": "teamwork hands"
     },
     {
       "id": "professional-bg-8",
       "description": "Glass facade of a modern skyscraper.",
-      "imageUrl": "https://images.unsplash.com/photo-1686100510379-942c0f855ba9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1572021335469-31706a17aaef?q=80&w=2070",
+      "imageHint": "business professionals"
     },
     {
       "id": "professional-bg-9",
       "description": "A collaborative workspace with people working.",
-      "imageUrl": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate office"
+      "imageUrl": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070",
+      "imageHint": "office presentation"
     },
     {
       "id": "professional-bg-10",
       "description": "Architectural details of a modern office building.",
-      "imageUrl": "https://images.unsplash.com/photo-1501324682324-0d8d7c4b9706?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjb3Jwb3JhdGUlMjBidWlsZGluZ3xlbnwwfHx8fDE3NTg1OTEyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "corporate building"
+      "imageUrl": "https://images.unsplash.com/photo-1600880292203-942699a05615?q=80&w=2148",
+      "imageHint": "business strategy"
     },
     {
       "id": "contact-bg",

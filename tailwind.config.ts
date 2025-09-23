@@ -88,10 +88,17 @@ export default {
             height: '0',
           },
         },
+        'fade-in-out': {
+          '0%': { opacity: '0' },
+          '16.66%': { opacity: '1' }, // 1s fade in, 4s hold
+          '83.33%': { opacity: '1' },
+          '100%': { opacity: '0' }, // 1s fade out
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in-out': 'fade-in-out 6s infinite',
       },
     },
   },

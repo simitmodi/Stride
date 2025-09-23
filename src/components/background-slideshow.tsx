@@ -1,47 +1,52 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
+import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface BackgroundSlideshowProps {
   images: ImagePlaceholder[];
-  interval?: number;
+  className?: string;
 }
 
-export function BackgroundSlideshow({ images, interval = 5000 }: BackgroundSlideshowProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (images.length > 1) {
-      const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, interval);
-      return () => clearInterval(timer);
-    }
-  }, [images.length, interval]);
-
+export function BackgroundSlideshow({ images, className }: BackgroundSlideshowProps) {
   if (!images || images.length === 0) {
     return null;
   }
 
+  // Each image will be visible for 5s, with a 1s fade transition.
+  // Total animation duration is 6s * number of images.
+  const animationDuration = images.length * 6;
+
   return (
-    <>
-      {images.map((image, index) => (
-        <Image
-          key={image.id}
-          src={image.imageUrl}
-          alt={image.description}
-          fill
-          className={`object-cover transition-opacity duration-1000 ease-in-out ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ filter: 'blur(8px)' }}
-          data-ai-hint={image.imageHint}
-          priority={index === 0}
-        />
-      ))}
-    </>
+    <div className={cn("fixed inset-0 -z-10", className)}>
+      {images.map((image, index) => {
+        // Delay each animation so they play sequentially
+        const animationDelay = index * 6;
+
+        return (
+          <div
+            key={image.id}
+            className="absolute inset-0 h-full w-full animate-fade-in-out"
+            style={{
+              animationDuration: `${animationDuration}s`,
+              animationDelay: `${animationDelay}s`,
+            }}
+          >
+            <Image
+              src={image.imageUrl}
+              alt={image.description}
+              fill
+              className="object-cover"
+              style={{ filter: 'blur(8px)' }}
+              data-ai-hint={image.imageHint}
+              priority={index === 0}
+            />
+          </div>
+        );
+      })}
+    </div>
   );
 }
