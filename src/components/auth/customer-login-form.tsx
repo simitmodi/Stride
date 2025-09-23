@@ -18,8 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { signInWithEmail, signInWithGoogle, getUserByUsername } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Loader2, Phone } from "lucide-react";
-import { PhoneAuthForm } from "./phone-auth-form";
+import { Loader2 } from "lucide-react";
 
 declare global {
   interface Window {
@@ -44,7 +43,6 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function CustomerLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isPhoneAuthOpen, setIsPhoneAuthOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -117,7 +115,7 @@ export function CustomerLoginForm() {
     }
   }
 
-  const allButtonsDisabled = isLoading || isGoogleLoading || isPhoneAuthOpen;
+  const allButtonsDisabled = isLoading || isGoogleLoading;
 
   return (
     <>
@@ -190,16 +188,6 @@ export function CustomerLoginForm() {
           )}
           Google
         </Button>
-        <PhoneAuthForm open={isPhoneAuthOpen} onOpenChange={setIsPhoneAuthOpen}>
-          <Button
-            variant="outline"
-            disabled={allButtonsDisabled}
-            className="w-full h-11"
-          >
-            <Phone className="mr-2 h-5 w-5" />
-            Sign in with Phone
-          </Button>
-        </PhoneAuthForm>
       </div>
     </>
   );

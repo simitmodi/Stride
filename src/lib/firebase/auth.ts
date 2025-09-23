@@ -9,56 +9,9 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  ConfirmationResult,
 } from "firebase/auth";
 import { auth, db } from "./config";
 import { doc, setDoc, getDoc, collection, query, where, getDocs, limit } from "firebase/firestore";
-
-// This function needs a DOM element to render the reCAPTCHA.
-// It's declared here but will be initialized in the component.
-export const setupRecaptchaVerifier = (elementId: string): RecaptchaVerifier => {
-  if (typeof window !== 'undefined') {
-    if ((window as any).recaptchaVerifier) {
-      (window as any).recaptchaVerifier.clear();
-    }
-    const verifier = new RecaptchaVerifier(auth, elementId, {
-      'size': 'invisible',
-      'callback': (response: any) => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-      }
-    });
-    (window as any).recaptchaVerifier = verifier;
-    return verifier;
-  }
-  // This should not happen in a client-side context where this is used.
-  throw new Error("reCAPTCHA can only be set up in a browser environment.");
-};
-
-export const sendPhoneOtp = async (phoneNumber: string, appVerifier: RecaptchaVerifier): Promise<ConfirmationResult> => {
-  return await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-};
-
-// This function will be called after the user signs in with a phone number for the first time
-// to create a corresponding user document in Firestore.
-export const onFirstPhoneSignIn = async (user: User) => {
-  const userDocRef = doc(db, "users", user.uid);
-  const userDoc = await getDoc(userDocRef);
-
-  if (!userDoc.exists()) {
-    const username = `user${user.uid.substring(0, 8)}`;
-    await setDoc(userDocRef, {
-      uid: user.uid,
-      phoneNumber: user.phoneNumber,
-      displayName: username,
-      username: username,
-      role: 'customer',
-      createdAt: new Date(),
-    });
-  }
-};
-
 
 export async function signUpWithEmail(
   email: string, 
