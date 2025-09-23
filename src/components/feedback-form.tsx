@@ -25,7 +25,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { submitFeedback } from "@/ai/flows/submitFeedbackFlow";
+import { db } from "@/lib/firebase/config";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Full name is required." }),
@@ -57,19 +58,25 @@ export function FeedbackForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const result = await submitFeedback(values);
-      setFeedbackId(result.feedbackId);
+      const docRef = await addDoc(collection(db, "UserFeedback"), {
+        ...values,
+        timestamp: serverTimestamp(),
+        status: "Pending",
+      });
+
+      setFeedbackId(docRef.id);
       setIsSubmitted(true);
       toast({
         title: "Success!",
-        description: `Your feedback has been submitted. Your reference ID is #${result.feedbackId}`,
+        description: `Your feedback has been submitted. Your reference ID is #${docRef.id}`,
       });
       form.reset();
     } catch (error: any) {
+      console.error("Error submitting feedback:", error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request. Please try again.",
+        description: "There was a problem with your request. Please check your connection and try again.",
       });
     } finally {
       setIsLoading(false);
