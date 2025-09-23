@@ -18,16 +18,22 @@ import { doc, setDoc, getDoc, collection, query, where, getDocs, limit } from "f
 
 // This function needs a DOM element to render the reCAPTCHA.
 // It's declared here but will be initialized in the component.
-export const setupRecaptchaVerifier = (elementId: string) => {
+export const setupRecaptchaVerifier = (elementId: string): RecaptchaVerifier => {
   if (typeof window !== 'undefined') {
-    (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
+    if ((window as any).recaptchaVerifier) {
+      (window as any).recaptchaVerifier.clear();
+    }
+    const verifier = new RecaptchaVerifier(auth, elementId, {
       'size': 'invisible',
       'callback': (response: any) => {
         // reCAPTCHA solved, allow signInWithPhoneNumber.
       }
     });
+    (window as any).recaptchaVerifier = verifier;
+    return verifier;
   }
-  return (window as any).recaptchaVerifier;
+  // This should not happen in a client-side context where this is used.
+  throw new Error("reCAPTCHA can only be set up in a browser environment.");
 };
 
 export const sendPhoneOtp = async (phoneNumber: string, appVerifier: RecaptchaVerifier): Promise<ConfirmationResult> => {

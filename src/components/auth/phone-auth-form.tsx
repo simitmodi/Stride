@@ -36,16 +36,19 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
   const { toast } = useToast();
 
   useEffect(() => {
-    if (open) {
-      // Reset state when dialog opens
+    if (!open) {
+      // Reset state and clear verifier when dialog closes
       setStep("phone");
       setPhoneNumber("");
       setOtp("");
       setError(null);
       setIsLoading(false);
-      // Setup reCAPTCHA verifier
-      if (!(window as any).recaptchaVerifier) {
-        setupRecaptchaVerifier("recaptcha-container-phone");
+      const recaptchaContainer = document.getElementById("recaptcha-container-phone");
+      if (recaptchaContainer) {
+        recaptchaContainer.innerHTML = "";
+      }
+      if ((window as any).recaptchaVerifier) {
+        (window as any).recaptchaVerifier.clear();
       }
     }
   }, [open]);
@@ -62,7 +65,7 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
     }
 
     try {
-      const appVerifier = (window as any).recaptchaVerifier;
+      const appVerifier = setupRecaptchaVerifier("recaptcha-container-phone");
       const result = await sendPhoneOtp(phoneNumber, appVerifier);
       setConfirmationResult(result);
       setStep("otp");
@@ -70,11 +73,13 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
     } catch (err: any) {
       console.error("Phone auth error:", err);
       setError("Failed to send OTP. Please check the phone number or try again later.");
-      // Reset reCAPTCHA
-      if ((window as any).recaptchaVerifier) {
-        (window as any).recaptchaVerifier.render().then((widgetId: any) => {
-          (window as any).grecaptcha.reset(widgetId);
-        });
+      // It's good practice to reset the verifier on error
+      const recaptchaContainer = document.getElementById("recaptcha-container-phone");
+      if (recaptchaContainer) {
+        recaptchaContainer.innerHTML = "";
+      }
+       if ((window as any).recaptchaVerifier) {
+        (window as any).recaptchaVerifier.clear();
       }
     } finally {
       setIsLoading(false);
@@ -134,6 +139,7 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
               onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
+             <div id="recaptcha-container-phone" className="my-2 flex justify-center"></div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Send OTP
@@ -163,7 +169,7 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
             </Button>
           </form>
         )}
-        <div id="recaptcha-container-phone"></div>
+       
       </DialogContent>
     </Dialog>
   );
