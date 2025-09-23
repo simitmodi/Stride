@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +20,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
+
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(1, { message: "Password is required." }),
@@ -39,20 +46,37 @@ export function BankLoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      const user = await signInWithEmail(values.email, values.password);
-      if (user) {
-        router.push("/dashboard/bank");
-      }
-    } catch (error: any) {
+
+    if (!window.grecaptcha) {
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "Invalid credentials or you do not have bank access.",
+        title: "CAPTCHA Error",
+        description: "Could not connect to the reCAPTCHA service. Please check your connection or ad blocker.",
       });
-    } finally {
       setIsLoading(false);
+      return;
     }
+
+    window.grecaptcha.enterprise.ready(async () => {
+      try {
+        const token = await window.grecaptcha.enterprise.execute('6Lfqw9IrAAAAAATsZvi3VG5KnxYHZWZA7eap6url', {action: 'LOGIN'});
+        // In a real app, you would send this token to your backend for verification.
+        console.log("reCAPTCHA Token:", token);
+
+        const user = await signInWithEmail(values.email, values.password);
+        if (user) {
+          router.push("/dashboard/bank");
+        }
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Invalid credentials or you do not have bank access.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    });
   }
 
   return (

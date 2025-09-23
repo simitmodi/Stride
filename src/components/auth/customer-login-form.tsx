@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +19,12 @@ import { signInWithEmail, signInWithGoogle, getUserByUsername } from "@/lib/fire
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
 
 const formSchema = z.object({
   emailOrUsername: z.string().min(1, { message: "Email or username is required." }),
@@ -47,7 +54,7 @@ export function CustomerLoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function handleLogin(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
       let email = values.emailOrUsername;
@@ -72,6 +79,22 @@ export function CustomerLoginForm() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!window.grecaptcha) {
+      toast({
+        variant: "destructive",
+        title: "CAPTCHA Error",
+        description: "Could not connect to the reCAPTCHA service. Please check your connection or ad blocker.",
+      });
+      return;
+    }
+    window.grecaptcha.enterprise.ready(async () => {
+      const token = await window.grecaptcha.enterprise.execute('6Lfqw9IrAAAAAATsZvi3VG5KnxYHZWZA7eap6url', {action: 'LOGIN'});
+      console.log("reCAPTCHA Token:", token);
+      await handleLogin(values);
+    });
   }
 
   async function handleGoogleSignIn() {
