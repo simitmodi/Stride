@@ -23,6 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { PasswordStrength } from "@/components/password-strength";
 
 
 const formSchema = z.object({
@@ -31,9 +32,13 @@ const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  confirmPassword: z.string(),
   dateOfBirth: z.date({
     required_error: "A date of birth is required.",
   }),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -48,6 +53,7 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function CustomerSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
   const router = useRouter();
   const currentYear = new Date().getFullYear();
@@ -60,6 +66,7 @@ export function CustomerSignUpForm() {
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
       dateOfBirth: new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
     },
   });
@@ -187,7 +194,7 @@ export function CustomerSignUpForm() {
                     <Calendar
                       mode="single"
                       captionLayout="dropdown-buttons"
-                      fromYear={currentYear - 100}
+                      fromYear={1924}
                       toYear={currentYear}
                       selected={field.value}
                       onSelect={field.onChange}
@@ -224,6 +231,28 @@ export function CustomerSignUpForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="password" 
+                    placeholder="••••••••" 
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPassword(e.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {password && <PasswordStrength password={password} />}
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
                   <Input 
                     type="password" 
