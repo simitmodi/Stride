@@ -7,24 +7,23 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        'z-20 w-full border-t border-border/5 bg-card/5 p-6 shadow md:p-8',
+        'z-20 w-full border-t border-border/5 bg-white p-6 shadow md:p-8',
         className
       )}
-      style={{ backdropFilter: 'blur(12px)' }}
     >
       <div className="container mx-auto flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:gap-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-black">
             <Banknote className="h-6 w-6 text-primary" />
-            <span className="self-center whitespace-nowrap text-xl font-semibold text-foreground">
+            <span className="self-center whitespace-nowrap text-xl font-semibold">
               Stride
             </span>
           </div>
-          <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-foreground">
+          <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-black">
             <li>
               <Link
                 href="/about"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 About
               </Link>
@@ -32,7 +31,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/privacy"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 Privacy Policy
               </Link>
@@ -40,7 +39,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/terms"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 T&amp;C
               </Link>
@@ -48,7 +47,7 @@ export default function Footer({ className }: { className?: string }) {
              <li>
               <Link
                 href="/faq"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 FAQs
               </Link>
@@ -56,7 +55,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/contact"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 Contact
               </Link>
@@ -64,7 +63,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="#"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
               >
                 Meet the Team
               </Link>
