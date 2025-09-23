@@ -87,9 +87,9 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-8">
-          <Button asChild variant="outline" size="icon" className="bg-card/80">
+          <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5">
             <Link href="/">
-              <Home className="h-4 w-4" />
+              <Home className="h-6 w-6" />
               <span className="sr-only">Back to Home</span>
             </Link>
           </Button>
