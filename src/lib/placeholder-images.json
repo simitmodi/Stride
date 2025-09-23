@@ -25,6 +25,42 @@
       "imageHint": "corporate office"
     },
     {
+      "id": "professional-bg-5",
+      "description": "A modern office lounge area.",
+      "imageUrl": "https://images.unsplash.com/photo-1582653291997-063a93627b7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-6",
+      "description": "A low-angle shot of a corporate skyscraper.",
+      "imageUrl": "https://images.unsplash.com/photo-1523908511403-7fc7b255dba6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-7",
+      "description": "A person working on a laptop in a bright, modern office.",
+      "imageUrl": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-8",
+      "description": "Glass facade of a modern skyscraper.",
+      "imageUrl": "https://images.unsplash.com/photo-1600880292210-f75bb6fe8bca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNHx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-9",
+      "description": "A collaborative workspace with people working.",
+      "imageUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMnx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-10",
+      "description": "Architectural details of a modern office building.",
+      "imageUrl": "https://images.unsplash.com/photo-1516475429286-465d815a0df7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8Y29ycG9yYXRlJTIwb2ZmaWNlfGVufDB8fHx8MTc1ODYwODk1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate building"
+    },
+    {
       "id": "contact-bg",
       "description": "A background image for the contact page.",
       "imageUrl": "https://images.unsplash.com/photo-1715310306143-787865a1b538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzdXBwb3J0JTIwY2VudGVyfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
