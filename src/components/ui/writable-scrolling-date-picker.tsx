@@ -24,8 +24,11 @@ export const WritableScrollingDatePicker: React.FC<WritableScrollingDatePickerPr
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    setInputValue(format(date, "dd/MM/yyyy"));
-  }, [date]);
+    // Only update input value if the date prop changes from outside
+    if (date.getTime() !== parse(inputValue, "dd/MM/yyyy", new Date()).getTime()) {
+      setInputValue(format(date, "dd/MM/yyyy"));
+    }
+  }, [date, inputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -43,7 +46,9 @@ export const WritableScrollingDatePicker: React.FC<WritableScrollingDatePickerPr
   
   const handleDateSelect = (newDate: Date) => {
     setDate(newDate);
-    // We don't close the popover here to allow continuous scrolling
+    // This function will now be called from the picker
+    // We update the input value directly here to keep it in sync
+    setInputValue(format(newDate, "dd/MM/yyyy"));
   }
 
   return (

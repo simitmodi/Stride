@@ -47,7 +47,7 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({ items, value, onValueChange
       }
       return () => { emblaApi.off("select", onSelect) };
     }
-  }, [emblaApi, items, value, onValueChange]);
+  }, [emblaApi, items, onValueChange]);
 
   // Update scroll position when value changes externally
   React.useEffect(() => {
@@ -102,15 +102,16 @@ export const ScrollingDatePicker: React.FC<ScrollingDatePickerProps> = ({ date, 
   }, [date]);
 
   React.useEffect(() => {
-    const newDay = Math.min(day, daysInMonth);
-    if(newDay !== day) {
-        setDay(newDay);
-    }
+    const currentDaysInMonth = getDaysInMonth(year, month);
+    const newDay = Math.min(day, currentDaysInMonth);
+    
     const newDate = new Date(year, month, newDay);
     if (newDate.getTime() !== date.getTime()) {
       setDate(newDate);
     }
-  }, [day, month, year, daysInMonth, date, setDate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day, month, year, setDate]);
+
 
   return (
     <div 
