@@ -1,15 +1,27 @@
 {
   "placeholderImages": [
     {
-      "id": "professional-bg",
-      "description": "A professional background image for login and signup pages.",
-      "imageUrl": "https://images.unsplash.com/photo-1601662528567-526cd06f6582?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "professional background"
+      "id": "professional-bg-1",
+      "description": "A professional background image showing a modern office interior.",
+      "imageUrl": "https://images.unsplash.com/photo-1556761175-b413da4baf72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-2",
+      "description": "A professional background image of a corporate meeting room.",
+      "imageUrl": "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
     },
     {
       "id": "professional-bg-new",
       "description": "A new professional background image for the landing page.",
       "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate office"
+    },
+    {
+      "id": "professional-bg-4",
+      "description": "A professional background image of a modern building exterior.",
+      "imageUrl": "https://images.unsplash.com/photo-1497493292307-31c376b6e479?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "corporate office"
     },
     {

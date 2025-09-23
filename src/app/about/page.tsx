@@ -6,7 +6,7 @@ import { Banknote, Home } from 'lucide-react';
 
 export default function AboutPage() {
   const professionalBg = PlaceHolderImages.find(
-    (p) => p.id === 'professional-bg'
+    (p) => p.id === 'professional-bg-1'
   );
 
   return (

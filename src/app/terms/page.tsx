@@ -78,7 +78,7 @@ const termsContent = [
 
 export default function TermsAndConditionsPage() {
   const professionalBg = PlaceHolderImages.find(
-    (p) => p.id === 'professional-bg'
+    (p) => p.id === 'professional-bg-1'
   );
 
   const formatContent = (content: string | string[]) => {

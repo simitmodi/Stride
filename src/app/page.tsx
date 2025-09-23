@@ -2,23 +2,15 @@
 import { Button } from "@/components/ui/button";
 import { Banknote } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { BackgroundSlideshow } from "@/components/background-slideshow";
 
 export default function Home() {
-  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
+  const slideshowImages = PlaceHolderImages.filter(p => p.id.startsWith("professional-bg"));
 
   return (
     <div className="relative flex min-h-screen w-full flex-col">
-      {professionalBg && <Image
-        src={professionalBg.imageUrl}
-        alt={professionalBg.description}
-        fill
-        className="object-cover"
-        style={{ filter: 'blur(8px)' }}
-        data-ai-hint={professionalBg.imageHint}
-        priority
-      />}
+      <BackgroundSlideshow images={slideshowImages} />
       <div className="absolute inset-0 bg-background/60" />
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4">

@@ -82,7 +82,7 @@ const privacyPolicyContent = [
 
 export default function PrivacyPolicyPage() {
   const professionalBg = PlaceHolderImages.find(
-    (p) => p.id === 'professional-bg'
+    (p) => p.id === 'professional-bg-1'
   );
 
   return (
