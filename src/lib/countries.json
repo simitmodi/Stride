@@ -188,7 +188,6 @@
   { "name": "Slovakia", "dial_code": "+421", "code": "SK", "flag": "🇸🇰" },
   { "name": "Slovenia", "dial_code": "+386", "code": "SI", "flag": "🇸🇮" },
   { "name": "Solomon Islands", "dial_code": "+677", "code": "SB", "flag": "🇸🇧" },
-S
   { "name": "Somalia", "dial_code": "+252", "code": "SO", "flag": "🇸🇴" },
   { "name": "South Africa", "dial_code": "+27", "code": "ZA", "flag": "🇿🇦" },
   { "name": "South Korea", "dial_code": "+82", "code": "KR", "flag": "🇰🇷" },
@@ -228,3 +227,5 @@ S
   { "name": "Zambia", "dial_code": "+260", "code": "ZM", "flag": "🇿🇲" },
   { "name": "Zimbabwe", "dial_code": "+263", "code": "ZW", "flag": "🇿🇼" }
 ]
+
+    
