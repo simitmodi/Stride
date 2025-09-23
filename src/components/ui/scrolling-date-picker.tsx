@@ -8,7 +8,6 @@ import { ChevronUp, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, i) => start + i)
-const days = range(1, 31);
 const months = range(0, 11).map(m => new Date(2000, m).toLocaleString('default', { month: 'short' }));
 const currentYear = new Date().getFullYear();
 const years = range(currentYear - 100, currentYear);
@@ -47,7 +46,7 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({ items, value, onValueChange
       }
       return () => { emblaApi.off("select", onSelect) };
     }
-  }, [emblaApi, items, onValueChange]);
+  }, [emblaApi, items, onValueChange, value]);
 
   // Update scroll position when value changes externally
   React.useEffect(() => {
@@ -95,12 +94,18 @@ export const ScrollingDatePicker: React.FC<ScrollingDatePickerProps> = ({ date, 
   const daysInMonth = React.useMemo(() => getDaysInMonth(year, month), [year, month]);
   const dayItems = React.useMemo(() => range(1, daysInMonth), [daysInMonth]);
 
+  // Sync internal state with external prop
   React.useEffect(() => {
-    setDay(date.getDate());
-    setMonth(date.getMonth());
-    setYear(date.getFullYear());
+    const newDay = date.getDate();
+    const newMonth = date.getMonth();
+    const newYear = date.getFullYear();
+    if (newDay !== day) setDay(newDay);
+    if (newMonth !== month) setMonth(newMonth);
+    if (newYear !== year) setYear(newYear);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
+  // Call setDate when internal state changes
   React.useEffect(() => {
     const currentDaysInMonth = getDaysInMonth(year, month);
     const newDay = Math.min(day, currentDaysInMonth);
@@ -110,7 +115,7 @@ export const ScrollingDatePicker: React.FC<ScrollingDatePickerProps> = ({ date, 
       setDate(newDate);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day, month, year, setDate]);
+  }, [day, month, year]);
 
 
   return (

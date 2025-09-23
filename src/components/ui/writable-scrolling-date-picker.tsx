@@ -24,8 +24,9 @@ export const WritableScrollingDatePicker: React.FC<WritableScrollingDatePickerPr
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    // Only update input value if the date prop changes from outside
-    if (date.getTime() !== parse(inputValue, "dd/MM/yyyy", new Date()).getTime()) {
+    // Sync input value only if the date prop changes from an external source
+    const inputDate = parse(inputValue, "dd/MM/yyyy", new Date());
+    if (isValid(inputDate) && date.getTime() !== inputDate.getTime()) {
       setInputValue(format(date, "dd/MM/yyyy"));
     }
   }, [date, inputValue]);
@@ -39,15 +40,13 @@ export const WritableScrollingDatePicker: React.FC<WritableScrollingDatePickerPr
     if (isValid(parsedDate)) {
       setDate(parsedDate);
     } else {
-      // Reset to the last valid date if input is invalid
+      // If the input is invalid, revert to the last valid date
       setInputValue(format(date, "dd/MM/yyyy"));
     }
   };
   
   const handleDateSelect = (newDate: Date) => {
     setDate(newDate);
-    // This function will now be called from the picker
-    // We update the input value directly here to keep it in sync
     setInputValue(format(newDate, "dd/MM/yyyy"));
   }
 
