@@ -3,9 +3,10 @@
 import { signOutUser } from "@/lib/firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Banknote, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 export default function Header() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function Header() {
           href={getDashboardLink()}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          <Banknote className="h-6 w-6 text-primary" />
+          <Image src="/Logo.png" alt="Stride Logo" width={24} height={24} />
           <span className="font-bold">Stride</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">

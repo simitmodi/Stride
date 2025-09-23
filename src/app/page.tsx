@@ -1,9 +1,8 @@
-
 import { Button } from "@/components/ui/button";
-import { Banknote } from "lucide-react";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { BackgroundSlideshow } from "@/components/background-slideshow";
+import Image from "next/image";
 
 export default function Home() {
   const slideshowImages = PlaceHolderImages.filter(p => p.id.startsWith("professional-bg"));
@@ -22,7 +21,7 @@ export default function Home() {
           >
             <div className="flex flex-col items-center gap-6">
               <div className="flex items-center gap-3">
-                <Banknote className="h-10 w-10 text-primary" />
+                <Image src="/Logo.png" alt="Stride Logo" width={40} height={40} />
                 <span className="text-4xl font-bold text-foreground">Stride</span>
               </div>
               <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
