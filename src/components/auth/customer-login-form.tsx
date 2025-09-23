@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
+import { signInWithEmail, signInWithGoogle, getUserByUsername } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
+  emailOrUsername: z.string().min(1, { message: "Email or username is required." }),
   password: z.string().min(1, { message: "Password is required." }),
 });
 
@@ -42,7 +42,7 @@ export function CustomerLoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      emailOrUsername: "",
       password: "",
     },
   });
@@ -50,7 +50,16 @@ export function CustomerLoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await signInWithEmail(values.email, values.password);
+      let email = values.emailOrUsername;
+      if (!email.includes('@')) {
+        const userProfile = await getUserByUsername(email);
+        if (userProfile && userProfile.email) {
+          email = userProfile.email;
+        } else {
+          throw new Error("Invalid username.");
+        }
+      }
+      const user = await signInWithEmail(email, values.password);
       if (user) {
         router.push("/dashboard/customer");
       }
@@ -58,7 +67,7 @@ export function CustomerLoginForm() {
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
+        description: "Invalid credentials. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -87,13 +96,13 @@ export function CustomerLoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="email"
+            name="emailOrUsername"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email or Username</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="name@example.com" 
+                    placeholder="name@example.com or johndoe" 
                     {...field}
                   />
                 </FormControl>
@@ -133,7 +142,7 @@ export function CustomerLoginForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground" style={{ transform: 'translateY(-0.1rem)' }}>
+          <span className="bg-card px-2 text-foreground/80" style={{ transform: 'translateY(-0.1rem)' }}>
             Or continue with
           </span>
         </div>

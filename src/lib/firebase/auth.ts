@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, db } from "./config";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, query, where, getDocs, limit } from "firebase/firestore";
 
 export async function signUpWithEmail(
   email: string, 
@@ -44,6 +44,18 @@ export async function signUpWithEmail(
 export async function signInWithEmail(email: string, password: string): Promise<User | null> {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   return userCredential.user;
+}
+
+export async function getUserByUsername(username: string): Promise<any | null> {
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("username", "==", username), limit(1));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    const userDoc = querySnapshot.docs[0];
+    return userDoc.data();
+  }
+  return null;
 }
 
 export async function signInWithGoogle(): Promise<User | null> {
