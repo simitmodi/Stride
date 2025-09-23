@@ -4,31 +4,12 @@
  * @fileOverview A flow to handle user feedback submissions.
  *
  * - submitFeedback - Saves feedback to Firestore and returns a feedback ID.
- * - FeedbackInput - The input type for the submitFeedback function.
- * - FeedbackOutput - The return type for the submitFeedback function.
  */
 
 import { ai } from '@/ai/genkit';
 import { db } from '@/lib/firebase/config';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { z } from 'genkit';
-
-export const FeedbackInputSchema = z.object({
-  name: z.string().describe("The user's full name."),
-  email: z.string().email().describe("The user's email address."),
-  phone: z.string().optional().describe("The user's optional phone number."),
-  category: z.enum(["Complaint", "Suggestion", "Feedback", "Other"]).describe("The category of the feedback."),
-  subject: z.string().describe("The subject of the feedback message."),
-  message: z.string().describe("The detailed feedback message from the user."),
-});
-
-export type FeedbackInput = z.infer<typeof FeedbackInputSchema>;
-
-export const FeedbackOutputSchema = z.object({
-  feedbackId: z.string().describe("The unique ID of the submitted feedback document."),
-});
-
-export type FeedbackOutput = z.infer<typeof FeedbackOutputSchema>;
+import { FeedbackInput, FeedbackInputSchema, FeedbackOutput, FeedbackOutputSchema } from './feedback';
 
 const submitFeedbackFlow = ai.defineFlow(
   {
