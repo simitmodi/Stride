@@ -165,10 +165,10 @@ export function CustomerSignUpForm() {
                   <div className="relative">
                     <FormControl>
                       <Input
-                        placeholder="MM/DD/YYYY"
-                        value={field.value ? format(field.value, "MM/dd/yyyy") : ""}
+                        placeholder="DD/MM/YYYY"
+                        value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
                         onChange={(e) => {
-                          const date = parse(e.target.value, "MM/dd/yyyy", new Date());
+                          const date = parse(e.target.value, "dd/MM/yyyy", new Date());
                           if (!isNaN(date.getTime())) {
                             field.onChange(date);
                           } else {
@@ -274,3 +274,5 @@ export function CustomerSignUpForm() {
     </>
   );
 }
+
+    
