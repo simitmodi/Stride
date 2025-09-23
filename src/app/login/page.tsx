@@ -8,6 +8,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowRight, User, Banknote } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Logo from '@/lib/Logo.png';
 
 export default function LoginOptionsPage() {
   const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
@@ -33,7 +34,7 @@ export default function LoginOptionsPage() {
             style={{ backdropFilter: 'blur(12px)' }}
           >
             <div className="text-center text-foreground">
-              <Image src="/Logo.png" alt="Stride Logo" width={48} height={48} className="mb-4 inline-block" />
+              <Image src={Logo} alt="Stride Logo" width={48} height={48} className="mb-4 inline-block" />
               <h1 className="text-3xl font-bold">Select your login type</h1>
               <p className="mt-2 text-foreground">
                 Choose your role to continue.

@@ -7,6 +7,7 @@ import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import Logo from '@/lib/Logo.png';
 
 export default function Header() {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function Header() {
           href={getDashboardLink()}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          <Image src="/Logo.png" alt="Stride Logo" width={24} height={24} />
+          <Image src={Logo} alt="Stride Logo" width={24} height={24} />
           <span className="font-bold">Stride</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">

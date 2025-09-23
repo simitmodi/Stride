@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import Logo from '@/lib/Logo.png';
 
 export default function Footer({ className }: { className?: string }) {
   return (
@@ -14,7 +15,7 @@ export default function Footer({ className }: { className?: string }) {
       <div className="container mx-auto flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:gap-8">
           <div className="flex items-center gap-2 text-black">
-            <Image src="/Logo.png" alt="Stride Logo" width={24} height={24} />
+            <Image src={Logo} alt="Stride Logo" width={24} height={24} />
             <span className="self-center whitespace-nowrap text-xl font-semibold">
               Stride
             </span>

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Home } from 'lucide-react';
+import Logo from '@/lib/Logo.png';
 
 export default function AboutPage() {
   const professionalBg = PlaceHolderImages.find(
@@ -33,7 +34,7 @@ export default function AboutPage() {
           >
             <div className="flex flex-col gap-6 text-foreground">
               <div className="flex items-center gap-3">
-                <Image src="/Logo.png" alt="Stride Logo" width={40} height={40} />
+                <Image src={Logo} alt="Stride Logo" width={40} height={40} />
                 <h1 className="text-4xl font-bold">About Stride</h1>
               </div>
 
