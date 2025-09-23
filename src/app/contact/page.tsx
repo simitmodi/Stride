@@ -65,8 +65,8 @@ const contactOptions = [
     title: 'Visit Helpdesk',
     description:
       'Find answers to common questions in our comprehensive help section.',
-    link: '/about',
-    linkText: 'Visit Helpdesk',
+    link: '/faq',
+    linkText: 'Visit FAQs',
   },
 ];
 

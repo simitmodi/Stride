@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Banknote } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -42,6 +43,14 @@ export default function Footer({ className }: { className?: string }) {
                 className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
               >
                 T&amp;C
+              </Link>
+            </li>
+             <li>
+              <Link
+                href="/faq"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
+              >
+                FAQs
               </Link>
             </li>
             <li>
