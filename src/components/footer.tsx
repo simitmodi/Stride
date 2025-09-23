@@ -46,7 +46,7 @@ export default function Footer({ className }: { className?: string }) {
             </li>
             <li>
               <Link
-                href="#"
+                href="/contact"
                 className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white hover:text-black"
               >
                 Contact

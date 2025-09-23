@@ -1,17 +1,22 @@
-
 {
   "placeholderImages": [
     {
       "id": "professional-bg",
       "description": "A professional background image for login and signup pages.",
-      "imageUrl": "https://picsum.photos/seed/prof-bg/1200/800",
+      "imageUrl": "https://images.unsplash.com/photo-1601662528567-526cd06f6582?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "professional background"
     },
     {
       "id": "professional-bg-new",
       "description": "A new professional background image for the landing page.",
-      "imageUrl": "https://picsum.photos/seed/prof-bg-new/1920/1080",
+      "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb3Jwb3JhdGUlMjBvZmZpY2V8ZW58MHx8fHwxNzU4NjA4OTUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "corporate office"
+    },
+    {
+      "id": "contact-bg",
+      "description": "A background image for the contact page.",
+      "imageUrl": "https://images.unsplash.com/photo-1715310306143-787865a1b538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzdXBwb3J0JTIwY2VudGVyfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "support center"
     }
   ]
 }
