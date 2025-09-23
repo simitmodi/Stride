@@ -100,13 +100,13 @@ export default function PrivacyPolicyPage() {
       )}
       <div className="absolute inset-0 bg-background/60" />
 
-      <main className="relative z-10 flex w-full max-w-6xl flex-col items-center">
+      <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="flex items-center gap-3 mb-8">
             <FileText className="h-10 w-10 text-primary" />
             <h1 className="text-4xl font-bold text-foreground">Privacy Policy</h1>
         </div>
 
-        <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full grid-cols-1 gap-6">
           {privacyPolicyContent.map((section) => (
             <div key={section.id} className="group relative">
                <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur transition-all duration-300 group-hover:opacity-100 group-hover:blur-md"></div>
