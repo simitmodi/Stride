@@ -11,7 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, db } from "./config";
-import { doc, setDoc, getDoc, collection, query, where, getDocs, limit } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, query, where, getDocs, limit, serverTimestamp } from "firebase/firestore";
 
 export async function signUpWithEmail(
   email: string, 
@@ -35,7 +35,8 @@ export async function signUpWithEmail(
       lastName,
       username,
       dateOfBirth,
-      role: 'customer' // default role
+      role: 'customer', // default role
+      createdAt: serverTimestamp(),
     });
     return userCredential.user;
   }
@@ -70,33 +71,39 @@ export async function signInWithGoogle(): Promise<User | null> {
 
     if (!userDoc.exists()) {
       const displayName = user.displayName || "";
-      const emailUsername = user.email?.split('@')[0] || `user${user.uid.substring(0, 5)}`;
-      
+      const email = user.email;
+      const photoURL = user.photoURL;
+
       let firstName = "";
       let lastName = "";
-
       if (displayName) {
         const nameParts = displayName.split(" ");
-        firstName = nameParts[0];
-        lastName = nameParts.slice(1).join(" ");
+        firstName = nameParts[0] || "";
+        lastName = nameParts.slice(1).join(" ") || "";
       }
+      
+      const username = email?.split('@')[0] || `user${user.uid.substring(0,5)}`;
 
+      // Note: Date of birth is not available from Google Sign-In by default.
+      // This requires requesting additional scopes (e.g., from Google People API)
+      // which is more complex and requires user consent for that specific data.
       await setDoc(userDocRef, {
         uid: user.uid,
-        email: user.email,
+        email: email,
         displayName: displayName,
         firstName: firstName,
         lastName: lastName,
-        username: emailUsername,
-        photoURL: user.photoURL,
+        username: username,
+        photoURL: photoURL,
         role: 'customer',
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
       });
     }
 
     return user;
   } catch (error) {
     console.error("Error during Google sign-in:", error);
+    // Don't re-throw, just return null to indicate failure
     return null;
   }
 }
