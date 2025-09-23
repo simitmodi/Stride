@@ -19,7 +19,7 @@ import { signUpWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { ScrollingDatePicker } from "@/components/ui/scrolling-date-picker";
+import { WritableScrollingDatePicker } from "@/components/ui/writable-scrolling-date-picker";
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
@@ -160,7 +160,7 @@ export function CustomerSignUpForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>Date of Birth</FormLabel>
                 <FormControl>
-                  <ScrollingDatePicker
+                  <WritableScrollingDatePicker
                     date={field.value}
                     setDate={field.onChange}
                   />
