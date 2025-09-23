@@ -18,12 +18,13 @@ import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { CalendarIcon, Loader2, Eye, EyeOff } from "lucide-react";
+import { CalendarIcon, Loader2, Eye, EyeOff, Phone } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { PasswordStrength } from "@/components/password-strength";
+import { PhoneAuthForm } from "./phone-auth-form";
 
 
 const formSchema = z.object({
@@ -53,6 +54,7 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function CustomerSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isPhoneAuthOpen, setIsPhoneAuthOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -112,6 +114,8 @@ export function CustomerSignUpForm() {
       setIsGoogleLoading(false);
     }
   }
+
+  const allButtonsDisabled = isLoading || isGoogleLoading || isPhoneAuthOpen;
 
   return (
     <>
@@ -307,7 +311,7 @@ export function CustomerSignUpForm() {
           <Button 
             type="submit" 
             className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
-            disabled={isLoading || isGoogleLoading}
+            disabled={allButtonsDisabled}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign Up
@@ -324,21 +328,31 @@ export function CustomerSignUpForm() {
           </span>
         </div>
       </div>
-      <Button
-        variant="outline"
-        onClick={handleGoogleSignIn}
-        disabled={isLoading || isGoogleLoading}
-        className="w-full h-11"
-      >
-        {isGoogleLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <GoogleIcon className="mr-2 h-5 w-5" />
-        )}
-        Google
-      </Button>
+      <div className="space-y-2">
+        <Button
+          variant="outline"
+          onClick={handleGoogleSignIn}
+          disabled={allButtonsDisabled}
+          className="w-full h-11"
+        >
+          {isGoogleLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <GoogleIcon className="mr-2 h-5 w-5" />
+          )}
+          Google
+        </Button>
+        <PhoneAuthForm open={isPhoneAuthOpen} onOpenChange={setIsPhoneAuthOpen}>
+          <Button
+            variant="outline"
+            disabled={allButtonsDisabled}
+            className="w-full h-11"
+          >
+            <Phone className="mr-2 h-5 w-5" />
+            Sign up with Phone
+          </Button>
+        </PhoneAuthForm>
+      </div>
     </>
   );
 }
-
-    

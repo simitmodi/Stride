@@ -18,7 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { signInWithEmail, signInWithGoogle, getUserByUsername } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Phone } from "lucide-react";
+import { PhoneAuthForm } from "./phone-auth-form";
 
 declare global {
   interface Window {
@@ -43,6 +44,7 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function CustomerLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isPhoneAuthOpen, setIsPhoneAuthOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -115,6 +117,8 @@ export function CustomerLoginForm() {
     }
   }
 
+  const allButtonsDisabled = isLoading || isGoogleLoading || isPhoneAuthOpen;
+
   return (
     <>
       <Form {...form}>
@@ -155,7 +159,7 @@ export function CustomerLoginForm() {
           <Button 
             type="submit" 
             className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
-            disabled={isLoading || isGoogleLoading}
+            disabled={allButtonsDisabled}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Login
@@ -172,19 +176,31 @@ export function CustomerLoginForm() {
           </span>
         </div>
       </div>
-      <Button
-        variant="outline"
-        onClick={handleGoogleSignIn}
-        disabled={isLoading || isGoogleLoading}
-        className="w-full h-11"
-      >
-        {isGoogleLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <GoogleIcon className="mr-2 h-5 w-5" />
-        )}
-        Google
-      </Button>
+      <div className="space-y-2">
+        <Button
+          variant="outline"
+          onClick={handleGoogleSignIn}
+          disabled={allButtonsDisabled}
+          className="w-full h-11"
+        >
+          {isGoogleLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <GoogleIcon className="mr-2 h-5 w-5" />
+          )}
+          Google
+        </Button>
+        <PhoneAuthForm open={isPhoneAuthOpen} onOpenChange={setIsPhoneAuthOpen}>
+          <Button
+            variant="outline"
+            disabled={allButtonsDisabled}
+            className="w-full h-11"
+          >
+            <Phone className="mr-2 h-5 w-5" />
+            Sign in with Phone
+          </Button>
+        </PhoneAuthForm>
+      </div>
     </>
   );
 }
