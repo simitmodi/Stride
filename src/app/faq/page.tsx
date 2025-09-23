@@ -203,7 +203,7 @@ export default function FaqPage() {
                       <AccordionItem
                         key={index}
                         value={`item-${index}`}
-                        className="border-border/50"
+                        className="border-border"
                       >
                         <AccordionTrigger className="text-left font-medium text-foreground hover:no-underline">
                           {faq.q}
