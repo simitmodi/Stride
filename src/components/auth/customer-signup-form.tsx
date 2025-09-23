@@ -18,11 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { CalendarIcon, Loader2 } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { format, parse } from "date-fns";
+import { Loader2 } from "lucide-react";
+import { ScrollingDatePicker } from "@/components/ui/scrolling-date-picker";
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
@@ -58,6 +55,7 @@ export function CustomerSignUpForm() {
       username: "",
       email: "",
       password: "",
+      dateOfBirth: new Date(new Date().setFullYear(new Date().getFullYear() - 18)), // Default to 18 years ago
     },
   });
 
@@ -155,52 +153,18 @@ export function CustomerSignUpForm() {
               </FormItem>
             )}
           />
-          <FormField
+           <FormField
             control={form.control}
             name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
-                <Popover>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        placeholder="DD/MM/YYYY"
-                        value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
-                        onChange={(e) => {
-                          const date = parse(e.target.value, "dd/MM/yyyy", new Date());
-                          if (!isNaN(date.getTime())) {
-                            field.onChange(date);
-                          } else {
-                            field.onChange(undefined);
-                          }
-                        }}
-                        className="pr-10"
-                      />
-                    </FormControl>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-0 top-0 h-full w-10 text-muted-foreground hover:bg-transparent"
-                      >
-                        <CalendarIcon className="h-4 w-4" />
-                        <span className="sr-only">Pick a date</span>
-                      </Button>
-                    </PopoverTrigger>
-                  </div>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FormLabel>Date of Birth</FormLabel>
+                <FormControl>
+                  <ScrollingDatePicker
+                    date={field.value}
+                    setDate={field.onChange}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -274,5 +238,3 @@ export function CustomerSignUpForm() {
     </>
   );
 }
-
-    
