@@ -17,6 +17,12 @@
       "description": "A background image for the contact page.",
       "imageUrl": "https://images.unsplash.com/photo-1715310306143-787865a1b538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzdXBwb3J0JTIwY2VudGVyfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "support center"
+    },
+    {
+      "id": "feedback-bg",
+      "description": "A background image for the feedback page.",
+      "imageUrl": "https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjdXN0b21lciUyMGZlZWRiYWNrfGVufDB8fHx8MTc1ODYzNDEzMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "customer feedback"
     }
   ]
 }
