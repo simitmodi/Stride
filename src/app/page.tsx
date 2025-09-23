@@ -21,10 +21,7 @@ export default function Home() {
             style={{ backdropFilter: 'blur(12px)' }}
           >
             <div className="flex flex-col items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Image src={Logo} alt="Stride Logo" width={40} height={40} />
-                <span className="text-4xl font-bold text-foreground">Stride</span>
-              </div>
+              <Image src={Logo} alt="Stride Logo" width={64} height={64} />
               <h1 className="text-balance text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
                 Seamless Bank Appointments
               </h1>
