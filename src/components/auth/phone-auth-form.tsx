@@ -122,6 +122,13 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
     }
   };
 
+  const handleCountryChange = (countryCode: string) => {
+    const country = countries.find(c => c.code === countryCode);
+    if (country) {
+        setCountryCode(country.dial_code);
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -140,16 +147,16 @@ export function PhoneAuthForm({ children, open, onOpenChange }: PhoneAuthFormPro
         {step === "phone" ? (
           <form onSubmit={handlePhoneSubmit} className="space-y-4">
             <div className="flex gap-2">
-              <Select value={countryCode} onValueChange={setCountryCode}>
+              <Select defaultValue="IN" onValueChange={handleCountryChange}>
                 <SelectTrigger className="w-[150px]">
                   <SelectValue placeholder="Country" />
                 </SelectTrigger>
                 <SelectContent>
                   {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.dial_code}>
+                    <SelectItem key={country.code} value={country.code}>
                       <span className="flex items-center gap-2">
                         <span>{country.flag}</span>
-                        <span>{country.dial_code}</span>
+                        <span>{country.name} ({country.dial_code})</span>
                       </span>
                     </SelectItem>
                   ))}
