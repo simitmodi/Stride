@@ -1,6 +1,7 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
+
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   "projectId": "studio-5920023951-be7cb",
@@ -11,21 +12,29 @@ const firebaseConfig = {
   "messagingSenderId": "863254815612"
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-const db = getFirestore(app);
+let app: FirebaseApp;
+let auth: ReturnType<typeof getAuth>;
+let db: Firestore;
 
-if (typeof window !== 'undefined') {
+if (typeof window === 'undefined') {
+  // Server-side initialization
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+} else {
+  // Client-side initialization
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+
   enableIndexedDbPersistence(db)
     .catch((err) => {
       if (err.code == 'failed-precondition') {
         // Multiple tabs open, persistence can only be enabled
         // in one tab at a time.
-        // ...
       } else if (err.code == 'unimplemented') {
         // The current browser does not support all of the
         // features required to enable persistence
-        // ...
       }
     });
 }
