@@ -40,7 +40,7 @@ const contactOptions = [
     title: 'Report an Issue',
     description:
       'Encountered a technical problem? Let us know so we can fix it right away.',
-    link: '#',
+    link: '/feedback',
     linkText: 'Report an Issue',
   },
   {
@@ -57,7 +57,7 @@ const contactOptions = [
     title: 'Raise a Complaint',
     description:
       'If you have a grievance, please use our formal process to have it addressed.',
-    link: '#',
+    link: '/feedback',
     linkText: 'Submit Complaint',
   },
   {
@@ -146,4 +146,3 @@ export default function ContactPage() {
     </div>
   );
 }
-
