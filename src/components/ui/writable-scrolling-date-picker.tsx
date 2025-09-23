@@ -24,10 +24,8 @@ export const WritableScrollingDatePicker: React.FC<WritableScrollingDatePickerPr
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    if (!open) {
-      setInputValue(format(date, "dd/MM/yyyy"));
-    }
-  }, [date, open]);
+    setInputValue(format(date, "dd/MM/yyyy"));
+  }, [date]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
