@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Home, FileText } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const privacyPolicyContent = [
   {
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
   );
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4 pt-24 md:pt-32">
       {professionalBg && (
         <Image
           src={professionalBg.imageUrl}
@@ -100,50 +100,31 @@ export default function PrivacyPolicyPage() {
       )}
       <div className="absolute inset-0 bg-background/60" />
 
-      <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
-        <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"></div>
-          <div
-            className="relative w-full rounded-xl bg-card/15 p-8 shadow-lg md:p-12"
-            style={{ backdropFilter: 'blur(12px)' }}
-          >
-            <div className="flex flex-col gap-6 text-foreground">
-              <div className="flex items-center gap-3">
-                <FileText className="h-10 w-10 text-primary" />
-                <h1 className="text-4xl font-bold">Privacy Policy</h1>
-              </div>
+      <main className="relative z-10 flex w-full max-w-6xl flex-col items-center">
+        <div className="flex items-center gap-3 mb-8">
+            <FileText className="h-10 w-10 text-primary" />
+            <h1 className="text-4xl font-bold text-foreground">Privacy Policy</h1>
+        </div>
 
-              {/* Desktop View */}
-              <div className="hidden space-y-8 md:block">
-                {privacyPolicyContent.map((section) => (
-                  <div key={section.id}>
-                    <h2 className="mb-3 text-2xl font-semibold">{section.title}</h2>
-                    <div className="space-y-2 text-foreground/80">
-                      {section.content.map((text, index) => (
-                        <p key={index}>{text}</p>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Mobile View (Accordion) */}
-              <div className="block md:hidden">
-                <Accordion type="single" collapsible className="w-full">
-                  {privacyPolicyContent.map((section) => (
-                    <AccordionItem value={section.id} key={section.id}>
-                      <AccordionTrigger className="text-left text-lg font-semibold">{section.title}</AccordionTrigger>
-                      <AccordionContent className="space-y-2 pt-2 text-foreground/80">
-                        {section.content.map((text, index) => (
-                          <p key={index}>{text}</p>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
+        <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {privacyPolicyContent.map((section) => (
+            <div key={section.id} className="group relative">
+               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur transition-all duration-300 group-hover:opacity-100 group-hover:blur-md"></div>
+              <Card 
+                className="relative h-full w-full transform-gpu bg-card/15 shadow-lg"
+                style={{ backdropFilter: 'blur(12px)' }}
+              >
+                <CardHeader>
+                  <CardTitle className="text-xl text-foreground">{section.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-foreground/80">
+                  {section.content.map((text, index) => (
+                    <p key={index}>{text}</p>
                   ))}
-                </Accordion>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          ))}
         </div>
 
         <div className="mt-8">
