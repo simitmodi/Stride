@@ -103,11 +103,13 @@ export function CustomerLoginForm() {
       await signInWithGoogle();
       router.push('/dashboard/customer');
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: error.message || "Could not sign in with Google. Please try again.",
-      });
+      if (error.code !== 'auth/popup-closed-by-user') {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: error.message || "Could not sign in with Google. Please try again.",
+        });
+      }
     } finally {
       setIsGoogleLoading(false);
     }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -88,11 +89,13 @@ export function CustomerSignUpForm() {
       await signInWithGoogle();
       router.push('/dashboard/customer');
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Sign-up Failed",
-        description: error.message || "Could not sign up with Google. Please try again.",
-      });
+      if (error.code !== 'auth/popup-closed-by-user') {
+        toast({
+          variant: "destructive",
+          title: "Sign-up Failed",
+          description: error.message || "Could not sign up with Google. Please try again.",
+        });
+      }
     } finally {
       setIsGoogleLoading(false);
     }
