@@ -48,8 +48,7 @@ export default function Header() {
           href={getDashboardLink()}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          <Image src={Logo} alt="Stride Logo" width={24} height={24} />
-          <span className="font-bold">Stride</span>
+          <Image src={Logo} alt="Stride Logo" width={200} height={200} />
         </Link>
         <div className="ml-auto flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={handleLogout}>

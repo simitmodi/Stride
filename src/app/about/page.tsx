@@ -32,10 +32,9 @@ export default function AboutPage() {
             className="relative w-full rounded-xl bg-card/15 p-8 shadow-lg md:p-12 transform-gpu"
             style={{ backdropFilter: 'blur(12px)' }}
           >
-            <div className="flex flex-col gap-6 text-foreground">
+            <div className="flex flex-col gap-6 text-foreground items-center">
               <div className="flex items-center gap-3">
-                <Image src={Logo} alt="Stride Logo" width={40} height={40} />
-                <h1 className="text-4xl font-bold">About Stride</h1>
+                <Image src={Logo} alt="Stride Logo" width={200} height={200} />
               </div>
 
               <p className="text-base text-foreground/80 md:text-lg">
