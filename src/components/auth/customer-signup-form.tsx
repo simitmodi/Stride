@@ -22,7 +22,7 @@ import { CalendarIcon, Loader2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
@@ -162,24 +162,33 @@ export function CustomerSignUpForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
                 <Popover>
-                  <PopoverTrigger asChild>
+                  <div className="relative">
                     <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
+                      <Input
+                        placeholder="MM/DD/YYYY"
+                        value={field.value ? format(field.value, "MM/dd/yyyy") : ""}
+                        onChange={(e) => {
+                          const date = parse(e.target.value, "MM/dd/yyyy", new Date());
+                          if (!isNaN(date.getTime())) {
+                            field.onChange(date);
+                          } else {
+                            field.onChange(undefined);
+                          }
+                        }}
+                        className="pr-10"
+                      />
                     </FormControl>
-                  </PopoverTrigger>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full w-10 text-muted-foreground hover:bg-transparent"
+                      >
+                        <CalendarIcon className="h-4 w-4" />
+                        <span className="sr-only">Pick a date</span>
+                      </Button>
+                    </PopoverTrigger>
+                  </div>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
