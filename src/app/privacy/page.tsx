@@ -118,9 +118,19 @@ export default function PrivacyPolicyPage() {
                   <CardTitle className="text-xl text-foreground">{section.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-foreground/80">
-                  {section.content.map((text, index) => (
-                    <p key={index}>{text}</p>
-                  ))}
+                  {section.content.map((text, index) => {
+                    const emailRegex = /support@strideapp\.in/;
+                    if (emailRegex.test(text)) {
+                      return (
+                        <p key={index}>
+                          <a href="mailto:support@strideapp.in" className="hover:text-primary transition-colors">
+                            {text}
+                          </a>
+                        </p>
+                      );
+                    }
+                    return <p key={index}>{text}</p>;
+                  })}
                 </CardContent>
               </Card>
             </div>
