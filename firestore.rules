@@ -1,13 +1,17 @@
-
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow anyone to submit feedback
+    // Allow anyone to submit feedback. 
+    // This is secure because we are only allowing 'create' operations.
+    // No one can read, update, or delete feedback through the client SDK.
     match /UserFeedback/{docId} {
       allow create: if true;
+      allow read, update, delete: if false;
     }
 
-    // Deny all other reads/writes
+    // By default, deny all reads and writes to other collections
+    // to keep the rest of your database secure.
     match /{document=**} {
       allow read, write: if false;
     }
