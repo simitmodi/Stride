@@ -11,6 +11,7 @@ import {
   format,
   isSameDay,
   startOfDay,
+  subDays,
 } from "date-fns";
 import { Button } from "./ui/button";
 import { Calendar as CalendarIcon, Bell } from "lucide-react";
@@ -30,19 +31,21 @@ export default function UpcomingAppointments() {
   const { data: allAppointments, isLoading } = useCollection(appointmentsQuery);
 
   useEffect(() => {
-    const start = startOfDay(new Date());
+    const start = subDays(selectedDate, 3);
     setDays(Array.from({ length: 7 }).map((_, i) => addDays(start, i)));
-  }, []);
+  }, [selectedDate]);
 
   const appointmentsByDay = useMemo(() => {
     const map = new Map<string, any[]>();
     if (allAppointments) {
       allAppointments.forEach((apt) => {
-        const dateStr = format(apt.date.toDate(), "yyyy-MM-dd");
-        if (!map.has(dateStr)) {
-          map.set(dateStr, []);
+        if (apt.date && apt.date.toDate) {
+          const dateStr = format(apt.date.toDate(), "yyyy-MM-dd");
+          if (!map.has(dateStr)) {
+            map.set(dateStr, []);
+          }
+          map.get(dateStr)?.push(apt);
         }
-        map.get(dateStr)?.push(apt);
       });
     }
     return map;
@@ -50,7 +53,7 @@ export default function UpcomingAppointments() {
 
   const appointmentsForSelectedDay = useMemo(() => {
     if (!selectedDate || !allAppointments) return [];
-    return allAppointments.filter(apt => isSameDay(apt.date.toDate(), selectedDate));
+    return allAppointments.filter(apt => apt.date && apt.date.toDate && isSameDay(apt.date.toDate(), selectedDate));
   }, [selectedDate, allAppointments]);
   
   if (days.length === 0) {
@@ -125,7 +128,7 @@ export default function UpcomingAppointments() {
                     <div>
                       <h3 className="font-bold">{apt.title}</h3>
                       <p className="text-sm">
-                        {format(apt.date.toDate(), "PPP p")}
+                        {apt.date && apt.date.toDate ? format(apt.date.toDate(), "PPP p") : 'Date not available'}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {apt.location}
@@ -145,4 +148,3 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
-
