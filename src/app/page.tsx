@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
       <BackgroundSlideshow images={slideshowImages} />
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-card/75" />
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4">
         <div className="group relative w-full max-w-2xl">

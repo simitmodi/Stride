@@ -88,7 +88,7 @@ export default function ContactPage() {
           priority
         />
       )}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-card/75" />
 
       <main className="relative z-10 flex w-full max-w-6xl flex-col items-center">
         <div className="mb-8 text-center text-foreground">

@@ -24,7 +24,7 @@ export default function AboutPage() {
           priority
         />
       )}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-card/75" />
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="group relative w-full">
