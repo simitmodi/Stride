@@ -65,14 +65,19 @@ export default function UpcomingAppointments() {
                 return (
                   <Button
                     key={day.toString()}
-                    variant={isToday ? "default" : "outline"}
+                    variant={isSameDay(day, selectedDate) && !isToday ? "secondary" : "ghost"}
                     className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200
                       ${
                         isToday
                           ? "bg-primary text-primary-foreground border-2 border-primary"
                           : "bg-card/30 hover:bg-card/70"
                       }
-                      ${hasAppointment && !isToday ? "border-2 border-primary" : ""}`}
+                      ${
+                        isSameDay(day, selectedDate)
+                          ? "ring-2 ring-primary"
+                          : ""
+                      }
+                      ${hasAppointment && !isSameDay(day, selectedDate) ? "border-2 border-primary" : ""}`}
                     onClick={() => setSelectedDate(day)}
                   >
                     <span className="text-sm">{format(day, "eee")}</span>
