@@ -1,4 +1,3 @@
-
 "use client";
 
 import Footer from "./footer";
