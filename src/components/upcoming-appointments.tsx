@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useCollection } from "@/firebase/firestore/use-collection";
 import { useUser, useMemoFirebase } from "@/firebase/provider";
 import { collection } from "firebase/firestore";
@@ -19,6 +20,7 @@ import { Card, CardContent } from "./ui/card";
 export default function UpcomingAppointments() {
   const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [days, setDays] = useState<Date[]>([]);
 
   const appointmentsQuery = useMemoFirebase(
     () => (user ? collection(db, `users/${user.uid}/appointments`) : null),
@@ -26,9 +28,9 @@ export default function UpcomingAppointments() {
   );
   const { data: appointments, isLoading } = useCollection(appointmentsQuery);
 
-  const days = useMemo(() => {
+  useEffect(() => {
     const start = startOfDay(new Date());
-    return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
+    setDays(Array.from({ length: 7 }).map((_, i) => addDays(start, i)));
   }, []);
 
   const appointmentsByDay = useMemo(() => {
@@ -44,6 +46,10 @@ export default function UpcomingAppointments() {
     }
     return map;
   }, [appointments]);
+  
+  if (days.length === 0) {
+    return null; 
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -135,3 +141,4 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
+
