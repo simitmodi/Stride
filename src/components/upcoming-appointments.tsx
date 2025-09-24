@@ -20,14 +20,14 @@ import { Calendar } from "./ui/calendar";
 
 export default function UpcomingAppointments() {
   const { user } = useUser();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [days, setDays] = useState<Date[]>([]);
 
   const appointmentsQuery = useMemoFirebase(
     () => (user ? collection(db, `users/${user.uid}/appointments`) : null),
     [user]
   );
-  const { data: appointments, isLoading } = useCollection(appointmentsQuery);
+  const { data: allAppointments, isLoading } = useCollection(appointmentsQuery);
 
   useEffect(() => {
     const start = startOfDay(new Date());
@@ -36,8 +36,8 @@ export default function UpcomingAppointments() {
 
   const appointmentsByDay = useMemo(() => {
     const map = new Map<string, any[]>();
-    if (appointments) {
-      appointments.forEach((apt) => {
+    if (allAppointments) {
+      allAppointments.forEach((apt) => {
         const dateStr = format(apt.date.toDate(), "yyyy-MM-dd");
         if (!map.has(dateStr)) {
           map.set(dateStr, []);
@@ -46,7 +46,12 @@ export default function UpcomingAppointments() {
       });
     }
     return map;
-  }, [appointments]);
+  }, [allAppointments]);
+
+  const appointmentsForSelectedDay = useMemo(() => {
+    if (!selectedDate || !allAppointments) return [];
+    return allAppointments.filter(apt => isSameDay(apt.date.toDate(), selectedDate));
+  }, [selectedDate, allAppointments]);
   
   if (days.length === 0) {
     return null; 
@@ -56,29 +61,23 @@ export default function UpcomingAppointments() {
     <div className="w-full max-w-4xl mx-auto">
       <Card className="bg-card/50 border-primary/20 shadow-lg rounded-lg">
         <CardContent className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex space-x-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between flex-grow mr-4">
               {days.map((day) => {
-                const isToday = isSameDay(day, new Date());
+                const isToday = isSameDay(day, startOfDay(new Date()));
+                const isSelected = isSameDay(day, selectedDate);
                 const hasAppointment = appointmentsByDay.has(
                   format(day, "yyyy-MM-dd")
                 );
+
                 return (
                   <Button
                     key={day.toString()}
-                    variant={isSameDay(day, selectedDate) && !isToday ? "secondary" : "ghost"}
-                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200
-                      ${
-                        isToday
-                          ? "bg-primary text-primary-foreground border-2 border-primary"
-                          : "bg-card/30 hover:bg-card/70"
-                      }
-                      ${
-                        isSameDay(day, selectedDate)
-                          ? "ring-2 ring-primary"
-                          : ""
-                      }
-                      ${hasAppointment && !isSameDay(day, selectedDate) ? "border-2 border-primary" : ""}`}
+                    variant="ghost"
+                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 
+                      ${isToday ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-card/70'} 
+                      ${isSelected && !isToday ? 'ring-2 ring-primary' : ''} 
+                      ${hasAppointment && !isSelected && !isToday ? 'border-2 border-primary' : ''}`}
                     onClick={() => setSelectedDate(day)}
                   >
                     <span className="text-sm">{format(day, "eee")}</span>
@@ -99,7 +98,7 @@ export default function UpcomingAppointments() {
                 <Calendar
                   mode="single"
                   selected={selectedDate}
-                  onSelect={(d) => setSelectedDate(d || new Date())}
+                  onSelect={(d) => setSelectedDate(d ? startOfDay(d) : new Date())}
                 />
               </PopoverContent>
             </Popover>
@@ -116,8 +115,8 @@ export default function UpcomingAppointments() {
           <p>Loading appointments...</p>
         ) : (
           <div className="space-y-4">
-            {appointments && appointments.length > 0 ? (
-              appointments.map((apt) => (
+            {appointmentsForSelectedDay && appointmentsForSelectedDay.length > 0 ? (
+              appointmentsForSelectedDay.map((apt) => (
                 <Card
                   key={apt.id}
                   className="bg-card/50 border-primary/20"
@@ -146,3 +145,4 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
+
