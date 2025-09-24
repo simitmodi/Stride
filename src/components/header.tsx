@@ -1,7 +1,8 @@
+
 "use client";
 
 import { signOutUser } from "@/lib/firebase/auth";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut, User as UserIcon } from "lucide-react";
 import Link from "next/link";
@@ -53,13 +54,14 @@ export default function Header() {
 
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-black/10 bg-transparent px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
         <Link
-          href="/"
+          href="/dashboard/customer"
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
           <Image src={Logo} alt="Stride Logo" width={100} height={100} />
+          <span className="sr-only">Stride</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">
           <DropdownMenu>
