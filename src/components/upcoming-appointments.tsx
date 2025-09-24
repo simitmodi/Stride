@@ -85,8 +85,8 @@ export default function UpcomingAppointments() {
     <div className="w-full max-w-4xl mx-auto">
       <Card className="bg-card/50 border-primary/20 shadow-lg rounded-lg">
         <CardContent className="p-4">
-          <div className="flex justify-between items-center">
-            <div className="flex justify-between flex-grow mr-4">
+          <div className="flex justify-between items-center gap-4">
+            <div className="flex justify-between flex-grow">
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
@@ -112,20 +112,29 @@ export default function UpcomingAppointments() {
                 );
               })}
             </div>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="h-16 w-16">
-                  <CalendarIcon className="h-6 w-6" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(d) => setSelectedDate(d ? startOfDay(d) : new Date())}
-                />
-              </PopoverContent>
-            </Popover>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                className="h-16"
+                onClick={() => setSelectedDate(startOfDay(new Date()))}
+              >
+                Today
+              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="h-16 w-16">
+                    <CalendarIcon className="h-6 w-6" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(d) => setSelectedDate(d ? startOfDay(d) : startOfDay(new Date()))}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
         </CardContent>
       </Card>
