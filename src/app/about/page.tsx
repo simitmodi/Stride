@@ -28,7 +28,7 @@ export default function AboutPage() {
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-2xl"></div>
+          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
           <div
             className="relative w-full rounded-xl bg-card p-8 shadow-lg md:p-12 transform-gpu"
             style={{ backdropFilter: 'blur(12px)' }}

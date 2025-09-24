@@ -16,7 +16,7 @@ export default function Home() {
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4">
         <div className="group relative w-full max-w-2xl">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-2xl"></div>
+          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
           <div 
             className="relative w-full rounded-xl bg-card p-8 text-center shadow-lg md:p-12 transform-gpu"
             style={{ backdropFilter: 'blur(12px)' }}
