@@ -86,7 +86,7 @@ export default function UpcomingAppointments() {
       <Card className="bg-card shadow-lg rounded-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
-            <div className="flex justify-start flex-grow gap-4">
+            <div className="flex justify-start flex-grow gap-6">
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
@@ -98,8 +98,8 @@ export default function UpcomingAppointments() {
                   <Button
                     key={day.toString()}
                     variant="ghost"
-                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center text-foreground
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'hover:bg-background/50'} 
+                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center
+                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-background/50'} 
                       ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
                       ${!dayIsSelected && hasAppointment && !dayIsToday ? 'border border-primary/50' : 'border border-transparent'}`}
                     onClick={() => setSelectedDate(day)}
