@@ -15,12 +15,12 @@ body::-webkit-scrollbar {
 
 @layer base {
   :root {
-    --background: 208 100% 97%;
+    --background: 40 11% 72%;
     --foreground: 120 100% 3%;
-    --card: 208 100% 97%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 208 100% 97%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --card: 44 13% 79%;
+    --card-foreground: 120 100% 3%;
+    --popover: 44 13% 79%;
+    --popover-foreground: 120 100% 3%;
     --primary: 137 70% 10%;
     --primary-foreground: 0 0% 100%;
     --secondary: 210 14% 90%;
