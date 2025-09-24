@@ -99,7 +99,7 @@ export default function UpcomingAppointments() {
                     key={day.toString()}
                     variant="ghost"
                     className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-background/50'} 
+                      ${dayIsToday ? 'bg-primary text-primary-foreground' : ''} 
                       ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
                       ${!dayIsSelected && hasAppointment && !dayIsToday ? 'border border-primary/50' : 'border border-transparent'}`}
                     onClick={() => setSelectedDate(day)}
@@ -170,7 +170,7 @@ export default function UpcomingAppointments() {
                 </Card>
               ))
             ) : (
-              <p className="text-center text-muted-foreground mt-8">
+              <p className="text-center text-foreground mt-8">
                 Your schedule is clear. Book an appointment to get started.
               </p>
             )}
