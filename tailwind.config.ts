@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -13,6 +14,15 @@ export default {
         body: ['Georgia', 'Times New Roman', 'serif'],
         headline: ['Georgia', 'Times New Roman', 'serif'],
         code: ['monospace'],
+      },
+      transitionProperty: {
+        'all': 'all',
+      },
+      transitionDuration: {
+        '300': '500ms',
+      },
+      transitionTimingFunction: {
+        'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
       colors: {
         background: 'hsl(var(--background))',
