@@ -193,7 +193,7 @@ export default function FaqPage() {
                 </h2>
               </div>
               <div className="group relative w-full">
-                 <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-20 blur-md transition-all duration-300 group-hover:opacity-40 group-hover:blur-lg"></div>
+                 <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
                 <div
                   className="relative w-full rounded-xl bg-card p-4 shadow-lg md:p-6"
                   style={{ backdropFilter: 'blur(12px)' }}
