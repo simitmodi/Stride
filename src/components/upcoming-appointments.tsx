@@ -83,7 +83,7 @@ export default function UpcomingAppointments() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="bg-card/50 border-primary/20 shadow-lg rounded-lg">
+      <Card className="bg-card shadow-lg rounded-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
             <div className="flex justify-start flex-grow gap-4">
@@ -98,10 +98,10 @@ export default function UpcomingAppointments() {
                   <Button
                     key={day.toString()}
                     variant="ghost"
-                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'bg-card/70 hover:bg-card'} 
-                      ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''} 
-                      ${!dayIsSelected && hasAppointment ? 'border border-primary/50' : 'border border-transparent'}`}
+                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center text-foreground
+                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'hover:bg-background/50'} 
+                      ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
+                      ${!dayIsSelected && hasAppointment && !dayIsToday ? 'border border-primary/50' : 'border border-transparent'}`}
                     onClick={() => setSelectedDate(day)}
                   >
                     <span className="text-sm uppercase">
@@ -124,7 +124,7 @@ export default function UpcomingAppointments() {
               </Button>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="h-16 w-16 rounded-full p-0">
+                  <Button variant="outline" className="h-16 w-16 rounded-lg p-0 flex justify-center items-center">
                     <CalendarIcon className="h-6 w-6" />
                   </Button>
                 </PopoverTrigger>
