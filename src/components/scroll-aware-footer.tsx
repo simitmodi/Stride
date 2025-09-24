@@ -1,7 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Footer from "./footer";
 
 export function ScrollAwareFooter() {
-  return <Footer />;
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  return isClient ? <Footer /> : null;
 }
