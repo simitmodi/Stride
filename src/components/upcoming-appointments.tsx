@@ -86,7 +86,7 @@ export default function UpcomingAppointments() {
       <Card className="bg-card shadow-lg rounded-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
-            <div className="flex justify-start flex-grow gap-6">
+            <div className="flex justify-between flex-grow">
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
