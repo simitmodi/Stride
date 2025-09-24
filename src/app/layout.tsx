@@ -7,6 +7,9 @@ import Script from 'next/script';
 export const metadata: Metadata = {
   title: 'Stride',
   description: 'Stride: Connecting customers and banks seamlessly.',
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export default function RootLayout({
