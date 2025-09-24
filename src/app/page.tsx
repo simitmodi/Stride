@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -17,7 +18,7 @@ export default function Home() {
         <div className="group relative w-full max-w-2xl">
           <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"></div>
           <div 
-            className="relative w-full rounded-xl bg-card/15 p-8 text-center shadow-lg md:p-12 transform-gpu"
+            className="relative w-full rounded-xl bg-black/50 p-8 text-center shadow-lg md:p-12 transform-gpu"
             style={{ backdropFilter: 'blur(12px)' }}
           >
             <div className="flex flex-col items-center gap-6">
