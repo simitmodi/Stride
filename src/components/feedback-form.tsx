@@ -27,6 +27,8 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Full name is required." }),
@@ -57,30 +59,34 @@ export function FeedbackForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      const docRef = await addDoc(collection(db, "UserFeedback"), {
-        ...values,
-        timestamp: serverTimestamp(),
-        status: "Pending",
-      });
+    const feedbackCollection = collection(db, "UserFeedback");
+    const feedbackData = {
+      ...values,
+      timestamp: serverTimestamp(),
+      status: "Pending",
+    };
 
-      setFeedbackId(docRef.id);
-      setIsSubmitted(true);
-      toast({
-        title: "Success!",
-        description: `Your feedback has been submitted. Your reference ID is #${docRef.id}`,
+    addDoc(feedbackCollection, feedbackData)
+      .then((docRef) => {
+        setFeedbackId(docRef.id);
+        setIsSubmitted(true);
+        toast({
+          title: "Success!",
+          description: `Your feedback has been submitted. Your reference ID is #${docRef.id}`,
+        });
+        form.reset();
+      })
+      .catch((serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: feedbackCollection.path,
+          operation: 'create',
+          requestResourceData: feedbackData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      form.reset();
-    } catch (error: any) {
-      console.error("Error submitting feedback:", error);
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request. Please check your connection and try again.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
   }
 
   if (isSubmitted) {
