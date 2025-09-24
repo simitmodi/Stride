@@ -90,7 +90,7 @@ export default function UpcomingAppointments() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
+      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-100">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
             <div className="flex justify-between flex-grow">
