@@ -9,7 +9,7 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        'z-20 w-full border-t bg-sidebar p-6 shadow md:p-8',
+        'z-20 w-full border-t bg-card p-6 shadow md:p-8',
         className
       )}
     >
