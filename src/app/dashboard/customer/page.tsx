@@ -1,42 +1,29 @@
 "use client";
 
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState, useEffect } from "react";
+import Greeting from "@/components/greeting";
+import UpcomingAppointments from "@/components/upcoming-appointments";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CustomerDashboardPage() {
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  
-  useEffect(() => {
-    setDate(new Date());
-  }, []);
-
   return (
-    <>
-      <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">My Dashboard</h1>
+    <div className="w-full">
+      <Greeting />
+      <UpcomingAppointments />
+      <div className="mt-12 flex justify-center gap-8">
+        <Button
+          asChild
+          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <Link href="/document-checklist">Document Checklist</Link>
+        </Button>
+        <Button
+          asChild
+          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <Link href="/appointment-scheduling">Appointment Scheduling</Link>
+        </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Visits</CardTitle>
-            <CardDescription>Your scheduled appointments with the bank.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              You have no upcoming visits scheduled.
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="flex justify-center items-center p-0 overflow-hidden">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className=""
-          />
-        </Card>
-      </div>
-    </>
+    </div>
   );
 }
