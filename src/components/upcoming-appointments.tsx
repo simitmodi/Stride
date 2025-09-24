@@ -4,7 +4,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useCollection } from "@/firebase/firestore/use-collection";
 import { useUser, useMemoFirebase } from "@/firebase/provider";
-import { collection } from "firebase/firestore";
+import { collection, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import {
   addDays,
@@ -28,7 +28,13 @@ export default function UpcomingAppointments() {
   const [month, setMonth] = useState(new Date());
 
   const appointmentsQuery = useMemoFirebase(
-    () => (user ? collection(db, `users/${user.uid}/appointments`) : null),
+    () =>
+      user
+        ? query(
+            collection(db, `users/${user.uid}/appointments`),
+            orderBy('date', 'asc')
+          )
+        : null,
     [user]
   );
   const { data: allAppointments, isLoading } = useCollection(appointmentsQuery);
@@ -99,7 +105,7 @@ export default function UpcomingAppointments() {
                   <Button
                     key={day.toString()}
                     variant="ghost"
-                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center
+                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center hover:scale-110 hover:shadow-lg
                       ${dayIsToday ? 'bg-primary text-primary-foreground' : ''} 
                       ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
                       ${!dayIsSelected && hasAppointment && !dayIsToday ? 'border border-primary/50' : 'border border-transparent'}`}
