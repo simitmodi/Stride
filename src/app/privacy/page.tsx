@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
         <div className="grid w-full grid-cols-1 gap-6">
           {privacyPolicyContent.map((section) => (
             <div key={section.id} className="group relative">
-               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur transition-all duration-300 group-hover:opacity-100 group-hover:blur-md"></div>
+               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
               <Card 
                 className="relative h-full w-full transform-gpu bg-card shadow-lg"
                 style={{ backdropFilter: 'blur(12px)' }}
