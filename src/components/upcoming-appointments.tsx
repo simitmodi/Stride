@@ -11,7 +11,7 @@ import {
   format,
   isSameDay,
   startOfDay,
-  subDays,
+  startOfWeek,
 } from "date-fns";
 import { Button } from "./ui/button";
 import { Calendar as CalendarIcon, Bell } from "lucide-react";
@@ -31,8 +31,8 @@ export default function UpcomingAppointments() {
   const { data: allAppointments, isLoading } = useCollection(appointmentsQuery);
 
   useEffect(() => {
-    const start = subDays(selectedDate, 3);
-    setDays(Array.from({ length: 7 }).map((_, i) => addDays(start, i)));
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // 1 for Monday
+    setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
   }, [selectedDate]);
 
   const appointmentsByDay = useMemo(() => {
@@ -65,7 +65,7 @@ export default function UpcomingAppointments() {
       <Card className="bg-card/50 border-primary/20 shadow-lg rounded-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center justify-between flex-grow mr-4">
+            <div className="flex justify-between flex-grow mr-4">
               {days.map((day) => {
                 const isToday = isSameDay(day, startOfDay(new Date()));
                 const isSelected = isSameDay(day, selectedDate);
