@@ -124,7 +124,7 @@ export default function UpcomingAppointments() {
               </Button>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="h-16 w-16 rounded-lg p-0 flex justify-center items-center">
+                  <Button variant="outline" className="h-12 w-12 rounded-full p-0 flex justify-center items-center">
                     <CalendarIcon className="h-6 w-6" />
                   </Button>
                 </PopoverTrigger>
