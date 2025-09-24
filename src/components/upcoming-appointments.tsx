@@ -12,6 +12,8 @@ import {
   isSameDay,
   startOfDay,
   startOfWeek,
+  isToday,
+  isFuture,
 } from "date-fns";
 import { Button } from "./ui/button";
 import { Calendar as CalendarIcon, Bell } from "lucide-react";
@@ -31,7 +33,7 @@ export default function UpcomingAppointments() {
   const { data: allAppointments, isLoading } = useCollection(appointmentsQuery);
 
   useEffect(() => {
-    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // 1 for Monday
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
     setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
   }, [selectedDate]);
 
@@ -51,10 +53,29 @@ export default function UpcomingAppointments() {
     return map;
   }, [allAppointments]);
 
-  const appointmentsForSelectedDay = useMemo(() => {
-    if (!selectedDate || !allAppointments) return [];
-    return allAppointments.filter(apt => apt.date && apt.date.toDate && isSameDay(apt.date.toDate(), selectedDate));
+  const appointmentsToList = useMemo(() => {
+    if (!allAppointments) return [];
+    if (isToday(selectedDate)) {
+      // If today is selected, show all future appointments
+      return allAppointments.filter(
+        (apt) =>
+          apt.date &&
+          apt.date.toDate &&
+          (isToday(apt.date.toDate()) || isFuture(apt.date.toDate()))
+      ).sort((a,b) => a.date.toDate() - b.date.toDate());
+    }
+    // Otherwise, show appointments only for the selected day
+    return allAppointments.filter(
+      (apt) =>
+        apt.date &&
+        apt.date.toDate &&
+        isSameDay(apt.date.toDate(), selectedDate)
+    ).sort((a,b) => a.date.toDate() - b.date.toDate());
   }, [selectedDate, allAppointments]);
+
+  const headingText = isToday(selectedDate)
+    ? "Upcoming Appointments"
+    : `Appointments for ${format(selectedDate, "PPP")}`;
   
   if (days.length === 0) {
     return null; 
@@ -67,8 +88,8 @@ export default function UpcomingAppointments() {
           <div className="flex justify-between items-center">
             <div className="flex justify-between flex-grow mr-4">
               {days.map((day) => {
-                const isToday = isSameDay(day, startOfDay(new Date()));
-                const isSelected = isSameDay(day, selectedDate);
+                const dayIsToday = isSameDay(day, startOfDay(new Date()));
+                const dayIsSelected = isSameDay(day, selectedDate);
                 const hasAppointment = appointmentsByDay.has(
                   format(day, "yyyy-MM-dd")
                 );
@@ -78,9 +99,9 @@ export default function UpcomingAppointments() {
                     key={day.toString()}
                     variant="ghost"
                     className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 
-                      ${isToday ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-card/70'} 
-                      ${isSelected && !isToday ? 'ring-2 ring-primary' : ''} 
-                      ${hasAppointment && !isSelected && !isToday ? 'border-2 border-primary' : ''}`}
+                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-card/70'} 
+                      ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''} 
+                      ${hasAppointment && !dayIsSelected && !dayIsToday ? 'border-2 border-primary' : ''}`}
                     onClick={() => setSelectedDate(day)}
                   >
                     <span className="text-sm">{format(day, "eee")}</span>
@@ -112,14 +133,14 @@ export default function UpcomingAppointments() {
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-4">
           <Bell className="h-6 w-6" />
-          Upcoming
+          {headingText}
         </h2>
         {isLoading ? (
           <p>Loading appointments...</p>
         ) : (
           <div className="space-y-4">
-            {appointmentsForSelectedDay && appointmentsForSelectedDay.length > 0 ? (
-              appointmentsForSelectedDay.map((apt) => (
+            {appointmentsToList && appointmentsToList.length > 0 ? (
+              appointmentsToList.map((apt) => (
                 <Card
                   key={apt.id}
                   className="bg-card/50 border-primary/20"
