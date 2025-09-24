@@ -99,12 +99,14 @@ export default function UpcomingAppointments() {
                     key={day.toString()}
                     variant="ghost"
                     className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-card/70'} 
+                      ${dayIsToday ? 'bg-primary text-primary-foreground' : 'bg-card/70 hover:bg-card'} 
                       ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''} 
-                      ${hasAppointment && !dayIsSelected && !dayIsToday ? 'border-2 border-primary' : ''}`}
+                      ${!dayIsSelected && hasAppointment ? 'border border-primary/50' : 'border border-transparent'}`}
                     onClick={() => setSelectedDate(day)}
                   >
-                    <span className="text-sm uppercase">{format(day, "eee")}</span>
+                    <span className="text-sm uppercase">
+                      {format(day, "eee")}
+                    </span>
                     <span className="text-2xl font-bold">
                       {format(day, "d")}
                     </span>
