@@ -31,7 +31,7 @@ export default function CustomerSignUpPage() {
         <div className="group relative w-full">
           <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"></div>
           <Card
-            className="relative w-full transform-gpu bg-card/15 shadow-lg"
+            className="relative w-full transform-gpu bg-card shadow-lg"
             style={{ backdropFilter: 'blur(12px)' }}
           >
             <CardHeader className="text-center">
