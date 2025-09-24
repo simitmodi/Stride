@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Stride',
   description: 'Stride: Connecting customers and banks seamlessly.',
   icons: {
-    icon: '/Logo_Circular.png',
+    icon: '/icon.png',
   },
 };
 
