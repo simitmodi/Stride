@@ -15,7 +15,7 @@ export default function Footer({ className }: { className?: string }) {
       <div className="container mx-auto flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:gap-8">
           <div className="flex items-center gap-2 text-black">
-            <Image src={Logo} alt="Stride Logo" width={200} height={200} />
+            <Image src={Logo} alt="Stride Logo" width={100} height={100} />
           </div>
           <ul className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-black">
             <li>
