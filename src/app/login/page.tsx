@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardDescription,
@@ -24,7 +25,7 @@ export default function LoginOptionsPage() {
         data-ai-hint={professionalBg.imageHint}
         priority
       />}
-      <div className="absolute inset-0 bg-background/60" />
+      <div className="absolute inset-0 bg-black/50" />
 
       <main className="relative z-10 flex w-full max-w-lg flex-col items-center">
         <div className="group relative w-full">

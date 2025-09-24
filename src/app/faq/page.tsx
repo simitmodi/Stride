@@ -173,7 +173,7 @@ export default function FaqPage() {
           priority
         />
       )}
-      <div className="absolute inset-0 bg-background/60" />
+      <div className="absolute inset-0 bg-black/50" />
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="mb-8 text-center text-foreground">
