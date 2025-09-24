@@ -128,7 +128,7 @@ export default function UpcomingAppointments() {
                     <CalendarIcon className="h-6 w-6" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
+                <PopoverContent className="w-auto p-0 bg-card/75" style={{ backdropFilter: 'blur(12px)' }}>
                   <Calendar
                     mode="single"
                     selected={selectedDate}
