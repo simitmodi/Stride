@@ -124,7 +124,7 @@ export default function UpcomingAppointments() {
             <div className="flex items-center gap-2">
               <Button 
                 variant="ghost"
-                className="h-16"
+                className="h-16 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-lg"
                 onClick={() => setSelectedDate(startOfDay(new Date()))}
               >
                 Today
