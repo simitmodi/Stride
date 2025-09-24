@@ -15,13 +15,13 @@ export default function CustomerDashboardPage() {
       <div className="mt-12 flex justify-center gap-8">
         <Button
           asChild
-          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
         >
           <Link href="/document-checklist">Document Checklist</Link>
         </Button>
         <Button
           asChild
-          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          className="bg-card text-primary font-bold py-6 px-12 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
         >
           <Link href="/appointment-scheduling">Appointment Scheduling</Link>
         </Button>
