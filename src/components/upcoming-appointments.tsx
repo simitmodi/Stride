@@ -25,6 +25,7 @@ export default function UpcomingAppointments() {
   const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [days, setDays] = useState<Date[]>([]);
+  const [month, setMonth] = useState(new Date());
 
   const appointmentsQuery = useMemoFirebase(
     () => (user ? collection(db, `users/${user.uid}/appointments`) : null),
@@ -132,7 +133,13 @@ export default function UpcomingAppointments() {
                   <Calendar
                     mode="single"
                     selected={selectedDate}
-                    onSelect={(d) => setSelectedDate(d ? startOfDay(d) : startOfDay(new Date()))}
+                    onSelect={(d) => {
+                      const newDate = d ? startOfDay(d) : startOfDay(new Date());
+                      setSelectedDate(newDate);
+                      setMonth(newDate);
+                    }}
+                    month={month}
+                    onMonthChange={setMonth}
                   />
                 </PopoverContent>
               </Popover>
