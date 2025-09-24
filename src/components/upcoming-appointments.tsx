@@ -140,6 +140,9 @@ export default function UpcomingAppointments() {
                     }}
                     month={month}
                     onMonthChange={setMonth}
+                    captionLayout="dropdown-buttons"
+                    fromYear={1924}
+                    toYear={new Date().getFullYear()}
                   />
                 </PopoverContent>
               </Popover>
