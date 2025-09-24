@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useUser } from "@/firebase/provider";
@@ -6,18 +7,18 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase/config";
 
 const greetings = {
-  0: "Good Midnight",
-  2: "Peaceful Night",
-  4: "Good Early Morning",
-  6: "Good Morning",
-  8: "A Bright Morning to You",
-  10: "Late Morning Greetings",
-  12: "Good Afternoon",
-  14: "Hope Your Afternoon’s Going Well",
-  16: "Good Evening",
-  18: "Warm Evening Greetings",
-  20: "Good Night",
-  22: "Late Night Greetings",
+  0: "Stride never sleeps",
+  2: "Owls in motion",
+  4: "Dawn is yours",
+  6: "Fresh stride",
+  8: "Rise and flow",
+  10: "Morning momentum",
+  12: "High noon stride",
+  14: "Smooth afternoon",
+  16: "Golden hour stride",
+  18: "Evening energy",
+  20: "Night moves",
+  22: "Almost midnight stride",
 };
 
 const getGreeting = () => {
@@ -44,7 +45,7 @@ export default function Greeting() {
       const userDocRef = doc(db, "users", user.uid);
       getDoc(userDocRef)
         .then((docSnap) => {
-          if (docSnap.exists()) {
+          if (docSnap.exists() && docSnap.data().firstName) {
             setFirstName(docSnap.data().firstName);
           } else {
             const displayName = user.displayName;
