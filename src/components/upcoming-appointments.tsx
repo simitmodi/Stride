@@ -13,9 +13,10 @@ import {
   startOfDay,
 } from "date-fns";
 import { Button } from "./ui/button";
-import { Calendar as CalendarIcon, Bell, Calendar } from "lucide-react";
+import { Calendar as CalendarIcon, Bell } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent } from "./ui/card";
+import { Calendar } from "./ui/calendar";
 
 export default function UpcomingAppointments() {
   const { user } = useUser();
@@ -56,7 +57,7 @@ export default function UpcomingAppointments() {
       <Card className="bg-card/50 border-primary/20 shadow-lg rounded-lg">
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-4">
-            <div className="flex space-x-2">
+            <div className="flex space-x-4">
               {days.map((day) => {
                 const isToday = isSameDay(day, new Date());
                 const hasAppointment = appointmentsByDay.has(
