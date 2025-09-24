@@ -90,7 +90,7 @@ export default function UpcomingAppointments() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
             <div className="flex justify-between flex-grow">
@@ -105,7 +105,7 @@ export default function UpcomingAppointments() {
                   <Button
                     key={day.toString()}
                     variant="ghost"
-                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center hover:scale-110 hover:shadow-lg
+                    className={`flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center
                       ${dayIsToday ? 'bg-primary text-primary-foreground' : ''} 
                       ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
                       ${!dayIsSelected && hasAppointment && !dayIsToday ? 'border border-primary/50' : 'border border-transparent'}`}
@@ -124,7 +124,7 @@ export default function UpcomingAppointments() {
             <div className="flex items-center gap-2">
               <Button 
                 variant="ghost"
-                className="h-16 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-lg"
+                className="h-16 rounded-lg transition-all duration-200"
                 onClick={() => setSelectedDate(startOfDay(new Date()))}
               >
                 Today
