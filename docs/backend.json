@@ -1,0 +1,185 @@
+{
+  "entities": {
+    "Customer": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Customer",
+      "type": "object",
+      "description": "Represents a customer user of the Stride application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the customer."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of the customer."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of the customer."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the customer.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+      ]
+    },
+    "Bank": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Bank",
+      "type": "object",
+      "description": "Represents a bank user of the Stride application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the bank."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the bank."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the bank.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email"
+      ]
+    },
+    "Appointment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Appointment",
+      "type": "object",
+      "description": "Represents an appointment scheduled through the Stride platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the appointment."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to the Customer. (Relationship: Customer 1:N Appointment)"
+        },
+        "bankId": {
+          "type": "string",
+          "description": "Reference to the Bank. (Relationship: Bank 1:N Appointment)"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "The date and time the appointment is scheduled to start.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "The date and time the appointment is scheduled to end.",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any notes associated with the appointment."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "bankId",
+        "startTime",
+        "endTime"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/customers/{customerId}",
+        "definition": {
+          "entityName": "Customer",
+          "schema": {
+            "$ref": "#/backend/entities/Customer"
+          },
+          "description": "Stores customer profiles. Only the customer themselves can read/write their own profile.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/banks/{bankId}",
+        "definition": {
+          "entityName": "Bank",
+          "schema": {
+            "$ref": "#/backend/entities/Bank"
+          },
+          "description": "Stores bank profiles. Only the bank itself can read/write their own profile.",
+          "params": [
+            {
+              "name": "bankId",
+              "description": "The unique identifier for the bank."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/customers/{customerId}/appointments/{appointmentId}",
+        "definition": {
+          "entityName": "Appointment",
+          "schema": {
+            "$ref": "#/backend/entities/Appointment"
+          },
+          "description": "Stores appointments associated with a customer. Includes the customerId and bankId for filtering and display. Path based authorization ensures only the customer can read these appointments.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer."
+            },
+            {
+              "name": "appointmentId",
+              "description": "The unique identifier for the appointment."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/banks/{bankId}/appointments/{appointmentId}",
+        "definition": {
+          "entityName": "Appointment",
+          "schema": {
+            "$ref": "#/backend/entities/Appointment"
+          },
+          "description": "Stores appointments associated with a bank. Includes the customerId and bankId for filtering and display. Path based authorization ensures only the bank can read these appointments.",
+          "params": [
+            {
+              "name": "bankId",
+              "description": "The unique identifier for the bank."
+            },
+            {
+              "name": "appointmentId",
+              "description": "The unique identifier for the appointment."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to ensure authorization independence, clarity, and scalability for the Stride application.  Authorization independence is achieved through path-based ownership. Segregation is used to isolate bank and customer data.  The structure supports secure list operations by restricting collection access based on user roles and path ownership.\n\n1.  **Customers Collection (`/customers/{customerId}`):** Stores customer profiles. Access is restricted to the specific customer or authorized admins (if implemented). The `customerId` in the path ensures ownership.\n\n2.  **Banks Collection (`/banks/{bankId}`):** Stores bank profiles. Access is restricted to the specific bank or authorized admins (if implemented). The `bankId` in the path ensures ownership.\n\n3.  **Customer Appointments Collection (`/customers/{customerId}/appointments/{appointmentId}`):** Stores appointments associated with a particular customer.  Critically, authorization is based on the path, making rules simple and scalable.  The customer can only access their own appointments. Includes `bankId` and a redundant `customerId` field to easily query for and display bank-specific appointments.\n\n4.  **Bank Appointments Collection (`/banks/{bankId}/appointments/{appointmentId}`):** Stores appointments associated with a particular bank.  Critically, authorization is based on the path, making rules simple and scalable. The bank can only access its own appointments. Includes `customerId` and a redundant `bankId` field to easily query for and display customer-specific appointments."
+  }
+}
