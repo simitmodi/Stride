@@ -94,7 +94,6 @@ export default function UpcomingAppointments() {
                   mode="single"
                   selected={selectedDate}
                   onSelect={(d) => setSelectedDate(d || new Date())}
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>
@@ -141,4 +140,3 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
-
