@@ -5,6 +5,7 @@ import Greeting from "@/components/greeting";
 import UpcomingAppointments from "@/components/upcoming-appointments";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import PastAppointments from "@/components/past-appointments";
 
 export default function CustomerDashboardPage() {
   return (
@@ -24,6 +25,9 @@ export default function CustomerDashboardPage() {
         >
           <Link href="/appointment-scheduling">Appointment Scheduling</Link>
         </Button>
+      </div>
+      <div className="mt-8">
+        <PastAppointments />
       </div>
     </div>
   );
