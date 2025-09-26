@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon, Loader2, Eye, EyeOff } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -68,9 +69,16 @@ export function CustomerSignUpForm() {
       email: "",
       password: "",
       confirmPassword: "",
-      dateOfBirth: new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
     },
   });
+
+  useEffect(() => {
+    // Set default DOB only on the client-side to avoid hydration mismatch
+    form.setValue(
+      'dateOfBirth',
+      new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+    );
+  }, [form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -343,3 +351,5 @@ export function CustomerSignUpForm() {
     </>
   );
 }
+
+    
