@@ -8,8 +8,11 @@ import {
   User,
   updateProfile,
   sendEmailVerification,
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from "firebase/auth";
-import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, updateDoc, Timestamp, deleteDoc } from "firebase/firestore";
 import { auth, db } from "./config";
 
 export async function signUpWithEmail(
@@ -69,3 +72,32 @@ export async function sendVerificationEmail(): Promise<void> {
     throw new Error("No user is currently signed in.");
   }
 }
+
+export async function reauthenticateUser(password: string): Promise<void> {
+  const user = auth.currentUser;
+  if (user && user.email) {
+    const credential = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, credential);
+  } else {
+    throw new Error("No user is currently signed in or user has no email.");
+  }
+}
+
+export async function deleteUserAccount(password: string): Promise<void> {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("No user is currently signed in.");
+  }
+
+  // Re-authenticate the user first
+  await reauthenticateUser(password);
+
+  // After successful re-authentication, delete the Firestore document
+  const userDocRef = doc(db, "users", user.uid);
+  await deleteDoc(userDocRef);
+
+  // Finally, delete the user from Firebase Authentication
+  await deleteUser(user);
+}
+
+    

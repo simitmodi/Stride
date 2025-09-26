@@ -4,20 +4,33 @@
 import { useState } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { signOutUser, updateUserProfile, sendVerificationEmail } from "@/lib/firebase/auth";
+import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, reauthenticateUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc, Timestamp } from "firebase/firestore";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, LogOut, ChevronRight } from "lucide-react";
+import { Bell, User, LogOut, ChevronRight, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { EditableField } from "@/components/editable-field";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 
 type ProfileView = "account" | "notifications";
@@ -29,6 +42,9 @@ export default function ProfilePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState("");
+  const [password, setPassword] = useState("");
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -108,6 +124,33 @@ export default function ProfilePage() {
       });
     }
   };
+
+    const handleDeleteAccount = async () => {
+    if (!user || !password) {
+      toast({ variant: "destructive", title: "Error", description: "Password is required." });
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      await deleteUserAccount(password);
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been permanently deleted.",
+      });
+      router.push("/");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Deletion Failed",
+        description: error.message || "Could not delete your account. Please try again.",
+      });
+    } finally {
+      setIsDeleting(false);
+      setDeleteConfirm("");
+      setPassword("");
+    }
+  };
+
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
@@ -211,6 +254,58 @@ export default function ProfilePage() {
                 </div>
               </div>
             </CardContent>
+             <CardFooter className="flex-col items-start gap-4 border-t border-destructive/20 bg-destructive/5 px-6 py-4 mt-6">
+              <h3 className="text-lg font-semibold text-destructive">Danger Zone</h3>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="flex items-center gap-2">
+                      <Trash2 className="h-4 w-4" />
+                      Delete My Account
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account and remove your data from our servers. To confirm, please enter your password and type <strong>DELETE</strong> below.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="password" className="text-right">Password</Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="confirm-delete" className="text-right">Confirm</Label>
+                        <Input
+                          id="confirm-delete"
+                          value={deleteConfirm}
+                          onChange={(e) => setDeleteConfirm(e.target.value)}
+                          placeholder="Type DELETE to confirm"
+                          className="col-span-3"
+                        />
+                      </div>
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel onClick={() => { setDeleteConfirm(""); setPassword(""); }}>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDeleteAccount}
+                        disabled={deleteConfirm !== "DELETE" || isDeleting || !password}
+                        className="bg-destructive hover:bg-destructive/90"
+                      >
+                        {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        Delete Account
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+            </CardFooter>
           </Card>
         );
       case "notifications":
@@ -292,3 +387,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
