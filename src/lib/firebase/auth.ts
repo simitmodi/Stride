@@ -9,9 +9,8 @@ import {
   updateProfile,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "./config";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { db } from "./config";
+import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { auth, db } from "./config";
 
 export async function signUpWithEmail(
   email: string, 
@@ -34,7 +33,7 @@ export async function signUpWithEmail(
       firstName: firstName,
       lastName: lastName,
       username: username,
-      dateOfBirth: dateOfBirth,
+      dateOfBirth: Timestamp.fromDate(dateOfBirth),
       email: user.email,
       displayName: fullName,
       uid: user.uid,
@@ -70,5 +69,3 @@ export async function sendVerificationEmail(): Promise<void> {
     throw new Error("No user is currently signed in.");
   }
 }
-
-    

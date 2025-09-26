@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { PasswordStrength } from "@/components/password-strength";
+import { Timestamp } from "firebase/firestore";
 
 
 const formSchema = z.object({
