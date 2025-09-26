@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -40,8 +39,14 @@ export async function signInWithGoogle(): Promise<User | null> {
     const userCredential = await signInWithPopup(auth, provider);
     // No Firestore document check or creation
     return userCredential.user;
-  } catch (error) {
-    console.error("Error during Google sign-in:", error);
+  } catch (error: any) {
+    if (error.code !== 'auth/popup-closed-by-user') {
+        console.error("Error during Google sign-in:", error);
+    }
     return null;
   }
+}
+
+export async function signOutUser(): Promise<void> {
+  return signOut(auth);
 }
