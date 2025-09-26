@@ -160,8 +160,8 @@ export default function ProfilePage() {
       {/* Sidebar */}
       <aside className="w-full md:w-64 lg:w-72 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
-          <div className="flex flex-col items-center text-center">
-            <Avatar className="h-24 w-24 mb-4 border-2 border-primary">
+          <div className="flex flex-col items-center text-center gap-2">
+            <Avatar className="h-24 w-24 border-2 border-primary">
               <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
                 {getInitials(user.displayName)}
               </AvatarFallback>
@@ -215,5 +215,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
