@@ -63,7 +63,7 @@ export default function ProfilePage() {
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
         updates['displayName'] = value;
-        // Also update the auth profile
+        // Also update the auth profile for consistency in other parts of the app
         if(auth.currentUser) {
           await updateProfile(auth.currentUser, { displayName: value as string });
         }
@@ -105,7 +105,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (!user) {
+  if (!user || !userData) {
     // This case is mostly handled by the layout, but it's good practice.
     return null;
   }
@@ -118,7 +118,6 @@ export default function ProfilePage() {
       formattedDob = format(dobDate, 'MM/dd/yyyy');
   }
 
-  const creationTime = user.metadata.creationTime ? new Date(user.metadata.creationTime).toLocaleString() : "N/A";
   const lastSignInTime = user.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleString() : "N/A";
 
   const renderContent = () => {
@@ -133,7 +132,7 @@ export default function ProfilePage() {
             <CardContent className="space-y-6 text-sm font-body">
               <EditableField
                 label="Full Name"
-                value={user.displayName || "N/A"}
+                value={userData.displayName || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
               />
               <Separator className="bg-primary/20"/>
@@ -147,7 +146,7 @@ export default function ProfilePage() {
               <Separator className="bg-primary/20"/>
                <EditableField
                 label="Phone Number"
-                value={user.phoneNumber || "N/A"}
+                value={userData.phoneNumber || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('phoneNumber', newValue)}
                 inputType="tel"
               />
@@ -162,7 +161,7 @@ export default function ProfilePage() {
                <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-foreground/70">Email Address</p>
-                  <p className="text-foreground">{user.email || "N/A"}</p>
+                  <p className="text-foreground">{userData.email || "N/A"}</p>
                 </div>
                 <Button variant="link" className="text-primary hover:text-accent" disabled>Edit</Button>
               </div>
@@ -196,17 +195,17 @@ export default function ProfilePage() {
   return (
     <div className="flex w-full flex-grow flex-col md:flex-row bg-background font-body text-foreground">
       {/* Sidebar */}
-      <aside className="w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
+      <aside className="w-full md:w-80 lg:w-96 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
-          <div className="flex flex-col items-center text-center gap-2">
+          <div className="flex flex-col items-center text-center gap-4">
             <Avatar className="h-24 w-24 border-2 border-primary">
               <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
-                {getInitials(user.displayName)}
+                {getInitials(userData.displayName)}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <h2 className="text-xl font-bold font-headline text-primary">{user.displayName}</h2>
-              <p className="text-sm text-foreground/70 break-all">{user.email}</p>
+              <h2 className="text-xl font-bold font-headline text-primary">{userData.displayName}</h2>
+              <p className="text-sm text-foreground/70 break-all">{userData.email}</p>
             </div>
           </div>
           <nav className="flex flex-col gap-2">
@@ -255,3 +254,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
