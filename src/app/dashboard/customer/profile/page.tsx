@@ -323,7 +323,7 @@ export default function ProfilePage() {
               <AlertDialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="justify-start items-center gap-3 text-base h-12 px-4 text-destructive hover:bg-destructive/10"
+                  className="justify-start items-center gap-3 text-base h-12 px-4 text-destructive hover:bg-destructive hover:text-destructive-foreground"
                 >
                   <Trash2 className="h-5 w-5" />
                   <span>Delete Account</span>
