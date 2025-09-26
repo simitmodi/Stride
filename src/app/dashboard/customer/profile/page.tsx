@@ -333,7 +333,7 @@ export default function ProfilePage() {
                       onChange={(e) => setNewInitials(e.target.value)}
                       className="col-span-3"
                       maxLength={2}
-                      placeholder="2 chars or emoji"
+                      placeholder="2 characters or emoji"
                     />
                   </div>
                 </div>
@@ -454,5 +454,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
