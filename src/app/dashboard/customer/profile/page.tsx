@@ -317,7 +317,7 @@ export default function ProfilePage() {
                       {avatarText}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-card/75 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <Pencil className="h-8 w-8 text-white" />
                   </div>
                 </div>
@@ -461,3 +461,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
