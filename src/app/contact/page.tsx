@@ -10,11 +10,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
   ArrowRight,
   BookUser,
-  Bug,
   CalendarPlus,
   Mail,
   MessageSquareHeart,
-  ShieldQuestion,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -36,14 +34,6 @@ const contactOptions = [
     linkText: 'Email Support',
   },
   {
-    icon: Bug,
-    title: 'Report an Issue',
-    description:
-      'Encountered a technical problem? Let us know so we can fix it right away.',
-    link: '/feedback',
-    linkText: 'Report an Issue',
-  },
-  {
     icon: Mail,
     title: 'Write to Us',
     description:
@@ -51,14 +41,6 @@ const contactOptions = [
     link: 'mailto:corporate@strideapp.in',
     linkText: 'Send Email',
     address: 'Stride Inc., 123 Finance Avenue, Mumbai, MH 400001, India',
-  },
-  {
-    icon: ShieldQuestion,
-    title: 'Raise a Complaint',
-    description:
-      'If you have a grievance, please use our formal process to have it addressed.',
-    link: '/feedback',
-    linkText: 'Submit Complaint',
   },
   {
     icon: BookUser,

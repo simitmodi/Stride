@@ -8,13 +8,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import {
-  ArrowRight,
   BookUser,
   Building2,
   CalendarCheck,
   HelpCircle,
   Home,
-  MessageSquareQuote,
   Settings,
   User,
 } from 'lucide-react';
@@ -222,7 +220,7 @@ export default function FaqPage() {
 
         <div className="mt-12 w-full max-w-2xl text-center">
             <h3 className="text-xl font-semibold text-foreground">Still have questions?</h3>
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-1">
                 <Button asChild variant="outline" size="lg" className="h-auto py-3 bg-card group">
                     <Link href="/contact" className="flex flex-col items-start text-left">
                         <div className='flex items-center gap-2'>
@@ -230,15 +228,6 @@ export default function FaqPage() {
                         <span className="font-semibold text-foreground group-hover:text-[#FFF0FF]">Contact Helpdesk</span>
                         </div>
                         <p className="mt-1 text-sm text-foreground/70 whitespace-normal group-hover:text-[#FFF0FF]">Get in touch with our support team for further assistance.</p>
-                    </Link>
-                </Button>
-                 <Button asChild variant="outline" size="lg" className="h-auto py-3 bg-card group">
-                    <Link href="/feedback" className="flex flex-col items-start text-left">
-                        <div className='flex items-center gap-2'>
-                        <MessageSquareQuote className="h-5 w-5 text-primary"/>
-                        <span className="font-semibold text-foreground group-hover:text-[#FFF0FF]">Share Feedback</span>
-                        </div>
-                        <p className="mt-1 text-sm text-foreground/70 whitespace-normal group-hover:text-[#FFF0FF]">Help us improve by sharing your thoughts or suggestions.</p>
                     </Link>
                 </Button>
             </div>
