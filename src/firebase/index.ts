@@ -1,3 +1,4 @@
+
 'use client';
 
 import { firebaseConfig } from '@/firebase/config';
@@ -36,8 +37,7 @@ export function getSdks(firebaseApp: FirebaseApp) {
   return {
     firebaseApp,
     auth: getAuth(firebaseApp),
-    // Firestore is no longer initialized here
-    firestore: null 
+    firestore: getFirestore(firebaseApp)
   };
 }
 

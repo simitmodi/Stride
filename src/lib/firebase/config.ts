@@ -1,6 +1,7 @@
 
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   "projectId": "studio-5920023951-be7cb",
@@ -13,6 +14,7 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
+let db: ReturnType<typeof getFirestore>;
 
 // This check prevents re-initializing the app on every render.
 if (getApps().length === 0) {
@@ -22,5 +24,6 @@ if (getApps().length === 0) {
 }
 
 auth = getAuth(app);
+db = getFirestore(app);
 
-export { auth };
+export { auth, db };

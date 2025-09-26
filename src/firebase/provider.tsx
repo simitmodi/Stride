@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
@@ -8,7 +9,7 @@ import { Auth, User, onAuthStateChanged } from 'firebase/auth';
 interface FirebaseProviderProps {
   children: ReactNode;
   firebaseApp: FirebaseApp;
-  firestore: Firestore | null; // Can be null now
+  firestore: Firestore;
   auth: Auth;
 }
 
@@ -23,7 +24,7 @@ interface UserAuthState {
 export interface FirebaseContextState {
   areServicesAvailable: boolean; // True if core services (app, auth instance) are provided
   firebaseApp: FirebaseApp | null;
-  firestore: Firestore | null; // Firestore is optional
+  firestore: Firestore | null;
   auth: Auth | null; // The Auth service instance
   // User authentication state
   user: User | null;
@@ -34,7 +35,7 @@ export interface FirebaseContextState {
 // Return type for useFirebase()
 export interface FirebaseServicesAndUser {
   firebaseApp: FirebaseApp;
-  firestore: Firestore | null; // Can be null
+  firestore: Firestore;
   auth: Auth;
   user: User | null;
   isUserLoading: boolean;
@@ -90,11 +91,11 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
-    const servicesAvailable = !!(firebaseApp && auth); // Firestore is no longer required
+    const servicesAvailable = !!(firebaseApp && auth && firestore);
     return {
       areServicesAvailable: servicesAvailable,
       firebaseApp: servicesAvailable ? firebaseApp : null,
-      firestore: firestore, // Pass it through, even if null
+      firestore: servicesAvailable ? firestore : null,
       auth: servicesAvailable ? auth : null,
       user: userAuthState.user,
       isUserLoading: userAuthState.isUserLoading,
@@ -120,7 +121,7 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     throw new Error('useFirebase must be used within a FirebaseProvider.');
   }
 
-  if (!context.areServicesAvailable || !context.firebaseApp || !context.auth) {
+  if (!context.areServicesAvailable || !context.firebaseApp || !context.auth || !context.firestore) {
     throw new Error('Firebase core services not available. Check FirebaseProvider props.');
   }
 
@@ -147,7 +148,7 @@ export const useAuth = (): Auth => {
 export const useFirestore = (): Firestore => {
   const { firestore } = useFirebase();
   if (!firestore) {
-    throw new Error("Firestore is not available in this project. It has been removed.");
+    throw new Error("Firestore is not available in this project.");
   }
   return firestore;
 };
