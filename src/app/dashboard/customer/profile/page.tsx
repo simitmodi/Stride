@@ -146,8 +146,9 @@ export default function ProfilePage() {
               <Separator className="bg-primary/20"/>
                <EditableField
                 label="Phone Number"
-                value={userData.phoneNumber || "N/A"}
-                onSave={(newValue) => handleUpdateProfile('phoneNumber', newValue)}
+                value={userData.phoneNumber ? `+91 ${userData.phoneNumber}` : "N/A"}
+                editValue={userData.phoneNumber || ""}
+                onSave={(newValue) => handleUpdateProfile('phoneNumber', newValue as string)}
                 inputType="tel"
               />
               <Separator className="bg-primary/20"/>
@@ -203,7 +204,7 @@ export default function ProfilePage() {
                 {getInitials(userData.displayName)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               <h2 className="text-xl font-bold font-headline text-primary">{userData.displayName}</h2>
               <p className="text-sm text-foreground/70 break-all">{userData.email}</p>
             </div>

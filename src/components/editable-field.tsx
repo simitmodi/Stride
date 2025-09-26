@@ -21,14 +21,15 @@ import { ScrollingDatePicker } from "./ui/scrolling-date-picker";
 interface EditableFieldProps {
   label: string;
   value: string;
+  editValue?: string;
   onSave: (newValue: string | Date) => void;
   inputType?: string;
   dateValue?: Date;
 }
 
-export function EditableField({ label, value, onSave, inputType = "text", dateValue }: EditableFieldProps) {
+export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue }: EditableFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState(value);
+  const [currentValue, setCurrentValue] = useState(editValue ?? value);
   const [currentDate, setCurrentDate] = useState<Date | undefined>(dateValue);
 
   const handleSave = () => {
@@ -43,7 +44,7 @@ export function EditableField({ label, value, onSave, inputType = "text", dateVa
   const handleOpenChange = (open: boolean) => {
     if (open) {
       // Reset to original value when opening
-      setCurrentValue(value);
+      setCurrentValue(editValue ?? value);
       if (inputType === 'date') {
         setCurrentDate(dateValue);
       }
