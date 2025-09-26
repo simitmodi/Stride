@@ -120,6 +120,13 @@ export default function ProfilePage() {
         }
       } else if (field === 'dateOfBirth' && value instanceof Date) {
         updates[field] = Timestamp.fromDate(value);
+      } else if (field === 'initials') {
+         updates[field] = value;
+         toast({
+            title: "Profile Updated",
+            description: "Your Avatar has been updated.",
+         });
+         return;
       }
       else {
         updates[field] = value;
@@ -318,9 +325,6 @@ export default function ProfilePage() {
               <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
                 <DialogHeader>
                   <DialogTitle className="text-primary">Edit Initials</DialogTitle>
-                  <DialogDescriptionComponent className="text-foreground/80">
-                    To use an emoji, use the keyboard shortcut for your OS (Windows: Win + . | macOS: Ctrl + Cmd + Space).
-                  </DialogDescriptionComponent>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -336,6 +340,9 @@ export default function ProfilePage() {
                       placeholder="2 characters or emoji"
                     />
                   </div>
+                   <DialogDescriptionComponent className="text-foreground/80 text-sm col-span-4 text-center pt-2">
+                    To use an emoji, use the keyboard shortcut for your OS (Windows: Win + . | macOS: Ctrl + Cmd + Space).
+                  </DialogDescriptionComponent>
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>

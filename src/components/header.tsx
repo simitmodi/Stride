@@ -9,7 +9,9 @@ import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import Logo from '@/lib/Logo.png';
-import { useUser } from "@/firebase/provider";
+import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
+import { doc } from "firebase/firestore";
+import { useDoc } from "@/firebase/firestore/use-doc";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +27,14 @@ export default function Header() {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, "users", user.uid) : null),
+    [user, firestore]
+  );
+  
+  const { data: userData } = useDoc(userDocRef);
 
   const handleLogout = async () => {
     try {
@@ -46,11 +56,13 @@ export default function Header() {
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
     const nameParts = name.split(" ");
-    if (nameParts.length > 1) {
+    if (nameParts.length > 1 && nameParts[1]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
-    return name[0];
+    return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
   };
+
+  const avatarText = userData?.initials || getInitials(user?.displayName);
 
 
   return (
@@ -73,7 +85,7 @@ export default function Header() {
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
                   <AvatarFallback>
-                    {user ? getInitials(user.displayName) : <UserIcon />}
+                    {avatarText || <UserIcon />}
                   </AvatarFallback>
                 </Avatar>
               </Button>
