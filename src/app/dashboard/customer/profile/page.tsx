@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { signOutUser, updateUserProfile } from "@/lib/firebase/auth";
+import { signOutUser, updateUserProfile, sendVerificationEmail } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc, Timestamp } from "firebase/firestore";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,6 +28,7 @@ export default function ProfilePage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -50,6 +51,26 @@ export default function ProfilePage() {
         title: "Logout Failed",
         description: error.message || "Could not log you out.",
       });
+    }
+  };
+
+  const handleSendVerification = async () => {
+    if (!user) return;
+    setIsVerifying(true);
+    try {
+      await sendVerificationEmail();
+      toast({
+        title: "Verification Email Sent",
+        description: "Please check your inbox to verify your email address.",
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Verification Failed",
+        description: error.message || "Could not send verification email. Please try again later.",
+      });
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -157,6 +178,17 @@ export default function ProfilePage() {
                   <p className="font-semibold text-foreground/70">Email Verified</p>
                   <p className="text-foreground">{user.emailVerified ? "Yes" : "No"}</p>
                 </div>
+                 {!user.emailVerified && (
+                  <Button 
+                    variant="link" 
+                    className="text-primary hover:text-accent" 
+                    onClick={handleSendVerification}
+                    disabled={isVerifying}
+                  >
+                    {isVerifying ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : null}
+                    Send Verification
+                  </Button>
+                )}
               </div>
               <Separator className="bg-primary/20"/>
                <div className="flex items-center justify-between">
@@ -255,3 +287,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    

@@ -7,6 +7,7 @@ import {
   signOut,
   User,
   updateProfile,
+  sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "./config";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
@@ -39,6 +40,9 @@ export async function signUpWithEmail(
       uid: user.uid,
     });
     
+    // Send verification email
+    await sendEmailVerification(user);
+
     return user;
   }
   return null;
@@ -57,3 +61,14 @@ export async function updateUserProfile(userId: string, data: { [key: string]: a
   const userDocRef = doc(db, "users", userId);
   return await updateDoc(userDocRef, data);
 }
+
+export async function sendVerificationEmail(): Promise<void> {
+  const user = auth.currentUser;
+  if (user) {
+    return await sendEmailVerification(user);
+  } else {
+    throw new Error("No user is currently signed in.");
+  }
+}
+
+    
