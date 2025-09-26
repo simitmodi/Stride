@@ -196,7 +196,6 @@ export default function ProfilePage() {
                   <p className="font-semibold text-foreground/70">Email Address</p>
                   <p className="text-foreground">{userData.email || "N/A"}</p>
                 </div>
-                <Button variant="link" className="text-primary hover:text-accent" disabled>Edit</Button>
               </div>
               <Separator className="bg-primary/20"/>
               <div className="flex items-center justify-between">
