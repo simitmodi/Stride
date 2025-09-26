@@ -25,9 +25,11 @@ interface EditableFieldProps {
   onSave: (newValue: string | Date) => void;
   inputType?: string;
   dateValue?: Date;
+  maxLength?: number;
+  placeholder?: string;
 }
 
-export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue }: EditableFieldProps) {
+export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue, maxLength, placeholder }: EditableFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(editValue ?? value);
   const [currentDate, setCurrentDate] = useState<Date | undefined>(dateValue);
@@ -68,6 +70,8 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
         value={currentValue}
         onChange={(e) => setCurrentValue(e.target.value)}
         className="col-span-3"
+        maxLength={maxLength}
+        placeholder={placeholder}
       />
     );
   };

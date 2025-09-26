@@ -40,6 +40,7 @@ export async function signUpWithEmail(
       email: user.email,
       displayName: fullName,
       uid: user.uid,
+      initials: '',
     });
     
     // Send verification email

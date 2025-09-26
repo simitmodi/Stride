@@ -162,6 +162,9 @@ export default function ProfilePage() {
     }
     return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
   };
+  
+  const avatarText = userData?.initials || getInitials(userData?.displayName);
+
 
   if (isUserLoading || isFirestoreLoading) {
     return (
@@ -206,6 +209,14 @@ export default function ProfilePage() {
                 label="Username"
                 value={userData.username || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('username', newValue)}
+              />
+               <Separator className="bg-primary/20"/>
+              <EditableField
+                label="Initials"
+                value={userData.initials || "N/A"}
+                onSave={(newValue) => handleUpdateProfile('initials', newValue as string)}
+                maxLength={2}
+                placeholder="2 chars or emoji"
               />
               <Separator className="bg-primary/20"/>
               <EditableField
@@ -283,7 +294,7 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center text-center gap-4">
             <Avatar className="h-24 w-24 border-2 border-primary">
               <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
-                {getInitials(userData.displayName)}
+                {avatarText}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-2">
