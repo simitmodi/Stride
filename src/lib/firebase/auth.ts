@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, db } from "./config";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 export async function signUpWithEmail(
   email: string, 
@@ -47,3 +47,10 @@ export async function signInWithEmail(email: string, password: string): Promise<
 export async function signOutUser(): Promise<void> {
   return signOut(auth);
 }
+
+export async function updateUserProfile(userId: string, data: { [key: string]: any }): Promise<void> {
+  const userDocRef = doc(db, "users", userId);
+  return await updateDoc(userDocRef, data);
+}
+
+    

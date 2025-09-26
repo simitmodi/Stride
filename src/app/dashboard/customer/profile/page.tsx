@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { signOutUser } from "@/lib/firebase/auth";
+import { signOutUser, updateUserProfile } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc } from "firebase/firestore";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -14,6 +15,10 @@ import { Bell, User, LogOut, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
+import { EditableField } from "@/components/editable-field";
+import { updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
+
 
 type ProfileView = "account" | "notifications";
 
@@ -48,10 +53,42 @@ export default function ProfilePage() {
     }
   };
 
+  const handleUpdateProfile = async (field: string, value: string) => {
+    if (!user) return;
+    try {
+      const updates: { [key: string]: any } = {};
+      if (field === 'displayName') {
+        const [firstName, ...lastNameParts] = value.split(' ');
+        const lastName = lastNameParts.join(' ');
+        updates['firstName'] = firstName;
+        updates['lastName'] = lastName;
+        updates['displayName'] = value;
+        // Also update the auth profile
+        if(auth.currentUser) {
+          await updateProfile(auth.currentUser, { displayName: value });
+        }
+      } else {
+        updates[field] = value;
+      }
+      
+      await updateUserProfile(user.uid, updates);
+      toast({
+        title: "Profile Updated",
+        description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: error.message || "Could not update your profile.",
+      });
+    }
+  };
+
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
     const nameParts = name.split(" ");
-    if (nameParts.length > 1) {
+    if (nameParts.length > 1 && nameParts[1]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
     return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
@@ -89,29 +126,26 @@ export default function ProfilePage() {
               <CardDescription className="text-foreground/80 font-body">Manage your personal information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6 text-sm font-body">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-foreground/70">Full Name</p>
-                  <p className="text-foreground">{user.displayName || "N/A"}</p>
-                </div>
-                <Button variant="link" className="text-primary hover:text-accent">Edit</Button>
-              </div>
+              <EditableField
+                label="Full Name"
+                value={user.displayName || "N/A"}
+                onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
+              />
               <Separator className="bg-primary/20"/>
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-foreground/70">DOB</p>
-                  <p className="text-foreground">{formattedDob}</p>
-                </div>
-                <Button variant="link" className="text-primary hover:text-accent">Edit</Button>
-              </div>
+                 <div>
+                   <p className="font-semibold text-foreground/70">DOB</p>
+                   <p className="text-foreground">{formattedDob}</p>
+                 </div>
+                 <Button variant="link" className="text-primary hover:text-accent" disabled>Edit</Button>
+               </div>
               <Separator className="bg-primary/20"/>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-foreground/70">Phone Number</p>
-                  <p className="text-foreground">{user.phoneNumber || "N/A"}</p>
-                </div>
-                <Button variant="link" className="text-primary hover:text-accent">Edit</Button>
-              </div>
+               <EditableField
+                label="Phone Number"
+                value={user.phoneNumber || "N/A"}
+                onSave={(newValue) => handleUpdateProfile('phoneNumber', newValue)}
+                inputType="tel"
+              />
               <Separator className="bg-primary/20"/>
               <div className="flex items-center justify-between">
                 <div>
@@ -120,12 +154,12 @@ export default function ProfilePage() {
                 </div>
               </div>
               <Separator className="bg-primary/20"/>
-              <div className="flex items-center justify-between">
+               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-foreground/70">Email Address</p>
                   <p className="text-foreground">{user.email || "N/A"}</p>
                 </div>
-                <Button variant="link" className="text-primary hover:text-accent">Edit</Button>
+                <Button variant="link" className="text-primary hover:text-accent" disabled>Edit</Button>
               </div>
               <Separator className="bg-primary/20"/>
               <div className="flex items-center justify-between">
@@ -159,13 +193,13 @@ export default function ProfilePage() {
       {/* Sidebar */}
       <aside className="w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
-          <div className="flex flex-col items-center text-center gap-2">
+          <div className="flex flex-col items-center text-center gap-4">
             <Avatar className="h-24 w-24 border-2 border-primary">
               <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
                 {getInitials(user.displayName)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <h2 className="text-xl font-bold font-headline text-primary">{user.displayName}</h2>
               <p className="text-sm text-foreground/70 break-all">{user.email}</p>
             </div>
@@ -216,3 +250,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
