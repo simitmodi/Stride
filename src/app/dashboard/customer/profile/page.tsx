@@ -115,7 +115,7 @@ export default function ProfilePage() {
   let formattedDob = "N/A";
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
       dobDate = dobTimestamp.toDate();
-      formattedDob = format(dobDate, 'MM/dd/yyyy');
+      formattedDob = format(dobDate, 'dd/MM/yyyy');
   }
 
   const lastSignInTime = user.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleString() : "N/A";
@@ -254,5 +254,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
