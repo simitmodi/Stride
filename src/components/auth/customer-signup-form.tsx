@@ -73,7 +73,7 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName);
+      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, values.dateOfBirth);
       toast({
         title: "Success!",
         description: "Your account has been created.",
@@ -318,5 +318,3 @@ export function CustomerSignUpForm() {
     </Form>
   );
 }
-
-    
