@@ -158,6 +158,12 @@ export default function ProfilePage() {
               />
               <Separator className="bg-primary/20"/>
               <EditableField
+                label="Username"
+                value={userData.username || "N/A"}
+                onSave={(newValue) => handleUpdateProfile('username', newValue)}
+              />
+              <Separator className="bg-primary/20"/>
+              <EditableField
                 label="Date of Birth"
                 value={formattedDob}
                 dateValue={dobDate}
@@ -286,3 +292,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
