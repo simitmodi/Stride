@@ -5,6 +5,16 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Check, Pencil, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Label } from "./ui/label";
 
 interface EditableFieldProps {
   label: string;
@@ -14,53 +24,66 @@ interface EditableFieldProps {
 }
 
 export function EditableField({ label, value, onSave, inputType = "text" }: EditableFieldProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
   const handleSave = () => {
     onSave(currentValue);
-    setIsEditing(false);
+    setIsOpen(false);
   };
 
-  const handleCancel = () => {
-    setCurrentValue(value);
-    setIsEditing(false);
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      // Reset to original value when opening
+      setCurrentValue(value);
+    }
+    setIsOpen(open);
   };
-
-  if (isEditing) {
-    return (
-      <div className="space-y-2">
-        <p className="font-semibold text-foreground/70">{label}</p>
-        <div className="flex items-center gap-2">
-          <Input
-            type={inputType}
-            value={currentValue}
-            onChange={(e) => setCurrentValue(e.target.value)}
-            className="flex-grow"
-          />
-          <Button variant="ghost" size="icon" onClick={handleSave}>
-            <Check className="h-5 w-5 text-green-500" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={handleCancel}>
-            <X className="h-5 w-5 text-destructive" />
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="font-semibold text-foreground/70">{label}</p>
-        <p className="text-foreground">{value}</p>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-foreground/70">{label}</p>
+          <p className="text-foreground">{value}</p>
+        </div>
+        <DialogTrigger asChild>
+          <Button variant="link" className="text-primary hover:text-accent">
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        </DialogTrigger>
       </div>
-      <Button variant="link" className="text-primary hover:text-accent" onClick={() => setIsEditing(true)}>
-        <Pencil className="h-4 w-4 mr-2" />
-        Edit
-      </Button>
-    </div>
+
+      <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
+        <DialogHeader>
+          <DialogTitle className="text-primary">Edit {label}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="field-input" className="text-right text-foreground/80">
+              {label}
+            </Label>
+            <Input
+              id="field-input"
+              type={inputType}
+              value={currentValue}
+              onChange={(e) => setCurrentValue(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button type="button" onClick={handleSave}>
+            Save changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
-
-    
