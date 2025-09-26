@@ -52,19 +52,22 @@ export async function signInWithGoogle(): Promise<User | null> {
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
 
-    // Create user document in Firestore if it's a new user
+    // Create or update user document in Firestore
     const userDocRef = doc(db, "users", user.uid);
     const nameParts = user.displayName?.split(" ") || [];
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
 
+    // Use { merge: true } to non-destructively update the document.
+    // This creates the doc if it doesn't exist, and updates it if it does,
+    // without overwriting other fields.
     await setDoc(userDocRef, {
       firstName: firstName,
       lastName: lastName,
       email: user.email,
       displayName: user.displayName,
       uid: user.uid,
-    }, { merge: true }); // Merge to avoid overwriting existing data on login
+    }, { merge: true }); 
 
     return user;
   } catch (error: any) {
