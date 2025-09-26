@@ -313,7 +313,7 @@ export default function ProfilePage() {
               <DialogTrigger asChild>
                 <div className="relative group cursor-pointer">
                   <Avatar className="h-24 w-24 border-2 border-primary">
-                    <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
+                    <AvatarFallback className="text-3xl bg-card text-primary font-bold">
                       {avatarText}
                     </AvatarFallback>
                   </Avatar>
