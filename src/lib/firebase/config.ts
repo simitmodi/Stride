@@ -1,7 +1,6 @@
 
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, enableIndexedDbPersistence, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   "projectId": "studio-5920023951-be7cb",
@@ -14,30 +13,14 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
-let db: Firestore;
 
-if (typeof window === 'undefined') {
-  // Server-side initialization
-  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
+// This check prevents re-initializing the app on every render.
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
 } else {
-  // Client-side initialization
-  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-
-  enableIndexedDbPersistence(db)
-    .catch((err) => {
-      if (err.code == 'failed-precondition') {
-        // Multiple tabs open, persistence can only be enabled
-        // in one tab at a time.
-      } else if (err.code == 'unimplemented') {
-        // The current browser does not support all of the
-        // features required to enable persistence
-      }
-    });
+  app = getApp();
 }
 
+auth = getAuth(app);
 
-export { app, auth, db };
+export { auth };

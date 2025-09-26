@@ -1,10 +1,7 @@
-
 "use client";
 
 import { useUser } from "@/firebase/provider";
-import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase/config";
 
 const greetings = {
   0: "Stride never sleeps",
@@ -42,24 +39,10 @@ export default function Greeting() {
 
   useEffect(() => {
     if (user) {
-      const userDocRef = doc(db, "users", user.uid);
-      getDoc(userDocRef)
-        .then((docSnap) => {
-          if (docSnap.exists() && docSnap.data().firstName) {
-            setFirstName(docSnap.data().firstName);
-          } else {
-            const displayName = user.displayName;
-            if (displayName) {
-              setFirstName(displayName.split(" ")[0]);
-            }
-          }
-        })
-        .catch(() => {
-          const displayName = user.displayName;
-          if (displayName) {
-            setFirstName(displayName.split(" ")[0]);
-          }
-        });
+        const displayName = user.displayName;
+        if (displayName) {
+          setFirstName(displayName.split(" ")[0]);
+        }
     }
   }, [user]);
 

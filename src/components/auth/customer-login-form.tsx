@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmail, signInWithGoogle, getUserByUsername } from "@/lib/firebase/auth";
+import { signInWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -54,18 +53,23 @@ export function CustomerLoginForm() {
     },
   });
 
+  // Since getUserByUsername is removed, this function is simplified
   async function handleLogin(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
+      // Assuming the input is always an email now
       let email = values.emailOrUsername;
       if (!email.includes('@')) {
-        const userProfile = await getUserByUsername(email);
-        if (userProfile && userProfile.email) {
-          email = userProfile.email;
-        } else {
-          throw new Error("Invalid username.");
-        }
+        // We can't look up by username anymore, so we tell the user.
+         toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: "Please log in with your email address.",
+          });
+         setIsLoading(false);
+         return;
       }
+
       const user = await signInWithEmail(email, values.password);
       if (user) {
         router.push("/dashboard/customer");
@@ -126,10 +130,10 @@ export function CustomerLoginForm() {
             name="emailOrUsername"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email or Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="name@example.com or johndoe" 
+                    placeholder="name@example.com" 
                     {...field}
                   />
                 </FormControl>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,7 +75,7 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, values.dateOfBirth);
+      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName);
       if (user) {
         toast({
           title: "Success!",

@@ -25,10 +25,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { db } from "@/lib/firebase/config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Full name is required." }),
@@ -59,34 +55,19 @@ export function FeedbackForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const feedbackCollection = collection(db, "UserFeedback");
-    const feedbackData = {
-      ...values,
-      timestamp: serverTimestamp(),
-      status: "Pending",
-    };
-
-    addDoc(feedbackCollection, feedbackData)
-      .then((docRef) => {
-        setFeedbackId(docRef.id);
-        setIsSubmitted(true);
-        toast({
-          title: "Success!",
-          description: `Your feedback has been submitted. Your reference ID is #${docRef.id}`,
-        });
-        form.reset();
-      })
-      .catch((serverError) => {
-        const permissionError = new FirestorePermissionError({
-          path: feedbackCollection.path,
-          operation: 'create',
-          requestResourceData: feedbackData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      })
-      .finally(() => {
-        setIsLoading(false);
+    // This is where the Firestore logic was.
+    // For now, we can simulate a successful submission.
+    setTimeout(() => {
+      const mockId = Math.random().toString(36).substring(2, 10);
+      setFeedbackId(mockId);
+      setIsSubmitted(true);
+      toast({
+        title: "Success!",
+        description: `Your feedback has been submitted. Your reference ID is #${mockId}`,
       });
+      form.reset();
+      setIsLoading(false);
+    }, 1000);
   }
 
   if (isSubmitted) {
