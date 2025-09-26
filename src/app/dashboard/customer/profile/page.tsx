@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, LogOut, ChevronRight, Trash2 } from "lucide-react";
+import { Bell, User, LogOut, ChevronRight, Trash2, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
@@ -29,6 +29,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -46,6 +55,9 @@ export default function ProfilePage() {
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [password, setPassword] = useState("");
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+
+  const [isInitialsDialogOpen, setIsInitialsDialogOpen] = useState(false);
+  const [newInitials, setNewInitials] = useState("");
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -165,6 +177,11 @@ export default function ProfilePage() {
   
   const avatarText = userData?.initials || getInitials(userData?.displayName);
 
+  const handleInitialsSave = async () => {
+    await handleUpdateProfile('initials', newInitials);
+    setIsInitialsDialogOpen(false);
+  }
+
 
   if (isUserLoading || isFirestoreLoading) {
     return (
@@ -209,14 +226,6 @@ export default function ProfilePage() {
                 label="Username"
                 value={userData.username || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('username', newValue)}
-              />
-               <Separator className="bg-primary/20"/>
-              <EditableField
-                label="Initials"
-                value={userData.initials || "N/A"}
-                onSave={(newValue) => handleUpdateProfile('initials', newValue as string)}
-                maxLength={2}
-                placeholder="2 chars or emoji"
               />
               <Separator className="bg-primary/20"/>
               <EditableField
@@ -292,11 +301,50 @@ export default function ProfilePage() {
       <aside className="w-full md:w-80 lg:w-96 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
           <div className="flex flex-col items-center text-center gap-4">
-            <Avatar className="h-24 w-24 border-2 border-primary">
-              <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
-                {avatarText}
-              </AvatarFallback>
-            </Avatar>
+             <Dialog open={isInitialsDialogOpen} onOpenChange={setIsInitialsDialogOpen}>
+              <DialogTrigger asChild>
+                <div className="relative group cursor-pointer">
+                  <Avatar className="h-24 w-24 border-2 border-primary">
+                    <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
+                      {avatarText}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Pencil className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
+                <DialogHeader>
+                  <DialogTitle className="text-primary">Edit Initials</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="initials-input" className="text-right">
+                      Initials
+                    </Label>
+                    <Input
+                      id="initials-input"
+                      value={newInitials}
+                      onChange={(e) => setNewInitials(e.target.value)}
+                      className="col-span-3"
+                      maxLength={2}
+                      placeholder="2 chars or emoji"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button type="button" variant="secondary">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button type="button" onClick={handleInitialsSave}>
+                    Save changes
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <div className="flex flex-col gap-2">
               <h2 className="text-xl font-bold font-headline text-primary">{userData.displayName}</h2>
               <p className="text-sm text-foreground/70 break-all">{userData.email}</p>
