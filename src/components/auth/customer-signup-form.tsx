@@ -73,19 +73,43 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName);
-      if (user) {
-        toast({
-          title: "Success!",
-          description: "Your account has been created.",
-        });
-        router.push("/dashboard/customer");
-      }
+      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName);
+      toast({
+        title: "Success!",
+        description: "Your account has been created.",
+      });
+      router.push("/dashboard/customer");
+
     } catch (error: any) {
+      console.error("Sign-up failed:", error); // Log the full error
+      let title = "Uh oh! Something went wrong.";
+      let description = "There was a problem with your request. Please try again later.";
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          title = "Email Already Registered";
+          description = "This email address is already in use. Please try logging in or use a different email.";
+          break;
+        case "auth/invalid-email":
+          title = "Invalid Email";
+          description = "Please enter a valid email address.";
+          break;
+        case "auth/weak-password":
+          title = "Weak Password";
+          description = "Your password should be at least 6 characters long.";
+          break;
+        default:
+          // Handles other Firebase errors or generic errors
+          if (error.message) {
+            description = error.message;
+          }
+          break;
+      }
+
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request. This email may already be in use.",
+        title: title,
+        description: description,
       });
     } finally {
       setIsLoading(false);
@@ -294,3 +318,5 @@ export function CustomerSignUpForm() {
     </Form>
   );
 }
+
+    
