@@ -45,6 +45,7 @@ export default function ProfilePage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [password, setPassword] = useState("");
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -137,6 +138,7 @@ export default function ProfilePage() {
         title: "Account Deleted",
         description: "Your account has been permanently deleted.",
       });
+      setIsDeleteAlertOpen(false);
       router.push("/");
     } catch (error: any) {
       toast({
@@ -254,58 +256,6 @@ export default function ProfilePage() {
                 </div>
               </div>
             </CardContent>
-             <CardFooter className="flex-col items-start gap-4 border-t border-destructive/20 bg-destructive/5 px-6 py-4 mt-6">
-              <h3 className="text-lg font-semibold text-destructive">Danger Zone</h3>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" className="flex items-center gap-2">
-                      <Trash2 className="h-4 w-4" />
-                      Delete My Account
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove your data from our servers. To confirm, please enter your password and type <strong>DELETE</strong> below.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="password" className="text-right">Password</Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="col-span-3"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="confirm-delete" className="text-right">Confirm</Label>
-                        <Input
-                          id="confirm-delete"
-                          value={deleteConfirm}
-                          onChange={(e) => setDeleteConfirm(e.target.value)}
-                          placeholder="Type DELETE to confirm"
-                          className="col-span-3"
-                        />
-                      </div>
-                    </div>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel onClick={() => { setDeleteConfirm(""); setPassword(""); }}>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleDeleteAccount}
-                        disabled={deleteConfirm !== "DELETE" || isDeleting || !password}
-                        className="bg-destructive hover:bg-destructive/90"
-                      >
-                        {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                        Delete Account
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-            </CardFooter>
           </Card>
         );
       case "notifications":
@@ -368,6 +318,60 @@ export default function ProfilePage() {
               <span>Notifications</span>
               {activeView === 'notifications' && <ChevronRight className="ml-auto h-5 w-5" />}
             </Button>
+            
+            <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="justify-start items-center gap-3 text-base h-12 px-4 text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-5 w-5" />
+                  <span>Delete Account</span>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account and remove your data from our servers. To confirm, please enter your password and type <strong>DELETE</strong> below.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="password" className="text-right">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="confirm-delete" className="text-right">Confirm</Label>
+                    <Input
+                      id="confirm-delete"
+                      value={deleteConfirm}
+                      onChange={(e) => setDeleteConfirm(e.target.value)}
+                      placeholder="Type DELETE to confirm"
+                      className="col-span-3"
+                    />
+                  </div>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => { setDeleteConfirm(""); setPassword(""); }}>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    disabled={deleteConfirm !== "DELETE" || isDeleting || !password}
+                    className="bg-destructive hover:bg-destructive/90"
+                  >
+                    {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Delete Account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            
             <Button
               variant="ghost"
               className="justify-start items-center gap-3 text-base h-12 px-4 text-destructive hover:bg-destructive/10"
