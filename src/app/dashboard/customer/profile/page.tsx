@@ -37,6 +37,7 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
+  DialogDescription as DialogDescriptionComponent,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -317,6 +318,9 @@ export default function ProfilePage() {
               <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
                 <DialogHeader>
                   <DialogTitle className="text-primary">Edit Initials</DialogTitle>
+                  <DialogDescriptionComponent>
+                    To use an emoji, use the keyboard shortcut for your OS (Windows: Win + . | macOS: Ctrl + Cmd + Space).
+                  </DialogDescriptionComponent>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
