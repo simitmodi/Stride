@@ -318,7 +318,7 @@ export default function ProfilePage() {
               <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
                 <DialogHeader>
                   <DialogTitle className="text-primary">Edit Initials</DialogTitle>
-                  <DialogDescriptionComponent>
+                  <DialogDescriptionComponent className="text-foreground/80">
                     To use an emoji, use the keyboard shortcut for your OS (Windows: Win + . | macOS: Ctrl + Cmd + Space).
                   </DialogDescriptionComponent>
                 </DialogHeader>
