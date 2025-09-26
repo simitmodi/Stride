@@ -1,7 +1,10 @@
 "use client";
 
-import { useUser } from "@/firebase/provider";
+import { useUser, useMemoFirebase } from "@/firebase/provider";
 import { useEffect, useState } from "react";
+import { doc } from "firebase/firestore";
+import { useFirestore } from "@/firebase/provider";
+import { useDoc } from "@/firebase/firestore/use-doc";
 
 const greetings = {
   0: "Stride never sleeps",
@@ -26,7 +29,15 @@ const getGreeting = () => {
 
 export default function Greeting() {
   const { user } = useUser();
-  const [firstName, setFirstName] = useState<string | null>(null);
+  const firestore = useFirestore();
+
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, "users", user.uid) : null),
+    [user, firestore]
+  );
+  
+  const { data: userData } = useDoc(userDocRef);
+
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
@@ -37,14 +48,7 @@ export default function Greeting() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (user) {
-        const displayName = user.displayName;
-        if (displayName) {
-          setFirstName(displayName.split(" ")[0]);
-        }
-    }
-  }, [user]);
+  const firstName = userData?.firstName;
 
   return (
     <div className="text-center py-8">
