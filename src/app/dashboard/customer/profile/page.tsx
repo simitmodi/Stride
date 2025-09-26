@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -158,7 +157,7 @@ export default function ProfilePage() {
   return (
     <div className="flex w-full flex-grow flex-col md:flex-row bg-background font-body text-foreground">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 lg:w-72 flex-shrink-0 p-4 md:p-6">
+      <aside className="w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
           <div className="flex flex-col items-center text-center gap-2">
             <Avatar className="h-24 w-24 border-2 border-primary">
@@ -166,8 +165,10 @@ export default function ProfilePage() {
                 {getInitials(user.displayName)}
               </AvatarFallback>
             </Avatar>
-            <h2 className="text-xl font-bold font-headline text-primary">{user.displayName}</h2>
-            <p className="text-sm text-foreground/70 break-all">{user.email}</p>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-xl font-bold font-headline text-primary">{user.displayName}</h2>
+              <p className="text-sm text-foreground/70 break-all">{user.email}</p>
+            </div>
           </div>
           <nav className="flex flex-col gap-2">
             <Button
