@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Calendar as CalendarIcon, Check, Pencil, X } from "lucide-react";
+import { Pencil } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,9 +15,8 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "./ui/label";
-import { Calendar } from "./ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { ScrollingDatePicker } from "./ui/scrolling-date-picker";
 
 interface EditableFieldProps {
   label: string;
@@ -55,15 +54,9 @@ export function EditableField({ label, value, onSave, inputType = "text", dateVa
   const renderInput = () => {
     if (inputType === "date") {
       return (
-        <Calendar
-          mode="single"
-          selected={currentDate}
-          onSelect={setCurrentDate}
-          className="rounded-md border w-full"
-          captionLayout="dropdown-buttons"
-          fromYear={1924}
-          toYear={new Date().getFullYear()}
-          initialFocus
+        <ScrollingDatePicker
+            date={currentDate}
+            onDateChange={setCurrentDate}
         />
       );
     }
