@@ -70,7 +70,7 @@ export default function Header() {
       className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card/75 px-4 md:px-6"
       style={{ backdropFilter: 'blur(12px)' }}
     >
-      <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
+      <nav className="flex w-full flex-row items-center justify-between gap-5 text-lg font-medium md:gap-6">
         <Link
           href="/dashboard/customer"
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
@@ -78,7 +78,7 @@ export default function Header() {
           <Image src={Logo} alt="Stride Logo" width={100} height={100} />
           <span className="sr-only">Stride</span>
         </Link>
-        <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
