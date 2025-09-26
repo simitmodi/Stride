@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Check, Pencil, X } from "lucide-react";
+import { Calendar as CalendarIcon, Check, Pencil, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,20 +15,29 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "./ui/label";
+import { Calendar } from "./ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 interface EditableFieldProps {
   label: string;
   value: string;
-  onSave: (newValue: string) => void;
+  onSave: (newValue: string | Date) => void;
   inputType?: string;
+  dateValue?: Date;
 }
 
-export function EditableField({ label, value, onSave, inputType = "text" }: EditableFieldProps) {
+export function EditableField({ label, value, onSave, inputType = "text", dateValue }: EditableFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
+  const [currentDate, setCurrentDate] = useState<Date | undefined>(dateValue);
 
   const handleSave = () => {
-    onSave(currentValue);
+    if (inputType === 'date' && currentDate) {
+      onSave(currentDate);
+    } else {
+      onSave(currentValue);
+    }
     setIsOpen(false);
   };
 
@@ -36,8 +45,37 @@ export function EditableField({ label, value, onSave, inputType = "text" }: Edit
     if (open) {
       // Reset to original value when opening
       setCurrentValue(value);
+      if (inputType === 'date') {
+        setCurrentDate(dateValue);
+      }
     }
     setIsOpen(open);
+  };
+
+  const renderInput = () => {
+    if (inputType === "date") {
+      return (
+        <Calendar
+          mode="single"
+          selected={currentDate}
+          onSelect={setCurrentDate}
+          className="rounded-md border"
+          captionLayout="dropdown-buttons"
+          fromYear={1924}
+          toYear={new Date().getFullYear()}
+          initialFocus
+        />
+      );
+    }
+    return (
+      <Input
+        id="field-input"
+        type={inputType}
+        value={currentValue}
+        onChange={(e) => setCurrentValue(e.target.value)}
+        className="col-span-3"
+      />
+    );
   };
 
   return (
@@ -60,17 +98,13 @@ export function EditableField({ label, value, onSave, inputType = "text" }: Edit
           <DialogTitle className="text-primary">Edit {label}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="field-input" className="text-right text-foreground/80">
-              {label}
-            </Label>
-            <Input
-              id="field-input"
-              type={inputType}
-              value={currentValue}
-              onChange={(e) => setCurrentValue(e.target.value)}
-              className="col-span-3"
-            />
+          <div className={cn("grid items-center gap-4", inputType !== 'date' && 'grid-cols-4')}>
+            {inputType !== 'date' &&
+              <Label htmlFor="field-input" className="text-right text-foreground/80">
+                {label}
+              </Label>
+            }
+            {renderInput()}
           </div>
         </div>
         <DialogFooter>

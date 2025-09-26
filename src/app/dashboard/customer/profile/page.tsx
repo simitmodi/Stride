@@ -6,7 +6,7 @@ import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { signOutUser, updateUserProfile } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
-import { doc } from "firebase/firestore";
+import { doc, Timestamp } from "firebase/firestore";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -53,21 +53,24 @@ export default function ProfilePage() {
     }
   };
 
-  const handleUpdateProfile = async (field: string, value: string) => {
+  const handleUpdateProfile = async (field: string, value: string | Date) => {
     if (!user) return;
     try {
       const updates: { [key: string]: any } = {};
       if (field === 'displayName') {
-        const [firstName, ...lastNameParts] = value.split(' ');
+        const [firstName, ...lastNameParts] = (value as string).split(' ');
         const lastName = lastNameParts.join(' ');
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
         updates['displayName'] = value;
         // Also update the auth profile
         if(auth.currentUser) {
-          await updateProfile(auth.currentUser, { displayName: value });
+          await updateProfile(auth.currentUser, { displayName: value as string });
         }
-      } else {
+      } else if (field === 'dateOfBirth' && value instanceof Date) {
+        updates[field] = Timestamp.fromDate(value);
+      }
+      else {
         updates[field] = value;
       }
       
@@ -108,9 +111,11 @@ export default function ProfilePage() {
   }
 
   const dobTimestamp = userData?.dateOfBirth;
+  let dobDate: Date | undefined = undefined;
   let formattedDob = "N/A";
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
-      formattedDob = format(dobTimestamp.toDate(), 'MM/dd/yyyy');
+      dobDate = dobTimestamp.toDate();
+      formattedDob = format(dobDate, 'MM/dd/yyyy');
   }
 
   const creationTime = user.metadata.creationTime ? new Date(user.metadata.creationTime).toLocaleString() : "N/A";
@@ -132,13 +137,13 @@ export default function ProfilePage() {
                 onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
               />
               <Separator className="bg-primary/20"/>
-              <div className="flex items-center justify-between">
-                 <div>
-                   <p className="font-semibold text-foreground/70">DOB</p>
-                   <p className="text-foreground">{formattedDob}</p>
-                 </div>
-                 <Button variant="link" className="text-primary hover:text-accent" disabled>Edit</Button>
-               </div>
+              <EditableField
+                label="Date of Birth"
+                value={formattedDob}
+                dateValue={dobDate}
+                onSave={(newValue) => handleUpdateProfile('dateOfBirth', newValue)}
+                inputType="date"
+              />
               <Separator className="bg-primary/20"/>
                <EditableField
                 label="Phone Number"
@@ -193,7 +198,7 @@ export default function ProfilePage() {
       {/* Sidebar */}
       <aside className="w-full md:w-72 lg:w-80 flex-shrink-0 p-4 md:p-6">
         <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
-          <div className="flex flex-col items-center text-center gap-4">
+          <div className="flex flex-col items-center text-center gap-2">
             <Avatar className="h-24 w-24 border-2 border-primary">
               <AvatarFallback className="text-3xl bg-muted text-primary font-bold">
                 {getInitials(user.displayName)}
@@ -250,5 +255,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
