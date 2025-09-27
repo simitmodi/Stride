@@ -402,7 +402,7 @@ export default function ProfilePage() {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
+                  <AlertDialogDescription className="text-foreground/80">
                     This action cannot be undone. This will permanently delete your account and remove your data from our servers. To confirm, please enter your password and type <strong>DELETE</strong> below.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
