@@ -205,7 +205,7 @@ export default function ProfilePage() {
   }
 
   const dobTimestamp = userData?.dateOfBirth;
-  let dobDate: Date | undefined = undefined;
+  let dobDate: Date | undefined;
   let formattedDob = "N/A";
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
     dobDate = dobTimestamp.toDate();
