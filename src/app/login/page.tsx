@@ -48,7 +48,7 @@ export default function LoginOptionsPage() {
                     <User className="h-12 w-12 text-primary" />
                     <div className="flex-1">
                       <CardTitle className="text-foreground">Customer Login</CardTitle>
-                      <CardDescription className="group-hover:text-accent-foreground">
+                      <CardDescription className="text-foreground group-hover:text-accent-foreground">
                         Access your personal account.
                       </CardDescription>
                     </div>
