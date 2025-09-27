@@ -208,8 +208,8 @@ export default function ProfilePage() {
   let dobDate: Date | undefined = undefined;
   let formattedDob = "N/A";
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
-      dobDate = dobTimestamp.toDate();
-      formattedDob = format(dobDate, 'dd/MM/yyyy');
+    dobDate = dobTimestamp.toDate();
+    formattedDob = format(dobDate, 'dd/MM/yyyy');
   }
 
   const lastSignInTime = user.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleString() : "N/A";
