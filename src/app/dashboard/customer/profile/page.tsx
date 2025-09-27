@@ -120,23 +120,23 @@ export default function ProfilePage() {
         }
       } else if (field === 'dateOfBirth' && value instanceof Date) {
         updates[field] = Timestamp.fromDate(value);
-      } else if (field === 'initials') {
-         updates[field] = value;
-         toast({
-            title: "Profile Updated",
-            description: "Your Avatar has been updated.",
-         });
-         return;
-      }
-      else {
+      } else {
         updates[field] = value;
       }
       
       await updateUserProfile(user.uid, updates);
-      toast({
-        title: "Profile Updated",
-        description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
-      });
+      
+      if (field === 'initials') {
+          toast({
+            title: "Profile Updated",
+            description: "Your Avatar has been updated.",
+          });
+      } else {
+          toast({
+            title: "Profile Updated",
+            description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
+          });
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
