@@ -45,7 +45,7 @@ export default function LoginOptionsPage() {
               <Link href="/login/customer" className="group">
                 <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground hover:shadow-md active:scale-100">
                   <CardHeader className="flex flex-row items-center gap-4">
-                    <User className="h-8 w-8 text-primary" />
+                    <User className="h-10 w-10 text-primary" />
                     <div className="flex-1">
                       <CardTitle className="text-foreground">Customer Login</CardTitle>
                       <CardDescription className="group-hover:text-accent-foreground">
