@@ -51,25 +51,20 @@ export function DeveloperLoginForm() {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
 
-        if (!userDoc.exists()) {
-          // If the user document doesn't exist, create it with the developer role.
-          // This handles users created manually in the Firebase console.
+        if (!userDoc.exists() || userDoc.data().role !== 'developer') {
+          // If the user document doesn't exist or doesn't have the correct role,
+          // create/update it. This handles users created manually in Firebase console.
           await setDoc(userDocRef, {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName || user.email?.split('@')[0],
             role: 'developer',
           }, { merge: true });
-           router.push("/dashboard/developer");
-        } else if (userDoc.data().role === 'developer') {
-          router.push("/dashboard/developer");
+          // Force a full page reload to ensure all states are reset and user data is refetched.
+          window.location.href = "/dashboard/developer";
         } else {
-          await signOutUser();
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "You do not have permission to access the developer portal.",
-          });
+          // If profile exists and role is correct, just push the route.
+          router.push("/dashboard/developer");
         }
       }
     } catch (error: any) {
@@ -84,8 +79,7 @@ export function DeveloperLoginForm() {
         title: "Login Failed",
         description: description,
       });
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Only set loading to false on error. On success, page reloads.
     }
   }
 
