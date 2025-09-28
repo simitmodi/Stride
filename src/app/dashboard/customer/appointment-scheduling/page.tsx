@@ -158,7 +158,7 @@ export default function AppointmentSchedulingPage() {
   
         slots.push(`${formatHour12(startHour)}:${startMinutes} ${startAmPm} - ${formatHour12(endHour)}:${endMinutes} ${endAmPm}`);
   
-        if (i < 16) {
+        if (i < 15) { // Adjusted to stop before 4:00 PM
             // Skip 13:30 - 14:00 (1:30 PM - 2:00 PM) slot
             if (i === 13) continue;
 
@@ -173,12 +173,14 @@ export default function AppointmentSchedulingPage() {
   }, []);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    toast({
-      title: 'Form Validated!',
-      description: 'Navigating to appointment details...',
-    });
-    router.push('/dashboard/customer/appointment-scheduling/appointment-details');
+    const query = new URLSearchParams({
+      bankName: data.bankName,
+      branch: data.branch,
+      date: data.date.toISOString(),
+      time: data.time,
+      accountNumber: data.accountNumber,
+    }).toString();
+    router.push(`/dashboard/customer/appointment-scheduling/appointment-details?${query}`);
   };
 
   const handleReset = () => {
@@ -248,11 +250,23 @@ export default function AppointmentSchedulingPage() {
               {/* Pincode */}
               <div className="space-y-2">
                 <Label htmlFor="pincode" style={{ color: '#000F00' }}>Pincode:</Label>
-                <Input
-                  id="pincode"
-                  placeholder="Enter 6 digit pincode"
-                  {...form.register('pincode')}
-                  disabled={!selectedBank}
+                <Controller
+                  name="pincode"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBank}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a pincode" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {pincodes.map((pincode) => (
+                          <SelectItem key={pincode} value={pincode}>
+                            {pincode}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 />
                 {form.formState.errors.pincode && <p className="text-sm text-destructive">{form.formState.errors.pincode.message}</p>}
               </div>
@@ -291,7 +305,7 @@ export default function AppointmentSchedulingPage() {
               {/* IFSC Code */}
               <div className="space-y-2">
                 <Label htmlFor="ifsc" style={{ color: '#000F00' }}>IFSC Code:</Label>
-                <Input id="ifsc" {...form.register('ifsc')} disabled className="bg-gray-200" />
+                <Input id="ifsc" {...form.register('ifsc')} readOnly className="bg-gray-200" />
               </div>
 
               {/* Email */}
@@ -314,11 +328,11 @@ export default function AppointmentSchedulingPage() {
                             variant="outline"
                             className={cn(
                               'w-full justify-start text-left font-normal',
-                              !field.value && 'text-foreground/80 hover:text-[#FFF0FF]'
+                              !field.value && 'text-foreground/80'
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? format(field.value, 'PPP') : <span style={!field.value ? {color: '#000F00'} : {}}>Enter Date</span>}
+                            {field.value ? format(field.value, 'PPP') : <span>Enter Date</span>}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
@@ -379,3 +393,5 @@ export default function AppointmentSchedulingPage() {
     </div>
   );
 }
+
+    

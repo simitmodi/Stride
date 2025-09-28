@@ -3,10 +3,32 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can only read and write to their own profile document.
+
+    // Helper function to check if a user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if the requesting user is the owner of the document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Rules for the 'users' collection
     match /users/{userId} {
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null;
+      // Allow read and write only by the owner of the document
+      allow read, write: if isSignedIn() && isOwner(userId);
+    }
+    
+    // Rules for the 'appointments' subcollection
+    match /users/{userId}/appointments/{appointmentId} {
+        // Allow create, read by the owner of the user profile
+        allow create, read: if isSignedIn() && isOwner(userId);
+        
+        // Disallow update and delete for now to keep records immutable
+        allow update, delete: if false;
     }
   }
 }
+
+    
