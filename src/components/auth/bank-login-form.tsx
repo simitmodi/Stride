@@ -80,12 +80,25 @@ export function BankLoginForm() {
               description: "You do not have permission to access the bank portal.",
             });
           }
+        } else {
+            // This case should ideally not be hit if signInWithEmail throws an error for failed login
+            toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: "Invalid credentials.",
+            });
         }
       } catch (error: any) {
+         let description = "An unexpected error occurred. Please try again.";
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+            description = "Invalid credentials. Please check your email and password.";
+          } else if (error.code === 'auth/too-many-requests') {
+            description = "Access to this account has been temporarily disabled due to many failed login attempts. You can try again later.";
+          }
         toast({
           variant: "destructive",
           title: "Login Failed",
-          description: "Invalid credentials or you do not have bank access.",
+          description: description,
         });
       } finally {
         setIsLoading(false);
