@@ -54,9 +54,13 @@ export default function UpcomingAppointments() {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      if (isUserLoading || !userData) {
-        // Still waiting for user data to load, or user has no data yet
-        setIsLoading(!isUserLoading); // Show loading only when user data is confirmed but appointments are being fetched.
+      if (!userData) {
+        // If userData is null (which it is initially), we might be loading or the user has no doc.
+        // We set loading to false only if we are also not in the initial user loading phase.
+        if (!isUserLoading) {
+            setIsLoading(false);
+            setAppointments([]);
+        }
         return;
       }
 
