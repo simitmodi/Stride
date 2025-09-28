@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { useFirestore } from '@/firebase/provider';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
@@ -110,10 +109,6 @@ export function AppointmentDetailsModal({
       >
         <DialogHeader className="p-6 relative">
             <DialogTitle className="sr-only">Appointment Details</DialogTitle>
-             <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                <X className="h-4 w-4" />
-                <span className="sr-only">Close</span>
-            </DialogClose>
         </DialogHeader>
         <div className="p-6 pt-0">
           {isLoading ? (
@@ -151,7 +146,7 @@ export function AppointmentDetailsModal({
                     <h3 className="text-lg font-bold mb-2">Documents:</h3>
                     <ol className="list-decimal list-inside space-y-1">
                         {details.documents.map((doc, index) => (
-                             <li key={index}>{doc}</li>
+                             <li key={index}>{doc.startsWith('documents.') ? doc.split('.').slice(1).join('.') : doc}</li>
                         ))}
                     </ol>
                 </div>
