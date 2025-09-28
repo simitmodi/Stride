@@ -80,13 +80,6 @@ export function BankLoginForm() {
               description: "You do not have permission to access the bank portal.",
             });
           }
-        } else {
-            // This case should ideally not be hit if signInWithEmail throws an error for failed login
-            toast({
-                variant: "destructive",
-                title: "Login Failed",
-                description: "Invalid credentials.",
-            });
         }
       } catch (error: any) {
          let description = "An unexpected error occurred. Please try again.";
