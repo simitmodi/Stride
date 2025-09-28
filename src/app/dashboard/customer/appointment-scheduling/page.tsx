@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/popover';
 import { CalendarIcon, Clock } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
+import { format, isSaturday, isSunday } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -196,6 +196,20 @@ export default function AppointmentSchedulingPage() {
     setBranches([]);
   };
 
+  const isBankHoliday = (date: Date) => {
+    if (isSunday(date)) {
+      return true; // All Sundays are holidays
+    }
+    if (isSaturday(date)) {
+      const dayOfMonth = date.getDate();
+      // Second Saturday (day 8-14) or Fourth Saturday (day 22-28)
+      if ((dayOfMonth > 7 && dayOfMonth <= 14) || (dayOfMonth > 21 && dayOfMonth <= 28)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <div className="flex w-full flex-col items-center p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
       <Card className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
@@ -313,7 +327,7 @@ export default function AppointmentSchedulingPage() {
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
-                            disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
+                            disabled={(date) => date < new Date() || date < new Date("1900-01-01") || isBankHoliday(date)}
                           />
                         </PopoverContent>
                       </Popover>
