@@ -45,12 +45,17 @@ export function BankEmployeeSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, new Date(), 'bank');
-      toast({
-        title: "Success!",
-        description: "Bank employee account has been created.",
-      });
-      form.reset();
+      // Create user with 'bank' role
+      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, new Date(), 'bank');
+      if (user) {
+        toast({
+          title: "Success!",
+          description: "Bank employee account has been created.",
+        });
+        form.reset();
+      } else {
+        throw new Error("User creation failed unexpectedly.");
+      }
     } catch (error: any) {
       let title = "Uh oh! Something went wrong.";
       let description = "There was a problem with the request.";
