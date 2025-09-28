@@ -92,6 +92,25 @@ export default function AppointmentSchedulingPage() {
   }, [user, setValue]);
 
   useEffect(() => {
+    if (selectedBank) {
+      const relevantPincodes = Array.from(
+        new Set(
+          bankData
+            .filter((item) => item.BANK === selectedBank && item.pincode)
+            .map((item) => item.pincode!.toString())
+        )
+      ).sort();
+      setPincodes(relevantPincodes);
+      setValue('pincode', '');
+      setValue('branch', '');
+      setValue('ifsc', '');
+    } else {
+      setPincodes([]);
+      setBranches([]);
+    }
+  }, [selectedBank, setValue]);
+
+  useEffect(() => {
     if (selectedBank && enteredPincode.length >= 6) {
       const filteredBranches = bankData.filter(
         (item) =>
@@ -120,8 +139,18 @@ export default function AppointmentSchedulingPage() {
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let i = 10; i < 17; i++) {
-        slots.push(`${i}:00`);
-        if (i < 16) slots.push(`${i}:30`);
+        const startHour = i;
+        const endHour = i;
+        const startMinutes = '00';
+        const endMinutes = '30';
+        
+        slots.push(`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`);
+        
+        if (i < 16) {
+            const nextStartHour = i + 1;
+            const nextStartMinutes = '00';
+            slots.push(`${endHour}:${endMinutes} - ${nextStartHour}:${nextStartMinutes}`);
+        }
     }
     return slots;
   }, []);
@@ -188,12 +217,23 @@ export default function AppointmentSchedulingPage() {
               {/* Pincode */}
               <div className="space-y-2">
                 <Label htmlFor="pincode" style={{ color: '#000F00' }}>Pincode:</Label>
-                <Input
-                  id="pincode"
-                  placeholder="eg. 380015"
-                  {...form.register('pincode')}
-                  disabled={!selectedBank}
-                  maxLength={6}
+                <Controller
+                  name="pincode"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBank}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a pincode" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {pincodes.map((pincode) => (
+                          <SelectItem key={pincode} value={pincode}>
+                            {pincode}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 />
                 {form.formState.errors.pincode && <p className="text-sm text-destructive">{form.formState.errors.pincode.message}</p>}
               </div>
@@ -321,3 +361,5 @@ export default function AppointmentSchedulingPage() {
   );
 }
 
+
+    
