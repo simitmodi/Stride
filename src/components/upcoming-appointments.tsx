@@ -50,18 +50,17 @@ export default function UpcomingAppointments() {
     [user, firestore]
   );
   
-  const { data: userData } = useDoc<UserData>(userDocRef);
+  const { data: userData, isLoading: isUserLoading } = useDoc<UserData>(userDocRef);
+
+  const appointmentIds = useMemo(() => userData?.appointmentIds || [], [userData?.appointmentIds]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      if (!userData) {
-        // We are probably still loading user data, or there is no user data.
-        // Don't set loading to false until we know for sure.
-        if (user && !isLoading) setIsLoading(true);
-        return;
+      if (isUserLoading) {
+        return; 
       }
-
-      if (!userData.appointmentIds || userData.appointmentIds.length === 0) {
+      
+      if (!appointmentIds || appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
         return;
@@ -71,9 +70,10 @@ export default function UpcomingAppointments() {
       setError(null);
       
       try {
-        const appointmentPromises = userData.appointmentIds.map(id => 
+        const appointmentPromises = appointmentIds.map(id => 
           getDoc(doc(db, "appointments", id))
         );
+
         const appointmentSnapshots = await Promise.all(appointmentPromises);
         
         const fetchedAppointments = appointmentSnapshots
@@ -92,7 +92,7 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userData, user, isLoading]);
+  }, [appointmentIds, isUserLoading]);
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
