@@ -7,7 +7,7 @@ import { useForm, Controller, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useUser } from '@/firebase/provider';
-import { addDoc, collection, doc, Timestamp } from 'firebase/firestore';
+import { collection, doc, Timestamp, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 import { Button } from '@/components/ui/button';
@@ -290,5 +290,3 @@ export default function AppointmentDetailsPage() {
         </Suspense>
     )
 }
-
-    
