@@ -19,7 +19,7 @@ import { signInWithEmail, signOutUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 const formSchema = z.object({
@@ -51,7 +51,17 @@ export function DeveloperLoginForm() {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
 
-        if (userDoc.exists() && userDoc.data().role === 'developer') {
+        if (!userDoc.exists()) {
+          // If the user document doesn't exist, create it with the developer role.
+          // This handles users created manually in the Firebase console.
+          await setDoc(userDocRef, {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName || user.email?.split('@')[0],
+            role: 'developer',
+          }, { merge: true });
+           router.push("/dashboard/developer");
+        } else if (userDoc.data().role === 'developer') {
           router.push("/dashboard/developer");
         } else {
           await signOutUser();
