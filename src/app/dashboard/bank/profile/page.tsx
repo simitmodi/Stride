@@ -39,7 +39,6 @@ export default function BankProfilePage() {
 
   useEffect(() => {
     if (!isUserLoading && (!user || userData?.role !== 'bank')) {
-      // Redirect if not a bank employee or data is loaded and role is not bank
       // router.push('/login');
     }
   }, [user, userData, isUserLoading, router]);
@@ -135,6 +134,13 @@ export default function BankProfilePage() {
             disabled={!!userData.bankName}
           />
         <Separator className="bg-primary/20"/>
+        <EditableField
+            label="Branch"
+            value={userData.branch || "N/A"}
+            onSave={(newValue) => {}}
+            disabled={true}
+        />
+        <Separator className="bg-primary/20"/>
          <EditableField
             label="DOB"
             value={formattedDob}
@@ -146,13 +152,21 @@ export default function BankProfilePage() {
         <EditableField
             label="IFSC Code"
             value={userData.ifscCode || "N/A"}
-            onSave={(newValue) => handleUpdateProfile('ifscCode', newValue)}
+            onSave={(newValue) => {}}
+            disabled={true}
           />
         <Separator className="bg-primary/20"/>
          <EditableField
             label="Designation"
             value={userData.designation || "N/A"}
             onSave={(newValue) => handleUpdateProfile('designation', newValue)}
+          />
+         <Separator className="bg-primary/20"/>
+         <EditableField
+            label="Address"
+            value={userData.address || "N/A"}
+            onSave={(newValue) => {}}
+            disabled={true}
           />
       </CardContent>
     </Card>

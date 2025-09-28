@@ -29,6 +29,8 @@ export async function signUpWithEmail(
   bankName?: string,
   designation?: string,
   ifscCode?: string,
+  branch?: string,
+  address?: string,
 ): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
@@ -52,10 +54,10 @@ export async function signUpWithEmail(
     
     if (role === 'bank') {
       userData.bankName = bankName;
+      userData.branch = branch;
+      userData.address = address;
       userData.designation = designation;
       userData.ifscCode = ifscCode;
-    } else if (role === 'customer') {
-      userData.sessionToken = '';
     }
 
     // Create user document in Firestore

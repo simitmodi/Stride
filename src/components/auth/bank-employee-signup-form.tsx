@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail } from "@/lib/firebase/auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import {
   Select,
@@ -34,6 +34,8 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
   bankName: z.string().min(1, { message: "Bank name is required." }),
+  branch: z.string().min(1, { message: "Branch is required." }),
+  address: z.string(),
   designation: z.string().min(1, { message: "Designation is required." }),
   ifscCode: z.string().min(1, { message: "IFSC code is required." }),
 });
@@ -41,7 +43,8 @@ const formSchema = z.object({
 export function BankEmployeeSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
+  
+  const [branches, setBranches] = useState<{ BRANCH: string; IFSC: string; ADDRESS: string; }[]>([]);
   const uniqueBanks = Array.from(new Set(bankData.map((item) => item.BANK))).sort();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,10 +56,35 @@ export function BankEmployeeSignUpForm() {
       email: "",
       password: "",
       bankName: "",
+      branch: "",
+      address: "",
       designation: "",
       ifscCode: "",
     },
   });
+
+  const selectedBank = form.watch("bankName");
+
+  useEffect(() => {
+    if (selectedBank) {
+      const filteredBranches = bankData.filter(item => item.BANK === selectedBank);
+      setBranches(filteredBranches);
+      form.setValue('branch', '');
+      form.setValue('ifscCode', '');
+      form.setValue('address', '');
+    } else {
+      setBranches([]);
+    }
+  }, [selectedBank, form]);
+
+  const handleBranchChange = (branchName: string) => {
+    const branchDetails = branches.find(b => b.BRANCH === branchName);
+    if (branchDetails) {
+      form.setValue('branch', branchDetails.BRANCH);
+      form.setValue('ifscCode', branchDetails.IFSC);
+      form.setValue('address', branchDetails.ADDRESS);
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -71,7 +99,9 @@ export function BankEmployeeSignUpForm() {
         'bank',
         values.bankName,
         values.designation,
-        values.ifscCode
+        values.ifscCode,
+        values.branch,
+        values.address
       );
       if (user) {
         toast({
@@ -79,6 +109,7 @@ export function BankEmployeeSignUpForm() {
           description: "Bank employee account has been created.",
         });
         form.reset();
+        setBranches([]);
       } else {
         throw new Error("User creation failed unexpectedly.");
       }
@@ -198,12 +229,49 @@ export function BankEmployeeSignUpForm() {
         />
         <FormField
           control={form.control}
+          name="branch"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Branch</FormLabel>
+                <Select onValueChange={handleBranchChange} value={field.value} disabled={!selectedBank}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a branch" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {branches.map((b) => (
+                      <SelectItem key={b.IFSC} value={b.BRANCH}>
+                        {b.BRANCH}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="ifscCode"
           render={({ field }) => (
             <FormItem>
               <FormLabel>IFSC Code</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. SBIN0000301" {...field} />
+                <Input placeholder="Auto-filled" {...field} readOnly className="bg-gray-200" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input placeholder="Auto-filled" {...field} readOnly className="bg-gray-200" />
               </FormControl>
               <FormMessage />
             </FormItem>
