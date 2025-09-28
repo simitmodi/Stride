@@ -12,7 +12,8 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  verifyBeforeUpdateEmail,
 } from "firebase/auth";
 import { doc, setDoc, updateDoc, Timestamp, deleteDoc } from "firebase/firestore";
 import { auth, db } from "./config";
@@ -69,6 +70,22 @@ export async function sendPasswordReset(email: string): Promise<void> {
 export async function updateUserProfile(userId: string, data: { [key: string]: any }): Promise<void> {
   const userDocRef = doc(db, "users", userId);
   await updateDoc(userDocRef, data);
+}
+
+export async function updateUserEmail(newEmail: string): Promise<void> {
+  const user = auth.currentUser;
+  if (user) {
+    await verifyBeforeUpdateEmail(user, newEmail);
+    // After this, Firebase sends a verification email to the new address.
+    // The email is updated only after the user clicks the link.
+    // You might want to update the email in your Firestore database as well,
+    // but only after the user has verified the new email.
+    // This can be handled by having the verification link redirect to a page
+    // in your app that confirms the change and updates Firestore.
+    // For now, we just trigger the Firebase flow.
+  } else {
+    throw new Error("No user is currently signed in.");
+  }
 }
 
 export async function sendVerificationEmail(): Promise<void> {

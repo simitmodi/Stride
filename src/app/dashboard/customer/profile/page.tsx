@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, changeUserPassword } from "@/lib/firebase/auth";
+import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, changeUserPassword, reauthenticateUser, updateUserEmail } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc, Timestamp } from "firebase/firestore";
 import * as z from "zod";
@@ -80,6 +80,11 @@ export default function ProfilePage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
 
+  const [isReauthDialogOpen, setIsReauthDialogOpen] = useState(false);
+  const [reauthPassword, setReauthPassword] = useState("");
+  const [isReauthing, setIsReauthing] = useState(false);
+  const [onReauthSuccess, setOnReauthSuccess] = useState<(() => Promise<void>) | null>(null);
+
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -133,9 +138,43 @@ export default function ProfilePage() {
       setIsVerifying(false);
     }
   };
+  
+  const handleUpdateEmail = async (newEmail: string) => {
+    try {
+      await updateUserEmail(newEmail);
+      await updateUserProfile(user.uid, { email: newEmail });
+      toast({
+        title: "Verification Email Sent",
+        description: `A verification email has been sent to ${newEmail}. Please verify to update your email address.`,
+      });
+    } catch(error: any) {
+      if (error.code === 'auth/requires-recent-login') {
+        toast({
+          variant: "destructive",
+          title: "Action Required",
+          description: "For security, please re-enter your password to continue.",
+        });
+        // Store the action to be performed after re-authentication
+        setOnReauthSuccess(() => () => handleUpdateEmail(newEmail));
+        setIsReauthDialogOpen(true);
+      } else {
+         toast({
+          variant: "destructive",
+          title: "Update Failed",
+          description: error.message || "Could not update your email.",
+        });
+      }
+    }
+  };
 
   const handleUpdateProfile = async (field: string, value: string | Date) => {
     if (!user) return;
+
+    if (field === 'email') {
+      await handleUpdateEmail(value as string);
+      return;
+    }
+
     try {
       const updates: { [key: string]: any } = {};
       if (field === 'displayName') {
@@ -143,7 +182,6 @@ export default function ProfilePage() {
         const lastName = lastNameParts.join(' ');
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
-        updates['displayName'] = value;
         if(auth.currentUser) {
           await updateProfile(auth.currentUser, { displayName: value as string });
         }
@@ -183,28 +221,41 @@ export default function ProfilePage() {
       });
       router.push("/");
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Deletion Failed",
-        description: error.message || "Could not delete your account. Please try again.",
-      });
+      if (error.code === 'auth/requires-recent-login') {
+         toast({
+          variant: "destructive",
+          title: "Action Required",
+          description: "For security, please re-enter your password to continue.",
+        });
+        setOnReauthSuccess(() => handleDeleteAccount);
+        setIsReauthDialogOpen(true);
+        setIsDeleting(false);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Deletion Failed",
+          description: error.message || "Could not delete your account. Please try again.",
+        });
+      }
     } finally {
-      setIsDeleting(false);
-      setDeleteConfirm("");
-      setDeletePassword("");
+      if (error.code !== 'auth/requires-recent-login') {
+        setIsDeleting(false);
+        setDeleteConfirm("");
+        setDeletePassword("");
+      }
     }
   };
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
     const nameParts = name.split(" ");
-    if (nameParts.length > 1 && nameParts[1]) {
+    if (nameParts.length > 1 && nameParts[nameParts.length - 1][0]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
     return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
   };
   
-  const avatarText = userData?.initials || getInitials(userData?.displayName);
+  const avatarText = userData?.initials || getInitials(userData?.displayName || user?.displayName);
 
   const handleInitialsSave = async () => {
     if (!user) return;
@@ -242,6 +293,32 @@ export default function ProfilePage() {
     }
   };
 
+  const handleReauthentication = async () => {
+    if (!reauthPassword) {
+      toast({ variant: "destructive", title: "Error", description: "Password is required." });
+      return;
+    }
+    setIsReauthing(true);
+    try {
+      await reauthenticateUser(reauthPassword);
+      toast({ title: "Re-authenticated successfully", description: "You can now complete your previous action." });
+      setIsReauthDialogOpen(false);
+      setReauthPassword("");
+      if (onReauthSuccess) {
+        await onReauthSuccess(); // Retry the original action
+        setOnReauthSuccess(null);
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Failed",
+        description: "The password you entered is incorrect. Please try again.",
+      });
+    } finally {
+      setIsReauthing(false);
+    }
+  };
+
 
   if (isUserLoading || isFirestoreLoading) {
     return (
@@ -266,6 +343,7 @@ export default function ProfilePage() {
       dobDate = dobTimestamp.toDate();
       formattedDob = format(dobDate, 'dd/MM/yyyy');
   }
+
 
   const lastSignInTime = user.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleString() : "N/A";
 
@@ -325,12 +403,12 @@ export default function ProfilePage() {
                 )}
               </div>
               <Separator className="bg-primary/20"/>
-               <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-foreground/70">Email Address</p>
-                  <p className="text-foreground">{userData.email || "N/A"}</p>
-                </div>
-              </div>
+              <EditableField
+                label="Email Address"
+                value={userData.email || "N/A"}
+                onSave={(newValue) => handleUpdateProfile('email', newValue)}
+                inputType="email"
+              />
               <Separator className="bg-primary/20"/>
               <div className="flex items-center justify-between">
                 <div>
@@ -608,6 +686,43 @@ export default function ProfilePage() {
       <main className="flex-grow p-4 md:p-6">
         {renderContent()}
       </main>
+
+      {/* Re-authentication Dialog */}
+      <Dialog open={isReauthDialogOpen} onOpenChange={setIsReauthDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
+          <DialogHeader>
+            <DialogTitle className="text-primary">Re-authentication Required</DialogTitle>
+            <DialogDescriptionComponent className="text-foreground/80">
+              For your security, please enter your password again to continue.
+            </DialogDescriptionComponent>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="reauth-password" className="text-right">
+                Password
+              </Label>
+              <Input
+                id="reauth-password"
+                type="password"
+                value={reauthPassword}
+                onChange={(e) => setReauthPassword(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" onClick={() => { setOnReauthSuccess(null); setReauthPassword(""); }}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="button" onClick={handleReauthentication} disabled={isReauthing}>
+              {isReauthing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
