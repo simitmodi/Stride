@@ -2,7 +2,7 @@
 "use client";
 
 import { signOutUser } from "@/lib/firebase/auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut, User as UserIcon } from "lucide-react";
 import Link from "next/link";
@@ -25,6 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const { toast } = useToast();
   const { user } = useUser();
   const firestore = useFirestore();
@@ -64,6 +65,26 @@ export default function Header() {
 
   const avatarText = userData?.initials || getInitials(user?.displayName);
 
+  const getProfileLink = () => {
+    if (pathname.startsWith('/dashboard/bank')) {
+      return "/dashboard/bank/profile";
+    }
+    if (pathname.startsWith('/dashboard/developer')) {
+      return "/dashboard/developer/profile"; // Assuming this will exist
+    }
+    return "/dashboard/customer/profile";
+  };
+  
+  const getDashboardLink = () => {
+    if (pathname.startsWith('/dashboard/bank')) {
+      return "/dashboard/bank";
+    }
+    if (pathname.startsWith('/dashboard/developer')) {
+      return "/dashboard/developer";
+    }
+    return "/dashboard/customer";
+  };
+
 
   return (
     <header 
@@ -72,7 +93,7 @@ export default function Header() {
     >
       <nav className="flex w-full flex-row items-center justify-between gap-5 text-lg font-medium md:gap-6">
         <Link
-          href="/dashboard/customer"
+          href={getDashboardLink()}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
           <Image src={Logo} alt="Stride Logo" width={100} height={100} />
@@ -101,7 +122,7 @@ export default function Header() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/customer/profile">
+                <Link href={getProfileLink()}>
                   <UserIcon className="mr-2 h-4 w-4" />
                   <span>My Profile</span>
                 </Link>
