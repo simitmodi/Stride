@@ -21,7 +21,7 @@ export default function MeetTheDevelopersPage() {
   const { data: userData, isLoading: isDocLoading } = useDoc(userDocRef);
 
   const homeLink = useMemo(() => {
-    if (isUserLoading || isDocLoading) return "/";
+    if (isUserLoading || isDocLoading) return null; // Return null while loading
     if (!user || !userData) return "/";
 
     switch (userData.role) {
@@ -75,11 +75,18 @@ export default function MeetTheDevelopersPage() {
         </div>
 
          <div className="mt-8">
-          <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5">
-            <Link href={homeLink}>
-              {isUserLoading || isDocLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Home className="h-6 w-6" />}
-              <span className="sr-only">Back</span>
-            </Link>
+          <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5" disabled={!homeLink}>
+            {homeLink ? (
+                <Link href={homeLink}>
+                    <Home className="h-6 w-6" />
+                    <span className="sr-only">Back</span>
+                </Link>
+            ) : (
+                <div>
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                    <span className="sr-only">Loading...</span>
+                </div>
+            )}
           </Button>
         </div>
       </main>
