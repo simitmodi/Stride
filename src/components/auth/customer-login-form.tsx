@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,13 +22,13 @@ import { Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { DialogDescription as DialogDescriptionComponent } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
 declare global {
@@ -166,9 +167,9 @@ export function CustomerLoginForm() {
                        <form onSubmit={forgotPasswordForm.handleSubmit(handleForgotPassword)}>
                         <DialogHeader>
                           <DialogTitle className="text-primary">Reset Password</DialogTitle>
-                          <DialogDescription>
+                          <DialogDescriptionComponent className="text-foreground/80">
                             Enter your email address and we'll send you a link to reset your password.
-                          </DialogDescription>
+                          </DialogDescriptionComponent>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
                           <FormField
