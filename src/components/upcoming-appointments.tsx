@@ -43,7 +43,7 @@ export default function UpcomingAppointments() {
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, `users/${user.uid}`) : null),
@@ -54,47 +54,44 @@ export default function UpcomingAppointments() {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      // Wait until user data and appointmentIds are loaded
-      if (isUserLoading) {
-        setIsLoading(true);
+      if (isUserLoading || !userData) {
+        // Still waiting for user data to load
         return;
       }
-      
-      const appointmentIds = userData?.appointmentIds || [];
+
+      const appointmentIds = userData.appointmentIds || [];
 
       if (appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
+        setError(null);
         return;
       }
-      
+
       setIsLoading(true);
       setError(null);
-      
-      try {
-        const appointmentPromises = appointmentIds.map(id => 
-          getDoc(doc(db, "appointments", id))
-        );
 
+      try {
+        const appointmentPromises = appointmentIds.map(id => getDoc(doc(db, "appointments", id)));
         const appointmentSnapshots = await Promise.all(appointmentPromises);
         
         const fetchedAppointments = appointmentSnapshots
           .filter(snap => snap.exists())
           .map(snap => ({ id: snap.id, ...snap.data() } as Appointment))
-          .filter(apt => apt.date.toDate() >= startOfDay(new Date())) // Filter for upcoming
-          .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time)); // Sort by date then time
+          .filter(apt => apt.date.toDate() >= startOfDay(new Date()))
+          .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time));
 
         setAppointments(fetchedAppointments);
       } catch (e: any) {
-        setError(e);
         console.error("Error fetching appointments:", e);
+        setError("Could not load appointments. Please try again later.");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchAppointments();
-  }, [userData, isUserLoading]); // Rerun when userData changes
+  }, [userData, isUserLoading]);
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
@@ -197,7 +194,7 @@ export default function UpcomingAppointments() {
             )}
             {!isLoading && error && (
                 <p className="text-center text-destructive mt-8">
-                    Could not load appointments. {error.message}
+                    {error}
                 </p>
             )}
             {!isLoading && !error && filteredAppointments.length === 0 && (
