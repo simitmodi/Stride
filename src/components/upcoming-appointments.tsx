@@ -52,15 +52,17 @@ export default function UpcomingAppointments() {
   
   const { data: userData, isLoading: isUserLoading } = useDoc<UserData>(userDocRef);
 
-  const appointmentIds = useMemo(() => userData?.appointmentIds || [], [userData?.appointmentIds]);
-
   useEffect(() => {
     const fetchAppointments = async () => {
+      // Wait until user data and appointmentIds are loaded
       if (isUserLoading) {
-        return; 
+        setIsLoading(true);
+        return;
       }
       
-      if (!appointmentIds || appointmentIds.length === 0) {
+      const appointmentIds = userData?.appointmentIds || [];
+
+      if (appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
         return;
@@ -92,7 +94,7 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [appointmentIds, isUserLoading]);
+  }, [userData, isUserLoading]); // Rerun when userData changes
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
@@ -171,8 +173,8 @@ export default function UpcomingAppointments() {
                     month={month}
                     onMonthChange={setMonth}
                     captionLayout="dropdown-buttons"
-                    fromYear={1924}
-                    toYear={new Date().getFullYear()}
+                    fromYear={new Date().getFullYear()}
+                    toYear={new Date().getFullYear() + 1}
                     disabled={(date) => date < startOfDay(new Date())}
                   />
                 </PopoverContent>
