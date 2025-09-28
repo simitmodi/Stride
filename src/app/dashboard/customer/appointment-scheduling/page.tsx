@@ -77,7 +77,7 @@ export default function AppointmentSchedulingPage() {
 
   const { watch, setValue, reset } = form;
   const selectedBank = watch('bankName');
-  const selectedPincode = watch('pincode');
+  const enteredPincode = watch('pincode');
   const selectedBranch = watch('branch');
 
   useEffect(() => {
@@ -92,30 +92,11 @@ export default function AppointmentSchedulingPage() {
   }, [user, setValue]);
 
   useEffect(() => {
-    if (selectedBank) {
-      const filteredPincodes = Array.from(
-        new Set(
-          bankData
-            .filter((item) => item.BANK === selectedBank && item.pincode)
-            .map((item) => item.pincode!.toString())
-        )
-      ).sort();
-      setPincodes(filteredPincodes);
-      setValue('pincode', '');
-      setValue('branch', '');
-      setValue('ifsc', '');
-    } else {
-      setPincodes([]);
-      setBranches([]);
-    }
-  }, [selectedBank, setValue]);
-
-  useEffect(() => {
-    if (selectedBank && selectedPincode) {
+    if (selectedBank && enteredPincode.length >= 6) {
       const filteredBranches = bankData.filter(
         (item) =>
           item.BANK === selectedBank &&
-          item.pincode?.toString() === selectedPincode
+          item.pincode?.toString() === enteredPincode
       );
       setBranches(filteredBranches);
       setValue('branch', '');
@@ -123,7 +104,7 @@ export default function AppointmentSchedulingPage() {
     } else {
       setBranches([]);
     }
-  }, [selectedBank, selectedPincode, setValue]);
+  }, [selectedBank, enteredPincode, setValue]);
 
   useEffect(() => {
     if (selectedBranch) {
@@ -207,25 +188,14 @@ export default function AppointmentSchedulingPage() {
               {/* Pincode */}
               <div className="space-y-2">
                 <Label htmlFor="pincode" style={{ color: '#000F00' }}>Pincode:</Label>
-                <Controller
-                  name="pincode"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBank}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="eg. 380015" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {pincodes.map((pincode) => (
-                          <SelectItem key={pincode} value={pincode}>
-                            {pincode}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
+                <Input
+                  id="pincode"
+                  placeholder="eg. 380015"
+                  {...form.register('pincode')}
+                  disabled={!selectedBank}
+                  maxLength={6}
                 />
-                 {form.formState.errors.pincode && <p className="text-sm text-destructive">{form.formState.errors.pincode.message}</p>}
+                {form.formState.errors.pincode && <p className="text-sm text-destructive">{form.formState.errors.pincode.message}</p>}
               </div>
 
               {/* Branches */}
@@ -235,7 +205,7 @@ export default function AppointmentSchedulingPage() {
                   name="branch"
                   control={form.control}
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedPincode}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={!enteredPincode || branches.length === 0}>
                       <SelectTrigger>
                         <SelectValue placeholder="First select a Bank & Pincode" />
                       </SelectTrigger>
@@ -269,7 +239,7 @@ export default function AppointmentSchedulingPage() {
               <div className="space-y-2">
                 <Label htmlFor="email" style={{ color: '#000F00' }}>Email:</Label>
                 <Input id="email" placeholder="eg. abc@example.com" {...form.register('email')} readOnly={!!user?.email} className={user?.email ? "bg-gray-200" : ""} />
-                {form.formState.errors.email && <p className="text-sm text-destructive">{form.form_state.errors.email.message}</p>}
+                {form.formState.errors.email && <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>}
               </div>
 
               {/* Date */}
@@ -285,11 +255,11 @@ export default function AppointmentSchedulingPage() {
                             variant="outline"
                             className={cn(
                               'w-full justify-start text-left font-normal',
-                              !field.value && 'text-muted-foreground'
+                              !field.value && 'text-foreground/80 hover:text-[#FFF0FF]'
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? format(field.value, 'PPP') : <span>Enter Date</span>}
+                            {field.value ? format(field.value, 'PPP') : <span style={!field.value ? {color: '#000F00'} : {}}>Enter Date</span>}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
