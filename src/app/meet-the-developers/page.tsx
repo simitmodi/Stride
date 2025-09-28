@@ -1,11 +1,41 @@
 
+"use client";
+
+import { useUser, useFirestore, useMemoFirebase } from '@/firebase/provider';
+import { doc } from 'firebase/firestore';
+import { useDoc } from '@/firebase/firestore/use-doc';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Users, Home } from 'lucide-react';
+import { Users, Home, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 export default function MeetTheDevelopersPage() {
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, "users", user.uid) : null),
+    [user, firestore]
+  );
+  const { data: userData, isLoading: isDocLoading } = useDoc(userDocRef);
+
+  const homeLink = useMemo(() => {
+    if (isUserLoading || isDocLoading) return "/";
+    if (!user || !userData) return "/";
+
+    switch (userData.role) {
+      case 'customer':
+        return '/dashboard/customer';
+      case 'bank':
+        return '/dashboard/bank';
+      case 'developer':
+        return '/dashboard/developer';
+      default:
+        return '/';
+    }
+  }, [user, userData, isUserLoading, isDocLoading]);
+
   const professionalBg = PlaceHolderImages.find(
     (p) => p.id === 'professional-bg-7'
   );
@@ -46,9 +76,9 @@ export default function MeetTheDevelopersPage() {
 
          <div className="mt-8">
           <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5">
-            <Link href="/">
-              <Home className="h-6 w-6" />
-              <span className="sr-only">Back to Home</span>
+            <Link href={homeLink}>
+              {isUserLoading || isDocLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Home className="h-6 w-6" />}
+              <span className="sr-only">Back</span>
             </Link>
           </Button>
         </div>
