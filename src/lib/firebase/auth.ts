@@ -10,7 +10,8 @@ import {
   sendEmailVerification,
   deleteUser,
   EmailAuthProvider,
-  reauthenticateWithCredential
+  reauthenticateWithCredential,
+  updatePassword
 } from "firebase/auth";
 import { doc, setDoc, updateDoc, Timestamp, deleteDoc } from "firebase/firestore";
 import { auth, db } from "./config";
@@ -61,8 +62,11 @@ export async function signOutUser(): Promise<void> {
 }
 
 export async function updateUserProfile(userId: string, data: { [key: string]: any }): Promise<void> {
+  if (data.initials !== undefined && data.initials.length > 2) {
+    // Potentially problematic, but let's allow for now as user might use emoji.
+  }
   const userDocRef = doc(db, "users", userId);
-  return await updateDoc(userDocRef, data);
+  await updateDoc(userDocRef, data);
 }
 
 export async function sendVerificationEmail(): Promise<void> {
@@ -83,6 +87,20 @@ export async function reauthenticateUser(password: string): Promise<void> {
     throw new Error("No user is currently signed in or user has no email.");
   }
 }
+
+
+export async function changeUserPassword(currentPassword: string, newPassword: string): Promise<void> {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("No user is currently signed in.");
+  }
+  // Re-authenticate user before changing password for security
+  await reauthenticateUser(currentPassword);
+  
+  // Update password
+  await updatePassword(user, newPassword);
+}
+
 
 export async function deleteUserAccount(password: string): Promise<void> {
   const user = auth.currentUser;

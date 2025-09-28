@@ -4,14 +4,18 @@
 import { useState } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, reauthenticateUser } from "@/lib/firebase/auth";
+import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, changeUserPassword } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc, Timestamp } from "firebase/firestore";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, LogOut, ChevronRight, Trash2, Pencil } from "lucide-react";
+import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
@@ -41,9 +45,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { PasswordStrength } from "@/components/password-strength";
 
 
 type ProfileView = "account" | "notifications";
+
+const passwordFormSchema = z.object({
+  currentPassword: z.string().min(1, { message: "Current password is required." }),
+  newPassword: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  confirmPassword: z.string(),
+}).refine(data => data.newPassword === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
 
 export default function ProfilePage() {
   const [activeView, setActiveView] = useState<ProfileView>("account");
@@ -54,18 +70,32 @@ export default function ProfilePage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
 
   const [isInitialsDialogOpen, setIsInitialsDialogOpen] = useState(false);
   const [newInitials, setNewInitials] = useState("");
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
   );
   
-  const { data: userData, isLoading: isFirestoreLoading } = useDoc(userDocRef);
+  const { data: userData, isLoading: isFirestoreLoading, error: firestoreError } = useDoc(userDocRef);
+
+  const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
 
   const handleLogout = async () => {
     try {
@@ -114,7 +144,6 @@ export default function ProfilePage() {
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
         updates['displayName'] = value;
-        // Also update the auth profile for consistency in other parts of the app
         if(auth.currentUser) {
           await updateProfile(auth.currentUser, { displayName: value as string });
         }
@@ -126,17 +155,11 @@ export default function ProfilePage() {
       
       await updateUserProfile(user.uid, updates);
       
-      if (field === 'initials') {
-          toast({
-            title: "Profile Updated",
-            description: "Your Avatar has been updated.",
-          });
-      } else {
-          toast({
-            title: "Profile Updated",
-            description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
-          });
-      }
+      toast({
+        title: "Profile Updated",
+        description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
+      });
+
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -147,18 +170,17 @@ export default function ProfilePage() {
   };
 
     const handleDeleteAccount = async () => {
-    if (!user || !password) {
+    if (!user || !deletePassword) {
       toast({ variant: "destructive", title: "Error", description: "Password is required." });
       return;
     }
     setIsDeleting(true);
     try {
-      await deleteUserAccount(password);
+      await deleteUserAccount(deletePassword);
       toast({
         title: "Account Deleted",
         description: "Your account has been permanently deleted.",
       });
-      setIsDeleteAlertOpen(false);
       router.push("/");
     } catch (error: any) {
       toast({
@@ -169,10 +191,9 @@ export default function ProfilePage() {
     } finally {
       setIsDeleting(false);
       setDeleteConfirm("");
-      setPassword("");
+      setDeletePassword("");
     }
   };
-
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
@@ -186,9 +207,40 @@ export default function ProfilePage() {
   const avatarText = userData?.initials || getInitials(userData?.displayName);
 
   const handleInitialsSave = async () => {
-    await handleUpdateProfile('initials', newInitials);
-    setIsInitialsDialogOpen(false);
-  }
+    if (!user) return;
+    try {
+        await updateUserProfile(user.uid, { initials: newInitials });
+        toast({
+            title: "Profile Updated",
+            description: "Your Avatar has been updated.",
+        });
+        setIsInitialsDialogOpen(false);
+    } catch (error: any) {
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: error.message || "Could not update your profile.",
+        });
+    }
+  };
+  
+  const onSubmitPasswordChange = async (values: z.infer<typeof passwordFormSchema>) => {
+    try {
+      await changeUserPassword(values.currentPassword, values.newPassword);
+      toast({
+        title: "Password Changed",
+        description: "Your password has been successfully updated.",
+      });
+      setIsPasswordDialogOpen(false);
+      passwordForm.reset();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Password Change Failed",
+        description: error.message === 'auth/wrong-password' ? 'The current password you entered is incorrect.' : error.message || "Could not change your password.",
+      });
+    }
+  };
 
 
   if (isUserLoading || isFirestoreLoading) {
@@ -200,13 +252,16 @@ export default function ProfilePage() {
   }
 
   if (!user || !userData) {
-    // This case is mostly handled by the layout, but it's good practice.
+    if (firestoreError) {
+      console.error("Firestore error:", firestoreError);
+    }
     return null;
   }
 
-  const dobTimestamp = userData?.dateOfBirth;
+  let formattedDob = "N/A";
   let dobDate: Date | undefined;
-  let formattedDob: string = "N/A";
+  const dobTimestamp = userData?.dateOfBirth;
+
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
       dobDate = dobTimestamp.toDate();
       formattedDob = format(dobDate, 'dd/MM/yyyy');
@@ -388,8 +443,103 @@ export default function ProfilePage() {
               <span>Notifications</span>
               {activeView === 'notifications' && <ChevronRight className="ml-auto h-5 w-5" />}
             </Button>
-            
-            <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
+
+            <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" className="justify-start items-center gap-3 text-base h-12 px-4 text-foreground hover:bg-accent/50">
+                  <KeyRound className="h-5 w-5" />
+                  <span>Change Password</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
+                <Form {...passwordForm}>
+                  <form onSubmit={passwordForm.handleSubmit(onSubmitPasswordChange)}>
+                    <DialogHeader>
+                      <DialogTitle className="text-primary">Change Password</DialogTitle>
+                      <DialogDescriptionComponent className="text-foreground/80">
+                        Enter your current password and a new password.
+                      </DialogDescriptionComponent>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <FormField
+                        control={passwordForm.control}
+                        name="currentPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Current Password</FormLabel>
+                            <div className="relative">
+                              <FormControl>
+                                <Input type={showCurrentPassword ? "text" : "password"} {...field} className="pr-10" />
+                              </FormControl>
+                              <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowCurrentPassword(prev => !prev)}>
+                                {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              </Button>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={passwordForm.control}
+                        name="newPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>New Password</FormLabel>
+                            <div className="relative">
+                              <FormControl>
+                                <Input
+                                  type={showNewPassword ? "text" : "password"}
+                                  {...field}
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                    setNewPassword(e.target.value);
+                                  }}
+                                  className="pr-10"
+                                />
+                              </FormControl>
+                              <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowNewPassword(prev => !prev)}>
+                                {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              </Button>
+                            </div>
+                             {newPassword && <PasswordStrength password={newPassword} />}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={passwordForm.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Confirm New Password</FormLabel>
+                             <div className="relative">
+                              <FormControl>
+                                <Input type={showConfirmPassword ? "text" : "password"} {...field} className="pr-10" />
+                              </FormControl>
+                              <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowConfirmPassword(prev => !prev)}>
+                                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              </Button>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button type="button" variant="secondary">Cancel</Button>
+                      </DialogClose>
+                      <Button type="submit" disabled={passwordForm.formState.isSubmitting}>
+                        {passwordForm.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        Save Changes
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>
+
+            <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
                   variant="ghost"
@@ -408,12 +558,12 @@ export default function ProfilePage() {
                 </AlertDialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="password" className="text-right">Password</Label>
+                    <Label htmlFor="password-delete" className="text-right">Password</Label>
                     <Input
-                      id="password"
+                      id="password-delete"
                       type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={deletePassword}
+                      onChange={(e) => setDeletePassword(e.target.value)}
                       className="col-span-3"
                     />
                   </div>
@@ -429,10 +579,10 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => { setDeleteConfirm(""); setPassword(""); }}>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel onClick={() => { setDeleteConfirm(""); setDeletePassword(""); }}>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
-                    disabled={deleteConfirm !== "DELETE" || isDeleting || !password}
+                    disabled={deleteConfirm !== "DELETE" || isDeleting || !deletePassword}
                     className="bg-destructive hover:bg-destructive/90"
                   >
                     {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
