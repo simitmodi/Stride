@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff, CalendarCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { format, isAfter, startOfDay } from "date-fns";
+import { format, isAfter, startOfDay, parse } from "date-fns";
 import { EditableField } from "@/components/editable-field";
 import { updateProfile } from "firebase/auth";
 import { auth, db } from "@/lib/firebase/config";
@@ -865,5 +865,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
