@@ -18,6 +18,7 @@ import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 
 interface Appointment {
   id: string;
@@ -64,7 +65,7 @@ export default function UpcomingAppointments() {
       
       try {
         const appointmentPromises = userData.appointmentIds.map(id => 
-          getDoc(doc(firestore, "appointments", id))
+          getDoc(doc(db, "appointments", id))
         );
         const appointmentSnapshots = await Promise.all(appointmentPromises);
         
@@ -84,7 +85,7 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userData, firestore]);
+  }, [userData]);
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
@@ -214,4 +215,3 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
-
