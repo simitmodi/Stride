@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Simit Modi",
+    "image": "/src/lib/Simit_Modi.PNG",
+    "bio": [
+      "Computer Engineering undergrad at SAL Institute of Technology (GTU), graduating in 2027.",
+      "Developed Stride end-to-end — from concept to code, shaping every detail of the platform.",
+      "Formula 1 and aviation enthusiast, thriving on precision, speed, and innovation both on and off the track."
+    ],
+    "links": {
+      "portfolio": "https://simitmodi.github.io/Portfolio",
+      "github": "https://github.com/simitmodi",
+      "linkedin": "https://linkedin.com/in/simitmodi"
+    }
+  },
+  {
+    "name": "Hardi Patel",
+    "image": "/src/lib/Hardi_patel.jpg",
+    "bio": [
+      "Currently Studying in 3rd year B.E(Computer Engineering).",
+      "Designed pages for this website with other developers.",
+      "Focused on practical learning and professional growth, with interests in problem-solving, and innovative software solutions."
+    ],
+    "links": {
+      "portfolio": "https://hardipatel.vercel.app/",
+      "github": "https://github.com/hardipatel2510",
+      "linkedin": "https://www.linkedin.com/in/hardipatel2510/"
+    }
+  },
+  {
+    "name": "Sharvi",
+    "image": "/src/lib/placeholder.png",
+    "bio": [
+      "A dedicated Computer Engineering student with a keen interest in web technologies.",
+      "Contributed to the project's development, focusing on creating a seamless and intuitive user experience.",
+      "Enjoys blending creative design with robust functionality to build impactful applications."
+    ],
+    "links": {
+      "portfolio": null,
+      "github": null,
+      "linkedin": null
+    }
+  },
+  {
+    "name": "Krishna Patel",
+    "image": "/src/lib/Krishna_Patel.jpg",
+    "bio": [
+      "3rd year Computer Engineering student passionate about technology.",
+      "Focused on skill development through hands-on projects.",
+      "Aiming to grow and contribute in the tech industry."
+    ],
+    "links": {
+      "portfolio": null,
+      "github": "https://github.com/krishna276-cloud",
+      "linkedin": "https://www.linkedin.com/in/krishna-patel-900523387"
+    }
+  },
+  {
+    "name": "Bansari Patel",
+    "image": "/src/lib/Bansari_Patel.jpg",
+    "bio": [
+      "3rd year Computer Engineering student at SAL.",
+      "Gave this website a twist—breaking stereotypes at its peak.",
+      "Love mixing tech with creativity to make things stand out and easy for the greater good."
+    ],
+    "links": {
+      "portfolio": null,
+      "github": "https://github.com/MakwBansari",
+      "linkedin": "https://www.linkedin.com/in/bansimakwana"
+    }
+  },
+  {
+    "name": "Ankit Nandoliya",
+    "image": "/src/lib/Ankit_Nandoliya.jpg",
+    "bio": [
+      "Currently studying in 3rd Year B.E. (Computer Engineering, 5th Semester).",
+      "Contributed to the design work, front-end structure, and underlying application logic for the website.",
+      "Passionate about solving complex problems and building innovative, user-centric web solutions."
+    ],
+    "links": {
+      "portfolio": null,
+      "github": "https://github.com/ankit5287",
+      "linkedin": "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/"
+    }
+  }
+]
