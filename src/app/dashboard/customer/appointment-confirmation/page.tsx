@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useMemo } from 'react';
+import { Suspense, useEffect, useState, useRef, createRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase/provider';
 import { useDoc } from '@/firebase/firestore/use-doc';
@@ -12,12 +12,15 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Download } from 'lucide-react';
 import { db } from '@/lib/firebase/config';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface AppointmentData {
   id: string;
@@ -37,6 +40,7 @@ function AppointmentConfirmation() {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const cardRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
 
   useEffect(() => {
     if (!appointmentIdsParam) {
@@ -48,6 +52,8 @@ function AppointmentConfirmation() {
     const fetchAppointments = async () => {
       setIsLoading(true);
       const ids = appointmentIdsParam.split(',');
+      cardRefs.current = ids.map(() => createRef<HTMLDivElement>());
+
       try {
         const appointmentsRef = collection(db, 'appointments');
         const q = query(appointmentsRef, where('__name__', 'in', ids));
@@ -72,6 +78,21 @@ function AppointmentConfirmation() {
 
     fetchAppointments();
   }, [appointmentIdsParam]);
+
+  const handleDownloadPdf = async (cardIndex: number, appointmentId: string) => {
+    const cardElement = cardRefs.current[cardIndex].current;
+    if (cardElement) {
+      const canvas = await html2canvas(cardElement, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`appointment_${appointmentId}.pdf`);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -116,7 +137,7 @@ function AppointmentConfirmation() {
   return (
     <div className="flex w-full flex-col items-center gap-8 p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
       {appointments.map((appointment, index) => (
-        <Card key={appointment.id} className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
+        <Card key={appointment.id} className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }} ref={cardRefs.current[index]}>
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-green-700">
               &#9989; Appointment {appointments.length > 1 ? `#${index + 1}`:''} Confirmed!
@@ -148,6 +169,12 @@ function AppointmentConfirmation() {
               </ul>
             </div>
           </CardContent>
+          <CardFooter className="justify-center">
+            <Button onClick={() => handleDownloadPdf(index, appointment.customAppointmentId)}>
+              <Download className="mr-2 h-4 w-4" />
+              Download PDF
+            </Button>
+          </CardFooter>
         </Card>
       ))}
       <div className="flex justify-center pt-2">
