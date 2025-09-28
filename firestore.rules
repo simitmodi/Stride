@@ -3,14 +3,14 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
+      // Allow users to read and write their own profile data
       allow read, write: if request.auth != null && request.auth.uid == userId;
 
       match /appointments/{appointmentId} {
-        // Allow users to perform all actions on their own appointments document
-        allow read, write, update, delete: if request.auth != null && request.auth.uid == userId;
+        // Allow users to manage their own appointments.
+        // Added 'list' to allow fetching the entire collection for the dashboard view.
+        allow list, create, read, update, delete: if request.auth != null && request.auth.uid == userId;
       }
-      // Allow users to list (query) their own appointments collection
-      allow list: if request.auth != null && request.auth.uid == userId;
     }
   }
 }
