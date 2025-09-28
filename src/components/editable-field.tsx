@@ -17,6 +17,8 @@ import {
 import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
 import { ScrollingDatePicker } from "./ui/scrolling-date-picker";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+
 
 interface EditableFieldProps {
   label: string;
@@ -27,9 +29,10 @@ interface EditableFieldProps {
   dateValue?: Date;
   maxLength?: number;
   placeholder?: string;
+  options?: string[];
 }
 
-export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue, maxLength, placeholder }: EditableFieldProps) {
+export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue, maxLength, placeholder, options }: EditableFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(editValue ?? value);
   const [currentDate, setCurrentDate] = useState<Date | undefined>(dateValue);
@@ -61,6 +64,22 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
             date={currentDate}
             onDateChange={setCurrentDate}
         />
+      );
+    }
+    if (inputType === "select" && options) {
+      return (
+        <Select value={currentValue} onValueChange={setCurrentValue}>
+            <SelectTrigger className="col-span-3">
+                <SelectValue placeholder={`Select a ${label.toLowerCase()}`} />
+            </SelectTrigger>
+            <SelectContent>
+                {options.map((option) => (
+                    <SelectItem key={option} value={option}>
+                        {option}
+                    </SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
       );
     }
     return (
@@ -97,12 +116,14 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className={cn("grid items-center gap-4", inputType !== 'date' && 'grid-cols-4')}>
-            {inputType !== 'date' &&
-              <Label htmlFor="field-input" className="text-right text-foreground/80">
+            {inputType !== 'date' && (
+              <Label htmlFor="field-input" className={cn("text-right text-foreground/80", inputType === "select" && "col-span-4 text-left -mb-2")}>
                 {label}
               </Label>
-            }
-            {renderInput()}
+            )}
+            <div className={cn(inputType === 'date' ? "col-span-4" : "col-span-4")}>
+              {renderInput()}
+            </div>
           </div>
         </div>
         <DialogFooter>

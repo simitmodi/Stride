@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { EditableField } from "@/components/editable-field";
 import { auth, db } from "@/lib/firebase/config";
 import { updateProfile } from "firebase/auth";
+import bankData from '@/lib/ahmedabad_data_with_pincode.json';
 
 
 export default function BankProfilePage() {
@@ -26,6 +27,8 @@ export default function BankProfilePage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+
+  const uniqueBanks = Array.from(new Set(bankData.map((item) => item.BANK))).sort();
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
@@ -127,6 +130,8 @@ export default function BankProfilePage() {
             label="Bank Name"
             value={userData.bankName || "N/A"}
             onSave={(newValue) => handleUpdateProfile('bankName', newValue)}
+            inputType="select"
+            options={uniqueBanks}
           />
         <Separator className="bg-primary/20"/>
          <EditableField
