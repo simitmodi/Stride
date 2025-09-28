@@ -17,7 +17,7 @@ import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { doc, getDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, Timestamp, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 interface Appointment {
