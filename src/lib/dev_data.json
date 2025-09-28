@@ -1,7 +1,8 @@
+
 [
   {
     "name": "Simit Modi",
-    "image": "/src/lib/Simit_Modi.PNG",
+    "imageKey": "Simit_Modi",
     "bio": [
       "Computer Engineering undergrad at SAL Institute of Technology (GTU), graduating in 2027.",
       "Developed Stride end-to-end — from concept to code, shaping every detail of the platform.",
@@ -15,7 +16,7 @@
   },
   {
     "name": "Hardi Patel",
-    "image": "/src/lib/Hardi_patel.jpg",
+    "imageKey": "Hardi_Patel",
     "bio": [
       "Currently Studying in 3rd year B.E(Computer Engineering).",
       "Designed pages for this website with other developers.",
@@ -29,7 +30,7 @@
   },
   {
     "name": "Sharvi",
-    "image": "/src/lib/placeholder.png",
+    "imageKey": "Sharvi",
     "bio": [
       "A dedicated Computer Engineering student with a keen interest in web technologies.",
       "Contributed to the project's development, focusing on creating a seamless and intuitive user experience.",
@@ -43,7 +44,7 @@
   },
   {
     "name": "Krishna Patel",
-    "image": "/src/lib/Krishna_Patel.jpg",
+    "imageKey": "Krishna_Patel",
     "bio": [
       "3rd year Computer Engineering student passionate about technology.",
       "Focused on skill development through hands-on projects.",
@@ -57,7 +58,7 @@
   },
   {
     "name": "Bansari Patel",
-    "image": "/src/lib/Bansari_Patel.jpg",
+    "imageKey": "Bansari_Patel",
     "bio": [
       "3rd year Computer Engineering student at SAL.",
       "Gave this website a twist—breaking stereotypes at its peak.",
@@ -71,7 +72,7 @@
   },
   {
     "name": "Ankit Nandoliya",
-    "image": "/src/lib/Ankit_Nandoliya.jpg",
+    "imageKey": "Ankit_Nandoliya",
     "bio": [
       "Currently studying in 3rd Year B.E. (Computer Engineering, 5th Semester).",
       "Contributed to the design work, front-end structure, and underlying application logic for the website.",

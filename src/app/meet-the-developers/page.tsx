@@ -13,15 +13,31 @@ import developers from '@/lib/dev_data.json';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
+import SimitModi from '@/lib/Simit_Modi.PNG';
+import HardiPatel from '@/lib/Hardi_patel.jpg';
+import KrishnaPatel from '@/lib/Krishna_Patel.jpg';
+import BansariPatel from '@/lib/Bansari_Patel.jpg';
+import AnkitNandoliya from '@/lib/Ankit_Nandoliya.jpg';
+import Placeholder from '@/lib/placeholder.png';
+
 type Developer = {
   name: string;
-  image: string;
+  imageKey: string;
   bio: string[];
   links: {
     portfolio: string | null;
     github: string | null;
     linkedin: string | null;
   };
+};
+
+const developerImages: { [key: string]: any } = {
+  'Simit_Modi': SimitModi,
+  'Hardi_Patel': HardiPatel,
+  'Krishna_Patel': KrishnaPatel,
+  'Bansari_Patel': BansariPatel,
+  'Ankit_Nandoliya': AnkitNandoliya,
+  'Sharvi': Placeholder
 };
 
 export default function MeetTheDevelopersPage() {
@@ -46,7 +62,7 @@ export default function MeetTheDevelopersPage() {
             <div key={index} className="bg-[#D0CBC1] rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8">
               <div className="w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
                 <Image
-                  src={dev.image}
+                  src={developerImages[dev.imageKey]}
                   alt={dev.name}
                   width={224}
                   height={224}
