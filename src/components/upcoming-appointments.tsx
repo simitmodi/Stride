@@ -24,7 +24,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
-import { useUser, useFirestore } from "@/firebase/provider";
+import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import {
   doc,
   getDoc,
@@ -33,8 +33,7 @@ import {
   where,
   getDocs,
   Timestamp,
-  writeBatch,
-  arrayRemove,
+  updateDoc,
 } from "firebase/firestore";
 import type { DocumentData } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
@@ -61,6 +60,7 @@ interface AppointmentData {
   time: string;
   serviceCategory: string;
   specificService: string;
+  deleted?: boolean;
 }
 
 export default function UpcomingAppointments() {
@@ -111,7 +111,8 @@ export default function UpcomingAppointments() {
             const fetchedAppointments: AppointmentData[] = [];
             appointmentSnapshots.forEach((doc) => {
               const data = doc.data();
-              if(data.date && data.date.toDate) {
+              // Filter out soft-deleted appointments
+              if(data.date && data.date.toDate && !data.deleted) {
                 fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
               }
             });
@@ -139,28 +140,22 @@ export default function UpcomingAppointments() {
     if (!user) return;
     setIsDeleting(appointmentId);
     try {
-      const batch = writeBatch(firestore);
-
-      // Ref for the appointment to be deleted
+      // Instead of deleting, update the document with a 'deleted' flag
       const appointmentDocRef = doc(firestore, "appointments", appointmentId);
-      batch.delete(appointmentDocRef);
-
-      // Ref for the user to update their appointmentIds array
-      const userDocRef = doc(firestore, "users", user.uid);
-      batch.update(userDocRef, {
-        appointmentIds: arrayRemove(appointmentId)
+      await updateDoc(appointmentDocRef, {
+        deleted: true
       });
       
-      await batch.commit();
-      
+      // Remove the appointment from the local state to update the UI
       setAppointments(prev => prev.filter(apt => apt.id !== appointmentId));
+      
       toast({
         title: "Appointment Cancelled",
         description: "Your appointment has been successfully cancelled.",
       });
 
     } catch (error: any) {
-      console.error("Error deleting appointment:", error);
+      console.error("Error cancelling appointment:", error);
       toast({
         variant: "destructive",
         title: "Cancellation Failed",
@@ -183,7 +178,7 @@ export default function UpcomingAppointments() {
 
     const now = new Date();
     const twelveHoursFromNow = addHours(now, 12);
-    const isEditable = isAfter(appointmentDateTime, twelveHoursFromNow);
+    const isActionable = isAfter(appointmentDateTime, twelveHoursFromNow);
 
     return (
       <Card className="bg-card/75 transition-shadow hover:shadow-md">
@@ -198,7 +193,7 @@ export default function UpcomingAppointments() {
             <p className="font-semibold">{appointment.time}</p>
             <p className="text-sm text-foreground/80">ID: {appointment.customAppointmentId}</p>
           </div>
-          {isEditable && (
+          {isActionable && (
             <div className="flex flex-col sm:flex-row gap-2 border-l border-foreground/20 pl-4">
               <Button 
                 variant="outline" 
@@ -213,14 +208,14 @@ export default function UpcomingAppointments() {
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" size="icon" className="h-9 w-9" disabled={isDeleting === appointment.id}>
                     {isDeleting === appointment.id ? <Loader2 className="h-4 w-4 animate-spin"/> : <Trash2 className="h-4 w-4" />}
-                    <span className="sr-only">Delete Appointment</span>
+                    <span className="sr-only">Cancel Appointment</span>
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently cancel your appointment.
+                      This action will cancel your appointment. This cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -399,4 +394,3 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
-
