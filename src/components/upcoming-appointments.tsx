@@ -54,7 +54,14 @@ export default function UpcomingAppointments() {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      if (!userData || !userData.appointmentIds || userData.appointmentIds.length === 0) {
+      if (!userData) {
+        // We are probably still loading user data, or there is no user data.
+        // Don't set loading to false until we know for sure.
+        if (user && !isLoading) setIsLoading(true);
+        return;
+      }
+
+      if (!userData.appointmentIds || userData.appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
         return;
@@ -85,7 +92,7 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userData]);
+  }, [userData, user, isLoading]);
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
@@ -191,12 +198,12 @@ export default function UpcomingAppointments() {
                     Could not load appointments. {error.message}
                 </p>
             )}
-            {!isLoading && filteredAppointments.length === 0 && (
+            {!isLoading && !error && filteredAppointments.length === 0 && (
                 <p className="text-center text-foreground mt-8">
                     Your schedule is clear.
                 </p>
             )}
-            {!isLoading && filteredAppointments.length > 0 && filteredAppointments.map((apt) => (
+            {!isLoading && !error && filteredAppointments.length > 0 && filteredAppointments.map((apt) => (
               <Card key={apt.id} className="bg-card/75 border border-primary/20 shadow-md">
                 <CardContent className="p-4 flex items-center justify-between">
                     <div>
