@@ -15,9 +15,8 @@ import { Calendar as CalendarIcon, Bell, Loader2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
-import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import { useDoc } from "@/firebase/firestore/use-doc";
-import { doc, getDoc, Timestamp, collection, DocumentData } from "firebase/firestore";
+import { useUser } from "@/firebase/provider";
+import { doc, getDoc, Timestamp, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 interface Appointment {
@@ -35,8 +34,7 @@ interface UserData {
 }
 
 export default function UpcomingAppointments() {
-  const { user } = useUser();
-  const firestore = useFirestore();
+  const { user, isUserLoading } = useUser();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [days, setDays] = useState<Date[]>([]);
   const [month, setMonth] = useState(new Date());
@@ -45,38 +43,41 @@ export default function UpcomingAppointments() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const userDocRef = useMemoFirebase(
-    () => (user ? doc(firestore, `users/${user.uid}`) : null),
-    [user, firestore]
-  );
-  
-  const { data: userData, isLoading: isUserLoading } = useDoc<UserData>(userDocRef);
-
   useEffect(() => {
-    const fetchAppointments = async () => {
-      if (isUserLoading) {
+    const fetchUserDataAndAppointments = async () => {
+      if (isUserLoading || !user) {
         setIsLoading(true);
         return;
       }
-
-      if (!userData || !userData.appointmentIds || userData.appointmentIds.length === 0) {
-        setAppointments([]);
-        setIsLoading(false);
-        return;
-      }
-      
       setIsLoading(true);
       setError(null);
-      
+
       try {
+        const userDocRef = doc(db, `users/${user.uid}`);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (!userDocSnap.exists()) {
+          setAppointments([]);
+          setIsLoading(false);
+          return;
+        }
+
+        const userData = userDocSnap.data() as UserData;
         const appointmentIds = userData.appointmentIds;
+
+        if (!appointmentIds || appointmentIds.length === 0) {
+          setAppointments([]);
+          setIsLoading(false);
+          return;
+        }
+        
         const appointmentPromises = appointmentIds.map(id => getDoc(doc(db, "appointments", id)));
         const appointmentSnapshots = await Promise.all(appointmentPromises);
         
         const fetchedAppointments = appointmentSnapshots
           .filter(snap => snap.exists())
           .map(snap => ({ id: snap.id, ...snap.data() } as Appointment))
-          .filter(apt => apt.date && apt.date.toDate() >= startOfDay(new Date())) // Ensure date exists before processing
+          .filter(apt => apt.date && apt.date.toDate() >= startOfDay(new Date())) 
           .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time));
 
         setAppointments(fetchedAppointments);
@@ -88,11 +89,10 @@ export default function UpcomingAppointments() {
       }
     };
 
-    fetchAppointments();
-  }, [userData, isUserLoading]);
+    fetchUserDataAndAppointments();
+  }, [user, isUserLoading]);
   
   const filteredAppointments = useMemo(() => {
-    if (!appointments) return [];
     return appointments.filter(apt => apt.date && isSameDay(apt.date.toDate(), selectedDate));
   }, [appointments, selectedDate]);
 
