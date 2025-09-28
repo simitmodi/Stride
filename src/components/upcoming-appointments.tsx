@@ -45,7 +45,6 @@ import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import {
   doc,
-  getDoc,
   collection,
   query,
   where,
@@ -53,6 +52,7 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
+import { useDoc } from "@/firebase/firestore/use-doc";
 import type { DocumentData } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -521,4 +521,3 @@ export default function UpcomingAppointments() {
   );
 }
 
-    
