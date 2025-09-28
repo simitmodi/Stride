@@ -69,9 +69,9 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
     }
     if (inputType === "select" && options) {
       return (
-        <Select value={currentValue} onValueChange={setCurrentValue}>
+        <Select value={currentValue} onValueChange={setCurrentValue} disabled={!options || options.length === 0}>
             <SelectTrigger className="col-span-3">
-                <SelectValue placeholder={`Select a ${label.toLowerCase()}`} />
+                <SelectValue placeholder={placeholder || `Select a ${label.toLowerCase()}`} />
             </SelectTrigger>
             <SelectContent>
                 {options.map((option) => (

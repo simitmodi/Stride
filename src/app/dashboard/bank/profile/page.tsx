@@ -37,6 +37,17 @@ export default function BankProfilePage() {
   
   const { data: userData, isLoading: isFirestoreLoading, error: firestoreError } = useDoc(userDocRef);
 
+  const branchesForSelectedBank = useMemo(() => {
+    if (userData?.bankName) {
+      return bankData
+        .filter((item) => item.BANK === userData.bankName)
+        .map((item) => item.BRANCH)
+        .sort();
+    }
+    return [];
+  }, [userData?.bankName]);
+
+
   useEffect(() => {
     if (!isUserLoading && (!user || userData?.role !== 'bank')) {
       // router.push('/login');
@@ -58,7 +69,15 @@ export default function BankProfilePage() {
         }
       } else if (field === 'dateOfBirth' && value instanceof Date) {
         updates[field] = Timestamp.fromDate(value);
-      } else {
+      } else if (field === 'branch') {
+        const branchDetails = bankData.find(b => b.BANK === userData.bankName && b.BRANCH === value);
+        if (branchDetails) {
+          updates['branch'] = branchDetails.BRANCH;
+          updates['ifscCode'] = branchDetails.IFSC;
+          updates['address'] = branchDetails.ADDRESS;
+        }
+      }
+      else {
         updates[field] = value;
       }
       
@@ -137,8 +156,11 @@ export default function BankProfilePage() {
         <EditableField
             label="Branch"
             value={userData.branch || "N/A"}
-            onSave={(newValue) => {}}
-            disabled={true}
+            onSave={(newValue) => handleUpdateProfile('branch', newValue)}
+            inputType="select"
+            options={branchesForSelectedBank}
+            disabled={!userData.bankName || !!userData.branch}
+            placeholder={!userData.bankName ? "Select a bank first" : "Select a branch"}
         />
         <Separator className="bg-primary/20"/>
          <EditableField
