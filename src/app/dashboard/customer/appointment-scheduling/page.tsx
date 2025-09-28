@@ -139,6 +139,9 @@ export default function AppointmentSchedulingPage() {
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let i = 10; i < 17; i++) {
+        // Skip recess time
+        if (i === 14) continue; // Skip 14:00 - 15:00
+
         const startHour = i;
         const endHour = i;
         const startMinutes = '00';
@@ -147,6 +150,9 @@ export default function AppointmentSchedulingPage() {
         slots.push(`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`);
         
         if (i < 16) {
+            // Don't add 13:30 - 14:00 slot
+            if (i === 13) continue;
+
             const nextStartHour = i + 1;
             const nextStartMinutes = '00';
             slots.push(`${endHour}:${endMinutes} - ${nextStartHour}:${nextStartMinutes}`);
@@ -360,6 +366,3 @@ export default function AppointmentSchedulingPage() {
     </div>
   );
 }
-
-
-    
