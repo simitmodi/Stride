@@ -15,10 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmail } from "@/lib/firebase/auth";
+import { signInWithEmail, signOutUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 
 declare global {
   interface Window {
@@ -65,7 +67,19 @@ export function BankLoginForm() {
 
         const user = await signInWithEmail(values.email, values.password);
         if (user) {
-          router.push("/dashboard/bank");
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists() && userDoc.data().role === 'bank') {
+            router.push("/dashboard/bank");
+          } else {
+            await signOutUser();
+            toast({
+              variant: "destructive",
+              title: "Access Denied",
+              description: "You do not have permission to access the bank portal.",
+            });
+          }
         }
       } catch (error: any) {
         toast({

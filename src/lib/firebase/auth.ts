@@ -15,7 +15,7 @@ import {
   sendPasswordResetEmail,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
-import { doc, setDoc, updateDoc, Timestamp, deleteDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, Timestamp, deleteDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "./config";
 
 export async function signUpWithEmail(
@@ -45,6 +45,7 @@ export async function signUpWithEmail(
       uid: user.uid,
       initials: '',
       sessionToken: '',
+      role: 'customer',
     });
     
     // Send verification email
@@ -61,7 +62,22 @@ export async function signInWithEmail(email: string, password: string): Promise<
     const user = userCredential.user;
     const sessionToken = crypto.randomUUID();
     const userDocRef = doc(db, "users", user.uid);
-    await updateDoc(userDocRef, { sessionToken });
+    
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+        // This case might happen for users created before the users collection was standard.
+        // Or if the doc was deleted. For a real app, you might want to create it here.
+        // For now, we will just proceed with login.
+        await setDoc(userDocRef, { 
+            email: user.email,
+            displayName: user.displayName,
+            uid: user.uid,
+            sessionToken: sessionToken
+         }, { merge: true });
+
+    } else {
+        await updateDoc(userDocRef, { sessionToken });
+    }
     
     if (typeof window !== 'undefined') {
       localStorage.setItem('sessionToken', sessionToken);
