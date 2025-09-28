@@ -262,7 +262,7 @@ export default function AppointmentSchedulingPage() {
               {/* IFSC Code */}
               <div className="space-y-2">
                 <Label htmlFor="ifsc" style={{ color: '#000F00' }}>IFSC Code:</Label>
-                <Input id="ifsc" {...form.register('ifsc')} readOnly className="bg-gray-200" />
+                <Input id="ifsc" {...form.register('ifsc')} disabled className="bg-gray-200" />
               </div>
 
               {/* Email */}
