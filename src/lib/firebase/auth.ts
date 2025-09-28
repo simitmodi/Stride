@@ -44,6 +44,7 @@ export async function signUpWithEmail(
       displayName: fullName,
       uid: user.uid,
       initials: '',
+      sessionToken: '',
     });
     
     // Send verification email
@@ -56,10 +57,23 @@ export async function signUpWithEmail(
 
 export async function signInWithEmail(email: string, password: string): Promise<User | null> {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  if (userCredential.user) {
+    const user = userCredential.user;
+    const sessionToken = crypto.randomUUID();
+    const userDocRef = doc(db, "users", user.uid);
+    await updateDoc(userDocRef, { sessionToken });
+    
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sessionToken', sessionToken);
+    }
+  }
   return userCredential.user;
 }
 
 export async function signOutUser(): Promise<void> {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('sessionToken');
+  }
   return signOut(auth);
 }
 
@@ -137,5 +151,3 @@ export async function deleteUserAccount(password: string): Promise<void> {
   // Finally, delete the user from Firebase Authentication
   await deleteUser(user);
 }
-
-    

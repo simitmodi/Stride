@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { ScrollAwareFooter } from '@/components/scroll-aware-footer';
 import Script from 'next/script';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import FirebaseErrorListener from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'Stride',
@@ -28,6 +29,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased h-full flex flex-col">
         <FirebaseClientProvider>
+          <FirebaseErrorListener />
           <div className="flex-grow">
             {children}
           </div>
