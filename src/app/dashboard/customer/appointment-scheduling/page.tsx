@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/popover';
 import { CalendarIcon, Clock } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { format, isSaturday, isSunday } from 'date-fns';
+import { format, isSaturday, isSunday, startOfDay, isBefore } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -211,6 +211,32 @@ export default function AppointmentSchedulingPage() {
     }
     return false;
   };
+  
+  const isDateDisabled = (date: Date): boolean => {
+    const now = new Date();
+    const today = startOfDay(now);
+    const dateStart = startOfDay(date);
+    
+    // Disable past dates
+    if (isBefore(dateStart, today)) {
+        return true;
+    }
+
+    // For today's date, disable if it's 8 AM or later
+    if (isBefore(dateStart, startOfDay(addDays(today,1))) && isBefore(startOfDay(addDays(dateStart,1)),startOfDay(addDays(today,1)))) {
+        if (now.getHours() >= 8) {
+            return true;
+        }
+    }
+    
+    // Disable bank holidays
+    if (isBankHoliday(date)) {
+        return true;
+    }
+
+    return false;
+  };
+
 
   return (
     <div className="flex w-full flex-col items-center p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
@@ -280,7 +306,7 @@ export default function AppointmentSchedulingPage() {
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value} disabled={!enteredPincode || branches.length === 0}>
                       <SelectTrigger>
-                        <SelectValue placeholder="First select a Bank & Pincode" />
+                        <SelectValue placeholder="First select a Bank &amp; Pincode" />
                       </SelectTrigger>
                       <SelectContent>
                         {branches.map((b) => (
@@ -341,7 +367,7 @@ export default function AppointmentSchedulingPage() {
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
-                            disabled={(date) => date < new Date() || date < new Date("1900-01-01") || isBankHoliday(date)}
+                            disabled={isDateDisabled}
                           />
                         </PopoverContent>
                       </Popover>
@@ -394,4 +420,3 @@ export default function AppointmentSchedulingPage() {
   );
 }
 
-    
