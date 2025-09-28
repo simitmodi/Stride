@@ -27,6 +27,7 @@ interface AppointmentData {
   customAppointmentId: string;
   bankName: string;
   branch: string;
+  address: string;
   date: Timestamp;
   time: string;
   serviceCategory: string;
@@ -197,6 +198,7 @@ function AppointmentConfirmation() {
                     <dl className="space-y-3">
                         <DetailItem label="Appointment ID" value={appointment.customAppointmentId} />
                         <DetailItem label="Bank Name & Branch" value={`${appointment.bankName} - ${appointment.branch}`} />
+                        <DetailItem label="Bank Address" value={appointment.address} />
                         <DetailItem label="Date & Time" value={`${format(appointment.date.toDate(), 'PPP')} at ${appointment.time}`} />
                         <DetailItem label="Service Requested" value={`${appointment.serviceCategory} - ${appointment.specificService}`} />
                     </dl>
@@ -240,3 +242,5 @@ export default function AppointmentConfirmationPage() {
         </Suspense>
     )
 }
+
+    

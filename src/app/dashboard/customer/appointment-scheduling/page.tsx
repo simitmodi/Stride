@@ -39,6 +39,7 @@ type Bank = {
   BANK: string;
   IFSC: string;
   BRANCH: string;
+  ADDRESS: string;
   pincode: number | null;
 };
 
@@ -46,6 +47,7 @@ const formSchema = z.object({
   bankName: z.string().min(1, 'Bank name is required.'),
   pincode: z.string().min(1, 'Pincode is required.'),
   branch: z.string().min(1, 'Branch is required.'),
+  address: z.string(),
   accountNumber: z.string().min(10, 'A valid account number is required.').max(16, 'Account number cannot exceed 16 digits.'),
   ifsc: z.string(),
   email: z.string().email(),
@@ -68,6 +70,7 @@ export default function AppointmentSchedulingPage() {
       bankName: '',
       pincode: '',
       branch: '',
+      address: '',
       accountNumber: '',
       ifsc: '',
       email: user?.email || '',
@@ -104,6 +107,7 @@ export default function AppointmentSchedulingPage() {
       setValue('pincode', '');
       setValue('branch', '');
       setValue('ifsc', '');
+      setValue('address', '');
     } else {
       setPincodes([]);
       setBranches([]);
@@ -120,6 +124,7 @@ export default function AppointmentSchedulingPage() {
       setBranches(filteredBranches);
       setValue('branch', '');
       setValue('ifsc', '');
+      setValue('address', '');
     } else {
       setBranches([]);
     }
@@ -132,6 +137,7 @@ export default function AppointmentSchedulingPage() {
       );
       if (branchDetails) {
         setValue('ifsc', branchDetails.IFSC);
+        setValue('address', branchDetails.ADDRESS);
       }
     }
   }, [selectedBranch, branches, setValue]);
@@ -176,6 +182,7 @@ export default function AppointmentSchedulingPage() {
     const query = new URLSearchParams({
       bankName: data.bankName,
       branch: data.branch,
+      address: data.address,
       date: data.date.toISOString(),
       time: data.time,
       accountNumber: data.accountNumber,
@@ -188,6 +195,7 @@ export default function AppointmentSchedulingPage() {
       bankName: '',
       pincode: '',
       branch: '',
+      address: '',
       accountNumber: '',
       ifsc: '',
       email: user?.email || '',
@@ -320,6 +328,12 @@ export default function AppointmentSchedulingPage() {
                 />
                  {form.formState.errors.branch && <p className="text-sm text-destructive">{form.formState.errors.branch.message}</p>}
               </div>
+
+              {/* Address */}
+                <div className="space-y-2">
+                    <Label htmlFor="address" style={{ color: '#000F00' }}>Address:</Label>
+                    <Input id="address" {...form.register('address')} readOnly className="bg-gray-200" />
+                </div>
               
               {/* Account Number */}
               <div className="space-y-2">
@@ -419,3 +433,5 @@ export default function AppointmentSchedulingPage() {
     </div>
   );
 }
+
+    
