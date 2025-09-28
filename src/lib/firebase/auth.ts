@@ -34,9 +34,8 @@ export async function signUpWithEmail(
     const fullName = `${firstName} ${lastName}`;
     await updateProfile(user, { displayName: fullName });
 
-    // Create user document in Firestore
-    const userDocRef = doc(db, "users", user.uid);
-    await setDoc(userDocRef, {
+    // Base user data
+    const userData: { [key: string]: any } = {
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -45,9 +44,17 @@ export async function signUpWithEmail(
       displayName: fullName,
       uid: user.uid,
       initials: '',
-      sessionToken: '',
       role: role,
-    });
+    };
+    
+    // Add sessionToken only for customers
+    if (role === 'customer') {
+      userData.sessionToken = '';
+    }
+
+    // Create user document in Firestore
+    const userDocRef = doc(db, "users", user.uid);
+    await setDoc(userDocRef, userData);
     
     // Send verification email
     await sendEmailVerification(user);
@@ -61,27 +68,27 @@ export async function signInWithEmail(email: string, password: string): Promise<
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   if (userCredential.user) {
     const user = userCredential.user;
-    const sessionToken = crypto.randomUUID();
     const userDocRef = doc(db, "users", user.uid);
     
     const userDoc = await getDoc(userDocRef);
-    if (!userDoc.exists()) {
-        // This case might happen for users created before the users collection was standard.
-        // Or if the doc was deleted. For a real app, you might want to create it here.
-        // For now, we will just proceed with login.
-        await setDoc(userDocRef, { 
-            email: user.email,
-            displayName: user.displayName,
-            uid: user.uid,
-            sessionToken: sessionToken
-         }, { merge: true });
+    const userData = userDoc.data();
 
-    } else {
-        await updateDoc(userDocRef, { sessionToken });
-    }
-    
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('sessionToken', sessionToken);
+    // Only handle session tokens for customers
+    if (userData && userData.role === 'customer') {
+      const sessionToken = crypto.randomUUID();
+      await updateDoc(userDocRef, { sessionToken });
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('sessionToken', sessionToken);
+      }
+    } else if (userDoc.exists() && userData?.role !== 'customer') {
+        // For non-customers (bank, developer), ensure local token is cleared
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('sessionToken');
+        }
+    } else if (!userDoc.exists()) {
+       // This case is primarily for developers created manually in Firebase console.
+       // It won't have a role, so we don't set a session token.
+       // The developer login form handles creating the profile with the 'developer' role.
     }
   }
   return userCredential.user;
