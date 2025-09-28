@@ -2,49 +2,108 @@
 'use client';
 
 import Greeting from '@/components/greeting';
-import {
-  Bell,
-  Calendar as CalendarIcon,
-} from 'lucide-react';
-import {
-  addDays,
-  format,
-  isSameDay,
-  startOfDay,
-  startOfWeek,
-} from 'date-fns';
+import { Bell, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { addDays, format, isSameDay, startOfDay, startOfWeek } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { useUser, useFirestore, useMemoFirebase } from '@/firebase/provider';
+import { doc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
+import { useDoc } from '@/firebase/firestore/use-doc';
 
-// Dummy data for appointments, to be replaced with real data later
-const dummyAppointments = [
-  {
-    id: '1',
-    customerName: 'Simit Modi',
-    date: '05/06/2025',
-    time: '5:30',
-  },
-  {
-    id: '2',
-    customerName: 'Ankit Nandoliya',
-    date: '9/6/2025',
-    time: '4:50',
-  },
-];
-
+interface Appointment {
+  id: string;
+  customerName: string;
+  date: string;
+  time: string;
+  originalDate: Date;
+}
 
 export default function BankDashboardPage() {
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, 'users', user.uid) : null),
+    [user]
+  );
+  const { data: bankUserData, isLoading: isBankUserLoading } = useDoc(userDocRef);
+
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [days, setDays] = useState<Date[]>([]);
   const [month, setMonth] = useState(new Date());
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // Assuming week starts on Monday
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
     setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (!bankUserData) return;
+
+    const fetchAppointments = async () => {
+      setIsLoading(true);
+      const { bankName, branch } = bankUserData;
+
+      if (!bankName || !branch) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const appointmentsRef = collection(firestore, 'appointments');
+        const q = query(
+          appointmentsRef,
+          where('bankName', '==', bankName),
+          where('branch', '==', branch)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const fetchedAppointments = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const appointmentsWithCustomerData = await Promise.all(
+          fetchedAppointments.map(async (apt) => {
+            if (apt.userId) {
+              const customerDocRef = doc(firestore, 'users', apt.userId);
+              const customerDoc = await getDoc(customerDocRef);
+              const customerName = customerDoc.exists()
+                ? customerDoc.data().displayName
+                : 'Unknown Customer';
+              return {
+                id: apt.id,
+                customerName: customerName,
+                date: format(apt.date.toDate(), 'dd/MM/yyyy'),
+                time: apt.time,
+                originalDate: apt.date.toDate(),
+              };
+            }
+            return null;
+          })
+        );
+        
+        const validAppointments = appointmentsWithCustomerData.filter(apt => apt !== null) as Appointment[];
+        setAppointments(validAppointments);
+
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [bankUserData, firestore]);
+
+  const filteredAppointments = appointments.filter((apt) =>
+    isSameDay(apt.originalDate, selectedDate)
+  );
 
   return (
     <div className="w-full" style={{ backgroundColor: '#BFBAB0' }}>
@@ -54,7 +113,7 @@ export default function BankDashboardPage() {
           <Card className="bg-card shadow-lg rounded-lg mb-8">
             <CardContent className="p-4">
               <div className="flex justify-between items-center gap-4">
-                 <div className="flex justify-between flex-grow overflow-x-auto">
+                <div className="flex justify-between flex-grow overflow-x-auto">
                   {days.map((day) => {
                     const dayIsSelected = isSameDay(day, selectedDate);
                     return (
@@ -62,7 +121,11 @@ export default function BankDashboardPage() {
                         key={day.toString()}
                         variant={dayIsSelected ? 'default' : 'ghost'}
                         className={`relative flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-200 justify-center items-center
-                          ${dayIsSelected ? 'bg-[#092910] text-white' : ''}
+                          ${
+                            dayIsSelected
+                              ? 'bg-[#092910] text-white'
+                              : ''
+                          }
                           border border-transparent`}
                         onClick={() => setSelectedDate(day)}
                       >
@@ -98,7 +161,9 @@ export default function BankDashboardPage() {
                         mode="single"
                         selected={selectedDate}
                         onSelect={(d) => {
-                          const newDate = d ? startOfDay(d) : startOfDay(new Date());
+                          const newDate = d
+                            ? startOfDay(d)
+                            : startOfDay(new Date());
                           setSelectedDate(newDate);
                           setMonth(newDate);
                         }}
@@ -114,25 +179,51 @@ export default function BankDashboardPage() {
 
           <div className="mt-8">
             <div className="flex items-center gap-2 mb-4">
-               <Bell className="h-6 w-6" style={{ color: '#092910' }} />
-               <h2 className="text-2xl font-bold" style={{ color: '#092910' }}>
-                 Upcoming
-               </h2>
+              <Bell className="h-6 w-6" style={{ color: '#092910' }} />
+              <h2 className="text-2xl font-bold" style={{ color: '#092910' }}>
+                Upcoming
+              </h2>
             </div>
-             <p className="mb-4" style={{ color: '#092910' }}>Customer Slots</p>
-             <div className="space-y-4">
-                {dummyAppointments.map((apt) => (
-                  <Card key={apt.id} style={{ backgroundColor: '#D0CBC1' }} className="shadow-md">
+            <p className="mb-4" style={{ color: '#092910' }}>
+              Customer Slots for {format(selectedDate, 'PPP')}
+            </p>
+            {isLoading || isBankUserLoading ? (
+              <div className="flex justify-center items-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#092910' }}/>
+                 <p className="ml-4" style={{ color: '#092910' }}>Loading appointments...</p>
+              </div>
+            ) : filteredAppointments.length > 0 ? (
+              <div className="space-y-4">
+                {filteredAppointments.map((apt) => (
+                  <Card
+                    key={apt.id}
+                    style={{ backgroundColor: '#D0CBC1' }}
+                    className="shadow-md"
+                  >
                     <CardContent className="p-4 flex justify-between items-center">
                       <div>
-                        <p className="font-semibold text-lg" style={{ color: '#092910' }}>{apt.customerName}</p>
-                        <p className="text-sm" style={{ color: '#092910' }}>{apt.date}, {apt.time}</p>
+                        <p
+                          className="font-semibold text-lg"
+                          style={{ color: '#092910' }}
+                        >
+                          {apt.customerName}
+                        </p>
+                        <p className="text-sm" style={{ color: '#092910' }}>
+                          {apt.date}, {apt.time}
+                        </p>
                       </div>
-                      <Button style={{ backgroundColor: '#092910', color: 'white' }}>More</Button>
+                      <Button
+                        style={{ backgroundColor: '#092910', color: 'white' }}
+                      >
+                        More
+                      </Button>
                     </CardContent>
                   </Card>
                 ))}
-             </div>
+              </div>
+            ) : (
+                <p className="text-center" style={{ color: '#092910' }}>No appointments for this day.</p>
+            )}
           </div>
         </div>
       </div>
