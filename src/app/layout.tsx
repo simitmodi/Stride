@@ -5,6 +5,7 @@ import { ScrollAwareFooter } from '@/components/scroll-aware-footer';
 import Script from 'next/script';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import FirebaseErrorListener from '@/components/FirebaseErrorListener';
+import RootHeader from '@/components/root-header';
 
 export const metadata: Metadata = {
   title: 'Stride',
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className="font-body antialiased h-full flex flex-col">
         <FirebaseClientProvider>
           <FirebaseErrorListener />
+          <RootHeader />
           <div className="flex-grow">
             {children}
           </div>

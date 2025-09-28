@@ -6,12 +6,9 @@ import { doc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { Button } from '@/components/ui/button';
 import { Github, Linkedin, UserCircle, Home, Loader2 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState, useEffect } from 'react';
 import developers from '@/lib/dev_data.json';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 
 type Developer = {
   name: string;
@@ -59,8 +56,7 @@ export default function MeetTheDevelopersPage() {
 
   return (
     <div className="flex w-full min-h-screen flex-col" style={{ backgroundColor: '#BFBAB0' }}>
-      {user && <Header />}
-      <main className="flex-grow p-4 md:p-8">
+      <main className="flex-grow p-4 md:p-8 pt-24">
         <h1 className="text-4xl font-bold text-center mb-12" style={{ color: '#092910' }}>
           Meet Our Developers
         </h1>
@@ -68,11 +64,11 @@ export default function MeetTheDevelopersPage() {
         <div className="max-w-4xl mx-auto space-y-8">
           {(developers as Developer[]).map((dev: Developer, index: number) => (
             <div key={index} className="bg-[#D0CBC1] rounded-lg shadow-lg p-6 md:p-8 flex flex-col items-center gap-6 md:gap-8">
-              <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start">
+              <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start w-full">
                 <h2 className="text-3xl font-bold" style={{ color: '#092910' }}>
                   {dev.name}
                 </h2>
-                <ul className="list-disc list-inside space-y-1 text-foreground/80">
+                <ul className="list-disc list-inside space-y-1 text-foreground/80 self-start">
                   {dev.bio.map((point, i) => (
                     <li key={i}>{point}</li>
                   ))}
@@ -119,7 +115,6 @@ export default function MeetTheDevelopersPage() {
             )}
           </div>
       </main>
-      {!user && <Footer />}
     </div>
   );
 }
