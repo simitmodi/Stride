@@ -139,23 +139,34 @@ export default function AppointmentSchedulingPage() {
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let i = 10; i < 17; i++) {
-        // Skip recess time
-        if (i === 14) continue; // Skip 14:00 - 15:00
-
+        if (i === 14) continue; // Skip 14:00 - 15:00 (2 PM hour)
+  
+        const formatHour12 = (hour: number) => {
+            const h = hour % 12 === 0 ? 12 : hour % 12;
+            return h < 10 ? `0${h}` : h.toString();
+        };
+  
+        const getAmPm = (hour: number) => (hour < 12 ? 'AM' : 'PM');
+  
         const startHour = i;
         const endHour = i;
         const startMinutes = '00';
         const endMinutes = '30';
-        
-        slots.push(`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`);
-        
+  
+        const startAmPm = getAmPm(startHour);
+        const endAmPm = getAmPm(endHour);
+  
+        slots.push(`${formatHour12(startHour)}:${startMinutes} ${startAmPm} - ${formatHour12(endHour)}:${endMinutes} ${endAmPm}`);
+  
         if (i < 16) {
-            // Don't add 13:30 - 14:00 slot
+            // Skip 13:30 - 14:00 (1:30 PM - 2:00 PM) slot
             if (i === 13) continue;
 
             const nextStartHour = i + 1;
             const nextStartMinutes = '00';
-            slots.push(`${endHour}:${endMinutes} - ${nextStartHour}:${nextStartMinutes}`);
+            const nextStartAmPm = getAmPm(nextStartHour);
+  
+            slots.push(`${formatHour12(endHour)}:${endMinutes} ${endAmPm} - ${formatHour12(nextStartHour)}:${nextStartMinutes} ${nextStartAmPm}`);
         }
     }
     return slots;
