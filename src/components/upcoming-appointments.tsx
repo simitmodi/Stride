@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   addDays,
   format,
@@ -20,8 +20,26 @@ import {
   Loader2,
   Pencil,
   Trash2,
+  Clock,
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
@@ -73,10 +91,22 @@ export default function UpcomingAppointments() {
   const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState<AppointmentData | null>(null);
+  const [newTime, setNewTime] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
+
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
+
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, "users", user.uid) : null),
+    [user, firestore]
+  );
+  const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
 
   useEffect(() => {
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
@@ -84,47 +114,36 @@ export default function UpcomingAppointments() {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (isUserLoading) {
-      return;
-    }
-    if (!user) {
-      setIsLoading(false);
-      return;
-    }
-
-    const fetchUserAppointments = async () => {
+    const fetchAppointments = async () => {
+      if (isUserDocLoading || !user) {
+        return;
+      }
+      
       setIsLoading(true);
       setError(null);
+      
+      const appointmentIds = userData?.appointmentIds;
+      if (!appointmentIds || appointmentIds.length === 0) {
+        setAppointments([]);
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const userDocRef = doc(firestore, "users", user.uid);
-        const userSnap = await getDoc(userDocRef);
-
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          const appointmentIds = userData.appointmentIds;
-
-          if (appointmentIds && appointmentIds.length > 0) {
-            const appointmentsRef = collection(firestore, "appointments");
-            const q = query(appointmentsRef, where('__name__', 'in', appointmentIds));
-            const appointmentSnapshots = await getDocs(q);
-            
-            const fetchedAppointments: AppointmentData[] = [];
-            appointmentSnapshots.forEach((doc) => {
-              const data = doc.data();
-              // Filter out soft-deleted appointments
-              if(data.date && data.date.toDate && !data.deleted) {
-                fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
-              }
-            });
-            
-            fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
-            setAppointments(fetchedAppointments);
-          } else {
-            setAppointments([]);
+        const appointmentsRef = collection(firestore, "appointments");
+        const q = query(appointmentsRef, where('__name__', 'in', appointmentIds));
+        const appointmentSnapshots = await getDocs(q);
+        
+        const fetchedAppointments: AppointmentData[] = [];
+        appointmentSnapshots.forEach((doc) => {
+          const data = doc.data();
+          if(data.date && data.date.toDate && !data.deleted) {
+            fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
           }
-        } else {
-           setAppointments([]);
-        }
+        });
+        
+        fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+        setAppointments(fetchedAppointments);
       } catch (e: any) {
         console.error("Error fetching appointments:", e);
         setError("Could not load appointments. Please try again later.");
@@ -133,20 +152,18 @@ export default function UpcomingAppointments() {
       }
     };
 
-    fetchUserAppointments();
-  }, [user, firestore, isUserLoading]);
+    fetchAppointments();
+  }, [user, userData, isUserDocLoading, firestore]);
 
   const handleDelete = async (appointmentId: string) => {
     if (!user) return;
     setIsDeleting(appointmentId);
     try {
-      // Instead of deleting, update the document with a 'deleted' flag
       const appointmentDocRef = doc(firestore, "appointments", appointmentId);
       await updateDoc(appointmentDocRef, {
         deleted: true
       });
       
-      // Remove the appointment from the local state to update the UI
       setAppointments(prev => prev.filter(apt => apt.id !== appointmentId));
       
       toast({
@@ -163,6 +180,78 @@ export default function UpcomingAppointments() {
       });
     } finally {
       setIsDeleting(null);
+    }
+  };
+
+  const timeSlots = useMemo(() => {
+    const slots = [];
+    for (let i = 10; i < 16; i++) {
+        if (i === 14) continue;
+  
+        const formatHour12 = (hour: number) => {
+            const h = hour % 12 === 0 ? 12 : hour % 12;
+            return h < 10 ? `0${h}` : h.toString();
+        };
+  
+        const getAmPm = (hour: number) => (hour < 12 ? 'AM' : 'PM');
+  
+        const startHour = i;
+        const endHour = i;
+        const startMinutes = '00';
+        const endMinutes = '30';
+  
+        const startAmPm = getAmPm(startHour);
+        const endAmPm = getAmPm(endHour);
+  
+        slots.push(`${formatHour12(startHour)}:${startMinutes} ${startAmPm} - ${formatHour12(endHour)}:${endMinutes} ${endAmPm}`);
+  
+        if (i < 15) { 
+            if (i === 13) continue;
+
+            const nextStartHour = i + 1;
+            const nextStartMinutes = '00';
+            const nextStartAmPm = getAmPm(nextStartHour);
+  
+            slots.push(`${formatHour12(endHour)}:${endMinutes} ${endAmPm} - ${formatHour12(nextStartHour)}:${nextStartMinutes} ${nextStartAmPm}`);
+        }
+    }
+    return slots;
+  }, []);
+
+  const handleEditClick = (appointment: AppointmentData) => {
+    setEditingAppointment(appointment);
+    setNewTime(appointment.time);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateTime = async () => {
+    if (!editingAppointment || !newTime) return;
+    setIsUpdating(true);
+    try {
+      const appointmentDocRef = doc(firestore, "appointments", editingAppointment.id);
+      await updateDoc(appointmentDocRef, {
+        time: newTime
+      });
+
+      // Update local state to reflect the change immediately
+      setAppointments(prev => prev.map(apt => 
+        apt.id === editingAppointment.id ? { ...apt, time: newTime } : apt
+      ));
+      
+      toast({
+        title: "Appointment Updated",
+        description: "Your appointment time has been successfully changed.",
+      });
+      setIsEditDialogOpen(false);
+    } catch (error: any) {
+      console.error("Error updating appointment:", error);
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: error.message || "Could not update the appointment time.",
+      });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -199,7 +288,7 @@ export default function UpcomingAppointments() {
                 variant="outline" 
                 size="icon" 
                 className="h-9 w-9" 
-                onClick={() => router.push(`/dashboard/customer/appointment-scheduling?edit=true&appointmentId=${appointment.id}`)}
+                onClick={() => handleEditClick(appointment)}
               >
                 <Pencil className="h-4 w-4" />
                 <span className="sr-only">Edit Appointment</span>
@@ -267,7 +356,7 @@ export default function UpcomingAppointments() {
   };
   
   const renderAppointmentContent = () => {
-    if (isLoading) {
+    if (isLoading || isUserDocLoading) {
       return (
         <div className="flex items-center justify-center p-8">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -307,7 +396,7 @@ export default function UpcomingAppointments() {
     ? "Upcoming Appointments"
     : `Appointments for ${format(selectedDate, "PPP")}`;
   
-  if (days.length === 0 && isLoading) {
+  if (days.length === 0 && (isLoading || isUserDocLoading)) {
     return (
         <div className="w-full max-w-4xl mx-auto">
              <div className="flex items-center justify-center p-8">
@@ -391,6 +480,45 @@ export default function UpcomingAppointments() {
         </h2>
         {renderAppointmentContent()}
       </div>
+
+       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
+            <DialogHeader>
+            <DialogTitle className="text-primary">Edit Appointment Time</DialogTitle>
+            <DialogDescription>
+                Select a new time for your appointment on {editingAppointment && format(editingAppointment.date.toDate(), 'PPP')}.
+            </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+            <Select onValueChange={setNewTime} defaultValue={newTime}>
+                <SelectTrigger>
+                    <div className="flex items-center">
+                        <Clock className="mr-2 h-4 w-4" />
+                        <SelectValue placeholder="Select a new time slot" />
+                    </div>
+                </SelectTrigger>
+                <SelectContent>
+                    {timeSlots.map((slot) => (
+                        <SelectItem key={slot} value={slot}>
+                            {slot}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            </div>
+            <DialogFooter>
+            <DialogClose asChild>
+                <Button type="button" variant="secondary">Cancel</Button>
+            </DialogClose>
+            <Button type="button" onClick={handleUpdateTime} disabled={isUpdating}>
+                {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+            </Button>
+            </DialogFooter>
+        </DialogContent>
+        </Dialog>
     </div>
   );
 }
+
+    
