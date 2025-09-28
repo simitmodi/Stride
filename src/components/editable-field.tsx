@@ -30,9 +30,10 @@ interface EditableFieldProps {
   maxLength?: number;
   placeholder?: string;
   options?: string[];
+  disabled?: boolean;
 }
 
-export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue, maxLength, placeholder, options }: EditableFieldProps) {
+export function EditableField({ label, value, editValue, onSave, inputType = "text", dateValue, maxLength, placeholder, options, disabled = false }: EditableFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(editValue ?? value);
   const [currentDate, setCurrentDate] = useState<Date | undefined>(dateValue);
@@ -102,12 +103,14 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
           <p className="font-semibold text-foreground/70">{label}</p>
           <p className="text-foreground">{value}</p>
         </div>
-        <DialogTrigger asChild>
-          <Button variant="link" className="text-primary hover:text-accent">
-            <Pencil className="h-4 w-4 mr-2" />
-            Edit
-          </Button>
-        </DialogTrigger>
+        {!disabled && (
+            <DialogTrigger asChild>
+            <Button variant="link" className="text-primary hover:text-accent">
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit
+            </Button>
+            </DialogTrigger>
+        )}
       </div>
 
       <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>

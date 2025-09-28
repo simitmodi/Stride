@@ -132,6 +132,7 @@ export default function BankProfilePage() {
             onSave={(newValue) => handleUpdateProfile('bankName', newValue)}
             inputType="select"
             options={uniqueBanks}
+            disabled={!!userData.bankName}
           />
         <Separator className="bg-primary/20"/>
          <EditableField
