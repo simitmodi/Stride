@@ -24,7 +24,8 @@ export async function signUpWithEmail(
   firstName: string,
   lastName: string,
   username: string,
-  dateOfBirth: Date
+  dateOfBirth: Date,
+  role: 'customer' | 'bank' = 'customer'
 ): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
@@ -45,7 +46,7 @@ export async function signUpWithEmail(
       uid: user.uid,
       initials: '',
       sessionToken: '',
-      role: 'customer',
+      role: role,
     });
     
     // Send verification email

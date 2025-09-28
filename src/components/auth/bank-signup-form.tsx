@@ -42,7 +42,7 @@ const formSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export function CustomerSignUpForm() {
+export function BankSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -74,12 +74,12 @@ export function CustomerSignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, values.dateOfBirth, 'customer');
+      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, values.dateOfBirth, 'bank');
       toast({
         title: "Success!",
-        description: "Your account has been created.",
+        description: "Bank employee account has been created.",
       });
-      router.push("/dashboard/customer");
+      router.push("/dashboard/bank");
 
     } catch (error: any) {
       console.error("Sign-up failed:", error); // Log the full error
