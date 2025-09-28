@@ -138,7 +138,7 @@ export default function AppointmentSchedulingPage() {
   
   const timeSlots = useMemo(() => {
     const slots = [];
-    for (let i = 10; i < 17; i++) {
+    for (let i = 10; i < 16; i++) {
         if (i === 14) continue; // Skip 14:00 - 15:00 (2 PM hour)
   
         const formatHour12 = (hour: number) => {
@@ -234,23 +234,11 @@ export default function AppointmentSchedulingPage() {
               {/* Pincode */}
               <div className="space-y-2">
                 <Label htmlFor="pincode" style={{ color: '#000F00' }}>Pincode:</Label>
-                <Controller
-                  name="pincode"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBank}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a pincode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {pincodes.map((pincode) => (
-                          <SelectItem key={pincode} value={pincode}>
-                            {pincode}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
+                <Input
+                  id="pincode"
+                  placeholder="Enter 6 digit pincode"
+                  {...form.register('pincode')}
+                  disabled={!selectedBank}
                 />
                 {form.formState.errors.pincode && <p className="text-sm text-destructive">{form.formState.errors.pincode.message}</p>}
               </div>
