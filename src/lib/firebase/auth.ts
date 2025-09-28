@@ -25,7 +25,10 @@ export async function signUpWithEmail(
   lastName: string,
   username: string,
   dateOfBirth: Date,
-  role: 'customer' | 'bank' | 'developer' = 'customer'
+  role: 'customer' | 'bank' | 'developer' = 'customer',
+  bankName?: string,
+  designation?: string,
+  ifscCode?: string,
 ): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
@@ -47,8 +50,11 @@ export async function signUpWithEmail(
       role: role,
     };
     
-    // Add sessionToken only for customers
-    if (role === 'customer') {
+    if (role === 'bank') {
+      userData.bankName = bankName;
+      userData.designation = designation;
+      userData.ifscCode = ifscCode;
+    } else if (role === 'customer') {
       userData.sessionToken = '';
     }
 
@@ -56,9 +62,10 @@ export async function signUpWithEmail(
     const userDocRef = doc(db, "users", user.uid);
     await setDoc(userDocRef, userData);
     
-    // Send verification email
-    await sendEmailVerification(user);
-
+    if (role !== 'bank') {
+        await sendEmailVerification(user);
+    }
+    
     return user;
   }
   return null;
@@ -73,7 +80,6 @@ export async function signInWithEmail(email: string, password: string): Promise<
     const userDoc = await getDoc(userDocRef);
     const userData = userDoc.data();
 
-    // Only handle session tokens for customers
     if (userData && userData.role === 'customer') {
       const sessionToken = crypto.randomUUID();
       await updateDoc(userDocRef, { sessionToken });
@@ -81,14 +87,11 @@ export async function signInWithEmail(email: string, password: string): Promise<
         localStorage.setItem('sessionToken', sessionToken);
       }
     } else if (userDoc.exists() && userData?.role !== 'customer') {
-        // For non-customers (bank, developer), ensure local token is cleared
         if (typeof window !== 'undefined') {
             localStorage.removeItem('sessionToken');
         }
     } else if (!userDoc.exists()) {
        // This case is primarily for developers created manually in Firebase console.
-       // It won't have a role, so we don't set a session token.
-       // The developer login form handles creating the profile with the 'developer' role.
     }
   }
   return userCredential.user;

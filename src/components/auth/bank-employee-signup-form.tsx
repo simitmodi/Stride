@@ -18,6 +18,14 @@ import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail } from "@/lib/firebase/auth";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import bankData from '@/lib/ahmedabad_data_with_pincode.json';
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
@@ -25,11 +33,16 @@ const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  bankName: z.string().min(1, { message: "Bank name is required." }),
+  designation: z.string().min(1, { message: "Designation is required." }),
+  ifscCode: z.string().min(1, { message: "IFSC code is required." }),
 });
 
 export function BankEmployeeSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  const uniqueBanks = Array.from(new Set(bankData.map((item) => item.BANK))).sort();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,14 +52,27 @@ export function BankEmployeeSignUpForm() {
       username: "",
       email: "",
       password: "",
+      bankName: "",
+      designation: "",
+      ifscCode: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      // Create user with 'bank' role
-      const user = await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.username, new Date(), 'bank');
+      const user = await signUpWithEmail(
+        values.email, 
+        values.password, 
+        values.firstName, 
+        values.lastName, 
+        values.username, 
+        new Date(), // Placeholder DOB
+        'bank',
+        values.bankName,
+        values.designation,
+        values.ifscCode
+      );
       if (user) {
         toast({
           title: "Success!",
@@ -141,6 +167,56 @@ export function BankEmployeeSignUpForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input placeholder="employee@bank.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="bankName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bank Name</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a bank" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {uniqueBanks.map((bank) => (
+                      <SelectItem key={bank} value={bank}>
+                        {bank}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="ifscCode"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>IFSC Code</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. SBIN0000301" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="designation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Designation</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Branch Manager" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
