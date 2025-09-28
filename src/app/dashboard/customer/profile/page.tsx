@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, changeUserPassword, reauthenticateUser, updateUserEmail } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
-import { doc, Timestamp } from "firebase/firestore";
+import { doc, Timestamp, collection, getDocs, query, where } from "firebase/firestore";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,13 +15,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff } from "lucide-react";
+import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff, CalendarCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isAfter, startOfDay } from "date-fns";
 import { EditableField } from "@/components/editable-field";
 import { updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase/config";
+import { auth, db } from "@/lib/firebase/config";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,7 +49,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { PasswordStrength } from "@/components/password-strength";
 
 
-type ProfileView = "account" | "notifications";
+type ProfileView = "account" | "notifications" | "appointments";
 
 const passwordFormSchema = z.object({
   currentPassword: z.string().min(1, { message: "Current password is required." }),
@@ -60,6 +60,120 @@ const passwordFormSchema = z.object({
   path: ["confirmPassword"],
 });
 
+interface AppointmentHistoryData {
+  id: string;
+  customAppointmentId: string;
+  bankName: string;
+  branch: string;
+  date: Timestamp;
+  time: string;
+  serviceCategory: string;
+  specificService: string;
+  deleted?: boolean;
+}
+
+function AppointmentHistory() {
+    const { user } = useUser();
+    const [appointments, setAppointments] = useState<AppointmentHistoryData[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const userDocRef = useMemoFirebase(
+      () => (user ? doc(db, "users", user.uid) : null),
+      [user]
+    );
+    const { data: userData, isLoading: isUserLoading } = useDoc(userDocRef);
+
+    useEffect(() => {
+        if (isUserLoading) return;
+        if (!userData?.appointmentIds || userData.appointmentIds.length === 0) {
+            setIsLoading(false);
+            return;
+        }
+
+        const fetchAppointments = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const appointmentsRef = collection(db, "appointments");
+                const q = query(appointmentsRef, where('__name__', 'in', userData.appointmentIds));
+                const appointmentSnapshots = await getDocs(q);
+                
+                const fetchedAppointments: AppointmentHistoryData[] = [];
+                appointmentSnapshots.forEach((doc) => {
+                    fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentHistoryData);
+                });
+                
+                fetchedAppointments.sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime());
+                setAppointments(fetchedAppointments);
+            } catch (e: any) {
+                console.error("Error fetching appointment history:", e);
+                setError("Could not load appointment history.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAppointments();
+    }, [userData, isUserLoading]);
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="ml-4">Loading your appointment history...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return <p className="text-center text-destructive mt-8">{error}</p>;
+    }
+
+    if (appointments.length === 0) {
+        return <p className="text-center text-foreground mt-8">You have no appointment history.</p>;
+    }
+
+    const grouped = appointments.reduce((acc, apt) => {
+      const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(apt);
+      return acc;
+    }, {} as Record<string, AppointmentHistoryData[]>);
+
+    return (
+        <div className="space-y-8">
+            {Object.keys(grouped).sort().reverse().map(dateKey => (
+                <div key={dateKey}>
+                    <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do, yyyy')}</h3>
+                    <div className="space-y-4">
+                        {grouped[dateKey].map(apt => (
+                            <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-md ${apt.deleted ? 'opacity-60' : ''}`}>
+                                <CardContent className="p-4 flex justify-between items-center gap-4">
+                                    <div className="flex-1">
+                                        <CardTitle className="text-lg">{apt.specificService}</CardTitle>
+                                        <CardDescription className="text-foreground/80">{apt.bankName} - {apt.branch}</CardDescription>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="font-semibold">{apt.time}</p>
+                                        <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
+                                    </div>
+                                    {apt.deleted && (
+                                        <div className="border-l border-foreground/20 pl-4">
+                                            <span className="text-sm font-bold text-destructive">CANCELLED</span>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default function ProfilePage() {
   const [activeView, setActiveView] = useState<ProfileView>("account");
@@ -431,6 +545,18 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         );
+      case "appointments":
+        return (
+           <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold text-primary font-headline">My Appointments</CardTitle>
+              <CardDescription className="text-foreground/80 font-body">A complete history of all your appointments.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <AppointmentHistory />
+            </CardContent>
+          </Card>
+        );
       default:
         return null;
     }
@@ -507,6 +633,19 @@ export default function ProfilePage() {
               <User className="h-5 w-5" />
               <span>Account Settings</span>
               {activeView === 'account' && <ChevronRight className="ml-auto h-5 w-5" />}
+            </Button>
+             <Button
+              variant="ghost"
+              className={`justify-start items-center gap-3 text-base h-12 px-4 transition-all
+                ${activeView === 'appointments' 
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' 
+                  : 'text-foreground hover:bg-accent/50'
+                }`}
+              onClick={() => setActiveView("appointments")}
+            >
+              <CalendarCheck className="h-5 w-5" />
+              <span>My Appointments</span>
+              {activeView === 'appointments' && <ChevronRight className="ml-auto h-5 w-5" />}
             </Button>
             <Button
               variant="ghost"
