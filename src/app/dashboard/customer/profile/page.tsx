@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { signOutUser, updateUserProfile, sendVerificationEmail, deleteUserAccount, changeUserPassword, reauthenticateUser, updateUserEmail } from "@/lib/firebase/auth";
@@ -15,10 +15,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff, CalendarCheck } from "lucide-react";
+import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff, CalendarCheck, ArrowUpDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { format, isAfter, startOfDay, parse } from "date-fns";
+import { format, isAfter, startOfDay, parse, isBefore } from "date-fns";
 import { EditableField } from "@/components/editable-field";
 import { updateProfile } from "firebase/auth";
 import { auth, db } from "@/lib/firebase/config";
@@ -77,6 +77,8 @@ function AppointmentHistory() {
     const [appointments, setAppointments] = useState<AppointmentHistoryData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [filter, setFilter] = useState<'all' | 'upcoming' | 'past' | 'cancelled'>('all');
+    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
     const userDocRef = useMemoFirebase(
       () => (user ? doc(db, "users", user.uid) : null),
@@ -104,7 +106,6 @@ function AppointmentHistory() {
                     fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentHistoryData);
                 });
                 
-                fetchedAppointments.sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime());
                 setAppointments(fetchedAppointments);
             } catch (e: any) {
                 console.error("Error fetching appointment history:", e);
@@ -116,6 +117,52 @@ function AppointmentHistory() {
 
         fetchAppointments();
     }, [userData, isUserLoading]);
+
+    const filteredAndSortedAppointments = useMemo(() => {
+      const today = startOfDay(new Date());
+
+      const filtered = appointments.filter(apt => {
+        if (filter === 'cancelled') {
+          return apt.deleted === true;
+        }
+        if (apt.deleted) return false;
+
+        const aptDate = startOfDay(apt.date.toDate());
+        if (filter === 'upcoming') {
+          return !isBefore(aptDate, today);
+        }
+        if (filter === 'past') {
+          return isBefore(aptDate, today);
+        }
+        return true; // 'all'
+      });
+
+      return filtered;
+
+    }, [appointments, filter]);
+    
+    const grouped = useMemo(() => {
+      const groupedData = filteredAndSortedAppointments.reduce((acc, apt) => {
+        const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
+        if (!acc[dateKey]) {
+          acc[dateKey] = [];
+        }
+        acc[dateKey].push(apt);
+        return acc;
+      }, {} as Record<string, AppointmentHistoryData[]>);
+
+      return groupedData;
+    }, [filteredAndSortedAppointments]);
+
+    const sortedDateKeys = useMemo(() => {
+      const keys = Object.keys(grouped);
+      return keys.sort((a, b) => {
+        const dateA = parse(a, 'yyyy-MM-dd', new Date()).getTime();
+        const dateB = parse(b, 'yyyy-MM-dd', new Date()).getTime();
+        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+      });
+    }, [grouped, sortOrder]);
+
 
     if (isLoading) {
         return (
@@ -130,47 +177,66 @@ function AppointmentHistory() {
         return <p className="text-center text-destructive mt-8">{error}</p>;
     }
 
-    if (appointments.length === 0) {
-        return <p className="text-center text-foreground mt-8">You have no appointment history.</p>;
-    }
-
-    const grouped = appointments.reduce((acc, apt) => {
-      const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(apt);
-      return acc;
-    }, {} as Record<string, AppointmentHistoryData[]>);
-
     return (
-        <div className="space-y-8">
-            {Object.keys(grouped).sort().reverse().map(dateKey => (
-                <div key={dateKey}>
-                    <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do, yyyy')}</h3>
-                    <div className="space-y-4">
-                        {grouped[dateKey].map(apt => (
-                            <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-md ${apt.deleted ? 'opacity-60' : ''}`}>
-                                <CardContent className="p-4 flex justify-between items-center gap-4">
-                                    <div className="flex-1">
-                                        <CardTitle className="text-lg">{apt.specificService}</CardTitle>
-                                        <CardDescription className="text-foreground/80">{apt.bankName} - {apt.branch}</CardDescription>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-semibold">{apt.time}</p>
-                                        <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
-                                    </div>
-                                    {apt.deleted && (
-                                        <div className="border-l border-foreground/20 pl-4">
-                                            <span className="text-sm font-bold text-destructive">CANCELLED</span>
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-card/50 rounded-lg border border-primary/20">
+                <div className="flex flex-wrap gap-2">
+                    {(['all', 'upcoming', 'past', 'cancelled'] as const).map(f => (
+                        <Button 
+                            key={f} 
+                            variant={filter === f ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setFilter(f)}
+                            className="capitalize"
+                        >
+                            {f}
+                        </Button>
+                    ))}
                 </div>
-            ))}
+                <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+                >
+                    <ArrowUpDown className="h-4 w-4 mr-2" />
+                    {sortOrder === 'desc' ? 'Newest First' : 'Oldest First'}
+                </Button>
+            </div>
+
+            {appointments.length === 0 ? (
+                <p className="text-center text-foreground mt-8">You have no appointment history.</p>
+            ) : sortedDateKeys.length === 0 ? (
+                <p className="text-center text-foreground mt-8">No appointments match the current filter.</p>
+            ) : (
+                <div className="space-y-8">
+                    {sortedDateKeys.map(dateKey => (
+                        <div key={dateKey}>
+                            <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do, yyyy')}</h3>
+                            <div className="space-y-4">
+                                {grouped[dateKey].map(apt => (
+                                    <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-md ${apt.deleted ? 'opacity-60' : ''}`}>
+                                        <CardContent className="p-4 flex justify-between items-center gap-4">
+                                            <div className="flex-1">
+                                                <CardTitle className="text-lg">{apt.specificService}</CardTitle>
+                                                <CardDescription className="text-foreground/80">{apt.bankName} - {apt.branch}</CardDescription>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-semibold">{apt.time}</p>
+                                                <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
+                                            </div>
+                                            {apt.deleted && (
+                                                <div className="border-l border-foreground/20 pl-4">
+                                                    <span className="text-sm font-bold text-destructive">CANCELLED</span>
+                                                </div>
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
