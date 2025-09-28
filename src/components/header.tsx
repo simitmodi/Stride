@@ -94,7 +94,7 @@ export default function Header() {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{user?.displayName}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
+                  <p className="text-xs leading-none" style={{ color: '#000F00' }}>
                     {user?.email}
                   </p>
                 </div>
