@@ -12,6 +12,8 @@ import {
   parse,
   isAfter,
   addHours,
+  isSaturday,
+  isSunday,
 } from "date-fns";
 import { Button } from "./ui/button";
 import {
@@ -67,6 +69,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
+import { Label } from "./ui/label";
+import { cn } from "@/lib/utils";
 
 
 interface AppointmentData {
@@ -93,6 +97,7 @@ export default function UpcomingAppointments() {
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState<AppointmentData | null>(null);
+  const [newDate, setNewDate] = useState<Date | undefined>(undefined);
   const [newTime, setNewTime] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -183,6 +188,20 @@ export default function UpcomingAppointments() {
     }
   };
 
+  const isBankHoliday = (date: Date) => {
+    if (isSunday(date)) {
+      return true; // All Sundays are holidays
+    }
+    if (isSaturday(date)) {
+      const dayOfMonth = date.getDate();
+      // Second Saturday (day 8-14) or Fourth Saturday (day 22-28)
+      if ((dayOfMonth > 7 && dayOfMonth <= 14) || (dayOfMonth > 21 && dayOfMonth <= 28)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let i = 10; i < 16; i++) {
@@ -221,21 +240,23 @@ export default function UpcomingAppointments() {
   const handleEditClick = (appointment: AppointmentData) => {
     setEditingAppointment(appointment);
     setNewTime(appointment.time);
+    setNewDate(appointment.date.toDate());
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdateTime = async () => {
-    if (!editingAppointment || !newTime) return;
+  const handleUpdateAppointment = async () => {
+    if (!editingAppointment || !newTime || !newDate) return;
     setIsUpdating(true);
     try {
       const appointmentDocRef = doc(firestore, "appointments", editingAppointment.id);
       await updateDoc(appointmentDocRef, {
-        time: newTime
+        time: newTime,
+        date: Timestamp.fromDate(newDate)
       });
 
       // Update local state to reflect the change immediately
       setAppointments(prev => prev.map(apt => 
-        apt.id === editingAppointment.id ? { ...apt, time: newTime } : apt
+        apt.id === editingAppointment.id ? { ...apt, time: newTime, date: Timestamp.fromDate(newDate) } : apt
       ));
       
       toast({
@@ -248,7 +269,7 @@ export default function UpcomingAppointments() {
       toast({
         variant: "destructive",
         title: "Update Failed",
-        description: error.message || "Could not update the appointment time.",
+        description: error.message || "Could not update the appointment.",
       });
     } finally {
       setIsUpdating(false);
@@ -484,33 +505,62 @@ export default function UpcomingAppointments() {
        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
             <DialogHeader>
-            <DialogTitle className="text-primary">Edit Appointment Time</DialogTitle>
+            <DialogTitle className="text-primary">Edit Appointment</DialogTitle>
             <DialogDescription>
-                Select a new time for your appointment on {editingAppointment && format(editingAppointment.date.toDate(), 'PPP')}.
+                Select a new date and time for your appointment.
             </DialogDescription>
             </DialogHeader>
-            <div className="py-4">
-            <Select onValueChange={setNewTime} defaultValue={newTime}>
-                <SelectTrigger>
-                    <div className="flex items-center">
-                        <Clock className="mr-2 h-4 w-4" />
-                        <SelectValue placeholder="Select a new time slot" />
-                    </div>
-                </SelectTrigger>
-                <SelectContent>
-                    {timeSlots.map((slot) => (
-                        <SelectItem key={slot} value={slot}>
-                            {slot}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+            <div className="py-4 space-y-4">
+                <div className="space-y-2">
+                    <Label style={{ color: '#000F00' }}>Date</Label>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              'w-full justify-start text-left font-normal',
+                              !newDate && 'text-foreground/80'
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {newDate ? format(newDate, 'PPP') : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={newDate}
+                            onSelect={setNewDate}
+                            initialFocus
+                            disabled={(date) => date < new Date() || date < new Date("1900-01-01") || isBankHoliday(date)}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                </div>
+                <div className="space-y-2">
+                    <Label style={{ color: '#000F00' }}>Time</Label>
+                    <Select onValueChange={setNewTime} defaultValue={newTime}>
+                        <SelectTrigger>
+                            <div className="flex items-center">
+                                <Clock className="mr-2 h-4 w-4" />
+                                <SelectValue placeholder="Select a new time slot" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {timeSlots.map((slot) => (
+                                <SelectItem key={slot} value={slot}>
+                                    {slot}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
             <DialogFooter>
             <DialogClose asChild>
                 <Button type="button" variant="secondary">Cancel</Button>
             </DialogClose>
-            <Button type="button" onClick={handleUpdateTime} disabled={isUpdating}>
+            <Button type="button" onClick={handleUpdateAppointment} disabled={isUpdating}>
                 {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Save Changes
             </Button>
@@ -520,4 +570,3 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
-
