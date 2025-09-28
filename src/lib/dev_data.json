@@ -29,17 +29,31 @@
     }
   },
   {
-    "name": "Sharvi",
-    "imagePath": "/images/placeholder.png",
+    "name": "Ankit Nandoliya",
+    "imagePath": "/images/Ankit_Nandoliya.jpg",
     "bio": [
-      "A dedicated Computer Engineering student with a keen interest in web technologies.",
-      "Contributed to the project's development, focusing on creating a seamless and intuitive user experience.",
-      "Enjoys blending creative design with robust functionality to build impactful applications."
+      "Currently studying in 3rd Year B.E. (Computer Engineering, 5th Semester).",
+      "Contributed to the design work, front-end structure, and underlying application logic for the website.",
+      "Passionate about solving complex problems and building innovative, user-centric web solutions."
     ],
     "links": {
       "portfolio": null,
-      "github": null,
-      "linkedin": null
+      "github": "https://github.com/ankit5287",
+      "linkedin": "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/"
+    }
+  },
+  {
+    "name": "Bansari Makwana",
+    "imagePath": "/images/Bansari_Patel.jpg",
+    "bio": [
+      "3rd year Computer Engineering student at SAL.",
+      "Gave this website a twist—breaking stereotypes at its peak.",
+      "Love mixing tech with creativity to make things stand out and easy for the greater good."
+    ],
+    "links": {
+      "portfolio": null,
+      "github": "https://github.com/MakwBansari",
+      "linkedin": "https://www.linkedin.com/in/bansimakwana"
     }
   },
   {
@@ -57,31 +71,17 @@
     }
   },
   {
-    "name": "Bansari Patel",
-    "imagePath": "/images/Bansari_Patel.jpg",
+    "name": "Sharvi",
+    "imagePath": "/images/placeholder.png",
     "bio": [
-      "3rd year Computer Engineering student at SAL.",
-      "Gave this website a twist—breaking stereotypes at its peak.",
-      "Love mixing tech with creativity to make things stand out and easy for the greater good."
+      "A dedicated Computer Engineering student with a keen interest in web technologies.",
+      "Contributed to the project's development, focusing on creating a seamless and intuitive user experience.",
+      "Enjoys blending creative design with robust functionality to build impactful applications."
     ],
     "links": {
       "portfolio": null,
-      "github": "https://github.com/MakwBansari",
-      "linkedin": "https://www.linkedin.com/in/bansimakwana"
-    }
-  },
-  {
-    "name": "Ankit Nandoliya",
-    "imagePath": "/images/Ankit_Nandoliya.jpg",
-    "bio": [
-      "Currently studying in 3rd Year B.E. (Computer Engineering, 5th Semester).",
-      "Contributed to the design work, front-end structure, and underlying application logic for the website.",
-      "Passionate about solving complex problems and building innovative, user-centric web solutions."
-    ],
-    "links": {
-      "portfolio": null,
-      "github": "https://github.com/ankit5287",
-      "linkedin": "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/"
+      "github": null,
+      "linkedin": null
     }
   }
 ]

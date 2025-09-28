@@ -15,7 +15,6 @@ import Footer from '@/components/footer';
 
 type Developer = {
   name: string;
-  imagePath: string;
   bio: string[];
   links: {
     portfolio: string | null;
@@ -68,17 +67,8 @@ export default function MeetTheDevelopersPage() {
 
         <div className="max-w-4xl mx-auto space-y-8">
           {(developers as Developer[]).map((dev: Developer, index: number) => (
-            <div key={index} className="bg-[#D0CBC1] rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8">
-              <div className="w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
-                <Image
-                  src={dev.imagePath}
-                  alt={dev.name}
-                  width={224}
-                  height={224}
-                  className="rounded-lg object-cover w-full h-full"
-                />
-              </div>
-              <div className="flex flex-col gap-4">
+            <div key={index} className="bg-[#D0CBC1] rounded-lg shadow-lg p-6 md:p-8 flex flex-col items-center gap-6 md:gap-8">
+              <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start">
                 <h2 className="text-3xl font-bold" style={{ color: '#092910' }}>
                   {dev.name}
                 </h2>
@@ -87,7 +77,7 @@ export default function MeetTheDevelopersPage() {
                     <li key={i}>{point}</li>
                   ))}
                 </ul>
-                <div className="flex flex-wrap gap-4 mt-4">
+                <div className="flex flex-wrap gap-4 mt-4 justify-center md:justify-start">
                   {dev.links.portfolio && (
                     <Button asChild variant="outline" className="bg-white/50 hover:bg-white">
                       <Link href={dev.links.portfolio} target="_blank" rel="noopener noreferrer">
