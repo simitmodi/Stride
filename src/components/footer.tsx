@@ -63,10 +63,10 @@ export default function Footer({ className }: { className?: string }) {
             </li>
             <li>
               <Link
-                href="/login"
+                href="/meet-the-developers"
                 className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
               >
-                Get Started
+                Meet Our Developers
               </Link>
             </li>
           </ul>
