@@ -346,7 +346,7 @@ export default function AppointmentSchedulingPage() {
                      <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger>
                           <div className="flex items-center">
-                            <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
+                            <Clock className="mr-2 h-4 w-4" />
                             <SelectValue placeholder="Select Time Slot" />
                           </div>
                         </SelectTrigger>
