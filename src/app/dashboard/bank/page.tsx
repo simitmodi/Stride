@@ -12,6 +12,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { useUser, useFirestore, useMemoFirebase } from '@/firebase/provider';
 import { doc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
+import { AppointmentDetailsModal } from '@/components/appointment-details-modal';
 
 interface Appointment {
   id: string;
@@ -36,6 +37,8 @@ export default function BankDashboardPage() {
   const [month, setMonth] = useState(new Date());
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null);
 
   useEffect(() => {
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
@@ -214,6 +217,7 @@ export default function BankDashboardPage() {
                       </div>
                       <Button
                         style={{ backgroundColor: '#092910', color: 'white' }}
+                        onClick={() => setSelectedAppointmentId(apt.id)}
                       >
                         More
                       </Button>
@@ -227,6 +231,13 @@ export default function BankDashboardPage() {
           </div>
         </div>
       </div>
+      {selectedAppointmentId && (
+        <AppointmentDetailsModal 
+            appointmentId={selectedAppointmentId} 
+            isOpen={!!selectedAppointmentId}
+            onClose={() => setSelectedAppointmentId(null)}
+        />
+      )}
     </div>
   );
 }
