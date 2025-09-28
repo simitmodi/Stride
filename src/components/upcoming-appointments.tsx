@@ -54,29 +54,22 @@ export default function UpcomingAppointments() {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      // Don't do anything until we have the user's data and it's not loading.
-      if (isUserLoading || !userData) {
-        // If the user doc is still loading or not present, we can't fetch appointments yet.
-        // We set isLoading to false only when we are sure there is nothing to fetch.
-        if (!isUserLoading) {
-            setIsLoading(false);
-            setAppointments([]);
-        }
+      if (isUserLoading) {
+        setIsLoading(true);
         return;
       }
-      
-      const appointmentIds = userData.appointmentIds || [];
 
-      if (appointmentIds.length === 0) {
+      if (!userData || !userData.appointmentIds || userData.appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
         return;
       }
-
+      
       setIsLoading(true);
       setError(null);
-
+      
       try {
+        const appointmentIds = userData.appointmentIds;
         const appointmentPromises = appointmentIds.map(id => getDoc(doc(db, "appointments", id)));
         const appointmentSnapshots = await Promise.all(appointmentPromises);
         
@@ -96,7 +89,7 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userData, isUserLoading]); // This effect re-runs only when the user data changes.
+  }, [userData, isUserLoading]);
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
