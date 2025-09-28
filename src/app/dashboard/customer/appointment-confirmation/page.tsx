@@ -33,12 +33,11 @@ function AppointmentConfirmation() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const appointmentId = searchParams.get('appointmentId');
-  const { user } = useUser();
   const firestore = useFirestore();
 
   const appointmentDocRef = useMemoFirebase(
-    () => (user && appointmentId ? doc(firestore, `users/${user.uid}/appointments`, appointmentId) : null),
-    [user, appointmentId, firestore]
+    () => (appointmentId ? doc(firestore, `appointments`, appointmentId) : null),
+    [appointmentId, firestore]
   );
 
   const { data: appointment, isLoading, error } = useDoc<AppointmentData>(appointmentDocRef);

@@ -7,7 +7,7 @@ import { useForm, Controller, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useUser } from '@/firebase/provider';
-import { collection, doc, Timestamp, setDoc } from 'firebase/firestore';
+import { collection, doc, Timestamp, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 import { Button } from '@/components/ui/button';
@@ -98,7 +98,7 @@ function AppointmentDetailsForm() {
         .filter(([, value]) => value !== false) // Keep strings from radio and true from checkboxes
         .map(([key, value]) => (typeof value === 'string' ? `${key}: ${value}` : key));
 
-      const newAppointmentRef = doc(collection(db, `users/${user.uid}/appointments`));
+      const newAppointmentRef = doc(collection(db, `appointments`));
 
       const bankNameFormatted = bankName?.replace(/\s+/g, '') || 'NoBank';
       const timeSlotFormatted = time?.replace(/[\s:-]+/g, '') || 'NoTime';
@@ -119,6 +119,11 @@ function AppointmentDetailsForm() {
       };
 
       await setDoc(newAppointmentRef, appointmentData);
+
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, {
+        appointmentIds: arrayUnion(newAppointmentRef.id)
+      });
 
       toast({
         title: 'Appointment Confirmed!',
@@ -290,3 +295,5 @@ export default function AppointmentDetailsPage() {
         </Suspense>
     )
 }
+
+    

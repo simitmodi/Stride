@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   addDays,
   format,
@@ -16,8 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import { useCollection } from "@/firebase/firestore/use-collection";
-import { collection, query, where, Timestamp, orderBy } from "firebase/firestore";
+import { useDoc } from "@/firebase/firestore/use-doc";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
 
 interface Appointment {
   id: string;
@@ -29,6 +29,10 @@ interface Appointment {
   specificService: string;
 }
 
+interface UserData {
+  appointmentIds?: string[];
+}
+
 export default function UpcomingAppointments() {
   const { user } = useUser();
   const firestore = useFirestore();
@@ -36,22 +40,56 @@ export default function UpcomingAppointments() {
   const [days, setDays] = useState<Date[]>([]);
   const [month, setMonth] = useState(new Date());
 
-  const appointmentsQuery = useMemoFirebase(() => {
-    if (!user) return null;
-    return query(
-      collection(firestore, `users/${user.uid}/appointments`),
-      where('date', '>=', startOfDay(new Date())),
-      orderBy('date'),
-      orderBy('time')
-    );
-  }, [user, firestore]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const { data: upcomingAppointments, isLoading, error } = useCollection<Appointment>(appointmentsQuery);
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, `users/${user.uid}`) : null),
+    [user, firestore]
+  );
   
-  const filteredAppointments = useMemoFirebase(() => {
-    if (!upcomingAppointments) return [];
-    return upcomingAppointments.filter(apt => isSameDay(apt.date.toDate(), selectedDate));
-  }, [upcomingAppointments, selectedDate]);
+  const { data: userData } = useDoc<UserData>(userDocRef);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      if (!userData || !userData.appointmentIds || userData.appointmentIds.length === 0) {
+        setAppointments([]);
+        setIsLoading(false);
+        return;
+      }
+      
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const appointmentPromises = userData.appointmentIds.map(id => 
+          getDoc(doc(firestore, "appointments", id))
+        );
+        const appointmentSnapshots = await Promise.all(appointmentPromises);
+        
+        const fetchedAppointments = appointmentSnapshots
+          .filter(snap => snap.exists())
+          .map(snap => ({ id: snap.id, ...snap.data() } as Appointment))
+          .filter(apt => apt.date.toDate() >= startOfDay(new Date())) // Filter for upcoming
+          .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time)); // Sort by date then time
+
+        setAppointments(fetchedAppointments);
+      } catch (e: any) {
+        setError(e);
+        console.error("Error fetching appointments:", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [userData, firestore]);
+  
+  const filteredAppointments = useMemo(() => {
+    if (!appointments) return [];
+    return appointments.filter(apt => isSameDay(apt.date.toDate(), selectedDate));
+  }, [appointments, selectedDate]);
 
 
   useEffect(() => {
@@ -76,7 +114,7 @@ export default function UpcomingAppointments() {
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
-                const hasAppointment = upcomingAppointments?.some(apt => isSameDay(apt.date.toDate(), day));
+                const hasAppointment = appointments?.some(apt => isSameDay(apt.date.toDate(), day));
 
                 return (
                   <Button
@@ -176,3 +214,5 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
+
+    
