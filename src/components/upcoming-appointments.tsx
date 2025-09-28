@@ -9,16 +9,48 @@ import {
   startOfDay,
   startOfWeek,
   isToday,
-  parseISO,
+  parse,
+  isAfter,
+  addHours,
 } from "date-fns";
 import { Button } from "./ui/button";
-import { Calendar as CalendarIcon, Bell, Loader2 } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Bell,
+  Loader2,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
-import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import { doc, getDoc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { useUser, useFirestore } from "@/firebase/provider";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  Timestamp,
+  writeBatch,
+  arrayRemove,
+} from "firebase/firestore";
 import type { DocumentData } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
+
 
 interface AppointmentData {
   id: string;
@@ -39,15 +71,13 @@ export default function UpcomingAppointments() {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
+  const router = useRouter();
 
-  const userDocRef = useMemoFirebase(
-    () => (user ? doc(firestore, "users", user.uid) : null),
-    [user, firestore]
-  );
-  
   useEffect(() => {
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
     setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
@@ -57,16 +87,16 @@ export default function UpcomingAppointments() {
     if (isUserLoading) {
       return;
     }
-    if (!userDocRef) {
+    if (!user) {
       setIsLoading(false);
       return;
     }
 
-    const fetchAppointments = async () => {
+    const fetchUserAppointments = async () => {
       setIsLoading(true);
       setError(null);
-      
       try {
+        const userDocRef = doc(firestore, "users", user.uid);
         const userSnap = await getDoc(userDocRef);
 
         if (userSnap.exists()) {
@@ -81,15 +111,12 @@ export default function UpcomingAppointments() {
             const fetchedAppointments: AppointmentData[] = [];
             appointmentSnapshots.forEach((doc) => {
               const data = doc.data();
-              // Ensure we only process appointments with a valid date
               if(data.date && data.date.toDate) {
                 fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
               }
             });
             
-            // Sort all fetched appointments by date initially
             fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
-             
             setAppointments(fetchedAppointments);
           } else {
             setAppointments([]);
@@ -105,19 +132,125 @@ export default function UpcomingAppointments() {
       }
     };
 
-    fetchAppointments();
-  }, [userDocRef, firestore, isUserLoading]);
+    fetchUserAppointments();
+  }, [user, firestore, isUserLoading]);
 
+  const handleDelete = async (appointmentId: string) => {
+    if (!user) return;
+    setIsDeleting(appointmentId);
+    try {
+      const batch = writeBatch(firestore);
+
+      // Ref for the appointment to be deleted
+      const appointmentDocRef = doc(firestore, "appointments", appointmentId);
+      batch.delete(appointmentDocRef);
+
+      // Ref for the user to update their appointmentIds array
+      const userDocRef = doc(firestore, "users", user.uid);
+      batch.update(userDocRef, {
+        appointmentIds: arrayRemove(appointmentId)
+      });
+      
+      await batch.commit();
+      
+      setAppointments(prev => prev.filter(apt => apt.id !== appointmentId));
+      toast({
+        title: "Appointment Cancelled",
+        description: "Your appointment has been successfully cancelled.",
+      });
+
+    } catch (error: any) {
+      console.error("Error deleting appointment:", error);
+      toast({
+        variant: "destructive",
+        title: "Cancellation Failed",
+        description: error.message || "Could not cancel the appointment.",
+      });
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
+
+  const AppointmentCard = ({ appointment }: { appointment: AppointmentData }) => {
+    const appointmentDate = appointment.date.toDate();
+    const timeSlotStartStr = appointment.time.split(' - ')[0];
+    const appointmentDateTime = parse(
+      `${format(appointmentDate, 'yyyy-MM-dd')} ${timeSlotStartStr}`,
+      'yyyy-MM-dd h:mm a',
+      new Date()
+    );
+
+    const now = new Date();
+    const twelveHoursFromNow = addHours(now, 12);
+    const isEditable = isAfter(appointmentDateTime, twelveHoursFromNow);
+
+    return (
+      <Card className="bg-card/75 transition-shadow hover:shadow-md">
+        <CardContent className="p-4 flex justify-between items-center gap-4">
+          <div className="flex-1">
+            <CardTitle className="text-lg">{appointment.specificService}</CardTitle>
+            <CardDescription className="text-foreground/80">
+              {appointment.bankName} - {appointment.branch}
+            </CardDescription>
+          </div>
+          <div className="text-right">
+            <p className="font-semibold">{appointment.time}</p>
+            <p className="text-sm text-foreground/80">ID: {appointment.customAppointmentId}</p>
+          </div>
+          {isEditable && (
+            <div className="flex flex-col sm:flex-row gap-2 border-l border-foreground/20 pl-4">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-9 w-9" 
+                onClick={() => router.push(`/dashboard/customer/appointment-scheduling?edit=true&appointmentId=${appointment.id}`)}
+              >
+                <Pencil className="h-4 w-4" />
+                <span className="sr-only">Edit Appointment</span>
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="icon" className="h-9 w-9" disabled={isDeleting === appointment.id}>
+                    {isDeleting === appointment.id ? <Loader2 className="h-4 w-4 animate-spin"/> : <Trash2 className="h-4 w-4" />}
+                    <span className="sr-only">Delete Appointment</span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently cancel your appointment.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Back</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleDelete(appointment.id)} className="bg-destructive hover:bg-destructive/90">
+                      Yes, Cancel
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+  
   const renderGroupedAppointments = (appointmentsToGroup: AppointmentData[]) => {
-    if (appointmentsToGroup.length === 0) {
+    const today = startOfDay(new Date());
+    const upcomingAppointments = appointmentsToGroup.filter(apt => !isAfter(today, startOfDay(apt.date.toDate())));
+  
+    if (upcomingAppointments.length === 0) {
       return (
         <p className="text-center text-foreground mt-8">
           No upcoming appointments scheduled.
         </p>
       );
     }
-
-    const grouped = appointmentsToGroup.reduce((acc, apt) => {
+  
+    const grouped = upcomingAppointments.reduce((acc, apt) => {
       const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
       if (!acc[dateKey]) {
         acc[dateKey] = [];
@@ -125,12 +258,12 @@ export default function UpcomingAppointments() {
       acc[dateKey].push(apt);
       return acc;
     }, {} as Record<string, AppointmentData[]>);
-
-    return Object.entries(grouped).map(([dateKey, dateAppointments]) => (
+  
+    return Object.keys(grouped).sort().map(dateKey => (
       <div key={dateKey} className="mb-6">
-        <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parseISO(dateKey), 'EEEE, MMMM do')}</h3>
+        <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do')}</h3>
         <div className="space-y-4">
-          {dateAppointments.map((apt) => (
+          {grouped[dateKey].map((apt) => (
             <AppointmentCard key={apt.id} appointment={apt} />
           ))}
         </div>
@@ -138,23 +271,6 @@ export default function UpcomingAppointments() {
     ));
   };
   
-  const AppointmentCard = ({ appointment }: { appointment: AppointmentData }) => (
-    <Card className="bg-card/75 transition-shadow hover:shadow-md">
-      <CardContent className="p-4 flex justify-between items-center">
-        <div>
-          <CardTitle className="text-lg">{appointment.specificService}</CardTitle>
-          <CardDescription className="text-foreground/80">
-            {appointment.bankName} - {appointment.branch}
-          </CardDescription>
-        </div>
-        <div className="text-right">
-          <p className="font-semibold">{appointment.time}</p>
-          <p className="text-sm text-foreground/80">ID: {appointment.customAppointmentId}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   const renderAppointmentContent = () => {
     if (isLoading) {
       return (
@@ -171,15 +287,8 @@ export default function UpcomingAppointments() {
        );
     }
     
-    const isTodaySelected = isToday(selectedDate);
-    const today = startOfDay(new Date());
-
-    if (isTodaySelected) {
-      const upcomingAppointments = appointments.filter(apt => {
-        const aptDate = startOfDay(apt.date.toDate());
-        return aptDate >= today;
-      });
-      return renderGroupedAppointments(upcomingAppointments);
+    if (isToday(selectedDate)) {
+      return renderGroupedAppointments(appointments);
     } else {
       const filteredAppointments = appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate));
       if (filteredAppointments.length === 0) {
@@ -203,8 +312,14 @@ export default function UpcomingAppointments() {
     ? "Upcoming Appointments"
     : `Appointments for ${format(selectedDate, "PPP")}`;
   
-  if (days.length === 0) {
-    return null; 
+  if (days.length === 0 && isLoading) {
+    return (
+        <div className="w-full max-w-4xl mx-auto">
+             <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+             </div>
+        </div>
+    ); 
   }
 
   return (
@@ -284,3 +399,4 @@ export default function UpcomingAppointments() {
     </div>
   );
 }
+
