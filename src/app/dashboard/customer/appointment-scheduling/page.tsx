@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/popover';
 import { CalendarIcon, Clock } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { format, isSaturday, isSunday, startOfDay, isBefore } from 'date-fns';
+import { format, isSaturday, isSunday, startOfDay, isBefore, addDays } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -419,4 +419,3 @@ export default function AppointmentSchedulingPage() {
     </div>
   );
 }
-
