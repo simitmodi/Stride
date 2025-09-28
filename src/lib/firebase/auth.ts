@@ -25,7 +25,7 @@ export async function signUpWithEmail(
   lastName: string,
   username: string,
   dateOfBirth: Date,
-  role: 'customer' | 'bank' = 'customer'
+  role: 'customer' | 'bank' | 'developer' = 'customer'
 ): Promise<User | null> {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
