@@ -1,11 +1,11 @@
 
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useFirestore, useUser, useMemoFirebase } from '@/firebase/provider';
 import { useDoc } from '@/firebase/firestore/use-doc';
-import { doc, Timestamp } from 'firebase/firestore';
+import { doc, Timestamp, collection, getDocs, where, query } from 'firebase/firestore';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,8 +17,10 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
+import { db } from '@/lib/firebase/config';
 
 interface AppointmentData {
+  id: string;
   customAppointmentId: string;
   bankName: string;
   branch: string;
@@ -30,23 +32,52 @@ interface AppointmentData {
 }
 
 function AppointmentConfirmation() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const appointmentId = searchParams.get('appointmentId');
-  const firestore = useFirestore();
+  const appointmentIdsParam = searchParams.get('appointmentId');
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const appointmentDocRef = useMemoFirebase(
-    () => (appointmentId ? doc(firestore, `appointments`, appointmentId) : null),
-    [appointmentId, firestore]
-  );
+  useEffect(() => {
+    if (!appointmentIdsParam) {
+      setError("No appointment ID provided.");
+      setIsLoading(false);
+      return;
+    }
 
-  const { data: appointment, isLoading, error } = useDoc<AppointmentData>(appointmentDocRef);
+    const fetchAppointments = async () => {
+      setIsLoading(true);
+      const ids = appointmentIdsParam.split(',');
+      try {
+        const appointmentsRef = collection(db, 'appointments');
+        const q = query(appointmentsRef, where('__name__', 'in', ids));
+        const querySnapshot = await getDocs(q);
+        
+        const fetchedAppointments: AppointmentData[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentData);
+        });
+        
+        if (fetchedAppointments.length === 0) {
+          setError("Appointment(s) not found.");
+        }
+        setAppointments(fetchedAppointments);
+      } catch (e: any) {
+        console.error("Error fetching appointments:", e);
+        setError("Could not load appointment details.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [appointmentIdsParam]);
 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center p-8">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="mt-4">Loading your confirmation...</p>
+        <p className="mt-4">Loading your confirmation(s)...</p>
       </div>
     );
   }
@@ -55,17 +86,19 @@ function AppointmentConfirmation() {
     return (
       <div className="text-center p-8">
         <h2 className="text-2xl font-bold text-destructive">Error</h2>
-        <p>Could not load appointment details. Please try again later.</p>
-        <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
+        <p>{error}</p>
+        <Button asChild className="mt-4">
+          <Link href="/dashboard/customer">Go to Dashboard</Link>
+        </Button>
       </div>
     );
   }
 
-  if (!appointment) {
+  if (appointments.length === 0) {
     return (
       <div className="text-center p-8">
         <h2 className="text-2xl font-bold">Appointment Not Found</h2>
-        <p>The requested appointment could not be found.</p>
+        <p>The requested appointment(s) could not be found.</p>
         <Button asChild className="mt-4">
           <Link href="/dashboard/customer">Go to Dashboard</Link>
         </Button>
@@ -81,46 +114,47 @@ function AppointmentConfirmation() {
   );
 
   return (
-    <div className="flex w-full flex-col items-center p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
-      <Card className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-green-700">
-            &#9989; Appointment Confirmed!
-          </CardTitle>
-          <CardDescription style={{ color: '#000F00' }}>
-            Your appointment has been successfully booked. Please find the details below.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4 rounded-lg border border-foreground/20 bg-background/5 p-4">
-            <dl className="space-y-3">
-              <DetailItem label="Appointment ID" value={appointment.customAppointmentId} />
-              <DetailItem label="Bank Name & Branch" value={`${appointment.bankName} - ${appointment.branch}`} />
-              <DetailItem label="Date & Time" value={`${format(appointment.date.toDate(), 'PPP')} at ${appointment.time}`} />
-              <DetailItem label="Service Requested" value={`${appointment.serviceCategory} - ${appointment.specificService}`} />
-            </dl>
-          </div>
+    <div className="flex w-full flex-col items-center gap-8 p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
+      {appointments.map((appointment, index) => (
+        <Card key={appointment.id} className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold text-green-700">
+              &#9989; Appointment {appointments.length > 1 ? `#${index + 1}`:''} Confirmed!
+            </CardTitle>
+            <CardDescription style={{ color: '#000F00' }}>
+              Your appointment has been successfully booked. Please find the details below.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4 rounded-lg border border-foreground/20 bg-background/5 p-4">
+              <dl className="space-y-3">
+                <DetailItem label="Appointment ID" value={appointment.customAppointmentId} />
+                <DetailItem label="Bank Name & Branch" value={`${appointment.bankName} - ${appointment.branch}`} />
+                <DetailItem label="Date & Time" value={`${format(appointment.date.toDate(), 'PPP')} at ${appointment.time}`} />
+                <DetailItem label="Service Requested" value={`${appointment.serviceCategory} - ${appointment.specificService}`} />
+              </dl>
+            </div>
 
-          <div className="space-y-2 rounded-lg border border-foreground/20 bg-background/5 p-4">
-            <h4 className="font-semibold text-foreground/80">Documents to Bring:</h4>
-            <ul className="list-disc list-inside space-y-1 text-foreground">
-              {appointment.confirmedDocuments.length > 0 ? (
-                appointment.confirmedDocuments.map((doc, index) => (
-                  <li key={index}>{doc.startsWith('documents.') ? doc.split('.')[1] : doc}</li>
-                ))
-              ) : (
-                <li>No documents confirmed.</li>
-              )}
-            </ul>
-          </div>
-          
-          <div className="flex justify-center pt-6">
-            <Button asChild className="w-full max-w-xs">
-              <Link href="/dashboard/customer">Go to Dashboard</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="space-y-2 rounded-lg border border-foreground/20 bg-background/5 p-4">
+              <h4 className="font-semibold text-foreground/80">Documents to Bring:</h4>
+              <ul className="list-disc list-inside space-y-1 text-foreground">
+                {appointment.confirmedDocuments.length > 0 ? (
+                  appointment.confirmedDocuments.map((doc, index) => (
+                    <li key={index}>{doc.startsWith('documents.') ? doc.split('.')[1] : doc}</li>
+                  ))
+                ) : (
+                  <li>No documents confirmed.</li>
+                )}
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+      <div className="flex justify-center pt-2">
+        <Button asChild className="w-full max-w-xs">
+          <Link href="/dashboard/customer">Go to Dashboard</Link>
+        </Button>
+      </div>
     </div>
   );
 }
@@ -132,5 +166,3 @@ export default function AppointmentConfirmationPage() {
         </Suspense>
     )
 }
-
-    
