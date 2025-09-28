@@ -15,7 +15,6 @@ import { Loader2, X } from 'lucide-react';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Separator } from './ui/separator';
 import { format } from 'date-fns';
-import { checklistData } from '@/lib/document-checklist-data';
 
 interface AppointmentDetails {
   customerName: string;
@@ -24,7 +23,8 @@ interface AppointmentDetails {
   date: string;
   time: string;
   documents: string[];
-  description: string;
+  serviceCategory: string;
+  specificService: string;
   initials: string;
 }
 
@@ -78,11 +78,6 @@ export function AppointmentDetailsModal({
         }
 
         const userData = userDoc.data();
-        
-        const serviceCategory = checklistData.find(c => c.category === appointmentData.serviceCategory);
-        const specificService = serviceCategory?.items.find(item => item.title === appointmentData.specificService);
-        const description = specificService?.content.map(c => c.text).join(' ') || 'No description available.';
-
 
         setDetails({
           customerName: userData.displayName || 'N/A',
@@ -91,7 +86,8 @@ export function AppointmentDetailsModal({
           date: format((appointmentData.date as Timestamp).toDate(), 'dd/MM/yyyy'),
           time: appointmentData.time,
           documents: appointmentData.confirmedDocuments || [],
-          description: description,
+          serviceCategory: appointmentData.serviceCategory || 'N/A',
+          specificService: appointmentData.specificService || 'N/A',
           initials: getInitials(userData.displayName),
         });
 
@@ -143,6 +139,13 @@ export function AppointmentDetailsModal({
                 </div>
 
                 <Separator style={{backgroundColor: '#092910'}}/>
+                
+                <div>
+                    <h3 className="text-lg font-bold mb-2">Type of Service:</h3>
+                    <p className="text-sm italic">
+                        {details.serviceCategory} - {details.specificService}
+                    </p>
+                </div>
 
                 <div>
                     <h3 className="text-lg font-bold mb-2">Documents:</h3>
@@ -151,13 +154,6 @@ export function AppointmentDetailsModal({
                              <li key={index}>{doc}</li>
                         ))}
                     </ol>
-                </div>
-                
-                <div>
-                    <h3 className="text-lg font-bold mb-2">Description:</h3>
-                    <p className="text-sm italic">
-                        {details.description}
-                    </p>
                 </div>
             </div>
           ) : null}
