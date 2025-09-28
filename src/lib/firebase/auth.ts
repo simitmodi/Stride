@@ -11,7 +11,8 @@ import {
   deleteUser,
   EmailAuthProvider,
   reauthenticateWithCredential,
-  updatePassword
+  updatePassword,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { doc, setDoc, updateDoc, Timestamp, deleteDoc } from "firebase/firestore";
 import { auth, db } from "./config";
@@ -61,10 +62,11 @@ export async function signOutUser(): Promise<void> {
   return signOut(auth);
 }
 
+export async function sendPasswordReset(email: string): Promise<void> {
+  await sendPasswordResetEmail(auth, email);
+}
+
 export async function updateUserProfile(userId: string, data: { [key: string]: any }): Promise<void> {
-  if (data.initials !== undefined && data.initials.length > 2) {
-    // Potentially problematic, but let's allow for now as user might use emoji.
-  }
   const userDocRef = doc(db, "users", userId);
   await updateDoc(userDocRef, data);
 }
