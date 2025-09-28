@@ -5,24 +5,17 @@ import { useUser, useFirestore, useMemoFirebase } from '@/firebase/provider';
 import { doc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { Button } from '@/components/ui/button';
-import { Github, Linkedin, UserCircle } from 'lucide-react';
+import { Github, Linkedin, UserCircle, Home, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import developers from '@/lib/dev_data.json';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-import SimitModi from '@/lib/Simit_Modi.PNG';
-import HardiPatel from '@/lib/Hardi_patel.jpg';
-import KrishnaPatel from '@/lib/Krishna_Patel.jpg';
-import BansariPatel from '@/lib/Bansari_Patel.jpg';
-import AnkitNandoliya from '@/lib/Ankit_Nandoliya.jpg';
-import Placeholder from '@/lib/placeholder.png';
-
 type Developer = {
   name: string;
-  imageKey: string;
+  imagePath: string;
   bio: string[];
   links: {
     portfolio: string | null;
@@ -31,23 +24,39 @@ type Developer = {
   };
 };
 
-const developerImages: { [key: string]: any } = {
-  'Simit_Modi': SimitModi,
-  'Hardi_Patel': HardiPatel,
-  'Krishna_Patel': KrishnaPatel,
-  'Bansari_Patel': BansariPatel,
-  'Ankit_Nandoliya': AnkitNandoliya,
-  'Sharvi': Placeholder
-};
-
 export default function MeetTheDevelopersPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const [dashboardLink, setDashboardLink] = useState<string | null>(null);
+
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
   const { data: userData, isLoading: isDocLoading } = useDoc(userDocRef);
+
+  useEffect(() => {
+    if (!isUserLoading && !isDocLoading) {
+      if (user && userData) {
+        switch (userData.role) {
+          case 'customer':
+            setDashboardLink('/dashboard/customer');
+            break;
+          case 'bank':
+            setDashboardLink('/dashboard/bank');
+            break;
+          case 'developer':
+            setDashboardLink('/dashboard/developer');
+            break;
+          default:
+            setDashboardLink('/');
+            break;
+        }
+      } else {
+        setDashboardLink('/');
+      }
+    }
+  }, [user, userData, isUserLoading, isDocLoading]);
 
   return (
     <div className="flex w-full min-h-screen flex-col" style={{ backgroundColor: '#BFBAB0' }}>
@@ -58,11 +67,11 @@ export default function MeetTheDevelopersPage() {
         </h1>
 
         <div className="max-w-4xl mx-auto space-y-8">
-          {developers.map((dev: Developer, index: number) => (
+          {(developers as Developer[]).map((dev: Developer, index: number) => (
             <div key={index} className="bg-[#D0CBC1] rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8">
               <div className="w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
                 <Image
-                  src={developerImages[dev.imageKey]}
+                  src={dev.imagePath}
                   alt={dev.name}
                   width={224}
                   height={224}
@@ -105,6 +114,20 @@ export default function MeetTheDevelopersPage() {
             </div>
           ))}
         </div>
+         <div className="mt-12 text-center">
+            {dashboardLink ? (
+              <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5">
+                <Link href={dashboardLink}>
+                  <Home className="h-6 w-6" />
+                  <span className="sr-only">Back to Home</span>
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="outline" size="icon" className="h-12 w-12 bg-card/5" disabled>
+                <Loader2 className="h-6 w-6 animate-spin" />
+              </Button>
+            )}
+          </div>
       </main>
       {!user && <Footer />}
     </div>
