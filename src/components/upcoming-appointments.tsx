@@ -9,6 +9,7 @@ import {
   startOfDay,
   startOfWeek,
   isToday,
+  parseISO,
 } from "date-fns";
 import { Button } from "./ui/button";
 import { Calendar as CalendarIcon, Bell, Loader2 } from "lucide-react";
@@ -53,8 +54,11 @@ export default function UpcomingAppointments() {
   }, [selectedDate]);
 
   useEffect(() => {
+    if (isUserLoading) {
+      return;
+    }
     if (!userDocRef) {
-      if(!isUserLoading) setIsLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -71,23 +75,26 @@ export default function UpcomingAppointments() {
 
           if (appointmentIds && appointmentIds.length > 0) {
             const appointmentsRef = collection(firestore, "appointments");
-            // Firestore 'in' queries are limited to 30 items. 
-            // If you expect more, you'll need to batch the requests.
             const q = query(appointmentsRef, where('__name__', 'in', appointmentIds));
             const appointmentSnapshots = await getDocs(q);
             
             const fetchedAppointments: AppointmentData[] = [];
             appointmentSnapshots.forEach((doc) => {
-              fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentData);
+              const data = doc.data();
+              // Ensure we only process appointments with a valid date
+              if(data.date && data.date.toDate) {
+                fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
+              }
             });
+            
+            // Sort all fetched appointments by date initially
+            fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
              
             setAppointments(fetchedAppointments);
           } else {
-            // User has no appointments
             setAppointments([]);
           }
         } else {
-           // User document doesn't exist
            setAppointments([]);
         }
       } catch (e: any) {
@@ -99,19 +106,54 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userDocRef, firestore]);
+  }, [userDocRef, firestore, isUserLoading]);
 
-  const filteredAppointments = appointments
-    .filter((apt) => isSameDay(apt.date.toDate(), selectedDate))
-    .sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+  const renderGroupedAppointments = (appointmentsToGroup: AppointmentData[]) => {
+    if (appointmentsToGroup.length === 0) {
+      return (
+        <p className="text-center text-foreground mt-8">
+          No upcoming appointments scheduled.
+        </p>
+      );
+    }
+
+    const grouped = appointmentsToGroup.reduce((acc, apt) => {
+      const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(apt);
+      return acc;
+    }, {} as Record<string, AppointmentData[]>);
+
+    return Object.entries(grouped).map(([dateKey, dateAppointments]) => (
+      <div key={dateKey} className="mb-6">
+        <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parseISO(dateKey), 'EEEE, MMMM do')}</h3>
+        <div className="space-y-4">
+          {dateAppointments.map((apt) => (
+            <AppointmentCard key={apt.id} appointment={apt} />
+          ))}
+        </div>
+      </div>
+    ));
+  };
   
-  const headingText = isToday(selectedDate)
-    ? "Upcoming Appointments"
-    : `Appointments for ${format(selectedDate, "PPP")}`;
-  
-  if (days.length === 0) {
-    return null; 
-  }
+  const AppointmentCard = ({ appointment }: { appointment: AppointmentData }) => (
+    <Card className="bg-card/75 transition-shadow hover:shadow-md">
+      <CardContent className="p-4 flex justify-between items-center">
+        <div>
+          <CardTitle className="text-lg">{appointment.specificService}</CardTitle>
+          <CardDescription className="text-foreground/80">
+            {appointment.bankName} - {appointment.branch}
+          </CardDescription>
+        </div>
+        <div className="text-right">
+          <p className="font-semibold">{appointment.time}</p>
+          <p className="text-sm text-foreground/80">ID: {appointment.customAppointmentId}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   const renderAppointmentContent = () => {
     if (isLoading) {
@@ -129,36 +171,41 @@ export default function UpcomingAppointments() {
        );
     }
     
-    if (filteredAppointments.length === 0) {
+    const isTodaySelected = isToday(selectedDate);
+    const today = startOfDay(new Date());
+
+    if (isTodaySelected) {
+      const upcomingAppointments = appointments.filter(apt => {
+        const aptDate = startOfDay(apt.date.toDate());
+        return aptDate >= today;
+      });
+      return renderGroupedAppointments(upcomingAppointments);
+    } else {
+      const filteredAppointments = appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate));
+      if (filteredAppointments.length === 0) {
+        return (
+          <p className="text-center text-foreground mt-8">
+            No appointments scheduled for this day.
+          </p>
+        );
+      }
       return (
-        <p className="text-center text-foreground mt-8">
-          No appointments scheduled for this day.
-        </p>
+        <div className="space-y-4">
+          {filteredAppointments.map((apt) => (
+            <AppointmentCard key={apt.id} appointment={apt} />
+          ))}
+        </div>
       );
     }
-
-    return (
-      <div className="space-y-4">
-        {filteredAppointments.map((apt) => (
-          <Card key={apt.id} className="bg-card/75 transition-shadow hover:shadow-md">
-            <CardContent className="p-4 flex justify-between items-center">
-              <div>
-                <CardTitle className="text-lg">{apt.specificService}</CardTitle>
-                <CardDescription className="text-foreground/80">
-                  {apt.bankName} - {apt.branch}
-                </CardDescription>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold">{apt.time}</p>
-                <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
   };
 
+  const headingText = isToday(selectedDate)
+    ? "Upcoming Appointments"
+    : `Appointments for ${format(selectedDate, "PPP")}`;
+  
+  if (days.length === 0) {
+    return null; 
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
