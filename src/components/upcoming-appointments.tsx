@@ -506,7 +506,7 @@ export default function UpcomingAppointments() {
         <DialogContent className="sm:max-w-[425px] bg-card/95" style={{ backdropFilter: 'blur(12px)' }}>
             <DialogHeader>
             <DialogTitle className="text-primary">Edit Appointment</DialogTitle>
-            <DialogDescription>
+            <DialogDescription style={{ color: '#000F00' }}>
                 Select a new date and time for your appointment.
             </DialogDescription>
             </DialogHeader>
