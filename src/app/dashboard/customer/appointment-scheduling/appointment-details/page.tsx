@@ -97,7 +97,8 @@ function AppointmentDetailsForm() {
         .filter(([, value]) => value !== false) // Keep strings from radio and true from checkboxes
         .map(([key, value]) => (typeof value === 'string' ? `${key}: ${value}` : key));
 
-      const newAppointmentRef = doc(collection(db, `appointments`));
+      // Corrected: Create a reference in the top-level 'appointments' collection
+      const newAppointmentRef = doc(collection(db, 'appointments'));
 
       const bankNameFormatted = bankName?.replace(/\s+/g, '') || 'NoBank';
       const timeSlotFormatted = time?.replace(/[\s:-]+/g, '') || 'NoTime';
@@ -117,8 +118,10 @@ function AppointmentDetailsForm() {
         createdAt: Timestamp.now(),
       };
 
+      // 1. Create the appointment document in the top-level collection
       await setDoc(newAppointmentRef, appointmentData);
 
+      // 2. Update the user's document with the ID of the new appointment
       const userDocRef = doc(db, 'users', user.uid);
       await updateDoc(userDocRef, {
         appointmentIds: arrayUnion(newAppointmentRef.id)
