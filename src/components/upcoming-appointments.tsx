@@ -17,7 +17,7 @@ import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
-import { doc, getDoc, Timestamp, collection } from "firebase/firestore";
+import { doc, getDoc, Timestamp, collection, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 interface Appointment {
@@ -54,22 +54,22 @@ export default function UpcomingAppointments() {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      if (!userData) {
-        // If userData is null (which it is initially), we might be loading or the user has no doc.
-        // We set loading to false only if we are also not in the initial user loading phase.
+      // Don't do anything until we have the user's data and it's not loading.
+      if (isUserLoading || !userData) {
+        // If the user doc is still loading or not present, we can't fetch appointments yet.
+        // We set isLoading to false only when we are sure there is nothing to fetch.
         if (!isUserLoading) {
             setIsLoading(false);
             setAppointments([]);
         }
         return;
       }
-
+      
       const appointmentIds = userData.appointmentIds || [];
 
       if (appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
-        setError(null);
         return;
       }
 
@@ -83,7 +83,7 @@ export default function UpcomingAppointments() {
         const fetchedAppointments = appointmentSnapshots
           .filter(snap => snap.exists())
           .map(snap => ({ id: snap.id, ...snap.data() } as Appointment))
-          .filter(apt => apt.date.toDate() >= startOfDay(new Date()))
+          .filter(apt => apt.date && apt.date.toDate() >= startOfDay(new Date())) // Ensure date exists before processing
           .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time));
 
         setAppointments(fetchedAppointments);
@@ -96,11 +96,11 @@ export default function UpcomingAppointments() {
     };
 
     fetchAppointments();
-  }, [userData, isUserLoading]);
+  }, [userData, isUserLoading]); // This effect re-runs only when the user data changes.
   
   const filteredAppointments = useMemo(() => {
     if (!appointments) return [];
-    return appointments.filter(apt => isSameDay(apt.date.toDate(), selectedDate));
+    return appointments.filter(apt => apt.date && isSameDay(apt.date.toDate(), selectedDate));
   }, [appointments, selectedDate]);
 
 
@@ -126,7 +126,7 @@ export default function UpcomingAppointments() {
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
-                const hasAppointment = appointments?.some(apt => isSameDay(apt.date.toDate(), day));
+                const hasAppointment = appointments?.some(apt => apt.date && isSameDay(apt.date.toDate(), day));
 
                 return (
                   <Button
