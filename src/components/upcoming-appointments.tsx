@@ -16,86 +16,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { Calendar } from "./ui/calendar";
 import { useUser } from "@/firebase/provider";
-import { doc, getDoc, Timestamp, DocumentData } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
-
-interface Appointment {
-  id: string;
-  bankName: string;
-  branch: string;
-  date: Timestamp;
-  time: string;
-  serviceCategory: string;
-  specificService: string;
-}
-
-interface UserData {
-  appointmentIds?: string[];
-}
 
 export default function UpcomingAppointments() {
-  const { user, isUserLoading } = useUser();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [days, setDays] = useState<Date[]>([]);
   const [month, setMonth] = useState(new Date());
-
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserDataAndAppointments = async () => {
-      if (isUserLoading || !user) {
-        setIsLoading(true);
-        return;
-      }
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const userDocRef = doc(db, `users/${user.uid}`);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (!userDocSnap.exists()) {
-          setAppointments([]);
-          setIsLoading(false);
-          return;
-        }
-
-        const userData = userDocSnap.data() as UserData;
-        const appointmentIds = userData.appointmentIds;
-
-        if (!appointmentIds || appointmentIds.length === 0) {
-          setAppointments([]);
-          setIsLoading(false);
-          return;
-        }
-        
-        const appointmentPromises = appointmentIds.map(id => getDoc(doc(db, "appointments", id)));
-        const appointmentSnapshots = await Promise.all(appointmentPromises);
-        
-        const fetchedAppointments = appointmentSnapshots
-          .filter(snap => snap.exists())
-          .map(snap => ({ id: snap.id, ...snap.data() } as Appointment))
-          .filter(apt => apt.date && apt.date.toDate() >= startOfDay(new Date())) 
-          .sort((a,b) => a.date.toMillis() - b.date.toMillis() || a.time.localeCompare(b.time));
-
-        setAppointments(fetchedAppointments);
-      } catch (e: any) {
-        console.error("Error fetching appointments:", e);
-        setError("Could not load appointments. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserDataAndAppointments();
-  }, [user, isUserLoading]);
-  
-  const filteredAppointments = useMemo(() => {
-    return appointments.filter(apt => apt.date && isSameDay(apt.date.toDate(), selectedDate));
-  }, [appointments, selectedDate]);
-
 
   useEffect(() => {
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
@@ -119,7 +44,6 @@ export default function UpcomingAppointments() {
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
-                const hasAppointment = appointments?.some(apt => apt.date && isSameDay(apt.date.toDate(), day));
 
                 return (
                   <Button
@@ -137,7 +61,6 @@ export default function UpcomingAppointments() {
                     <span className="text-2xl font-bold">
                       {format(day, "d")}
                     </span>
-                    {hasAppointment && <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-destructive" />}
                   </Button>
                 );
               })}
@@ -185,35 +108,9 @@ export default function UpcomingAppointments() {
           {headingText}
         </h2>
         <div className="space-y-4">
-            {isLoading && (
-              <div className="flex items-center justify-center p-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            )}
-            {!isLoading && error && (
-                <p className="text-center text-destructive mt-8">
-                    {error}
-                </p>
-            )}
-            {!isLoading && !error && filteredAppointments.length === 0 && (
-                <p className="text-center text-foreground mt-8">
-                    Your schedule is clear.
-                </p>
-            )}
-            {!isLoading && !error && filteredAppointments.length > 0 && filteredAppointments.map((apt) => (
-              <Card key={apt.id} className="bg-card/75 border border-primary/20 shadow-md">
-                <CardContent className="p-4 flex items-center justify-between">
-                    <div>
-                        <CardTitle className="text-lg">{apt.time}</CardTitle>
-                        <CardDescription className="text-foreground/80">{apt.specificService}</CardDescription>
-                    </div>
-                    <div className="text-right">
-                        <p className="font-semibold">{apt.bankName}</p>
-                        <p className="text-sm text-foreground/70">{apt.branch}</p>
-                    </div>
-                </CardContent>
-              </Card>
-            ))}
+            <p className="text-center text-foreground mt-8">
+                Could not load appointments. Please try again later.
+            </p>
         </div>
       </div>
     </div>
