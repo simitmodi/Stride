@@ -7,7 +7,9 @@ import Script from 'next/script';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import FirebaseErrorListener from '@/components/FirebaseErrorListener';
 import RootHeader from '@/components/root-header';
+import SessionTimeoutHandler from '@/components/SessionTimeoutHandler';
 
+// Metadata is defined as a static object, not a function returning one.
 export const metadata: Metadata = {
   title: 'Stride',
   description: 'Stride: Connecting customers and banks seamlessly.',
@@ -31,13 +33,15 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased h-full flex flex-col">
         <FirebaseClientProvider>
-          <FirebaseErrorListener />
-          <RootHeader />
-          <div className="flex-grow">
-            {children}
-          </div>
-          <ScrollAwareFooter />
-          <Toaster />
+          <SessionTimeoutHandler>
+            <FirebaseErrorListener />
+            <RootHeader />
+            <div className="flex-grow">
+              {children}
+            </div>
+            <ScrollAwareFooter />
+            <Toaster />
+          </SessionTimeoutHandler>
         </FirebaseClientProvider>
       </body>
     </html>
