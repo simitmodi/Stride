@@ -29,7 +29,7 @@ export function BackgroundSlideshow({ images, className }: BackgroundSlideshowPr
         return (
           <div
             key={image.id}
-            className="absolute inset-0 h-full w-full animate-fade-in-out"
+            className="absolute inset-0 h-full w-full md:animate-fade-in-out"
             style={{
               animationDuration: `${animationDuration}s`,
               animationDelay: `${animationDelay}s`,

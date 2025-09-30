@@ -81,6 +81,9 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      screens: {
+        'md': '768px',
+      },
       keyframes: {
         'accordion-down': {
           from: {
@@ -119,5 +122,10 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addVariant }: { addVariant: (name: string, definition: string) => void }) {
+      addVariant('not-sm', '@media (min-width: 640px)');
+    }
+  ],
 } satisfies Config;
