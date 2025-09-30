@@ -40,6 +40,28 @@ const formSchema = z.object({
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
+}).refine(data => {
+    const password = data.password.toLowerCase();
+    if (data.firstName && password.includes(data.firstName.toLowerCase())) return false;
+    if (data.lastName && password.includes(data.lastName.toLowerCase())) return false;
+    if (data.username && password.includes(data.username.toLowerCase())) return false;
+    if (data.email && password.includes(data.email.split('@')[0].toLowerCase())) return false;
+    if (data.dateOfBirth) {
+        const dob = data.dateOfBirth;
+        const day = dob.getDate().toString();
+        const month = (dob.getMonth() + 1).toString();
+        const year = dob.getFullYear().toString();
+        if (password.includes(day) || password.includes(month) || password.includes(year)) return false;
+    }
+    // Check for consecutive numbers
+    for (let i = 0; i <= 9; i++) {
+        const seq = `${i}${i+1}${i+2}`;
+        if (password.includes(seq)) return false;
+    }
+    return true;
+}, {
+    message: "Password cannot contain personal info or consecutive numbers.",
+    path: ["password"],
 });
 
 export function CustomerSignUpForm() {
