@@ -103,8 +103,7 @@ export default function DocumentChecklistPage() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <ChecklistItem item={item} />
-                        <Separator className="my-4 bg-primary/20" />
-                        <div className="flex justify-center">
+                        <div className="flex justify-center pt-4">
                             <Button asChild variant="link" className="text-primary hover:text-accent">
                                 <Link href="/dashboard/customer/appointment-scheduling">
                                     Book an Appointment
