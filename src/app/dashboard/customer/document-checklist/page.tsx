@@ -10,6 +10,10 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { checklistData } from '@/lib/document-checklist-data';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklist-data';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 const ChecklistItem = ({ item }: { item: ChecklistItemType }) => {
   const renderContent = (contentItem: ChecklistItemType['content'][0]) => {
@@ -99,6 +103,15 @@ export default function DocumentChecklistPage() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <ChecklistItem item={item} />
+                        <Separator className="my-4 bg-primary/20" />
+                        <div className="flex justify-end">
+                            <Button asChild variant="link" className="text-primary hover:text-accent">
+                                <Link href="/dashboard/customer/appointment-scheduling">
+                                    Book an Appointment
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
