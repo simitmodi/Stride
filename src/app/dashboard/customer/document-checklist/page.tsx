@@ -103,7 +103,7 @@ export default function DocumentChecklistPage() {
                       <AccordionContent>
                         <ChecklistItem item={item} />
                         <div className="flex justify-center pt-4">
-                            <Button asChild variant="outline" className="animate-blink">
+                            <Button asChild variant="outline" className="animate-blink border-2">
                                 <Link href="/dashboard/customer/appointment-scheduling">
                                     Book an Appointment
                                     <ArrowRight className="ml-2 h-4 w-4" />
