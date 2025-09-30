@@ -38,7 +38,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useFirestore } from '@/firebase/provider';
 import { doc, updateDoc, Timestamp, getDoc } from 'firebase/firestore';
 import { Loader2, Calendar as CalendarIcon, Clock, Pencil, Trash2 } from 'lucide-react';
-import { format, addHours, isAfter, isSaturday, isSunday, startOfDay } from 'date-fns';
+import { format, addHours, isAfter, isSaturday, isSunday, startOfDay, parse } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 
