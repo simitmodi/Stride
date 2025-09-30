@@ -43,7 +43,7 @@ export default function LoginOptionsPage() {
 
             <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
               <Link href="/login/customer" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground hover:shadow-md active:scale-100">
+                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <User className="h-12 w-12 text-primary" />
                     <div className="flex-1">
@@ -57,7 +57,7 @@ export default function LoginOptionsPage() {
                 </Card>
               </Link>
               <Link href="/login/bank" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground hover:shadow-md active:scale-100">
+                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <Banknote className="h-4 w-4 text-primary" />
                     <div className="flex-1">

@@ -29,7 +29,7 @@ export default function Home() {
               <p className="max-w-[600px] text-balance text-foreground md:text-xl">
                 Manage your appointments quickly and efficiently.
               </p>
-              <Button asChild size="lg" className="mt-4 h-12 px-8 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground">
+              <Button asChild size="lg" className="mt-4 h-12 px-8 text-base transform transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground">
                 <Link href="/login">Login / Get Started</Link>
               </Button>
             </div>

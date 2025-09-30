@@ -84,7 +84,7 @@ export default function ContactPage() {
           {contactOptions.map((option) => (
             <div key={option.title} className="group relative">
               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-              <Card className="relative flex h-full w-full transform-gpu flex-col justify-between bg-card p-6 shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.02] active:scale-100"
+              <Card className="relative flex h-full w-full transform-gpu flex-col justify-between bg-card p-6 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 active:scale-100"
                 style={{ backdropFilter: 'blur(12px)' }}
               >
                 <div>

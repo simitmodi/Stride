@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -24,7 +25,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/about"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 About
               </Link>
@@ -32,7 +33,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/privacy"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 Privacy Policy
               </Link>
@@ -40,7 +41,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/terms"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 T&amp;C
               </Link>
@@ -48,7 +49,7 @@ export default function Footer({ className }: { className?: string }) {
              <li>
               <Link
                 href="/faq"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 FAQs
               </Link>
@@ -56,7 +57,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/contact"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 Contact
               </Link>
@@ -64,7 +65,7 @@ export default function Footer({ className }: { className?: string }) {
             <li>
               <Link
                 href="/meet-the-developers"
-                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+                className="inline-block transform rounded-md px-3 py-2 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground"
               >
                 Meet Our Developers
               </Link>

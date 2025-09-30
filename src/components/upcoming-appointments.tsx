@@ -291,7 +291,7 @@ export default function UpcomingAppointments() {
     const isActionable = isAfter(appointmentDateTime, twelveHoursFromNow);
 
     return (
-      <Card className="bg-card/75 transition-shadow hover:shadow-md">
+      <Card className="bg-card/75 transition-shadow hover:shadow-xl hover:scale-105">
         <CardContent className="p-4 flex justify-between items-center gap-4">
           <div className="flex-1">
             <CardTitle className="text-lg">{appointment.specificService}</CardTitle>
@@ -429,7 +429,7 @@ export default function UpcomingAppointments() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-100">
+      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-100">
         <CardContent className="p-4">
           <div className="flex justify-between items-center gap-4">
             <div className="flex justify-between flex-grow">
