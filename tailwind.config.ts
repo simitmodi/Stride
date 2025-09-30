@@ -105,7 +105,10 @@ export default {
           '100%': { opacity: '0' }, // 1s fade out
         },
         'blink': {
-            '50%': { opacity: '0.5' },
+          '50%': { 
+            borderColor: 'hsl(var(--primary))',
+            opacity: '0.7',
+          },
         },
       },
       animation: {
