@@ -36,7 +36,6 @@ const termsContent = [
       '  - Receive reminders and notifications.',
       '  - Access a personalized dashboard for upcoming visits.',
       '  - Track activities via an integrated calendar view.',
-      'Note: Appointment confirmation is subject to the respective bank’s policies. Stride does not guarantee approval.',
     ],
   },
   {
