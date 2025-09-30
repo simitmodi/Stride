@@ -13,6 +13,7 @@ import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklis
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 const ChecklistItem = ({ item }: { item: ChecklistItemType }) => {
   const renderContent = (contentItem: ChecklistItemType['content'][0]) => {

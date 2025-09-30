@@ -25,6 +25,9 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { PasswordStrength } from "@/components/password-strength";
 import { Timestamp } from "firebase/firestore";
+import { Checkbox } from "../ui/checkbox";
+import Link from "next/link";
+import { Label } from "../ui/label";
 
 
 const formSchema = z.object({
@@ -36,6 +39,9 @@ const formSchema = z.object({
   confirmPassword: z.string(),
   dateOfBirth: z.date({
     required_error: "A date of birth is required.",
+  }),
+  terms: z.boolean().default(false).refine(val => val === true, {
+    message: "You must accept the terms and conditions."
   }),
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -82,8 +88,11 @@ export function CustomerSignUpForm() {
       email: "",
       password: "",
       confirmPassword: "",
+      terms: false,
     },
   });
+
+  const termsValue = form.watch("terms");
 
   useEffect(() => {
     // Set default DOB only on the client-side to avoid hydration mismatch
@@ -329,10 +338,33 @@ export function CustomerSignUpForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="terms"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <Label htmlFor="terms" className="font-normal">
+                  Accept{" "}
+                  <Link href="/terms" className="underline hover:text-primary">
+                    terms and conditions
+                  </Link>
+                </Label>
+                <FormMessage />
+              </div>
+            </FormItem>
+          )}
+        />
         <Button 
           type="submit" 
           className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
-          disabled={isLoading}
+          disabled={isLoading || !termsValue}
         >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Sign Up
