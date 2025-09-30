@@ -99,7 +99,7 @@ export default function PastAppointments() {
                 <p className="text-center text-destructive">{error}</p>
               ) : pastAppointments.length > 0 ? (
                 pastAppointments.map(apt => (
-                  <Card key={apt.id} className={`bg-card/75 ${apt.deleted ? 'opacity-60' : ''}`}>
+                  <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-xl hover:scale-105 ${apt.deleted ? 'opacity-60' : ''}`}>
                     <CardContent className="p-4 flex justify-between items-center gap-4">
                       <div className="flex-1">
                         <CardTitle className="text-lg">{apt.specificService}</CardTitle>
