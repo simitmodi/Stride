@@ -13,7 +13,6 @@ import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklis
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
 
 const ChecklistItem = ({ item }: { item: ChecklistItemType }) => {
   const renderContent = (contentItem: ChecklistItemType['content'][0]) => {
@@ -104,7 +103,7 @@ export default function DocumentChecklistPage() {
                       <AccordionContent>
                         <ChecklistItem item={item} />
                         <div className="flex justify-center pt-4">
-                            <Button asChild variant="link" className="text-primary hover:text-accent">
+                            <Button asChild variant="outline" className="animate-blink">
                                 <Link href="/dashboard/customer/appointment-scheduling">
                                     Book an Appointment
                                     <ArrowRight className="ml-2 h-4 w-4" />
