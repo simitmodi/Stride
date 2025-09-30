@@ -23,7 +23,6 @@ const termsContent = [
     title: '3. User Responsibilities',
     content: [
       'Provide accurate, complete, and up-to-date information during registration.',
-      'Ensure that uploaded documents are valid, authentic, and legally acceptable.',
       'Use the platform solely for lawful purposes related to banking appointments.',
     ],
   },
