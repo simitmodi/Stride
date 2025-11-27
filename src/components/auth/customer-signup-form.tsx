@@ -25,7 +25,7 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { PasswordStrength } from "@/components/password-strength";
 import { Timestamp } from "firebase/firestore";
-import { RadixCheckboxDemo } from "@/components/RadixCheckboxDemo";
+import { TermsCheckbox } from "@/components/TermsCheckbox";
 import Link from "next/link";
 
 
@@ -343,7 +343,7 @@ export function CustomerSignUpForm() {
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormControl>
-                <RadixCheckboxDemo
+                <TermsCheckbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />

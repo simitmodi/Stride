@@ -16,7 +16,7 @@ const termsContent = [
   {
     id: 'eligibility',
     title: '2. Eligibility',
-    content: 'Stride services are available only to individuals aged 18 years and above.',
+    content: 'Stride services are available only to individuals aged 18 years and above. By using our services, you represent and warrant that you meet this eligibility requirement.',
   },
   {
     id: 'responsibilities',
@@ -24,6 +24,7 @@ const termsContent = [
     content: [
       'Provide accurate, complete, and up-to-date information during registration.',
       'Use the platform solely for lawful purposes related to banking appointments.',
+      'Maintain the confidentiality of your account credentials.',
     ],
   },
   {
@@ -35,6 +36,7 @@ const termsContent = [
       '  - Receive reminders and notifications.',
       '  - Access a personalized dashboard for upcoming visits.',
       '  - Track activities via an integrated calendar view.',
+      'We strive to ensure high availability but do not guarantee uninterrupted service.',
     ],
   },
   {
@@ -45,6 +47,7 @@ const termsContent = [
       '  - Misuse, manipulate, or overload the appointment system.',
       '  - Submit fraudulent, false, or misleading documents.',
       '  - Interfere with, disrupt, or compromise the platform’s functionality.',
+      '  - Attempt to gain unauthorized access to our systems.',
     ],
   },
   {
@@ -54,24 +57,35 @@ const termsContent = [
       'All content, trademarks, logos, and technology associated with Stride are the exclusive property of the platform. Unauthorized reproduction or usage is strictly prohibited.',
   },
   {
+    id: 'privacy',
+    title: '7. Privacy and Data Security',
+    content: 'We are committed to protecting your privacy. Your personal data is processed in accordance with our Privacy Policy. We implement industry-standard security measures to safeguard your information.',
+  },
+  {
     id: 'liability',
-    title: '7. Limitation of Liability',
+    title: '8. Limitation of Liability',
     content: [
       'Stride shall not be held liable for:',
       '  - Bank policies, service delays, or cancellations.',
       '  - Losses due to unauthorized access or misuse of credentials.',
       '  - Technical issues or outages beyond its reasonable control.',
+      'Our liability is limited to the maximum extent permitted by law.',
     ],
   },
   {
     id: 'termination',
-    title: '8. Termination of Services',
-    content: 'Stride reserves the right to suspend or terminate user accounts for violations of these Terms.',
+    title: '9. Termination of Services',
+    content: 'Stride reserves the right to suspend or terminate user accounts for violations of these Terms or for any other reason at our sole discretion.',
+  },
+  {
+    id: 'governing',
+    title: '10. Governing Law',
+    content: 'These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Stride operates, without regard to its conflict of law provisions.',
   },
   {
     id: 'changes',
-    title: '9. Changes to Terms',
-    content: 'Stride may revise these Terms at any time. Significant updates will be communicated to users.',
+    title: '11. Changes to Terms',
+    content: 'Stride may revise these Terms at any time. Significant updates will be communicated to users. Continued use of the platform constitutes acceptance of the revised terms.',
   },
 ];
 
@@ -108,15 +122,15 @@ export default function TermsAndConditionsPage() {
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="flex items-center gap-3 mb-8">
-            <FileText className="h-10 w-10 text-primary" />
-            <h1 className="text-4xl font-bold text-foreground">Terms & Conditions</h1>
+          <FileText className="h-10 w-10 text-primary" />
+          <h1 className="text-4xl font-bold text-foreground">Terms & Conditions</h1>
         </div>
 
         <div className="grid w-full grid-cols-1 gap-6">
           {termsContent.map((section) => (
             <div key={section.id} className="group relative">
-               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-              <Card 
+              <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
+              <Card
                 className="relative h-full w-full transform-gpu bg-card shadow-lg"
                 style={{ backdropFilter: 'blur(12px)' }}
               >
