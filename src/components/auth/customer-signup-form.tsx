@@ -25,9 +25,8 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { PasswordStrength } from "@/components/password-strength";
 import { Timestamp } from "firebase/firestore";
-import { Checkbox } from "../ui/checkbox";
+import { RadixCheckboxDemo } from "@/components/RadixCheckboxDemo";
 import Link from "next/link";
-import { Label } from "../ui/label";
 
 
 const formSchema = z.object({
@@ -47,27 +46,27 @@ const formSchema = z.object({
   message: "Passwords do not match",
   path: ["confirmPassword"],
 }).refine(data => {
-    const password = data.password.toLowerCase();
-    if (data.firstName && password.includes(data.firstName.toLowerCase())) return false;
-    if (data.lastName && password.includes(data.lastName.toLowerCase())) return false;
-    if (data.username && password.includes(data.username.toLowerCase())) return false;
-    if (data.email && password.includes(data.email.split('@')[0].toLowerCase())) return false;
-    if (data.dateOfBirth) {
-        const dob = data.dateOfBirth;
-        const day = dob.getDate().toString();
-        const month = (dob.getMonth() + 1).toString();
-        const year = dob.getFullYear().toString();
-        if (password.includes(day) || password.includes(month) || password.includes(year)) return false;
-    }
-    // Check for consecutive numbers
-    for (let i = 0; i <= 9; i++) {
-        const seq = `${i}${i+1}${i+2}`;
-        if (password.includes(seq)) return false;
-    }
-    return true;
+  const password = data.password.toLowerCase();
+  if (data.firstName && password.includes(data.firstName.toLowerCase())) return false;
+  if (data.lastName && password.includes(data.lastName.toLowerCase())) return false;
+  if (data.username && password.includes(data.username.toLowerCase())) return false;
+  if (data.email && password.includes(data.email.split('@')[0].toLowerCase())) return false;
+  if (data.dateOfBirth) {
+    const dob = data.dateOfBirth;
+    const day = dob.getDate().toString();
+    const month = (dob.getMonth() + 1).toString();
+    const year = dob.getFullYear().toString();
+    if (password.includes(day) || password.includes(month) || password.includes(year)) return false;
+  }
+  // Check for consecutive numbers
+  for (let i = 0; i <= 9; i++) {
+    const seq = `${i}${i + 1}${i + 2}`;
+    if (password.includes(seq)) return false;
+  }
+  return true;
 }, {
-    message: "Password cannot contain personal info or consecutive numbers.",
-    path: ["password"],
+  message: "Password cannot contain personal info or consecutive numbers.",
+  path: ["password"],
 });
 
 export function CustomerSignUpForm() {
@@ -152,38 +151,38 @@ export function CustomerSignUpForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="John" 
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Doe" 
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="John"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Doe"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <FormField
           control={form.control}
@@ -192,8 +191,8 @@ export function CustomerSignUpForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="johndoe" 
+                <Input
+                  placeholder="johndoe"
                   {...field}
                 />
               </FormControl>
@@ -201,7 +200,7 @@ export function CustomerSignUpForm() {
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="dateOfBirth"
           render={({ field }) => (
@@ -252,8 +251,8 @@ export function CustomerSignUpForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="name@example.com" 
+                <Input
+                  placeholder="name@example.com"
                   {...field}
                 />
               </FormControl>
@@ -269,9 +268,9 @@ export function CustomerSignUpForm() {
               <FormLabel>Password</FormLabel>
               <div className="relative">
                 <FormControl>
-                  <Input 
-                    type={showPassword ? "text" : "password"} 
-                    placeholder="••••••••" 
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
@@ -310,9 +309,9 @@ export function CustomerSignUpForm() {
               <FormLabel>Confirm Password</FormLabel>
               <div className="relative">
                 <FormControl>
-                  <Input 
-                    type={showConfirmPassword ? "text" : "password"} 
-                    placeholder="••••••••" 
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="••••••••"
                     {...field}
                     className="pr-10"
                   />
@@ -344,25 +343,17 @@ export function CustomerSignUpForm() {
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormControl>
-                <Checkbox
+                <RadixCheckboxDemo
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <div className="space-y-1 leading-none">
-                <Label htmlFor="terms" className="font-normal">
-                  Accept{" "}
-                  <Link href="/terms" className="underline hover:text-primary">
-                    terms and conditions
-                  </Link>
-                </Label>
-                <FormMessage />
-              </div>
+              <FormMessage />
             </FormItem>
           )}
         />
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
           disabled={isLoading || !termsValue}
         >
