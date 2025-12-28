@@ -8,6 +8,8 @@ import { FirebaseClientProvider } from '@/firebase/client-provider';
 import FirebaseErrorListener from '@/components/FirebaseErrorListener';
 import RootHeader from '@/components/root-header';
 import SessionTimeoutHandler from '@/components/SessionTimeoutHandler';
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Metadata is defined as a static object, not a function returning one.
 export const metadata: Metadata = {
@@ -41,6 +43,8 @@ export default function RootLayout({
             </div>
             <ScrollAwareFooter />
             <Toaster />
+            <Analytics />
+            <SpeedInsights />
           </SessionTimeoutHandler>
         </FirebaseClientProvider>
       </body>
