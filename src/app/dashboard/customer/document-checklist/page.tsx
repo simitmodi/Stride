@@ -1,6 +1,7 @@
 
 'use client';
 
+import React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -14,35 +15,39 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import ElectricBorder from '@/components/ElectricBorder';
+import ShinyText from '@/components/ShinyText';
 
 const ChecklistItem = ({ item }: { item: ChecklistItemType }) => {
   const renderContent = (contentItem: ChecklistItemType['content'][0]) => {
     switch (contentItem.type) {
       case 'required':
         return (
-          <li className="flex items-start gap-2">
-            <span className="text-destructive font-bold">*</span>
+          <li>
             <span>{contentItem.text}</span>
+            <span className="text-destructive font-bold ml-1">*</span>
           </li>
         );
       case 'optional':
         return (
-          <li className="flex items-start gap-2 pl-4">
+          <li>
             <span>{contentItem.text}</span>
           </li>
         );
       case 'options':
         return (
-          <li className="flex flex-col gap-1 pl-4">
-            <span>{contentItem.text} &rarr;</span>
-            <span className="text-foreground/80 text-sm">
-              {contentItem.choices?.join(' / ')}
-            </span>
+          <li>
+            <div className="flex flex-col gap-1">
+              <span>{contentItem.text} &rarr;</span>
+              <span className="text-foreground/80 text-lg">
+                {contentItem.choices?.join(' / ')}
+              </span>
+            </div>
           </li>
         );
       case 'note':
         return (
-          <li className="pl-4 text-xs text-foreground/70 italic">
+          <li className="list-none text-sm text-foreground/70 italic mt-1">
             {contentItem.text}
           </li>
         );
@@ -52,9 +57,9 @@ const ChecklistItem = ({ item }: { item: ChecklistItemType }) => {
   };
 
   return (
-    <ul className="space-y-2 text-foreground font-body">
+    <ul className="space-y-2 text-foreground font-body text-lg md:text-xl list-disc pl-6">
       {item.content.map((c, index) => (
-        <div key={index}>{renderContent(c)}</div>
+        <React.Fragment key={index}>{renderContent(c)}</React.Fragment>
       ))}
     </ul>
   );
@@ -75,7 +80,7 @@ export default function DocumentChecklistPage() {
                 style={{ color: '#092910' }}
               />
               <h2
-                className="text-3xl font-bold font-headline"
+                className="text-5xl font-bold font-headline"
                 style={{ color: '#092910' }}
               >
                 {section.category}
@@ -98,18 +103,23 @@ export default function DocumentChecklistPage() {
                       value={`item-${index}`}
                       className="border-foreground/20"
                     >
-                      <AccordionTrigger className="text-left font-headline text-lg hover:no-underline text-[#000F00]">
+                      <AccordionTrigger className="text-left font-headline text-2xl hover:no-underline text-[#000F00]">
                         {item.title}
                       </AccordionTrigger>
                       <AccordionContent>
                         <ChecklistItem item={item} />
                         <div className="flex justify-center pt-4">
-                            <Button asChild variant="outline" className="animate-blink border-2">
-                                <Link href="/dashboard/customer/appointment-scheduling">
-                                    Book an Appointment
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Link>
-                            </Button>
+                            <ElectricBorder className="inline-block p-1" style={{ borderRadius: '5px' }}>
+                                <Button asChild variant="outline" className="border-none bg-transparent hover:bg-transparent">
+                                    <Link href="/dashboard/customer/appointment-scheduling" className="flex items-center gap-2">
+                                        <ShinyText text="Book an Appointment" disabled={false} speed={1} className="font-semibold" />
+                                        <ArrowRight className="h-4 w-4 text-[#082B12]" />
+                                    </Link>
+                                </Button>
+                            </ElectricBorder>
+                        </div>
+                        <div className="text-right mt-4 text-sm text-destructive font-semibold">
+                            * means compulsory
                         </div>
                       </AccordionContent>
                     </AccordionItem>
