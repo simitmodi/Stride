@@ -52,6 +52,7 @@ function AppointmentDetailsForm() {
 
   const bankName = searchParams.get('bankName');
   const branch = searchParams.get('branch');
+  const address = searchParams.get('address');
   const date = searchParams.get('date');
   const time = searchParams.get('time');
   const accountNumber = searchParams.get('accountNumber');
@@ -98,6 +99,7 @@ function AppointmentDetailsForm() {
           userId: user.uid,
           bankName,
           branch,
+          address,
           date: date ? Timestamp.fromDate(new Date(date)) : Timestamp.now(),
           time,
           accountNumber,

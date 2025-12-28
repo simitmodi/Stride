@@ -24,7 +24,7 @@ interface AppointmentCardProps {
 export function AppointmentCard({ appointment, onCardClick }: AppointmentCardProps) {
   return (
     <Card 
-      className="bg-card/75 transition-shadow hover:shadow-xl hover:scale-105 cursor-pointer"
+      className="bg-card/75 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer"
       onClick={onCardClick}
     >
       <CardContent className="p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">

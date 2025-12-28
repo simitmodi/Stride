@@ -135,8 +135,10 @@ export default function DocumentChecklistPage() {
           </SidebarFooter>
         </Sidebar>
 
-        <SidebarInset className="bg-[#BFBAB0] flex flex-col h-full overflow-hidden">
-
+        <SidebarInset className="bg-[#BFBAB0] flex flex-col h-full overflow-hidden relative">
+            <div className="absolute top-4 left-4 z-50 md:hidden">
+                <CustomTrigger />
+            </div>
 
             <ScrollStack 
                 key={activeCategory}
