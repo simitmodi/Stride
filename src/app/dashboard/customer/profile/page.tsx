@@ -607,7 +607,7 @@ export default function ProfilePage() {
               <CardDescription className="text-foreground/80 font-body">This feature will be added soon</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-center text-foreground/60 py-12">No notification settings available yet.</p>
+              <p className="text-center text-foreground/60 py-12">Notifications will be intoduced in Version 1.1</p>
             </CardContent>
           </Card>
         );
