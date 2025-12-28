@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { doc } from "firebase/firestore";
 import { useFirestore } from "@/firebase/provider";
 import { useDoc } from "@/firebase/firestore/use-doc";
+import AnimatedSplitText from "@/components/SplitText";
 
 const greetings = {
   0: "Stride never sleeps",
@@ -49,12 +50,16 @@ export default function Greeting() {
   }, []);
 
   const firstName = userData?.firstName;
+  const fullGreeting = `${greeting}, ${firstName || "Valued Customer"}.`;
 
   return (
     <div className="text-center py-8">
-      <h1 className="text-4xl font-bold text-primary">
-        {greeting}, {firstName || "Valued Customer"}.
-      </h1>
+      <AnimatedSplitText
+        key={fullGreeting}
+        text={fullGreeting}
+        className="text-4xl font-bold text-primary"
+        tag="h1"
+      />
     </div>
   );
 }
