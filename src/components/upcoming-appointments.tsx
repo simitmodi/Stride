@@ -34,6 +34,7 @@ import {
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { CustomerAppointmentDetailsModal } from "./customer-appointment-details-modal";
 import { AppointmentCard } from "./appointment-card";
+import ShinyText from "./ShinyText";
 
 interface AppointmentData {
   id: string;
@@ -214,7 +215,7 @@ export default function UpcomingAppointments() {
       <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-100">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex justify-between flex-grow overflow-x-auto w-full md:w-auto pb-2">
+            <div className="flex justify-between items-center flex-grow overflow-x-auto w-full md:w-auto py-4 px-2">
               {days.map((day) => {
                 const dayIsToday = isSameDay(day, startOfDay(new Date()));
                 const dayIsSelected = isSameDay(day, selectedDate);
@@ -279,7 +280,7 @@ export default function UpcomingAppointments() {
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-4">
           <Bell className="h-6 w-6" />
-          {headingText}
+          <ShinyText text={headingText} disabled={false} speed={3} className="custom-class" />
         </h2>
         {renderAppointmentContent()}
       </div>

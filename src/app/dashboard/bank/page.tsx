@@ -13,6 +13,7 @@ import { useUser, useFirestore, useMemoFirebase } from '@/firebase/provider';
 import { doc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { useDoc } from '@/firebase/firestore/use-doc';
 import { AppointmentDetailsModal } from '@/components/appointment-details-modal';
+import ShinyText from '@/components/ShinyText';
 
 interface Appointment {
   id: string;
@@ -68,7 +69,7 @@ export default function BankDashboardPage() {
         const querySnapshot = await getDocs(q);
         const fetchedAppointments = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
+          ...doc.data() as any,
         }));
 
         const appointmentsWithCustomerData = await Promise.all(
@@ -116,7 +117,7 @@ export default function BankDashboardPage() {
           <Card className="bg-card shadow-lg rounded-lg mb-8">
             <CardContent className="p-4">
               <div className="flex justify-between items-center gap-4">
-                <div className="flex justify-between flex-grow overflow-x-auto">
+                <div className="flex justify-between items-center flex-grow overflow-x-auto py-4 px-2">
                   {days.map((day) => {
                     const dayIsSelected = isSameDay(day, selectedDate);
                     return (
@@ -184,7 +185,7 @@ export default function BankDashboardPage() {
             <div className="flex items-center gap-2 mb-4">
               <Bell className="h-6 w-6" style={{ color: '#092910' }} />
               <h2 className="text-2xl font-bold" style={{ color: '#092910' }}>
-                Upcoming
+                <ShinyText text="Upcoming" disabled={false} speed={3} className="custom-class" />
               </h2>
             </div>
             <p className="mb-4" style={{ color: '#092910' }}>
