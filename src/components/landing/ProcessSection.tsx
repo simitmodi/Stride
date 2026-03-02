@@ -58,7 +58,7 @@ export function ProcessSection() {
             <div className="absolute inset-0 bg-primary/5 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] animate-[spin_10s_linear_infinite]" />
             <div className="absolute inset-4 bg-primary/10 rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-[spin_15s_linear_infinite_reverse]" />
             
-            <div className="relative z-10 w-3/4 h-3/4 bg-white dark:bg-black rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 flex items-center justify-center p-8 overflow-hidden">
+            <div className="relative z-10 w-3/4 h-3/4 bg-white dark:bg-black rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-slate-100 dark:border-border/50 flex items-center justify-center p-8 overflow-hidden hover:-translate-y-2 transition-transform duration-500">
                {/* inner fake UI */}
                <div className="w-full h-full flex flex-col gap-4 opacity-50">
                   <div className="w-3/4 h-8 bg-slate-100 dark:bg-slate-800 rounded-md"></div>
