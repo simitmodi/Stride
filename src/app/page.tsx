@@ -14,6 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { ProblemSection } from "@/components/landing/ProblemSection";
+import { ProcessSection } from "@/components/landing/ProcessSection";
+import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import { StatsSection } from "@/components/landing/StatsSection";
+import { TestimonialSection } from "@/components/landing/TestimonialSection";
+import { CtaSection } from "@/components/landing/SectionBlocks";
+
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
   const t = landingTranslations[lang];
@@ -28,15 +35,15 @@ export default function Home() {
         </div>
         
         <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 bg-secondary/50 rounded-full p-1 backdrop-blur-sm">
-          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-foreground">{t.home}</Link>
-          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-foreground">{t.aboutUs}</Link>
-          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-foreground">{t.faq}</Link>
+          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-[#0F1729]">{t.home}</Link>
+          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729]">{t.aboutUs}</Link>
+          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729]">{t.faq}</Link>
         </div>
 
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer text-foreground hover:text-primary transition-colors">
+              <div className="hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] hover:text-primary transition-colors">
                 <Globe className="w-4 h-4" /> {selectedLangName}
               </div>
             </DropdownMenuTrigger>
@@ -64,7 +71,7 @@ export default function Home() {
             <User className="w-4 h-4" /> {t.heroTag}
           </div>
           
-          <h1 className="text-balance text-6xl md:text-8xl font-bold tracking-tighter text-foreground leading-[1.1] mb-6 whitespace-pre-line">
+          <h1 className="text-balance text-6xl md:text-8xl font-bold tracking-tighter text-[#0F1729] leading-[1.1] mb-6 whitespace-pre-line">
             {t.heroTitle}
           </h1>
           
@@ -84,14 +91,14 @@ export default function Home() {
           <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">{t.upcomingAppointment}</p>
-              <h3 className="text-4xl font-bold text-foreground mb-6">{t.tomorrow}</h3>
+              <h3 className="text-4xl font-bold text-[#0F1729] mb-6">{t.tomorrow}</h3>
               
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center my-4 ml-8 relative shadow-inner">
                  <User className="w-5 h-5 text-blue-500" />
               </div>
 
               <p className="text-sm font-medium text-muted-foreground mb-1 mt-4">{t.branch}</p>
-              <h3 className="text-2xl font-bold text-foreground">{t.downtownWest}</h3>
+              <h3 className="text-2xl font-bold text-[#0F1729]">{t.downtownWest}</h3>
             </div>
             
             <div className="mt-8 pt-6 border-t border-border/50 text-center">
@@ -117,7 +124,7 @@ export default function Home() {
           {/* Card 3: Staff Availability */}
           <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
              <div className="flex justify-between items-start mb-6">
-                <div className="bg-secondary px-4 py-2 rounded-2xl text-sm font-medium text-foreground">{t.staffAvailability}</div>
+                <div className="bg-secondary px-4 py-2 rounded-2xl text-sm font-medium text-[#0F1729]">{t.staffAvailability}</div>
                 <div className="flex -space-x-2">
                   <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
                   <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
@@ -125,7 +132,7 @@ export default function Home() {
              </div>
 
              <div>
-                <h3 className="text-4xl font-bold text-foreground mb-2">{t.slotsAvailable}</h3>
+                <h3 className="text-4xl font-bold text-[#0F1729] mb-2">{t.slotsAvailable}</h3>
                 <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
              </div>
 
@@ -146,13 +153,20 @@ export default function Home() {
              </div>
              
              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
-                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-foreground font-bold">5pm</span>
+                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] font-bold">5pm</span>
              </div>
           </div>
 
         </div>
 
       </main>
+      
+      <ProblemSection />
+      <ProcessSection />
+      <FeaturesSection />
+      <StatsSection />
+      <TestimonialSection />
+      <CtaSection />
     </div>
   );
 }
