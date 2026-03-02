@@ -7,7 +7,7 @@ import Logo from '@/lib/Logo.png';
 
 export default function Footer({ className }: { className?: string }) {
   return (
-    <footer className={cn("w-full py-16 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800", className)}>
+    <footer className={cn("w-full py-16 bg-white dark:bg-black border-t border-slate-100 dark:border-slate-800", className)}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
