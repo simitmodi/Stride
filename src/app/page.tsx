@@ -54,16 +54,16 @@ export default function Home() {
           <Image src={Logo} alt="Stride Logo" width={180} height={60} className="w-auto h-12" />
         </div>
         
-        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 bg-secondary/50 rounded-full p-1 backdrop-blur-sm">
-          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-[#0F1729]">{t.home}</Link>
-          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729]">{t.aboutUs}</Link>
-          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729]">{t.faq}</Link>
+        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
+          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-[#0F1729] dark:text-slate-100">{t.home}</Link>
+          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.aboutUs}</Link>
+          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
         </div>
 
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] hover:text-primary transition-colors">
+              <div className="hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors">
                 <Globe className="w-4 h-4" /> {selectedLangName}
               </div>
             </DropdownMenuTrigger>
@@ -89,11 +89,11 @@ export default function Home() {
       <main className="relative z-10 flex flex-1 flex-col items-center pt-32 pb-16 px-4">
         
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-primary text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary dark:bg-slate-800 text-primary dark:text-primary text-sm font-medium mb-8">
             <User className="w-4 h-4" /> {t.heroTag}
           </div>
           
-          <h1 className="text-balance text-6xl md:text-8xl font-bold tracking-tighter text-[#0F1729] leading-[1.1] mb-6 whitespace-pre-line">
+          <h1 className="text-balance text-6xl md:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line">
             {t.heroTitle}
           </h1>
           
@@ -110,20 +110,20 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mt-24">
           
           {/* Card 1: Upcoming Appointment */}
-          <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
+          <div className="bg-white dark:bg-black rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 dark:border-slate-800 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">{t.upcomingAppointment}</p>
-              <h3 className="text-4xl font-bold text-[#0F1729] mb-6">{mounted ? realtimeData.date : t.tomorrow}</h3>
+              <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-6">{mounted ? realtimeData.date : t.tomorrow}</h3>
               
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center my-4 ml-8 relative shadow-inner">
-                 <User className="w-5 h-5 text-blue-500" />
+              <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center my-4 ml-8 relative shadow-inner">
+                 <User className="w-5 h-5 text-blue-500 dark:text-blue-400" />
               </div>
 
               <p className="text-sm font-medium text-muted-foreground mb-1 mt-4">{t.branch}</p>
-              <h3 className="text-2xl font-bold text-[#0F1729]">{t.downtownWest}</h3>
+              <h3 className="text-2xl font-bold text-[#0F1729] dark:text-slate-100">{t.downtownWest}</h3>
             </div>
             
-            <div className="mt-8 pt-6 border-t border-border/50 text-center">
+            <div className="mt-8 pt-6 border-t border-border/50 dark:border-slate-800 text-center">
               <p className="text-xs text-muted-foreground">{t.status}</p>
               <p className="text-sm font-bold text-emerald-500 mt-1">{t.confirmed}</p>
             </div>
@@ -144,17 +144,17 @@ export default function Home() {
           </div>
 
           {/* Card 3: Staff Availability */}
-          <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
+          <div className="bg-white dark:bg-black rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 dark:border-slate-800 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
              <div className="flex justify-between items-start mb-6">
-                <div className="bg-secondary px-4 py-2 rounded-2xl text-sm font-medium text-[#0F1729]">{t.staffAvailability}</div>
+                <div className="bg-secondary dark:bg-slate-800 px-4 py-2 rounded-2xl text-sm font-medium text-[#0F1729] dark:text-slate-100">{t.staffAvailability}</div>
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
-                  <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
+                  <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
+                  <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4"/></div>
                 </div>
              </div>
 
              <div>
-                <h3 className="text-4xl font-bold text-[#0F1729] mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
+                <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
                 <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
              </div>
 
@@ -170,12 +170,12 @@ export default function Home() {
                 </svg>
                 {/* Overlay lines */}
                 <div className="absolute inset-0 flex justify-between">
-                  {[1,2,3,4,5,6].map(i => <div key={i} className="h-full w-px bg-border/50"></div>)}
+                  {[1,2,3,4,5,6].map(i => <div key={i} className="h-full w-px bg-border/50 dark:bg-border/20"></div>)}
                 </div>
              </div>
              
              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
-                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] font-bold">5pm</span>
+                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] dark:text-slate-100 font-bold">5pm</span>
              </div>
           </div>
 
