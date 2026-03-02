@@ -44,11 +44,11 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="w-full py-24 bg-[#F3F4F6]">
+    <section className="w-full py-24 bg-[#F3F4F6] dark:bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
           <div className="text-center md:text-left mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900">
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">
               Built for First-Visit Success
             </h2>
           </div>
@@ -57,15 +57,15 @@ export function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, i) => (
             <AnimateIn key={i} delay={feat.delay} className="group h-full">
-              <div className="h-full bg-white rounded-xl p-[20px] shadow-sm border border-slate-100 hover:border-primary/50 transition-colors duration-300 relative overflow-hidden">
+              <div className="h-full bg-white dark:bg-slate-800 rounded-xl p-[20px] shadow-sm border border-slate-100 dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50 transition-colors duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300">
                   {feat.icon}
                 </div>
                 
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{feat.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{feat.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   {feat.description}
                 </p>
               </div>
