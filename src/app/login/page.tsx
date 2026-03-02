@@ -29,40 +29,40 @@ export default function LoginOptionsPage() {
 
       <main className="relative z-10 flex w-full max-w-lg flex-col items-center">
         <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
+          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-primary/50 opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
           <div
-            className="relative w-full rounded-xl bg-card p-8 shadow-lg transform-gpu"
+            className="relative w-full rounded-xl bg-white/90 p-8 shadow-lg transform-gpu"
             style={{ backdropFilter: 'blur(12px)' }}
           >
-            <div className="text-center text-foreground">
+            <div className="text-center text-slate-900">
               <Image src={Logo} alt="Stride Logo" width={200} height={200} className="mb-4 inline-block" />
-              <p className="mt-2 text-foreground">
+              <p className="mt-2 text-slate-600">
                 Choose your role to continue.
               </p>
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
               <Link href="/login/customer" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
+                <Card className="h-full transform-gpu border-border bg-white text-slate-900 transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl active:scale-105">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <User className="h-12 w-12 text-primary" />
                     <div className="flex-1">
-                      <CardTitle className="text-foreground">Customer Login</CardTitle>
-                      <CardDescription className="text-sm text-foreground group-hover:text-accent-foreground">
+                      <CardTitle className="text-slate-900">Customer Login</CardTitle>
+                      <CardDescription className="text-sm text-slate-500">
                         Access your personal account.
                       </CardDescription>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground" />
+                    <ArrowRight className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
                   </CardHeader>
                 </Card>
               </Link>
               <Link href="/login/bank" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
+                <Card className="h-full transform-gpu border-border bg-white text-slate-900 transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl active:scale-105">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <Banknote className="h-4 w-4 text-primary" />
                     <div className="flex-1">
-                      <CardTitle className="text-foreground">Bank Login</CardTitle>
-                      <CardDescription className="text-sm text-foreground group-hover:text-accent-foreground">
+                      <CardTitle className="text-slate-900">Bank Login</CardTitle>
+                      <CardDescription className="text-sm text-slate-500">
                         Access the employee portal.
                       </CardDescription>
                     </div>
