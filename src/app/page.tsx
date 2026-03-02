@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,6 +23,24 @@ import { CtaSection } from "@/components/landing/SectionBlocks";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
+  const [mounted, setMounted] = useState(false);
+  const [realtimeData, setRealtimeData] = useState({ date: "", slots: "12" });
+
+  useEffect(() => {
+    setMounted(true);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedDate = tomorrow.toLocaleDateString(lang, { month: 'short', day: 'numeric' });
+    
+    const currentHour = new Date().getHours();
+    const slots = Math.max(3, 20 - currentHour); // Adjust slots realistically based on hour
+    
+    setRealtimeData({
+      date: `${formattedDate}, 10:00 AM`,
+      slots: slots.toString()
+    });
+  }, [lang]);
+
   const t = landingTranslations[lang];
   const selectedLangName = languages.find(l => l.code === lang)?.name || 'English';
 
@@ -91,7 +109,7 @@ export default function Home() {
           <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">{t.upcomingAppointment}</p>
-              <h3 className="text-4xl font-bold text-[#0F1729] mb-6">{t.tomorrow}</h3>
+              <h3 className="text-4xl font-bold text-[#0F1729] mb-6">{mounted ? realtimeData.date : t.tomorrow}</h3>
               
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center my-4 ml-8 relative shadow-inner">
                  <User className="w-5 h-5 text-blue-500" />
@@ -132,7 +150,7 @@ export default function Home() {
              </div>
 
              <div>
-                <h3 className="text-4xl font-bold text-[#0F1729] mb-2">{t.slotsAvailable}</h3>
+                <h3 className="text-4xl font-bold text-[#0F1729] mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
                 <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
              </div>
 
