@@ -14,6 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { ThemeToggle } from "@/components/theme-toggle";
+
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { ProcessSection } from "@/components/landing/ProcessSection";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
@@ -73,6 +75,8 @@ export default function Home() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <ThemeToggle />
 
           <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">{t.login}</Link>
           <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
