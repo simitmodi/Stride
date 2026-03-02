@@ -31,11 +31,7 @@ import {
 import { DialogDescription as DialogDescriptionComponent } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
+
 
 const formSchema = z.object({
   emailOrUsername: z.string().min(1, { message: "Email is required." }).email({ message: "Invalid email address." }),
@@ -94,19 +90,7 @@ export function CustomerLoginForm() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!window.grecaptcha) {
-      toast({
-        variant: "destructive",
-        title: "CAPTCHA Error",
-        description: "Could not connect to the reCAPTCHA service. Please check your connection or ad blocker.",
-      });
-      return;
-    }
-    window.grecaptcha.enterprise.ready(async () => {
-      const token = await window.grecaptcha.enterprise.execute('6Lfqw9IrAAAAAATsZvi3VG5KnxYHZWZA7eap6url', {action: 'LOGIN'});
-      console.log("reCAPTCHA Token:", token);
-      await handleLogin(values);
-    });
+    await handleLogin(values);
   }
 
   async function handleForgotPassword(values: z.infer<typeof forgotPasswordSchema>) {

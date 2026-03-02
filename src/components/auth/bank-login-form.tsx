@@ -22,11 +22,7 @@ import { Loader2 } from "lucide-react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
+
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -49,54 +45,38 @@ export function BankLoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    if (!window.grecaptcha) {
+    try {
+      const user = await signInWithEmail(values.email, values.password);
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists() && userDoc.data().role === 'bank') {
+          router.push("/dashboard/bank");
+        } else {
+          await signOutUser();
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "You do not have permission to access the bank portal.",
+          });
+        }
+      }
+    } catch (error: any) {
+       let description = "An unexpected error occurred. Please try again.";
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+          description = "Invalid credentials. Please check your email and password.";
+        } else if (error.code === 'auth/too-many-requests') {
+          description = "Access to this account has been temporarily disabled due to many failed login attempts. You can try again later.";
+        }
       toast({
         variant: "destructive",
-        title: "CAPTCHA Error",
-        description: "Could not connect to the reCAPTCHA service. Please check your connection or ad blocker.",
+        title: "Login Failed",
+        description: description,
       });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    window.grecaptcha.enterprise.ready(async () => {
-      try {
-        const token = await window.grecaptcha.enterprise.execute('6Lfqw9IrAAAAAATsZvi3VG5KnxYHZWZA7eap6url', {action: 'LOGIN'});
-        // In a real app, you would send this token to your backend for verification.
-        console.log("reCAPTCHA Token:", token);
-
-        const user = await signInWithEmail(values.email, values.password);
-        if (user) {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-
-          if (userDoc.exists() && userDoc.data().role === 'bank') {
-            router.push("/dashboard/bank");
-          } else {
-            await signOutUser();
-            toast({
-              variant: "destructive",
-              title: "Access Denied",
-              description: "You do not have permission to access the bank portal.",
-            });
-          }
-        }
-      } catch (error: any) {
-         let description = "An unexpected error occurred. Please try again.";
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-            description = "Invalid credentials. Please check your email and password.";
-          } else if (error.code === 'auth/too-many-requests') {
-            description = "Access to this account has been temporarily disabled due to many failed login attempts. You can try again later.";
-          }
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: description,
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    });
   }
 
   return (

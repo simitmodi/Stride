@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { ScrollAwareFooter } from '@/components/scroll-aware-footer';
-import Script from 'next/script';
+
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import FirebaseErrorListener from '@/components/FirebaseErrorListener';
 import RootHeader from '@/components/root-header';
@@ -31,7 +31,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
-        <Script src="https://www.google.com/recaptcha/enterprise.js?render=6Lfqw9IrAAAAAATsZvi3VG5KnxYHZWZA7eap6url" strategy="lazyOnload" />
+
       </head>
       <body className="font-body antialiased h-full flex flex-col">
         <FirebaseClientProvider>
