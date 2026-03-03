@@ -334,10 +334,10 @@ export default function CustomerDashboardPage() {
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
-      <div className="fixed inset-0 pointer-events-none z-[-2] opacity-40">
+      <div className="fixed inset-0 pointer-events-none z-0">
         <ThreeBackground />
       </div>
-      <div className="absolute inset-0 pointer-events-none z-[-1] opacity-40">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
         <style>{`
           @keyframes ambientDrift1 { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(10vw, 5vh) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
           @keyframes ambientDrift2 { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(-8vw, 10vh) rotate(15deg)} 100%{transform:translate(0,0) rotate(0deg)} }

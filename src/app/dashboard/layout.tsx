@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
   // If user is logged in, render the dashboard.
   return (
-    <div className="dashboard-theme flex min-h-screen w-full flex-col" style={{ background: '#F4F4F8' }}>
+    <div className="dashboard-theme flex min-h-screen w-full flex-col">
       <Header />
       <main className="flex flex-1 flex-col">
         {children}

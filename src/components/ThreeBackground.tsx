@@ -47,7 +47,7 @@ function FloatingShape({
                         speed={speed}
                         distort={distort}
                         transparent
-                        opacity={0.4}
+                        opacity={0.8}
                         roughness={0.1}
                         metalness={0.8}
                     />
@@ -57,7 +57,7 @@ function FloatingShape({
                         speed={speed}
                         factor={wobble}
                         transparent
-                        opacity={0.4}
+                        opacity={0.8}
                         roughness={0.1}
                         metalness={0.8}
                     />
@@ -139,8 +139,9 @@ function Scene() {
 
 export default function ThreeBackground() {
     return (
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40">
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
             <Canvas dpr={[1, 2]}>
+                <color attach="background" args={["#F4F4F8"]} />
                 <Scene />
             </Canvas>
         </div>
