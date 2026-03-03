@@ -18,5 +18,8 @@ export function ScrollAwareFooter() {
     return null;
   }
 
+  if (pathname?.startsWith("/login")) return null;
+  if (pathname?.startsWith("/signup")) return null;
+
   return isClient ? <Footer /> : null;
 }
