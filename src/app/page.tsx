@@ -156,7 +156,7 @@ export default function Home() {
                 <div className="mt-8 mb-4 relative">
                   <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150 opacity-20" />
                   <Image
-                    src="/.gemini/antigravity/brain/c786a99e-af24-4b44-9809-c213a9b58f6a/headset_3d_fintech_1772570982910.png"
+                    src="/images/headset_3d.png"
                     alt="24/7 Support"
                     width={140}
                     height={140}
@@ -237,7 +237,7 @@ export default function Home() {
                 <div className="mt-4 mb-2 relative">
                   <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150 opacity-20" />
                   <Image
-                    src="/.gemini/antigravity/brain/c786a99e-af24-4b44-9809-c213a9b58f6a/calendar_3d_fintech_1772570996656.png"
+                    src="/images/calendar_3d.png"
                     alt="Book Appointment"
                     width={140}
                     height={140}
