@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Footer from "./footer";
-
 import { usePathname } from "next/navigation";
+import Footer from "./footer";
 
 export function ScrollAwareFooter() {
   const [isClient, setIsClient] = useState(false);
@@ -13,10 +12,12 @@ export function ScrollAwareFooter() {
     setIsClient(true);
   }, []);
 
-  // Hide footer on specific pages where we want a full-height app feel
-  if (pathname === '/dashboard/customer/document-checklist') {
-    return null;
-  }
+  if (!isClient) return null;
 
-  return isClient ? <Footer /> : null;
+  // Hide footer on specific pages where we want a full-height app feel
+  if (pathname === '/dashboard/customer/document-checklist') return null;
+  if (pathname?.startsWith("/login")) return null;
+  if (pathname?.startsWith("/signup")) return null;
+
+  return <Footer />;
 }

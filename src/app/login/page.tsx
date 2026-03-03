@@ -12,6 +12,36 @@ import Logo from '@/lib/Logo.png';
 export default function LoginOptionsPage() {
   return (
     <div className="flex min-h-screen w-full bg-[#111111] overflow-hidden">
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-15px); }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-200%) skewX(-15deg); }
+          100% { transform: translateX(300%) skewX(-15deg); }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 15px rgba(99,102,241,0.2); border-color: rgba(255,255,255,0.05); }
+          50% { box-shadow: 0 0 30px rgba(99,102,241,0.6); border-color: rgba(255,255,255,0.2); }
+        }
+        @keyframes width-pulse {
+          0% { width: 10%; }
+          50% { width: 80%; }
+          100% { width: 10%; }
+        }
+        @keyframes width-pulse-delayed {
+          0% { width: 30%; }
+          50% { width: 90%; }
+          100% { width: 30%; }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 6s ease-in-out 3s infinite; }
+        .animate-shimmer { animation: shimmer 3s infinite; }
+        .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+        .animate-width-pulse { animation: width-pulse 4s ease-in-out infinite; }
+        .animate-width-pulse-delayed { animation: width-pulse-delayed 5s ease-in-out infinite; }
+      `}</style>
 
       {/* ─── LEFT COLUMN: Selection (Solid Light Theme) ─── */}
       <div className="flex w-full flex-col justify-center bg-[#F4F4F8] px-6 py-12 md:w-1/2 lg:px-16 xl:px-24 rounded-r-3xl z-10 shadow-[8px_0_30px_rgba(0,0,0,0.1)] relative">
@@ -98,54 +128,51 @@ export default function LoginOptionsPage() {
             className="text-center text-4xl lg:text-5xl tracking-tight text-[#f4f4f5] mb-4 font-medium"
             style={{ fontFamily: "Georgia, serif", lineHeight: 1.2 }}
           >
-            Think fast,<br /> build faster
+            Seamless Bank <br /> Appointments
           </h2>
-          <p className="text-[#a1a1aa] text-lg text-center mb-12" style={{ fontFamily: "Georgia, serif" }}>
-            Brainstorm with Stride, build intuitively
-          </p>
 
           {/* Mock Floating UI Frame */}
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#27272a]/40 p-4 shadow-2xl backdrop-blur-xl animate-[pulse_6s_ease-in-out_infinite]">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#27272a]/40 p-4 shadow-2xl backdrop-blur-xl animate-float animate-pulse-glow mt-8">
 
             {/* Header */}
             <div className="flex items-center gap-2 mb-4 bg-black/40 px-3 py-2 rounded-lg border border-white/5">
               <Search className="h-4 w-4 text-white/40" />
-              <span className="text-sm font-medium text-white/40">Search</span>
+              <span className="text-sm font-medium text-white/40">Search available slots...</span>
             </div>
 
             {/* Mock Folders */}
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/5 transition border border-transparent hover:border-white/10 cursor-pointer">
-                <div className="h-10 w-12 rounded-lg bg-indigo-500/80 shadow-[0_0_15px_rgba(99,102,241,0.5)] flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
+                <div className="h-10 w-12 rounded-lg bg-indigo-500/80 shadow-[0_0_15px_rgba(99,102,241,0.5)] flex items-center justify-center relative overflow-hidden animate-float">
+                  <div className="absolute top-0 left-0 w-full h-full bg-white/20 animate-shimmer"></div>
                 </div>
-                <span className="text-[11px] text-white/70">Analysis</span>
+                <span className="text-[11px] text-white/70">Appointments</span>
               </div>
               <div className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/5 transition border border-transparent hover:border-white/10 cursor-pointer">
-                <div className="h-10 w-12 rounded-lg bg-indigo-500/80 flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
+                <div className="h-10 w-12 rounded-lg bg-indigo-500/80 flex items-center justify-center relative overflow-hidden animate-float-delayed">
+                  <div className="absolute top-0 left-0 w-full h-full bg-white/20 animate-shimmer" style={{ animationDelay: '1.5s' }}></div>
                 </div>
-                <span className="text-[11px] text-white/70 text-center leading-tight">Meeting Transcripts</span>
+                <span className="text-[11px] text-white/70 text-center leading-tight">Document Checklist</span>
               </div>
             </div>
 
             {/* Mock Progress Bars */}
             <div className="bg-black/20 rounded-xl p-3 border border-white/5 relative overflow-hidden">
               <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
-                <span className="text-xs font-semibold text-white/60 uppercase tracking-widest">Progress</span>
+                <span className="text-xs font-semibold text-white/60 uppercase tracking-widest">Booking Status</span>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-3 w-3 animate-spin text-indigo-400" />
                   <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-1/2 bg-indigo-500 rounded-full"></div>
+                    <div className="h-full bg-indigo-500 rounded-full animate-width-pulse"></div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full border border-indigo-400/50 bg-indigo-400/20"></div>
+                  <div className="h-3 w-3 rounded-full border border-indigo-400/50 bg-indigo-400/20 animate-pulse"></div>
                   <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-white/30 rounded-full"></div>
+                    <div className="h-full bg-white/30 rounded-full animate-width-pulse-delayed"></div>
                   </div>
                 </div>
               </div>
