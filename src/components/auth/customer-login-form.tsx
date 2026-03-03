@@ -299,7 +299,7 @@ export function CustomerLoginForm() {
       {/* ── Gradient Login Button ── */}
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading || !emailValue || !passwordValue}
         className="
           relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-semibold text-white
           shadow-md transition-all duration-300
