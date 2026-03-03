@@ -44,7 +44,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="w-full py-24 bg-[#F3F4F6]">
+    <section className="w-full py-24 bg-[#FBFBFB]">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
           <div className="text-center md:text-left mb-16">
@@ -59,12 +59,12 @@ export function FeaturesSection() {
             <AnimateIn key={i} delay={feat.delay} className="group h-full">
               <div className="h-full bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:-translate-y-2 transition-all duration-500 relative overflow-hidden flex flex-col min-h-[250px] justify-between">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                
+
                 <div>
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     {feat.icon}
                   </div>
-                  
+
                   <h3 className="text-2xl font-bold text-slate-900 mb-3">{feat.title}</h3>
                 </div>
                 <p className="text-slate-500 font-medium leading-relaxed">
