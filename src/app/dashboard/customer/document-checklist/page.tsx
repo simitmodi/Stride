@@ -417,11 +417,11 @@ export default function DocumentChecklistPage() {
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col h-full overflow-hidden",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col h-fit max-h-[calc(100vh-140px)] overflow-hidden",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-fit max-h-full">
               {/* Category Header */}
               <motion.div
                 key={activeCategory}
