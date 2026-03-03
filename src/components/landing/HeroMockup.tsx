@@ -21,7 +21,7 @@ export function HeroMockup() {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    const springConfig = { damping: 30, stiffness: 200 };
+    const springConfig = { damping: 40, stiffness: 250 };
     const dx = useSpring(mouseX, springConfig);
     const dy = useSpring(mouseY, springConfig);
 
@@ -60,7 +60,13 @@ export function HeroMockup() {
                     x: tabletX,
                     y: tabletY
                 }}
-                className="relative z-10 w-full max-w-4xl aspect-[16/10] bg-slate-100 dark:bg-slate-900 rounded-[2.5rem] border-[12px] border-slate-200 dark:border-slate-800 shadow-[0_60px_100px_-20px_rgba(0,0,0,0.3)] flex overflow-hidden pointer-events-auto"
+                whileHover={{
+                    rotateX: 14,
+                    rotateY: 2,
+                    scale: 1.01,
+                    transition: { duration: 0.5, ease: "easeOut" }
+                }}
+                className="relative z-10 w-full max-w-4xl aspect-[16/10] bg-slate-100 dark:bg-slate-900 rounded-[2.5rem] border-[12px] border-slate-200 dark:border-slate-800 shadow-[0_60px_100px_-20px_rgba(0,0,0,0.3)] flex overflow-hidden pointer-events-auto transition-shadow hover:shadow-[0_80px_150px_-30px_rgba(var(--primary),0.2)]"
             >
                 {/* Sidebar */}
                 <div className="w-20 md:w-56 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-8">
@@ -165,7 +171,20 @@ export function HeroMockup() {
             {/* Top Left: Documents Ready */}
             <motion.div
                 style={{ x: cardLX, y: cardLY }}
-                className="absolute -left-12 top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 animate-[float_6s_ease-in-out_infinite]"
+                animate={{
+                    y: [-10, 10, -10],
+                }}
+                transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -left-12 top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-400/30">
                     <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -179,7 +198,20 @@ export function HeroMockup() {
             {/* Top Right: Appointment Confirmed */}
             <motion.div
                 style={{ x: cardRX, y: cardRY }}
-                className="absolute -right-12 top-20 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 animate-[float_8s_ease-in-out_infinite]"
+                animate={{
+                    y: [10, -10, 10],
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -right-12 top-20 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <Calendar className="w-6 h-6 text-primary" />
@@ -193,7 +225,20 @@ export function HeroMockup() {
             {/* Bottom Left: Nearby Branch */}
             <motion.div
                 style={{ x: cardLX, y: cardLY }}
-                className="absolute -left-20 bottom-1/4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 animate-[float_7s_ease-in-out_infinite_reverse]"
+                animate={{
+                    y: [5, -15, 5],
+                }}
+                transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -left-20 bottom-1/4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
                     <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -207,7 +252,20 @@ export function HeroMockup() {
             {/* Bottom Right: Queue Status */}
             <motion.div
                 style={{ x: cardRX, y: cardRY }}
-                className="absolute -right-20 bottom-1/3 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 animate-[float_9s_ease-in-out_infinite_reverse]"
+                animate={{
+                    y: [-15, 5, -15],
+                }}
+                transition={{
+                    duration: 9,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -right-20 bottom-1/3 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
                     <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
