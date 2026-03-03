@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { HeroMockup } from "@/components/landing/HeroMockup";
+
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { ProcessSection } from "@/components/landing/ProcessSection";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
@@ -25,9 +27,9 @@ import { CtaSection } from "@/components/landing/SectionBlocks";
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
   const [mounted, setMounted] = useState(false);
-  const [realtimeData, setRealtimeData] = useState({ 
+  const [realtimeData, setRealtimeData] = useState({
     date: 'tomorrow',
-    slots: 12 
+    slots: 12
   });
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <Image src={Logo} alt="Stride Logo" width={180} height={60} className="w-auto h-12" />
         </div>
-        
+
         <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
           <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-[#0F1729] dark:text-slate-100">{t.home}</Link>
           <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.aboutUs}</Link>
@@ -99,6 +101,9 @@ export default function Home() {
             <Link href="/login">{t.getStarted} <ArrowRight className="w-5 h-5 ml-2" /></Link>
           </Button>
         </div>
+
+        {/* 3D Tablet Dashboard Mockup */}
+        <HeroMockup />
 
         {/* Feature Cards Grid (Resolved from conflicts) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl pb-32">
@@ -182,7 +187,7 @@ export default function Home() {
             <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
-                
+
                 <div className="flex justify-between items-start mb-6">
                   <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
                     {t.bookingCardTag || "Instant Confirmation"}
