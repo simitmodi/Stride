@@ -8,7 +8,8 @@ html {
 }
 
 html::-webkit-scrollbar {
-  display: none; /* WebKit browsers */
+  display: none;
+  /* WebKit browsers */
 }
 
 body {
@@ -51,6 +52,7 @@ body {
     --sidebar-border: 214.3 31.8% 91.4%;
     --sidebar-ring: 243 75% 59%;
   }
+
   .dark {
     --background: 0 0% 0%;
     --foreground: 210 40% 98%;
@@ -85,12 +87,24 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* ── Dashboard theme: overrides primary to indigo (#4F46E5) ── */
+  .dashboard-theme {
+    --primary: 243 76% 59%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 243 76% 59%;
+    --accent-foreground: 0 0% 100%;
+    --ring: 243 76% 59%;
+    --sidebar-primary: 243 76% 59%;
+    --sidebar-ring: 243 76% 59%;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
