@@ -54,63 +54,62 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
   useEffect(() => {
     if (value === display.cur) return;
     setDisplay(d => ({ cur: d.cur, prev: d.cur, flipping: true }));
+
+    // We update 'cur' state after a tiny delay to ensure the 'prev' is captured on the flap's front
     const t1 = setTimeout(() => {
       setDisplay(d => ({ cur: value, prev: d.prev, flipping: true }));
-    }, 40); // slightly faster start
+    }, 20);
+
     const t2 = setTimeout(() => {
       setDisplay(d => ({ cur: value, prev: value, flipping: false }));
-    }, 900); // end after animation
+    }, 700); // slightly longer but smoother
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return (
-    <div className="flex flex-col items-center gap-1.5">
-      <div className="relative w-[3.2rem] h-[4rem] perspective-[400px]">
-        {/* Top Half (New Value - Static) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/10">
+    <div className="flex flex-col items-center gap-1.5 min-w-[3.2rem]">
+      <div className="relative w-[3.2rem] h-[4rem] perspective-[500px]">
+        {/* UPPER HALF (New State) */}
+        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/5">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
             {display.cur}
           </span>
         </div>
 
-        {/* Bottom Half (Old Value - Static) */}
+        {/* LOWER HALF (Previous State) */}
         <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
             {display.prev}
           </span>
         </div>
 
-        {/* Realistic 3D Flipping Flaps */}
-        {display.flipping && (
-          <>
-            {/* Top flap (Old value, rotating down) */}
-            <div
-              className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20 origin-bottom z-10"
-              style={{ animation: 'flipTopRealistic 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards' }}
-            >
-              <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
-                {display.prev}
-              </span>
-              <div className="absolute inset-0 bg-black/20" style={{ animation: 'flipShadowTop 0.6s ease-in forwards' }} />
-            </div>
+        {/* THE FLIPPER (The physical flap) */}
+        <div className={`absolute top-0 left-0 right-0 h-1/2 origin-bottom transition-none preserve-3d z-30 ${display.flipping ? 'animate-physical-flip' : ''}`}
+          style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}>
 
-            {/* Bottom flap (New value, rotating into view) */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top z-20"
-              style={{ animation: 'flipBottomRealistic 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards', transform: 'rotateX(90deg)' }}
-            >
-              <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
-                {display.cur}
-              </span>
-              <div className="absolute inset-0 bg-black/40" style={{ animation: 'flipShadowBottom 0.6s ease-out forwards' }} />
-            </div>
-          </>
-        )}
+          {/* FRONT: Current Top (Value before flip started) */}
+          <div className="absolute inset-0 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20"
+            style={{ backfaceVisibility: 'hidden' }}>
+            <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
+              {display.prev}
+            </span>
+          </div>
+
+          {/* BACK: New Bottom (Value flipping into view) */}
+          <div className="absolute inset-0 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] rotate-x-180"
+            style={{ transform: 'rotateX(180deg)', backfaceVisibility: 'hidden' }}>
+            <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
+              {display.cur}
+            </span>
+          </div>
+        </div>
+
+        {/* Subtle mid-line hinge */}
+        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-black/30 z-40 transform -translate-y-1/2" />
       </div>
       <span className="text-[8px] text-white/40 font-bold uppercase tracking-[0.15em]">{label}</span>
     </div>
@@ -151,11 +150,11 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
         }}
       >
         <style>{`
-          @keyframes flipTopRealistic      { 0%{transform:rotateX(0deg)} 100%{transform:rotateX(-180deg)} }
-          @keyframes flipBottomRealistic   { 0%{transform:rotateX(180deg)} 100%{transform:rotateX(0deg)} }
-          @keyframes flipShadowTop        { 0%{opacity:0} 100%{opacity:1} }
-          @keyframes flipShadowBottom     { 0%{opacity:1} 100%{opacity:0} }
-          @keyframes coin3D               { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
+          @keyframes animate-physical-flip {
+            0%   { transform: rotateX(0deg); z-index: 50; }
+            100% { transform: rotateX(-180deg); z-index: 50; }
+          }
+          @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
           @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
           @keyframes floatRandom  { 
             0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
@@ -163,6 +162,9 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
             66%  { transform: translate(-40px, 60px) scale(0.9) rotate(-5deg); }
             100% { transform: translate(0, 0) scale(1) rotate(0deg); }
           }
+          .animate-physical-flip { animation: animate-physical-flip 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+          .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
+          .cal-float { animation: calFloat 3s ease-in-out infinite; transform-style: preserve-3d; }
           @keyframes pulseScale   { 0%,100%{transform:scale(1);opacity:0.15} 50%{transform:scale(1.2);opacity:0.25} }
           @keyframes driftSlow    { 0%{transform:translate(0,0)} 50%{transform:translate(40px, -20px)} 100%{transform:translate(0,0)} }
           .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
