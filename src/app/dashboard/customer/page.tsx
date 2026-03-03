@@ -59,7 +59,7 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
     }, 40); // slightly faster start
     const t2 = setTimeout(() => {
       setDisplay(d => ({ cur: value, prev: value, flipping: false }));
-    }, 400); // end after animation
+    }, 900); // end after animation
 
     return () => {
       clearTimeout(t1);
@@ -91,7 +91,7 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
             {/* Top flap (Old value, rotating down) */}
             <div
               className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20 origin-bottom"
-              style={{ animation: 'flipTop 0.4s ease-in forwards', zIndex: 2 }}
+              style={{ animation: 'flipTop 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards', zIndex: 2 }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
                 {display.prev}
@@ -101,7 +101,7 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
             {/* Bottom flap (New value, rotating into view) */}
             <div
               className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top"
-              style={{ animation: 'flipBottom 0.4s ease-out forwards', zIndex: 3, transform: 'rotateX(90deg)' }}
+              style={{ animation: 'flipBottom 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards', zIndex: 3, transform: 'rotateX(90deg)' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
                 {display.cur}
