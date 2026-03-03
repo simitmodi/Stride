@@ -23,13 +23,13 @@ export function AnimatedRightSide() {
                     className="text-center text-4xl lg:text-5xl tracking-tight text-[#f4f4f5] mb-4 font-medium"
                     style={{ fontFamily: 'Georgia, serif', lineHeight: 1.2 }}
                 >
-                    Think fast,<br /> build faster
+                    Seamless Bank<br /> Appointments
                 </h2>
                 <p
                     className="text-[#a1a1aa] text-lg text-center mb-12"
                     style={{ fontFamily: 'Georgia, serif' }}
                 >
-                    Brainstorm with Stride, build intuitively
+                    Book and manage bank appointments effortlessly
                 </p>
 
                 {/* Mock Floating UI Frame */}
@@ -37,7 +37,7 @@ export function AnimatedRightSide() {
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-4 bg-black/40 px-3 py-2 rounded-lg border border-white/5">
                         <Search className="h-4 w-4 text-white/40" />
-                        <span className="text-sm font-medium text-white/40">Search</span>
+                        <span className="text-sm font-medium text-white/40">Search Appointments</span>
                     </div>
 
                     {/* Mock Folders */}
@@ -46,14 +46,14 @@ export function AnimatedRightSide() {
                             <div className="h-10 w-12 rounded-lg bg-indigo-500/80 shadow-[0_0_15px_rgba(99,102,241,0.5)] flex items-center justify-center relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
                             </div>
-                            <span className="text-[11px] text-white/70">Analysis</span>
+                            <span className="text-[11px] text-white/70">Checklists</span>
                         </div>
                         <div className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/5 transition border border-transparent hover:border-white/10 cursor-pointer">
                             <div className="h-10 w-12 rounded-lg bg-indigo-500/80 flex items-center justify-center relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
                             </div>
                             <span className="text-[11px] text-white/70 text-center leading-tight">
-                                Meeting Transcripts
+                                Available Slots
                             </span>
                         </div>
                         <div className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/5 transition border border-transparent hover:border-white/10 cursor-pointer">
@@ -61,7 +61,7 @@ export function AnimatedRightSide() {
                                 <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
                             </div>
                             <span className="text-[11px] text-white/70 text-center leading-tight">
-                                Quarterly Reports
+                                Past Visits
                             </span>
                         </div>
                         <div className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/5 transition border border-transparent hover:border-white/10 cursor-pointer">
@@ -69,7 +69,7 @@ export function AnimatedRightSide() {
                                 <div className="absolute top-0 right-0 w-1/2 h-full bg-white/20 skew-x-12 translate-x-2"></div>
                             </div>
                             <span className="text-[11px] text-white/70 text-center leading-tight">
-                                Expenses
+                                Documents
                             </span>
                         </div>
                     </div>
@@ -78,7 +78,7 @@ export function AnimatedRightSide() {
                     <div className="bg-black/20 rounded-xl p-3 border border-white/5 relative overflow-hidden">
                         <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
                             <span className="text-xs font-semibold text-white/60 uppercase tracking-widest">
-                                Progress
+                                Booking Status
                             </span>
                         </div>
 
@@ -104,10 +104,10 @@ export function AnimatedRightSide() {
                             <Sparkles className="h-4 w-4 text-orange-500" />
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
-                                    Open
+                                    Stride Assist
                                 </span>
-                                <span className="text-sm font-medium text-gray-900 leading-snug max-w-[140px]">
-                                    I can pull insights from your reports
+                                <span className="text-sm font-medium text-gray-900 leading-snug max-w-[150px]">
+                                    I found 3 open slots for you this week
                                 </span>
                             </div>
                         </div>
