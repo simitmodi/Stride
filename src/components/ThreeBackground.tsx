@@ -80,18 +80,18 @@ function Scene() {
             <ColorfulShape
                 geometry="torus"
                 color="#FF0080"
-                position={[-6, 4, -5]}
-                size={1.2}
+                position={[-8, 6, -10]}
+                size={1.5}
                 speed={1.0}
-                distort={0.3}
+                distort={0.4}
             />
 
             {/* Purple Octahedron */}
             <ColorfulShape
                 geometry="octahedron"
                 color="#7928CA"
-                position={[7, -4, -4]}
-                size={1.8}
+                position={[9, -5, -8]}
+                size={2.2}
                 speed={0.7}
                 wobble={0.6}
             />
@@ -100,8 +100,8 @@ function Scene() {
             <ColorfulShape
                 geometry="ring"
                 color="#0070F3"
-                position={[3, 5, -8]}
-                size={2.5}
+                position={[4, 7, -12]}
+                size={3.0}
                 speed={1.2}
                 rotationSpeed={0.5}
             />
@@ -110,20 +110,40 @@ function Scene() {
             <ColorfulShape
                 geometry="tetrahedron"
                 color="#00DFD8"
-                position={[-8, -5, -6]}
-                size={1.5}
+                position={[-10, -7, -10]}
+                size={1.8}
                 speed={0.9}
                 wobble={0.4}
             />
 
-            {/* Indigo Accent Ring */}
+            {/* Indigo Accent Ring - Massive background element */}
             <ColorfulShape
                 geometry="ring"
                 color="#4F46E5"
-                position={[-2, -2, -10]}
-                size={4.0}
-                speed={0.5}
-                rotationSpeed={0.3}
+                position={[-3, -4, -15]}
+                size={6.0}
+                speed={0.3}
+                rotationSpeed={0.2}
+            />
+
+            {/* Additional Amber Accent */}
+            <ColorfulShape
+                geometry="octahedron"
+                color="#F59E0B"
+                position={[12, 10, -20]}
+                size={1.2}
+                speed={1.5}
+                wobble={0.8}
+            />
+
+            {/* Additional Lime Accent */}
+            <ColorfulShape
+                geometry="tetrahedron"
+                color="#84CC16"
+                position={[-15, 0, -18]}
+                size={2.0}
+                speed={0.6}
+                distort={0.5}
             />
 
             <fog attach="fog" args={["#F4F4F8", 10, 30]} />
