@@ -2,35 +2,37 @@
 
 import { AnimateIn } from "./AnimateIn";
 import { CopyX, FileBadge, Clock } from "lucide-react";
+import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
 
-const problems = [
-  {
-    icon: <CopyX className="w-6 h-6 text-primary" />,
-    title: "Multiple Visits",
-    description: "Going back and forth for a single request just because of scheduling issues.",
-    delay: 100,
-  },
-  {
-    icon: <FileBadge className="w-6 h-6 text-primary" />,
-    title: "Missing Documents",
-    description: "Arriving at the branch only to find out you're missing a critical signature.",
-    delay: 200,
-  },
-  {
-    icon: <Clock className="w-6 h-6 text-primary" />,
-    title: "Long Waiting Time",
-    description: "Wasting hours in line despite booking a slot over the phone.",
-    delay: 300,
-  },
-];
+export function ProblemSection({ lang }: { lang: LanguageCode }) {
+  const t = landingTranslations[lang];
+  const problems = [
+    {
+      icon: <CopyX className="w-6 h-6 text-primary" />,
+      title: t.prob1Title,
+      description: t.prob1Desc,
+      delay: 100,
+    },
+    {
+      icon: <FileBadge className="w-6 h-6 text-primary" />,
+      title: t.prob2Title,
+      description: t.prob2Desc,
+      delay: 200,
+    },
+    {
+      icon: <Clock className="w-6 h-6 text-primary" />,
+      title: t.prob3Title,
+      description: t.prob3Desc,
+      delay: 300,
+    },
+  ];
 
-export function ProblemSection() {
   return (
     <section className="w-full py-24 bg-[#F9FAFB] dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
           <h2 className="text-3xl md:text-5xl font-bold text-center text-slate-900 dark:text-slate-100 mb-16">
-            Why Bank Visits Still Feel Complicated
+            {t.probTitle}
           </h2>
         </AnimateIn>
 
