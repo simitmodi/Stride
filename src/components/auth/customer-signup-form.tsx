@@ -356,15 +356,22 @@ export function CustomerSignUpForm() {
             </FormItem>
           )}
         />
-        <Button
+        <button
           type="submit"
-          className="w-full h-11 text-base transform transition-all duration-300 shadow-md ease-in-out hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
-          style={{ backgroundColor: "#4F46E5", color: "#fff" }}
           disabled={isLoading || !termsValue}
+          className="
+            relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-semibold text-white
+            shadow-md transition-all duration-300
+            hover:opacity-90 hover:scale-[1.02]
+            active:scale-[0.98]
+            disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
+            flex items-center justify-center gap-2
+          "
+          style={{ backgroundColor: "#4F46E5" }}
         >
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           Sign Up
-        </Button>
+        </button>
       </form>
     </Form>
   );
