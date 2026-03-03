@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { checklistData } from '@/lib/document-checklist-data';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklist-data';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ShinyText from '@/components/ShinyText';
 import { cn } from '@/lib/utils';
@@ -417,11 +417,11 @@ export default function DocumentChecklistPage() {
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start h-full",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col h-full overflow-hidden",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
-            <div className="flex flex-col h-full min-h-0">
+            <div className="flex flex-col h-full">
               {/* Category Header */}
               <motion.div
                 key={activeCategory}
@@ -444,7 +444,7 @@ export default function DocumentChecklistPage() {
               </motion.div>
 
               {/* Document List */}
-              <div ref={listContainerRef} className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-2 scrollbar-none">
+              <div ref={listContainerRef} className="space-y-1.5 overflow-y-auto pr-2 scrollbar-none">
                 <AnimatePresence mode="popLayout">
                   {activeData.items.map((item, index) => {
                     const itemRequired = item.content.filter(c => c.type === 'required').length;
@@ -513,7 +513,7 @@ export default function DocumentChecklistPage() {
           {/* ─── Right Panel: Detail View ─── */}
           {/* Hidden on mobile if viewing list */}
           <div className={cn(
-            "flex-1 min-w-0 lg:block h-full flex flex-col",
+            "flex-1 min-w-0 lg:block h-fit max-h-full flex flex-col",
             isMobileDetailView ? "block" : "hidden"
           )}>
             <AnimatePresence mode="wait">
@@ -523,7 +523,7 @@ export default function DocumentChecklistPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="bg-white/80 backdrop-blur-3xl rounded-3xl shadow-xl shadow-slate-900/[0.04] border border-slate-200/60 overflow-hidden flex flex-col h-full"
+                className="bg-white/80 backdrop-blur-3xl rounded-3xl shadow-xl shadow-slate-900/[0.04] border border-slate-200/60 overflow-hidden flex flex-col h-fit max-h-full"
               >
                 {/* Detail Header */}
                 <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-slate-100">
