@@ -82,15 +82,73 @@ function GridOverlay() {
     );
 }
 
+function Bubble({ position, size, speed, opacity }: { position: [number, number, number], size: number, speed: number, opacity: number }) {
+    const meshRef = useRef<THREE.Mesh>(null!);
+    const initialY = position[1];
+    const initialX = position[0];
+
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime();
+        // Float upwards
+        meshRef.current.position.y += speed;
+        // Horizontal oscillation
+        meshRef.current.position.x = initialX + Math.sin(t + initialY) * 0.5;
+
+        // Reset to bottom if it goes too high
+        if (meshRef.current.position.y > 15) {
+            meshRef.current.position.y = -15;
+        }
+    });
+
+    return (
+        <mesh ref={meshRef} position={position}>
+            <sphereGeometry args={[size, 16, 16]} />
+            <meshPhysicalMaterial
+                color="#ffffff"
+                transparent
+                opacity={opacity}
+                transmission={0.9}
+                thickness={0.5}
+                roughness={0}
+                ior={1.2}
+            />
+        </mesh>
+    );
+}
+
+function Bubbles() {
+    const bubbleData = useMemo(() => {
+        return Array.from({ length: 40 }, () => ({
+            position: [
+                (Math.random() - 0.5) * 30, // x
+                (Math.random() - 0.5) * 30, // y
+                (Math.random() - 0.5) * 10,  // z
+            ] as [number, number, number],
+            size: Math.random() * 0.15 + 0.05,
+            speed: Math.random() * 0.02 + 0.01,
+            opacity: Math.random() * 0.5 + 0.1,
+        }));
+    }, []);
+
+    return (
+        <group>
+            {bubbleData.map((data, i) => (
+                <Bubble key={i} {...data} />
+            ))}
+        </group>
+    );
+}
+
 function Scene() {
     return (
         <>
             <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
-            <ambientLight intensity={0.4} />
+            <ambientLight intensity={0.6} />
             <pointLight position={[10, 10, 10]} intensity={1.5} />
             <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
 
             <GridOverlay />
+            <Bubbles />
 
             {/* Indigo Torus Knot - Primary Brand Color */}
             <FloatingShape
