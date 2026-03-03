@@ -618,42 +618,6 @@ export default function DocumentChecklistPage() {
                 </div>
               </motion.div>
             </AnimatePresence>
-
-            {/* Navigation Arrows */}
-            <div className="flex items-center justify-between mt-4 px-2">
-              <motion.button
-                onClick={() => activeItem > 0 && handleItemClick(activeItem - 1)}
-                disabled={activeItem === 0}
-                whileHover={activeItem > 0 ? { x: -3 } : {}}
-                whileTap={activeItem > 0 ? { scale: 0.95 } : {}}
-                transition={springPop}
-                className={cn(
-                  "flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg",
-                  activeItem === 0
-                    ? "text-slate-200 cursor-not-allowed"
-                    : "text-slate-500 hover:text-indigo-600 hover:bg-white"
-                )}
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Previous
-              </motion.button>
-              <motion.button
-                onClick={() => activeItem < activeData.items.length - 1 && handleItemClick(activeItem + 1)}
-                disabled={activeItem === activeData.items.length - 1}
-                whileHover={activeItem < activeData.items.length - 1 ? { x: 3 } : {}}
-                whileTap={activeItem < activeData.items.length - 1 ? { scale: 0.95 } : {}}
-                transition={springPop}
-                className={cn(
-                  "flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg",
-                  activeItem === activeData.items.length - 1
-                    ? "text-slate-200 cursor-not-allowed"
-                    : "text-slate-500 hover:text-indigo-600 hover:bg-white"
-                )}
-              >
-                Next
-                <ChevronRight className="w-4 h-4" />
-              </motion.button>
-            </div>
           </div>
         </div>
       </div>
