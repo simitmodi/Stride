@@ -156,11 +156,12 @@ export function CustomerSignUpForm() {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First Name</FormLabel>
+                <FormLabel className="text-gray-900 font-medium">First Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="John"
                     {...field}
+                    className="bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                   />
                 </FormControl>
                 <FormMessage />
@@ -172,11 +173,12 @@ export function CustomerSignUpForm() {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last Name</FormLabel>
+                <FormLabel className="text-gray-900 font-medium">Last Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Doe"
                     {...field}
+                    className="bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                   />
                 </FormControl>
                 <FormMessage />
@@ -189,11 +191,12 @@ export function CustomerSignUpForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel className="text-gray-900 font-medium">Username</FormLabel>
               <FormControl>
                 <Input
                   placeholder="johndoe"
                   {...field}
+                  className="bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                 />
               </FormControl>
               <FormMessage />
@@ -205,15 +208,15 @@ export function CustomerSignUpForm() {
           name="dateOfBirth"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of Birth</FormLabel>
+              <FormLabel className="text-gray-900 font-medium">Date of Birth</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        "w-full pl-3 text-left font-normal bg-white border-gray-200 text-gray-900 hover:bg-gray-50 focus:border-indigo-400",
+                        !field.value && "text-gray-400"
                       )}
                     >
                       {field.value ? (
@@ -221,7 +224,7 @@ export function CustomerSignUpForm() {
                       ) : (
                         <span>Pick a date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50 text-gray-400" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -249,11 +252,12 @@ export function CustomerSignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-gray-900 font-medium">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="name@example.com"
                   {...field}
+                  className="bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                 />
               </FormControl>
               <FormMessage />
@@ -265,7 +269,7 @@ export function CustomerSignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-gray-900 font-medium">Password</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
@@ -276,14 +280,14 @@ export function CustomerSignUpForm() {
                       field.onChange(e);
                       setPassword(e.target.value);
                     }}
-                    className="pr-10"
+                    className="pr-10 bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                   />
                 </FormControl>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400 hover:text-indigo-500 hover:bg-transparent"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
@@ -306,21 +310,21 @@ export function CustomerSignUpForm() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel className="text-gray-900 font-medium">Confirm Password</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="••••••••"
                     {...field}
-                    className="pr-10"
+                    className="pr-10 bg-white border border-gray-200 text-gray-900 focus:border-indigo-400 focus:ring-indigo-400/50"
                   />
                 </FormControl>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400 hover:text-indigo-500 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
                 >
                   {showConfirmPassword ? (
@@ -341,7 +345,7 @@ export function CustomerSignUpForm() {
           control={form.control}
           name="terms"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-gray-200 bg-gray-50/50 p-4">
               <FormControl>
                 <TermsCheckbox
                   checked={field.value}
@@ -354,7 +358,8 @@ export function CustomerSignUpForm() {
         />
         <Button
           type="submit"
-          className="w-full h-11 text-base transform transition-all duration-300 ease-in-out hover:scale-105 hover:bg-accent hover:text-accent-foreground"
+          className="w-full h-11 text-base transform transition-all duration-300 shadow-md ease-in-out hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
+          style={{ backgroundColor: "#4F46E5", color: "#fff" }}
           disabled={isLoading || !termsValue}
         >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

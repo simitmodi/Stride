@@ -15,36 +15,23 @@ export default function CustomerSignUpPage() {
   const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 p-4">
-      {professionalBg && <Image
-        src={professionalBg.imageUrl}
-        alt={professionalBg.description}
-        fill
-        className="object-cover"
-        style={{ filter: 'blur(8px)' }}
-        data-ai-hint={professionalBg.imageHint}
-        priority
-      />}
-      <div className="absolute inset-0 bg-white/75" />
+    <div className="flex min-h-screen w-full flex-col items-center justify-center p-4" style={{ backgroundColor: "#F4F4F8" }}>
 
       <main className="relative z-10 flex w-full max-w-md flex-col items-center">
         <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-primary/50 opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-          <Card
-            className="relative w-full transform-gpu bg-white shadow-lg border border-slate-100"
-            style={{ backdropFilter: 'blur(12px)' }}
-          >
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl text-slate-900">Create an Account</CardTitle>
-              <CardDescription className="text-slate-600">
+          {/* Form static simple card block */}
+          <Card className="w-full rounded-2xl border border-gray-200 bg-white p-2 shadow-lg">
+            <CardHeader className="text-center pt-6">
+              <CardTitle className="text-3xl font-bold tracking-tight text-gray-900">Create an Account</CardTitle>
+              <CardDescription className="text-gray-500 font-light mt-2 text-sm">
                 Enter your details below to get started.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <CustomerSignUpForm />
-              <p className="mt-6 text-center text-sm text-slate-600">
+              <p className="mt-6 text-center text-sm text-gray-500">
                 Already have an account?{" "}
-                <Link href="/login/customer" className="font-medium text-primary underline-offset-4 hover:text-primary/80 hover:underline transition-colors">
+                <Link href="/login/customer" className="font-medium text-indigo-600 underline-offset-4 hover:underline transition-colors">
                   Log in
                 </Link>
               </p>
