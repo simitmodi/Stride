@@ -55,6 +55,106 @@ const contentRowVariants = {
   }),
 };
 
+/* ─── Document Illustration (3D-like / Animated) ─── */
+const DocumentIllustration = ({ activeCategory }: { activeCategory: number }) => {
+  return (
+    <div className="relative w-full aspect-square flex items-center justify-center select-none pointer-events-none" style={{ perspective: 1000 }}>
+      {/* Glow background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-violet-50/50 rounded-full blur-3xl scale-75" />
+
+      <motion.div
+        key={`doc-stack-${activeCategory}`}
+        initial={{ rotateX: 60, rotateZ: -20, y: 50, opacity: 0 }}
+        animate={{ rotateX: 60, rotateZ: -30, y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className="relative w-48 h-64 xl:mt-12"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        {/* Document Layers (bottom to top) */}
+        {[0, 1, 2, 3].map((layerIndex) => (
+          <motion.div
+            key={layerIndex}
+            initial={{ z: 0, y: 0, opacity: 0 }}
+            animate={{ 
+              z: layerIndex * 25,
+              y: -layerIndex * 15,
+              x: layerIndex * 12,
+              opacity: 1
+            }}
+            transition={{ type: "spring", stiffness: 120, damping: 15, delay: layerIndex * 0.1 }}
+            className={cn(
+              "absolute inset-0 rounded-2xl border flex items-center justify-center shadow-xl backdrop-blur-sm",
+              layerIndex === 3 ? "bg-white/95 border-indigo-100 shadow-indigo-600/10" :
+              layerIndex === 2 ? "bg-white/60 border-white/80 shadow-slate-900/5" :
+              layerIndex === 1 ? "bg-white/40 border-white/60 shadow-slate-900/5" :
+              "bg-white/20 border-white/40 shadow-slate-900/5"
+            )}
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {layerIndex === 3 && (
+              <div className="w-full h-full p-5 flex flex-col gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center shadow-sm">
+                  <FileText className="w-5 h-5 text-indigo-500" />
+                </div>
+                <div className="space-y-3 mt-2">
+                  <div className="h-1.5 w-3/4 rounded-full bg-slate-200" />
+                  <div className="h-1.5 w-full rounded-full bg-slate-100" />
+                  <div className="h-1.5 w-5/6 rounded-full bg-slate-100" />
+                  <div className="h-1.5 w-4/6 rounded-full bg-slate-100" />
+                </div>
+                <div className="mt-auto flex justify-between items-center">
+                  <div className="flex -space-x-2">
+                    <div className="w-6 h-6 rounded-full bg-indigo-100 border-2 border-white" />
+                    <div className="w-6 h-6 rounded-full bg-violet-100 border-2 border-white" />
+                    <div className="w-6 h-6 rounded-full bg-rose-100 border-2 border-white" />
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center shadow-md">
+                    <CheckCircle2 className="w-3 h-3 text-white" />
+                  </div>
+                </div>
+              </div>
+            )}
+            {layerIndex < 3 && (
+              <div className="absolute inset-x-5 top-5 bottom-8 border-2 border-dashed border-slate-200/50 rounded-xl" />
+            )}
+          </motion.div>
+        ))}
+
+        {/* Floating badges */}
+        <motion.div
+           initial={{ z: 120, opacity: 0, scale: 0.5 }}
+           animate={{ z: 120, opacity: 1, scale: 1, y: [-5, 5, -5] }}
+           transition={{ 
+             y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+             opacity: { delay: 0.6 },
+             scale: { delay: 0.6, type: "spring" }
+           }}
+           className="absolute -right-6 -top-2 w-14 h-14 bg-white rounded-2xl shadow-xl shadow-rose-500/10 border border-rose-100 flex items-center justify-center"
+           style={{ transformStyle: 'preserve-3d' }}
+        >
+          <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center">
+            <span className="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50" />
+          </div>
+        </motion.div>
+
+        <motion.div
+           initial={{ z: 90, opacity: 0, scale: 0.5 }}
+           animate={{ z: 90, opacity: 1, scale: 1, y: [5, -5, 5] }}
+           transition={{ 
+             y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+             opacity: { delay: 0.8 },
+             scale: { delay: 0.8, type: "spring" }
+           }}
+           className="absolute -left-8 top-20 w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl shadow-violet-500/10 border border-violet-100 flex items-center justify-center"
+           style={{ transformStyle: 'preserve-3d' }}
+        >
+          <LayoutList className="w-7 h-7 text-violet-500" />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
 /* ─── Detail Content Renderer ─── */
 const DetailContent = ({ item }: { item: ChecklistItemType }) => {
   return (
@@ -221,7 +321,14 @@ export default function DocumentChecklistPage() {
   const optionalCount = selectedItem.content.filter(c => c.type === 'optional').length;
 
   return (
-    <div className="min-h-screen w-full bg-[#F4F4F8]">
+    <div className="min-h-screen w-full bg-[#F4F4F8] relative">
+      {/* ─── Background Decorative Elements ─── */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-400/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[30%] right-[-10%] w-[40%] h-[50%] bg-violet-400/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[30%] h-[30%] bg-rose-400/10 rounded-full blur-[120px]" />
+      </div>
+
       {/* ─── Top Bar: Category Tabs ─── */}
       <div className="sticky top-16 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm shadow-slate-900/[0.03]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -320,7 +427,7 @@ export default function DocumentChecklistPage() {
       </div>
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
@@ -488,12 +595,19 @@ export default function DocumentChecklistPage() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="px-6 sm:px-8 py-6 sm:py-8">
-                  <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
+                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[360px] relative">
+                  <div className="flex-1 relative z-10">
+                    <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
+                  </div>
+                  
+                  {/* Decorative 3D Illustration to fill empty space */}
+                  <div className="hidden xl:flex w-[280px] shrink-0 items-center justify-center relative z-0">
+                    <DocumentIllustration activeCategory={activeCategory} />
+                  </div>
                 </div>
 
                 {/* Detail Footer */}
-                <div className="px-6 sm:px-8 py-5 bg-slate-50/80 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="px-6 sm:px-8 py-5 bg-slate-50/80 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
