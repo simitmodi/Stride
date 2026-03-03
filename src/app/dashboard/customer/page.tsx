@@ -11,6 +11,7 @@ import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
 import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark } from "lucide-react";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
+import ThreeBackground from "@/components/ThreeBackground";
 
 const INDIGO = "#4F46E5";
 
@@ -233,14 +234,14 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
               </div>
             </div>
             {/* Text */}
-            <div className="min-w-0">
-              <p className="text-xs font-extrabold uppercase tracking-widest text-white/45 mb-1.5">Next up</p>
-              <p className="text-lg font-bold text-white leading-tight truncate max-w-[180px]">{nextAppt.specificService}</p>
-              <p className="text-sm text-white/55 mt-1.5 truncate max-w-[180px]">
+            <div className="min-w-0 pr-4">
+              <p className="text-sm font-extrabold uppercase tracking-widest text-white/45 mb-1.5">Next up</p>
+              <p className="text-xl font-bold text-white leading-tight">{nextAppt.specificService}</p>
+              <p className="text-sm text-white/55 mt-1.5">
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-4 py-2 rounded-xl text-sm font-bold bg-white/15 text-white border border-white/20 hover:bg-white/25 transition-all active:scale-95 whitespace-nowrap">
+            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-white/15 text-white border border-white/20 hover:bg-white/25 transition-all active:scale-95 whitespace-nowrap">
               Details →
             </span>
           </div>
@@ -333,6 +334,9 @@ export default function CustomerDashboardPage() {
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
+      <div className="fixed inset-0 pointer-events-none z-[-2] opacity-40">
+        <ThreeBackground />
+      </div>
       <div className="absolute inset-0 pointer-events-none z-[-1] opacity-40">
         <style>{`
           @keyframes ambientDrift1 { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(10vw, 5vh) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
@@ -374,7 +378,7 @@ export default function CustomerDashboardPage() {
       )}
 
       {/* ── Main 2-column layout ── */}
-      <div className="px-4 md:px-8 flex flex-col xl:flex-row gap-8 items-start">
+      <div className="px-4 md:px-8 flex flex-col xl:flex-row gap-8 items-start relative z-10">
 
         {/* Left — Calendar + Appointments */}
         <div className="w-full xl:flex-1 min-w-0">

@@ -233,13 +233,19 @@ export default function ThreeMonthCalendar({
             {/* 3-month grid: 20 | 60 | 20 */}
             <div className="flex items-start w-full px-2 py-4 gap-0">
                 {/* Prev 20% */}
-                <div className="w-[20%] px-1 pt-6">
-                    <MiniCalendar year={prev.year} month={prev.month} role="prev" today={today}
-                        appointments={appointments} selectedDate={selectedDate} onSelectDate={onSelectDate} />
-                </div>
+                <button
+                    onClick={() => nav(-1)}
+                    className="w-[20%] px-1 pt-6 text-left transition-transform hover:scale-[1.02] active:scale-95 group"
+                    aria-label="Go to previous month"
+                >
+                    <div className="opacity-60 group-hover:opacity-100 transition-opacity">
+                        <MiniCalendar year={prev.year} month={prev.month} role="prev" today={today}
+                            appointments={appointments} selectedDate={selectedDate} onSelectDate={onSelectDate} />
+                    </div>
+                </button>
 
                 {/* Divider */}
-                <div className="self-stretch mx-1" style={{ width: "1px", background: "#e2e8f0", flexShrink: 0 }} />
+                <div className="self-stretch mx-1" style={{ width: "1px", background: "#f1f5f9", flexShrink: 0 }} />
 
                 {/* Center 60% */}
                 <div className="w-[60%] px-2">
@@ -248,13 +254,19 @@ export default function ThreeMonthCalendar({
                 </div>
 
                 {/* Divider */}
-                <div className="self-stretch mx-1" style={{ width: "1px", background: "#e2e8f0", flexShrink: 0 }} />
+                <div className="self-stretch mx-1" style={{ width: "1px", background: "#f1f5f9", flexShrink: 0 }} />
 
                 {/* Next 20% */}
-                <div className="w-[20%] px-1 pt-6">
-                    <MiniCalendar year={next.year} month={next.month} role="next" today={today}
-                        appointments={appointments} selectedDate={selectedDate} onSelectDate={onSelectDate} />
-                </div>
+                <button
+                    onClick={() => nav(1)}
+                    className="w-[20%] px-1 pt-6 text-left transition-transform hover:scale-[1.02] active:scale-95 group"
+                    aria-label="Go to next month"
+                >
+                    <div className="opacity-60 group-hover:opacity-100 transition-opacity">
+                        <MiniCalendar year={next.year} month={next.month} role="next" today={today}
+                            appointments={appointments} selectedDate={selectedDate} onSelectDate={onSelectDate} />
+                    </div>
+                </button>
             </div>
         </div>
     );
