@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ShinyText from '@/components/ShinyText';
+import FluidGlass from '@/components/FluidGlass';
 import { cn } from '@/lib/utils';
 
 /* ─── Spring configs ─── */
@@ -411,17 +412,17 @@ export default function DocumentChecklistPage() {
       <SideDecorations />
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-[104px] pb-24 relative z-10 flex-1 flex flex-col min-h-0">
+      <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-[104px] pb-[160px] relative z-10 flex-1 flex flex-col min-h-0">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 min-h-0 relative">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col h-fit max-h-[calc(100vh-140px)] overflow-hidden",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col h-fit max-h-full overflow-hidden",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
-            <div className="flex flex-col h-fit max-h-full">
+            <div className="flex flex-col flex-1 min-h-0">
               {/* Category Header */}
               <motion.div
                 key={activeCategory}
@@ -444,7 +445,7 @@ export default function DocumentChecklistPage() {
               </motion.div>
 
               {/* Document List */}
-              <div ref={listContainerRef} className="space-y-1.5 overflow-y-auto pr-2 scrollbar-none">
+              <div ref={listContainerRef} className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-2 scrollbar-none scroll-smooth">
                 <AnimatePresence mode="popLayout">
                   {activeData.items.map((item, index) => {
                     const itemRequired = item.content.filter(c => c.type === 'required').length;
@@ -580,7 +581,7 @@ export default function DocumentChecklistPage() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[300px] overflow-y-auto relative scrollbar-none">
+                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[300px] relative">
                   <div className="flex-1 relative z-10">
                     <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
                   </div>
@@ -628,7 +629,7 @@ export default function DocumentChecklistPage() {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.1 }}
-          className="flex items-center gap-2 p-2 bg-white/80 backdrop-blur-2xl border border-white max-w-[100%] overflow-x-auto shadow-2xl shadow-indigo-900/10 rounded-[20px] pointer-events-auto scrollbar-none"
+          className="flex items-center gap-2 p-2 bg-white/80 backdrop-blur-2xl border border-white max-w-[100%] shadow-2xl shadow-indigo-900/10 rounded-[20px] pointer-events-auto"
         >
           {checklistData.map((section, index) => {
             const Icon = section.icon;
