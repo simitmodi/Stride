@@ -1,4 +1,5 @@
 import { CustomerLoginForm } from "@/components/auth/customer-login-form";
+import { AnimatedRightSide } from "@/components/auth/AnimatedRightSide";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,28 +40,7 @@ export default function CustomerLoginPage() {
       </div>
 
       {/* Right Column - Video */}
-      <div className="relative hidden w-full bg-slate-900 lg:block lg:w-1/2 overflow-hidden shadow-2xl">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-90"
-        >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-connection-background-19014-large.mp4" type="video/mp4" />
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-1516-large.mp4" type="video/mp4" />
-        </video>
-        {/* Overlay gradient for text readability and sleekness */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
-        <div className="absolute bottom-16 left-16 right-16 z-10 text-white">
-          <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-            Welcome to Stride
-          </h2>
-          <p className="mt-4 text-slate-300 text-xl font-light">
-            Deploy, scale, and manage your infrastructure effortlessly with our next-generation platform.
-          </p>
-        </div>
-      </div>
+      <AnimatedRightSide />
     </div>
   );
 }
