@@ -1,42 +1,19 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {
-  addDays,
-  format,
-  isSameDay,
-  startOfDay,
-  startOfWeek,
-  isToday,
-  parse,
-  isAfter,
-} from "date-fns";
-import { Button } from "./ui/button";
-import {
-  Calendar as CalendarIcon,
-  Bell,
-  Loader2,
-} from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-
-import { Card, CardContent } from "./ui/card";
-import { Calendar } from "./ui/calendar";
+import { format, isSameDay, startOfDay, isAfter } from "date-fns";
+import { Loader2, CalendarDays } from "lucide-react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import {
-  doc,
-  collection,
-  query,
-  where,
-  getDocs,
-  Timestamp,
-} from "firebase/firestore";
+import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { CustomerAppointmentDetailsModal } from "./customer-appointment-details-modal";
 import { AppointmentCard } from "./appointment-card";
 import ShinyText from "./ShinyText";
+import ThreeMonthCalendar from "./three-month-calendar";
 
-interface AppointmentData {
+const INDIGO = "#4F46E5";
+
+export interface AppointmentData {
   id: string;
   customAppointmentId: string;
   bankName: string;
@@ -48,20 +25,21 @@ interface AppointmentData {
   deleted?: boolean;
 }
 
-export default function UpcomingAppointments() {
-  const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
-  const [days, setDays] = useState<Date[]>([]);
-  const [month, setMonth] = useState(new Date());
+export default function UpcomingAppointments({ calendarJumpDate }: { calendarJumpDate?: Date | null }) {
+  const todayDate = useMemo(() => startOfDay(new Date()), []);
+
+  // Calendar-controlled state (lifted up here)
+  const [selectedDate, setSelectedDate] = useState<Date>(todayDate);
+  const [calendarMonth, setCalendarMonth] = useState(todayDate.getMonth());
+  const [calendarYear, setCalendarYear] = useState(todayDate.getFullYear());
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData | null>(null);
 
-  const { user, isUserLoading } = useUser();
+  const { user } = useUser();
   const firestore = useFirestore();
-
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
@@ -69,231 +47,182 @@ export default function UpcomingAppointments() {
   const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
 
   useEffect(() => {
-    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
-    setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
-  }, [selectedDate]);
-
-  useEffect(() => {
     const fetchAppointments = async () => {
-      if (isUserDocLoading || !user) {
-        return;
-      }
-      
+      if (isUserDocLoading || !user) return;
       setIsLoading(true);
       setError(null);
-      
       const appointmentIds = userData?.appointmentIds;
       if (!appointmentIds || appointmentIds.length === 0) {
         setAppointments([]);
         setIsLoading(false);
         return;
       }
-
       try {
-        const appointmentsRef = collection(firestore, "appointments");
-        const q = query(appointmentsRef, where('__name__', 'in', appointmentIds));
-        const appointmentSnapshots = await getDocs(q);
-        
-        const fetchedAppointments: AppointmentData[] = [];
-        appointmentSnapshots.forEach((doc) => {
+        const q = query(collection(firestore, "appointments"), where("__name__", "in", appointmentIds));
+        const snapshots = await getDocs(q);
+        const fetched: AppointmentData[] = [];
+        snapshots.forEach((doc) => {
           const data = doc.data();
-          if(data.date && data.date.toDate && !data.deleted) {
-            fetchedAppointments.push({ id: doc.id, ...data } as AppointmentData);
-          }
+          if (data.date?.toDate && !data.deleted) fetched.push({ id: doc.id, ...data } as AppointmentData);
         });
-        
-        fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
-        setAppointments(fetchedAppointments);
-      } catch (e: any) {
-        console.error("Error fetching appointments:", e);
-        setError("Could not load appointments. Please try again later.");
+        fetched.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+        setAppointments(fetched);
+      } catch {
+        setError("Could not load appointments.");
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchAppointments();
   }, [user, userData, isUserDocLoading, firestore]);
-  
-  const handleAppointmentUpdate = (updatedAppointment: AppointmentData) => {
-    setAppointments(prev => prev.map(apt => 
-      apt.id === updatedAppointment.id ? updatedAppointment : apt
-    ));
-  };
-  
-  const handleAppointmentCancel = (appointmentId: string) => {
-    setAppointments(prev => prev.filter(apt => apt.id !== appointmentId));
-  };
 
+  const handleUpdate = (updated: AppointmentData) =>
+    setAppointments((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
 
-  const renderGroupedAppointments = (appointmentsToGroup: AppointmentData[]) => {
-    const today = startOfDay(new Date());
-    const upcomingAppointments = appointmentsToGroup.filter(apt => !isAfter(today, startOfDay(apt.date.toDate())));
-  
-    if (upcomingAppointments.length === 0) {
-      return (
-        <p className="text-center text-foreground mt-8">
-          No upcoming appointments scheduled.
-        </p>
-      );
-    }
-  
-    const grouped = upcomingAppointments.reduce((acc, apt) => {
-      const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(apt);
-      return acc;
-    }, {} as Record<string, AppointmentData[]>);
-  
-    return Object.keys(grouped).sort().map(dateKey => (
-      <div key={dateKey} className="mb-6">
-        <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do')}</h3>
-        <div className="space-y-4">
-          {grouped[dateKey].map((apt) => (
-            <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
-          ))}
-        </div>
-      </div>
-    ));
-  };
-  
-  const renderAppointmentContent = () => {
-    if (isLoading || isUserDocLoading) {
-      return (
-        <div className="flex items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="ml-4">Loading your appointments...</p>
-        </div>
-      );
-    }
+  const handleCancel = (id: string) =>
+    setAppointments((prev) => prev.filter((a) => a.id !== id));
 
-    if (error) {
-       return (
-         <p className="text-center text-destructive mt-8">{error}</p>
-       );
-    }
-    
-    if (isToday(selectedDate)) {
-      return renderGroupedAppointments(appointments);
-    } else {
-      const filteredAppointments = appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate));
-      if (filteredAppointments.length === 0) {
-        return (
-          <p className="text-center text-foreground mt-8">
-            No appointments scheduled for this day.
-          </p>
-        );
-      }
-      return (
-        <div className="space-y-4">
-          {filteredAppointments.map((apt) => (
-             <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
-          ))}
-        </div>
-      );
-    }
+  // Appointments for the currently selected date
+  const selectedDateAppointments = useMemo(
+    () => appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate)),
+    [appointments, selectedDate]
+  );
+
+  // All OTHER upcoming appointments (not on selected date, not in the past)
+  const otherUpcoming = useMemo(() => {
+    return appointments.filter((apt) => {
+      const d = startOfDay(apt.date.toDate());
+      return !isAfter(todayDate, d) && !isSameDay(d, selectedDate);
+    });
+  }, [appointments, selectedDate, todayDate]);
+
+  // Jump calendar to a date and select it
+  const jumpToDate = (date: Date) => {
+    setCalendarMonth(date.getMonth());
+    setCalendarYear(date.getFullYear());
+    setSelectedDate(date);
   };
 
-  const headingText = isToday(selectedDate)
-    ? "Upcoming Appointments"
-    : `Appointments for ${format(selectedDate, "PPP")}`;
-  
-  if (days.length === 0 && (isLoading || isUserDocLoading)) {
+  // External jump trigger (from parent — e.g. "Next up" click)
+  useEffect(() => {
+    if (calendarJumpDate) jumpToDate(startOfDay(calendarJumpDate));
+  }, [calendarJumpDate]);
+
+  if (isLoading || isUserDocLoading) {
     return (
-        <div className="w-full max-w-4xl mx-auto">
-             <div className="flex items-center justify-center p-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-             </div>
-        </div>
-    ); 
+      <div className="flex items-center justify-center p-12">
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: INDIGO }} />
+        <p className="ml-4 text-slate-500">Loading appointments…</p>
+      </div>
+    );
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-100">
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex justify-between items-center flex-grow overflow-x-auto w-full md:w-auto py-4 px-2">
-              {days.map((day) => {
-                const dayIsToday = isSameDay(day, startOfDay(new Date()));
-                const dayIsSelected = isSameDay(day, selectedDate);
+    <div className="w-full px-4 md:px-8">
+      {/* ── Full-width calendar ── */}
+      <ThreeMonthCalendar
+        appointments={appointments}
+        selectedDate={selectedDate}
+        centerMonth={calendarMonth}
+        centerYear={calendarYear}
+        onCenterChange={(m, y) => { setCalendarMonth(m); setCalendarYear(y); }}
+        onSelectDate={(d) => setSelectedDate(d)}
+        onAppointmentClick={(apt) => setSelectedAppointment(apt)}
+      />
 
-                return (
-                  <Button
-                    key={day.toString()}
-                    variant="ghost"
-                    className={`relative flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-300 justify-center items-center shrink-0
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : ''} 
-                      ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
-                      border border-transparent`}
-                    onClick={() => setSelectedDate(day)}
-                  >
-                    <span className="text-sm uppercase">
-                      {format(day, "eee")}
-                    </span>
-                    <span className="text-2xl font-bold">
-                      {format(day, "d")}
-                    </span>
-                  </Button>
-                );
-              })}
+      {/* ── Appointments for selected date ── */}
+      <div className="mt-10">
+        <div className="flex items-center gap-3 mb-6">
+          <CalendarDays className="h-8 w-8 flex-shrink-0" style={{ color: INDIGO }} />
+          <h2 className="text-4xl font-bold leading-tight">
+            <ShinyText
+              text={`Appointments for ${format(selectedDate, "MMMM d, yyyy")}`}
+              disabled={false}
+              speed={3}
+              className="custom-class"
+            />
+          </h2>
+        </div>
+
+        {error && <p className="text-destructive text-center mb-4">{error}</p>}
+
+        {selectedDateAppointments.length === 0 ? (
+          <div
+            key={selectedDate.toISOString()}
+            className="relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl"
+            style={{ background: `linear-gradient(145deg, ${INDIGO}08, ${INDIGO}04)`, border: `1px solid ${INDIGO}18` }}
+          >
+            <style>{`
+              @keyframes vaultPop { 0%{opacity:0;transform:scale(0.6) rotate(-10deg)} 70%{transform:scale(1.1) rotate(3deg);opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+              @keyframes esSlide  { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+              @keyframes esBtnIn  { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+              @keyframes esShimmer { 0%{opacity:0.05} 50%{opacity:0.12} 100%{opacity:0.05} }
+              .es3-vault { animation: vaultPop  0.5s cubic-bezier(.34,1.56,.64,1) 0.05s both; }
+              .es3-text  { animation: esSlide   0.35s ease-out 0.4s both; }
+              .es3-btn1  { animation: esBtnIn   0.3s cubic-bezier(.34,1.56,.64,1) 0.55s both; }
+              .es3-btn2  { animation: esBtnIn   0.3s cubic-bezier(.34,1.56,.64,1) 0.68s both; }
+              .es3-glow  { animation: esShimmer 3s ease-in-out infinite; }
+            `}</style>
+
+            {/* shimmer bg */}
+            <div className="es3-glow absolute -top-6 -right-6 w-32 h-32 rounded-full pointer-events-none"
+              style={{ background: `radial-gradient(circle, ${INDIGO}35, transparent 70%)` }} />
+
+            {/* Vault icon */}
+            <div className="es3-vault flex-shrink-0">
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                <rect x="4" y="4" width="36" height="36" rx="8" fill={`${INDIGO}12`} stroke={INDIGO} strokeWidth="1.5" />
+                <circle cx="22" cy="22" r="11" stroke={INDIGO} strokeWidth="1.5" fill={`${INDIGO}08`} />
+                <circle cx="22" cy="22" r="6" stroke={`${INDIGO}70`} strokeWidth="1.2" fill={`${INDIGO}12`} />
+                <circle cx="22" cy="22" r="2.5" fill={INDIGO} />
+                <line x1="22" y1="11" x2="22" y2="16" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="22" y1="28" x2="22" y2="33" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="11" y1="22" x2="16" y2="22" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="28" y1="22" x2="33" y2="22" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
             </div>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost"
-                className="h-16 rounded-lg transition-all duration-300"
-                onClick={() => setSelectedDate(startOfDay(new Date()))}
-              >
-                Today
-              </Button>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="h-12 w-12 rounded-full p-0 flex justify-center items-center">
-                    <CalendarIcon className="h-6 w-6" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-card/75" style={{ backdropFilter: 'blur(12px)' }}>
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={(d) => {
-                      const newDate = d ? startOfDay(d) : startOfDay(new Date());
-                      setSelectedDate(newDate);
-                      setMonth(newDate);
-                    }}
-                    month={month}
-                    onMonthChange={setMonth}
-                    captionLayout="dropdown-buttons"
-                    fromYear={new Date().getFullYear()}
-                    toYear={new Date().getFullYear() + 1}
-                    disabled={(date) => date < startOfDay(new Date())}
-                  />
-                </PopoverContent>
-              </Popover>
+
+            {/* Text */}
+            <div className="es3-text flex-1 min-w-0">
+              <p className="text-sm font-black" style={{ color: INDIGO }}>Schedule is clear</p>
+              <p className="text-xs text-slate-400 mt-0.5 truncate">Nothing booked — ready when you are.</p>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex gap-2 flex-shrink-0">
+              <a href="/dashboard/customer/document-checklist"
+                className="es3-btn1 flex items-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold transition-all hover:shadow-md hover:-translate-y-0.5"
+                style={{ border: `1.5px solid ${INDIGO}`, color: INDIGO, background: "white" }}>
+                <svg width="11" height="11" viewBox="0 0 15 15" fill="none"><rect x="2" y="1" width="11" height="13" rx="2" stroke={INDIGO} strokeWidth="1.4" /><line x1="5" y1="5" x2="10" y2="5" stroke={INDIGO} strokeWidth="1.2" strokeLinecap="round" /><line x1="5" y1="8" x2="10" y2="8" stroke={INDIGO} strokeWidth="1.2" strokeLinecap="round" /></svg>
+                Docs
+              </a>
+              <a href="/dashboard/customer/appointment-scheduling"
+                className="es3-btn2 flex items-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
+                style={{ background: INDIGO, boxShadow: `0 3px 12px ${INDIGO}40` }}>
+                <svg width="11" height="11" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="11" rx="2" stroke="white" strokeWidth="1.4" /><line x1="1" y1="7" x2="14" y2="7" stroke="white" strokeWidth="1.2" /><line x1="5" y1="1" x2="5" y2="5" stroke="white" strokeWidth="1.4" strokeLinecap="round" /><line x1="10" y1="1" x2="10" y2="5" stroke="white" strokeWidth="1.4" strokeLinecap="round" /></svg>
+                Book
+              </a>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-4">
-          <Bell className="h-6 w-6" />
-          <ShinyText text={headingText} disabled={false} speed={3} className="custom-class" />
-        </h2>
-        {renderAppointmentContent()}
+        ) : (
+          <div className="space-y-4">
+            {selectedDateAppointments.map((apt) => (
+              <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
+            ))}
+          </div>
+        )}
       </div>
 
-       {selectedAppointment && (
+      {selectedAppointment && (
         <CustomerAppointmentDetailsModal
           appointment={selectedAppointment}
           isOpen={!!selectedAppointment}
           onClose={() => setSelectedAppointment(null)}
-          onAppointmentUpdate={handleAppointmentUpdate}
-          onAppointmentCancel={handleAppointmentCancel}
+          onAppointmentUpdate={handleUpdate}
+          onAppointmentCancel={handleCancel}
         />
       )}
     </div>
   );
 }
+
