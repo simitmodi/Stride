@@ -31,12 +31,12 @@ export function ProblemSection({ lang }: { lang: LanguageCode }) {
     <section className="w-full py-24 bg-[#F4F4F8] dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
-          <h2 className="text-3xl md:text-5xl font-bold text-center text-slate-900 dark:text-slate-100 mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-slate-900 dark:text-slate-100 mb-16 px-4">
             {t.probTitle}
           </h2>
         </AnimateIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {problems.map((prob, i) => (
             <AnimateIn key={i} delay={prob.delay} className="group relative hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-2xl blur-xl opacity-60 transition duration-500 group-hover:opacity-100" />

@@ -10,7 +10,7 @@ export function StatsSection({ lang }: { lang: LanguageCode }) {
   return (
     <section className="w-full py-24 bg-white dark:bg-background border-y border-slate-100 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
           <AnimateIn delay={100} className="py-8 flex flex-col items-center justify-center">
             <ShieldCheck className="w-12 h-12 text-primary mb-6" />
             <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t.stat1Title}</h3>

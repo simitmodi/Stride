@@ -13,7 +13,7 @@ export function CtaSection({ lang }: { lang: LanguageCode }) {
     <section className="w-full py-32 bg-gradient-to-b from-primary/5 to-primary/15 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <AnimateIn>
-          <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-slate-900 dark:text-slate-100 mb-6 leading-tight">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter text-slate-900 dark:text-slate-100 mb-6 leading-tight">
             {t.cta1} <span className="text-primary">{t.cta1Highlight}</span>
           </h2>
         </AnimateIn>

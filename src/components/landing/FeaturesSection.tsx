@@ -56,7 +56,7 @@ export function FeaturesSection({ lang }: { lang: LanguageCode }) {
           </div>
         </AnimateIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, i) => (
             <AnimateIn key={i} delay={feat.delay} className="group relative hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-xl blur-xl opacity-60 transition duration-500 group-hover:opacity-100" />

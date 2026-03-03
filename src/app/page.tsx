@@ -50,8 +50,8 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors">
-                <Globe className="w-4 h-4" /> {selectedLangName}
+              <div className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors">
+                <Globe className="w-4 h-4" /> <span className="hidden sm:inline">{selectedLangName}</span>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[180px]">
@@ -79,7 +79,7 @@ export default function Home() {
             <User className="w-4 h-4" /> {t.heroTag}
           </div>
 
-          <h1 className="text-balance text-6xl md:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line">
+          <h1 className="text-balance text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line">
             {t.heroTitle}
           </h1>
 
@@ -93,7 +93,7 @@ export default function Home() {
         </div>
 
         {/* Feature Cards Grid (Scroll to reveal) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl pb-32">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl pb-32">
 
           {/* Card 1: Platform Usage Demo */}
           <motion.div
