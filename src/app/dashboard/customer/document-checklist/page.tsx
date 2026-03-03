@@ -55,6 +55,85 @@ const contentRowVariants = {
   }),
 };
 
+/* ─── Side Background Decorations (Floating 3D elements for wide screens) ─── */
+const SideDecorations = () => {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden hidden xl:block">
+      {/* --- LEFT SIDE --- */}
+      <motion.div 
+        initial={{ y: 0, rotate: 0 }}
+        animate={{ y: [-20, 20, -20], rotate: [0, 5, -5, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-[2%] top-[15%] w-[300px] h-[300px] opacity-70"
+        style={{ perspective: 1000 }}
+      >
+        <div 
+          className="w-full h-full rounded-full border-[24px] border-white/40 backdrop-blur-md shadow-[0_20px_60px_rgba(79,70,229,0.15)] flex items-center justify-center relative" 
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(55deg) rotateY(15deg) rotateZ(-10deg)' }}
+        >
+          {/* Inner ring */}
+          <div className="absolute w-[200px] h-[200px] rounded-full border-[12px] border-indigo-100/50 shadow-inner" style={{ transform: 'translateZ(40px)' }} />
+          {/* Glowing core */}
+          <div className="absolute w-[100px] h-[100px] rounded-full bg-gradient-to-tr from-indigo-400/40 to-violet-400/40 blur-xl" style={{ transform: 'translateZ(80px)' }} />
+          {/* Floating icon inside */}
+          <LayoutList className="absolute w-12 h-12 text-indigo-400/80" style={{ transform: 'translateZ(120px)' }} />
+        </div>
+      </motion.div>
+
+      <motion.div 
+        initial={{ y: 0, rotate: 0 }}
+        animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute left-[5%] bottom-[10%] w-[200px] h-[200px] opacity-60"
+        style={{ perspective: 1000 }}
+      >
+        <div 
+          className="w-full h-full rounded-3xl bg-white/30 backdrop-blur-lg border border-white/60 shadow-xl shadow-indigo-900/10 flex items-center justify-center relative" 
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(30deg) rotateY(-20deg) rotateZ(15deg)' }}
+        >
+          <div className="absolute inset-4 rounded-2xl border-2 border-dashed border-indigo-300/50" style={{ transform: 'translateZ(20px)' }} />
+          <FileText className="w-16 h-16 text-indigo-300/80" style={{ transform: 'translateZ(50px)' }} />
+        </div>
+      </motion.div>
+
+      {/* --- RIGHT SIDE --- */}
+      <motion.div 
+        initial={{ y: 0, rotate: 0 }}
+        animate={{ y: [25, -25, 25], rotate: [0, -8, 8, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute right-[2%] top-[12%] w-[280px] h-[280px] opacity-70"
+        style={{ perspective: 1000 }}
+      >
+        <div 
+          className="w-full h-full bg-gradient-to-br from-white/50 to-white/20 backdrop-blur-md rounded-tr-[80px] rounded-bl-[80px] rounded-tl-3xl rounded-br-3xl border border-white/80 shadow-2xl shadow-violet-900/15 flex items-center justify-center relative" 
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-25deg) rotateY(-20deg) rotateZ(5deg)' }}
+        >
+          <div className="w-[180px] h-[180px] bg-gradient-to-tr from-violet-300/30 to-rose-300/30 rounded-full blur-2xl absolute" style={{ transform: 'translateZ(0px)' }} />
+          <div className="w-[240px] h-[240px] border-2 border-dashed border-white/60 rounded-tr-[70px] rounded-bl-[70px] rounded-tl-[24px] rounded-br-[24px] absolute" style={{ transform: 'translateZ(30px)' }} />
+          <CheckCircle2 className="w-20 h-20 text-violet-400/80" style={{ transform: 'translateZ(60px)' }} />
+        </div>
+      </motion.div>
+
+      <motion.div 
+        initial={{ y: 0, rotate: 0 }}
+        animate={{ y: [-20, 20, -20], rotate: [0, 15, 0] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        className="absolute right-[6%] bottom-[12%] w-[180px] h-[180px] opacity-60"
+        style={{ perspective: 1000 }}
+      >
+        <div 
+          className="w-full h-full rounded-full border-[12px] border-rose-100/40 backdrop-blur-md relative flex items-center justify-center" 
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(45deg) rotateY(30deg) rotateZ(-15deg)' }}
+        >
+           <div className="absolute w-[120px] h-[120px] rounded-full border-[6px] border-rose-200/50" style={{ transform: 'translateZ(25px)' }}/>
+           <div className="absolute w-[60px] h-[60px] rounded-full bg-rose-400/30 blur-md" style={{ transform: 'translateZ(50px)' }}/>
+           <Circle className="absolute w-10 h-10 text-rose-400/80" style={{ transform: 'translateZ(75px)' }} />
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 /* ─── Document Illustration (3D-like / Animated) ─── */
 const DocumentIllustration = ({ activeCategory }: { activeCategory: number }) => {
   return (
@@ -329,9 +408,11 @@ export default function DocumentChecklistPage() {
         <div className="absolute bottom-[-10%] left-[20%] w-[30%] h-[30%] bg-rose-400/10 rounded-full blur-[120px]" />
       </div>
 
+      <SideDecorations />
+
       {/* ─── Top Bar: Category Tabs ─── */}
       <div className="sticky top-16 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm shadow-slate-900/[0.03]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Desktop Version: Horizontal Tabs */}
           <div className="hidden lg:flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
@@ -427,13 +508,13 @@ export default function DocumentChecklistPage() {
       </div>
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] shrink-0 lg:block",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 lg:block",
             isMobileDetailView ? "hidden" : "block"
           )}>
             <div className="sticky top-[85px]">
