@@ -410,106 +410,15 @@ export default function DocumentChecklistPage() {
 
       <SideDecorations />
 
-      {/* ─── Top Bar: Category Tabs ─── */}
-      <div className="sticky top-16 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm shadow-slate-900/[0.03]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {/* Desktop Version: Horizontal Tabs */}
-          <div className="hidden lg:flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
-            <FileText className="w-5 h-5 text-indigo-400 shrink-0" />
-            <span className="text-sm font-semibold text-slate-400 mr-2 shrink-0">Services</span>
-            <div className="h-6 w-px bg-slate-200 shrink-0" />
-            {checklistData.map((section, index) => {
-              const Icon = section.icon;
-              return (
-                <motion.button
-                  key={section.category}
-                  onClick={() => handleCategoryChange(index)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={springPop}
-                  className={cn(
-                    "relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap shrink-0",
-                    "transition-colors duration-300",
-                    activeCategory === index
-                      ? "text-white"
-                      : "text-slate-500 hover:text-slate-700"
-                  )}
-                >
-                  {/* Animated pill background */}
-                  {activeCategory === index && (
-                    <motion.div
-                      layoutId="activeTabBg"
-                      className="absolute inset-0 bg-indigo-600 rounded-full shadow-lg shadow-indigo-600/25"
-                      transition={springSmooth}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-2">
-                    <Icon className="w-4 h-4" />
-                    {section.category}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* Mobile Version: Expandable Dropdown Selector */}
-          <div className="lg:hidden py-3 relative">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="flex items-center justify-between w-full bg-white border border-indigo-100 rounded-xl px-4 py-3 shadow-sm hover:border-indigo-200 transition-colors"
-            >
-              <div className="flex items-center gap-2.5 text-indigo-900 font-semibold text-sm">
-                <FileText className="w-4 h-4 text-indigo-400" />
-                Category: 
-                <span className="font-bold">{checklistData[activeCategory].category}</span>
-              </div>
-              <ChevronRight className={cn("w-5 h-5 text-indigo-400 transition-transform duration-300", isMobileMenuOpen ? "rotate-[-90deg]" : "rotate-90")} />
-            </button>
-
-            <AnimatePresence>
-              {isMobileMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  transition={springBouncy}
-                  className="absolute left-4 right-4 top-[calc(100%+4px)] bg-white rounded-xl border border-slate-100 shadow-xl overflow-hidden z-50 flex flex-col p-1.5"
-                >
-                  {checklistData.map((section, index) => {
-                    const Icon = section.icon;
-                    return (
-                      <button
-                        key={section.category}
-                        onClick={() => {
-                          handleCategoryChange(index);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className={cn(
-                          "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors",
-                          activeCategory === index 
-                            ? "bg-indigo-50 text-indigo-700" 
-                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                        )}
-                      >
-                        <Icon className={cn("w-4 h-4", activeCategory === index ? "text-indigo-600" : "text-slate-400")} />
-                        {section.category}
-                        {activeCategory === index && (
-                          <CheckCircle2 className="w-4 h-4 text-indigo-600 ml-auto" />
-                        )}
-                      </button>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 relative z-10 pb-[120px]">
+        {/* Title removed from top bar, added here gracefully */}
+        <div className="flex items-center gap-3 mb-8 px-2">
+          <FileText className="w-8 h-8 text-indigo-500" />
+          <h1 className="text-3xl font-bold text-slate-900 font-headline">Service Requirements</h1>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-220px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
@@ -753,6 +662,52 @@ export default function DocumentChecklistPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ─── Floating Navigation Dock ─── */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+        <motion.div 
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.1 }}
+          className="flex items-center gap-1.5 p-2 bg-white/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-indigo-900/10 rounded-2xl pointer-events-auto"
+        >
+          {checklistData.map((section, index) => {
+            const Icon = section.icon;
+            const isActive = activeCategory === index;
+            
+            return (
+              <div key={section.category} className="relative group">
+                <motion.button
+                  onClick={() => handleCategoryChange(index)}
+                  className={cn(
+                    "relative flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300",
+                    isActive 
+                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" 
+                      : "text-slate-500 hover:text-indigo-600 hover:bg-white box-border"
+                  )}
+                  whileHover={{ scale: 1.15, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Icon className="w-5 h-5 pointer-events-none" />
+                  
+                  {isActive && (
+                    <motion.div 
+                      layoutId="dockIndicator"
+                      className="absolute -bottom-1 w-1 h-1 bg-indigo-600 rounded-full"
+                    />
+                  )}
+                </motion.button>
+
+                {/* Tooltip */}
+                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">
+                  {section.category}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-slate-800" />
+                </div>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
     </div>
   );
