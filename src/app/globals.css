@@ -97,11 +97,22 @@ body {
 }
 
 @layer utilities {
-  .scrollbar-none {
+  .scrollbar-none,
+  .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-none::-webkit-scrollbar {
+  .scrollbar-none::-webkit-scrollbar,
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
