@@ -411,13 +411,13 @@ export default function DocumentChecklistPage() {
       <SideDecorations />
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 pb-[120px]">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-[120px] relative z-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-180px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start sticky top-[85px] max-h-[calc(100vh-120px)]",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start sticky top-[110px] max-h-[calc(100vh-140px)]",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
