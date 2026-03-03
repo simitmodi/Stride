@@ -411,14 +411,8 @@ export default function DocumentChecklistPage() {
       <SideDecorations />
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 relative z-10 pb-[120px]">
-        {/* Title removed from top bar, added here gracefully */}
-        <div className="flex items-center gap-3 mb-8 px-2">
-          <FileText className="w-8 h-8 text-indigo-500" />
-          <h1 className="text-3xl font-bold text-slate-900 font-headline">Service Requirements</h1>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-220px)] relative overflow-hidden lg:overflow-visible">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 pb-[120px]">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
@@ -665,46 +659,42 @@ export default function DocumentChecklistPage() {
       </div>
 
       {/* ─── Floating Navigation Dock ─── */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+      <div className="fixed bottom-6 w-full px-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-auto z-50 pointer-events-none flex justify-center">
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.1 }}
-          className="flex items-center gap-1.5 p-2 bg-white/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-indigo-900/10 rounded-2xl pointer-events-auto"
+          className="flex items-center gap-2 p-2 bg-white/80 backdrop-blur-2xl border border-white max-w-[100%] overflow-x-auto shadow-2xl shadow-indigo-900/10 rounded-[20px] pointer-events-auto scrollbar-none"
         >
           {checklistData.map((section, index) => {
             const Icon = section.icon;
             const isActive = activeCategory === index;
             
             return (
-              <div key={section.category} className="relative group">
-                <motion.button
-                  onClick={() => handleCategoryChange(index)}
-                  className={cn(
-                    "relative flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300",
-                    isActive 
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" 
-                      : "text-slate-500 hover:text-indigo-600 hover:bg-white box-border"
-                  )}
-                  whileHover={{ scale: 1.15, y: -4 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Icon className="w-5 h-5 pointer-events-none" />
-                  
-                  {isActive && (
-                    <motion.div 
-                      layoutId="dockIndicator"
-                      className="absolute -bottom-1 w-1 h-1 bg-indigo-600 rounded-full"
-                    />
-                  )}
-                </motion.button>
-
-                {/* Tooltip */}
-                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">
+              <motion.button
+                key={section.category}
+                onClick={() => handleCategoryChange(index)}
+                className={cn(
+                  "relative flex items-center justify-center gap-2.5 px-4 h-12 rounded-xl transition-all duration-300 shrink-0",
+                  isActive 
+                    ? "text-white" 
+                    : "text-slate-600 hover:text-indigo-600 hover:bg-indigo-50"
+                )}
+                whileHover={{ scale: 1.05, y: isActive ? 0 : -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {isActive && (
+                  <motion.div 
+                    layoutId="dockIndicatorBg"
+                    className="absolute inset-0 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-600/30"
+                    transition={springSmooth}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2.5 font-semibold text-sm">
+                  <Icon className="w-4 h-4" />
                   {section.category}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-slate-800" />
-                </div>
-              </div>
+                </span>
+              </motion.button>
             );
           })}
         </motion.div>
