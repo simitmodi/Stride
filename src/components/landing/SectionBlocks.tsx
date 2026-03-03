@@ -26,7 +26,7 @@ export function CtaSection({ lang }: { lang: LanguageCode }) {
 
         <AnimateIn delay={200}>
           <Button asChild size="lg" className="rounded-full h-16 px-10 text-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
-            <Link href="/signup">
+            <Link href="/signup/customer">
               {t.ctaBtn} <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </Button>

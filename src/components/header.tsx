@@ -87,11 +87,9 @@ export default function Header() {
 
 
   return (
-    <header 
-      className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card/75 px-4 md:px-6"
-      style={{ backdropFilter: 'blur(12px)' }}
-    >
-      <nav className="flex w-full flex-row items-center justify-between gap-5 text-lg font-medium md:gap-6">
+    <div className="fixed top-4 left-4 right-4 md:left-8 md:right-8 z-50 pointer-events-none flex justify-center">
+      <header className="pointer-events-auto flex items-center justify-between w-full max-w-[1440px] h-16 px-4 md:px-6 rounded-full bg-white/70 backdrop-blur-2xl border border-white/60 shadow-xl shadow-slate-900/5 transition-all">
+        <nav className="flex w-full flex-row items-center justify-between gap-5 text-lg font-medium md:gap-6">
         <Link
           href={getDashboardLink()}
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
@@ -136,6 +134,7 @@ export default function Header() {
           </DropdownMenu>
         </div>
       </nav>
-    </header>
+      </header>
+    </div>
   );
 }

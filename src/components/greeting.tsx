@@ -36,7 +36,7 @@ export default function Greeting() {
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
   );
-  
+
   const { data: userData } = useDoc(userDocRef);
 
   const [greeting, setGreeting] = useState("");
@@ -57,7 +57,7 @@ export default function Greeting() {
       <AnimatedSplitText
         key={fullGreeting}
         text={fullGreeting}
-        className="text-4xl font-bold text-primary"
+        className="text-5xl font-bold text-primary"
         tag="h1"
       />
     </div>

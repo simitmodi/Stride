@@ -57,7 +57,17 @@ export const landingTranslations = {
     cta1: "Your Time Deserves ",
     cta1Highlight: "Better.",
     cta2: "Book smarter. Visit once. Get it done.",
-    ctaBtn: "Start Booking Now"
+    ctaBtn: "Start Booking Now",
+    supportCardTag: "Available Now",
+    supportCardTitle: "24/7 Support",
+    supportCardSub: "Banking Assistance",
+    supportCardDesc: "Chat with our experts anytime",
+    supportCardResponse: "Response Time",
+    supportCardResponseTime: "< 1 min average",
+    bookingCardTag: "Instant Confirmation",
+    bookingCardTitle: "Skip the Queue. Book Your Visit.",
+    bookingCardDesc: "Select your branch, choose a preferred time, and receive confirmation in seconds. No waiting lines. No unnecessary delays.",
+    bookingCardBtn: "Reserve Your Slot"
   },
   hi: {
     home: "होम",

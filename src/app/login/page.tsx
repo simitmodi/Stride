@@ -1,3 +1,4 @@
+'use client';
 
 import {
   Card,
@@ -5,81 +6,114 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowRight, User, Banknote } from 'lucide-react';
+import { ArrowRight, User, Banknote, Folder, Search, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '@/lib/Logo.png';
+import { AnimatedRightSide } from '@/components/auth/AnimatedRightSide';
+import { motion, Variants } from 'framer-motion';
 
 export default function LoginOptionsPage() {
-  const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  };
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
-      {professionalBg && <Image
-        src={professionalBg.imageUrl}
-        alt={professionalBg.description}
-        fill
-        className="object-cover"
-        style={{ filter: 'blur(8px)' }}
-        data-ai-hint={professionalBg.imageHint}
-        priority
-      />}
-      <div className="absolute inset-0 bg-card/75" />
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex h-screen w-full bg-[#111111] overflow-hidden"
+    >
 
-      <main className="relative z-10 flex w-full max-w-lg flex-col items-center">
-        <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-          <div
-            className="relative w-full rounded-xl bg-card p-8 shadow-lg transform-gpu"
-            style={{ backdropFilter: 'blur(12px)' }}
-          >
-            <div className="text-center text-foreground">
-              <Image src={Logo} alt="Stride Logo" width={200} height={200} className="mb-4 inline-block" />
-              <p className="mt-2 text-foreground">
-                Choose your role to continue.
-              </p>
-            </div>
+      {/* ─── LEFT COLUMN: Selection (Solid Light Theme) ─── */}
+      <motion.div 
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="flex lg:flex-1 w-full flex-col bg-[#F4F4F8] px-6 md:w-1/2 lg:px-16 xl:px-24 z-10 relative rounded-r-[40px] shadow-[8px_0_30px_rgba(0,0,0,0.1)] h-full overflow-y-auto scrollbar-hide items-center"
+      >
+        <div className="min-h-full flex flex-col py-12 w-full items-center">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="mx-auto w-full max-w-md my-auto"
+        >
+          <motion.div variants={itemVariants} className="mb-10 text-center">
+            <Image
+              src={Logo}
+              alt="Stride Logo"
+              width={180}
+              height={180}
+              className="mb-6 mx-auto inline-block"
+            />
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 mb-2">
+              Welcome to Stride
+            </h1>
+            <p className="text-gray-500 text-lg">
+              Choose your role to continue.
+            </p>
+          </motion.div>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-              <Link href="/login/customer" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <User className="h-12 w-12 text-primary" />
-                    <div className="flex-1">
-                      <CardTitle className="text-foreground">Customer Login</CardTitle>
-                      <CardDescription className="text-sm text-foreground group-hover:text-accent-foreground">
-                        Access your personal account.
-                      </CardDescription>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground" />
-                  </CardHeader>
-                </Card>
+          <div className="grid grid-cols-1 gap-6">
+            <motion.div variants={itemVariants}>
+              <Link href="/login/customer" className="group block">
+                <div className="flex flex-row items-center gap-6 p-6 rounded-3xl transition-all duration-300 ease-in-out hover:bg-white/50">
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-all duration-300 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 shadow-sm">
+                    <User className="h-8 w-8" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 leading-none mb-2">Customer Login</h3>
+                    <p className="text-sm text-gray-500 font-medium leading-tight">
+                      Access your personal account securely.
+                    </p>
+                  </div>
+                  <ArrowRight className="h-6 w-6 shrink-0 text-gray-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-indigo-600" />
+                </div>
               </Link>
-              <Link href="/login/bank" className="group">
-                <Card className="h-full transform-gpu border-border bg-background/50 text-foreground transition-all duration-300 ease-in-out hover:scale-110 hover:bg-accent hover:text-accent-foreground hover:shadow-xl active:scale-105">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <Banknote className="h-4 w-4 text-primary" />
-                    <div className="flex-1">
-                      <CardTitle className="text-foreground">Bank Login</CardTitle>
-                      <CardDescription className="text-sm text-foreground group-hover:text-accent-foreground">
-                        Access the employee portal.
-                      </CardDescription>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground" />
-                  </CardHeader>
-                </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <Link href="/login/bank" className="group block">
+                <div className="flex flex-row items-center gap-6 p-6 rounded-3xl transition-all duration-300 ease-in-out hover:bg-white/50">
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-all duration-300 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 shadow-sm">
+                    <Banknote className="h-8 w-8" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 leading-none mb-2">Bank Login</h3>
+                    <p className="text-sm text-gray-500 font-medium leading-tight">
+                      Access the employee & ops portal.
+                    </p>
+                  </div>
+                  <ArrowRight className="h-6 w-6 shrink-0 text-gray-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-indigo-600" />
+                </div>
               </Link>
-            </div>
+            </motion.div>
           </div>
-        </div>
 
-        <div className="mt-8 text-center text-sm text-foreground/80">
-          <Link href="/" className="underline hover:text-primary">
-            Back to Home
-          </Link>
-        </div>
-      </main>
-    </div>
+          <motion.div variants={itemVariants} className="mt-10 text-center text-sm font-medium">
+            <Link href="/" className="text-gray-500 underline hover:text-indigo-600 transition-colors inline-flex items-center gap-1">
+              &larr; Back to Home
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </motion.div>
+
+      {/* ─── RIGHT COLUMN: Video / Animated Presentation ─── */}
+      <AnimatedRightSide />
+    </motion.div>
   );
 }
