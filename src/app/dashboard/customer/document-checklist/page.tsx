@@ -514,11 +514,11 @@ export default function DocumentChecklistPage() {
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 lg:block rounded-3xl p-4 lg:p-5 relative",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start sticky top-[85px] max-h-[calc(100vh-120px)]",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
-            isMobileDetailView ? "hidden" : "block"
+            isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
-            <div className="sticky top-[85px]">
+            <div className="flex flex-col h-full min-h-0">
               {/* Category Header */}
               <motion.div
                 key={activeCategory}
@@ -541,7 +541,7 @@ export default function DocumentChecklistPage() {
               </motion.div>
 
               {/* Document List */}
-              <div ref={listContainerRef} className="space-y-1.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1 scrollbar-none">
+              <div ref={listContainerRef} className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 transition-colors">
                 <AnimatePresence mode="popLayout">
                   {activeData.items.map((item, index) => {
                     const itemRequired = item.content.filter(c => c.type === 'required').length;
