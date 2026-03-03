@@ -108,8 +108,8 @@ export default function Home() {
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col min-h-[300px]">
 
                 <div className="mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span> Available Now
+                  <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-4">
+                    Available Now
                   </div>
                   <h3 className="text-5xl font-extrabold text-[#0F1729] dark:text-slate-100 tracking-tight">
                     24/7
@@ -175,7 +175,7 @@ export default function Home() {
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
                 <div className="flex justify-between items-start mb-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
+                  <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
                     Instant Confirmation
                   </div>
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
