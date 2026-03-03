@@ -15,9 +15,9 @@ import Logo from "@/lib/Logo.png";
 
 export default function CustomerSignUpPage() {
   return (
-    <div className="flex min-h-screen w-full bg-[#F4F4F8]">
+    <div className="flex min-h-screen w-full bg-[#191919]">
       {/* Left Column - Form */}
-      <div className="flex w-full flex-col items-center justify-center p-8 lg:w-1/2 lg:p-12 xl:p-24 relative z-10">
+      <div className="flex w-full flex-col items-center justify-center p-8 lg:w-1/2 lg:p-12 xl:p-24 relative z-10 bg-[#F4F4F8] rounded-r-[40px] shadow-[8px_0_30px_rgba(0,0,0,0.1)]">
         <main className="w-full max-w-md">
           <div className="mb-10 text-center lg:text-left">
             <Link href="/" className="inline-block">
