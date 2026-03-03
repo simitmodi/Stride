@@ -41,13 +41,38 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
   ];
 
   return (
-    <section className="w-full py-32 bg-[#020617] relative overflow-hidden">
-      {/* Background Gradient Mesh */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 opacity-50" />
-      <motion.div
-        style={{ x: glowX, y: glowY }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"
-      />
+    <section className="w-full py-32 bg-[#02040a] relative overflow-hidden">
+      {/* Premium Gradient Mesh Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Base dark layer */}
+        <div className="absolute inset-0 bg-[#02040a]" />
+
+        {/* Subtle indigo mesh layer */}
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_20%_35%,rgba(99,102,241,0.15)_0%,transparent_50%),radial-gradient(circle_at_80%_65%,rgba(99,102,241,0.1)_0%,transparent_50%)]" />
+
+        {/* Moving ambient glows */}
+        <motion.div
+          style={{ x: glowX, y: glowY }}
+          animate={{
+            opacity: [0.3, 0.5, 0.3],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-500/10 rounded-full blur-[120px]"
+        />
+        <motion.div
+          style={{ x: -glowX, y: -glowY }}
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+            scale: [1.2, 1, 1.2],
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]"
+        />
+
+        {/* Noise overlay for texture */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center relative z-10">
         <div>
