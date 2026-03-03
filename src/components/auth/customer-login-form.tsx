@@ -226,44 +226,40 @@ export function CustomerLoginForm() {
             </button>
           </DialogTrigger>
           <DialogContent
-            className="sm:max-w-[425px] border border-white/20 text-white"
-            style={{
-              background: "rgba(15, 23, 42, 0.85)",
-              backdropFilter: "blur(20px)",
-            }}
+            className="sm:max-w-[425px] border border-gray-200 bg-white shadow-lg"
           >
             <form onSubmit={handleSubmitFP(handleForgotPassword)}>
               <DialogHeader>
-                <DialogTitle className="text-teal-300">Reset Password</DialogTitle>
-                <DialogDescriptionComponent className="text-white/60">
+                <DialogTitle className="text-gray-900 font-bold">Reset Password</DialogTitle>
+                <DialogDescriptionComponent className="text-gray-500 text-sm">
                   Enter your email address and we&apos;ll send you a reset link.
                 </DialogDescriptionComponent>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40 pointer-events-none z-10" />
+                  <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 pointer-events-none z-10" />
                   <input
                     id="fp-email"
                     type="email"
                     {...registerFP("email")}
                     placeholder=" "
                     className="
-                      peer block w-full rounded-xl border border-white/20 bg-white/10
-                      px-10 pb-2.5 pt-5 text-sm text-white placeholder-transparent
-                      outline-none focus:border-teal-400/70 focus:ring-1 focus:ring-teal-400/50
+                      peer block w-full rounded-xl border border-gray-200 bg-white
+                      px-10 pb-2.5 pt-5 text-sm text-gray-900 placeholder-transparent
+                      outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50
                     "
                   />
                   <label
                     htmlFor="fp-email"
                     className="
                       absolute left-10 top-4 z-10 origin-[0] -translate-y-2.5 scale-75
-                      text-xs font-medium text-teal-300
+                      text-xs font-medium text-indigo-600
                       transition-all duration-200
                       peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
-                      peer-placeholder-shown:scale-100 peer-placeholder-shown:text-white/50
+                      peer-placeholder-shown:scale-100 peer-placeholder-shown:text-gray-400
                       peer-placeholder-shown:text-sm
                       peer-focus:top-4 peer-focus:-translate-y-2.5 peer-focus:scale-75
-                      peer-focus:text-teal-300
+                      peer-focus:text-indigo-600
                     "
                   >
                     Email
@@ -277,7 +273,7 @@ export function CustomerLoginForm() {
                 <DialogClose asChild>
                   <button
                     type="button"
-                    className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors"
+                    className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
@@ -285,7 +281,8 @@ export function CustomerLoginForm() {
                 <button
                   type="submit"
                   disabled={isResetting}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-teal-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 hover:from-teal-400 hover:to-cyan-300 disabled:opacity-60 transition-all"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-90 disabled:opacity-60 transition-all"
+                  style={{ backgroundColor: "#4F46E5" }}
                 >
                   {isResetting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   Send Reset Link
