@@ -580,7 +580,7 @@ export default function DocumentChecklistPage() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 flex-1 overflow-y-auto relative scrollbar-none">
+                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[300px] overflow-y-auto relative scrollbar-none">
                   <div className="flex-1 relative z-10">
                     <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
                   </div>
