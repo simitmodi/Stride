@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 html {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 html::-webkit-scrollbar {
-  display: none; /* WebKit browsers */
+  display: none;
+  /* WebKit browsers */
 }
 
 body {
@@ -51,6 +54,7 @@ body {
     --sidebar-border: 214.3 31.8% 91.4%;
     --sidebar-ring: 243 75% 59%;
   }
+
   .dark {
     --background: 0 0% 0%;
     --foreground: 210 40% 98%;
@@ -91,7 +95,52 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  .animate-breathing {
+    animation: breathing 8s ease-in-out infinite;
+  }
+
+  .glass-card {
+    @apply bg-white/70 dark:bg-black/70 backdrop-blur-xl border border-white/20 dark:border-white/10;
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgba(16, 185, 129, 0));
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+  }
+}
+
+@keyframes breathing {
+
+  0%,
+  100% {
+    opacity: 0.94;
+    filter: brightness(100%) saturate(100%);
+  }
+
+  50% {
+    opacity: 1;
+    filter: brightness(110%) saturate(105%);
   }
 }

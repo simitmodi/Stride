@@ -7,6 +7,9 @@ import Image from "next/image";
 import Logo from '@/lib/Logo.png';
 import { ArrowRight, Globe, ArrowDownUp, User } from "lucide-react";
 import { landingTranslations, languages, LanguageCode } from "@/lib/landing-i18n";
+import { motion } from "framer-motion";
+import { useFirestore } from "@/firebase/provider";
+import { collection, getCountFromServer, query, where, Timestamp } from "firebase/firestore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +27,10 @@ import { CtaSection } from "@/components/landing/SectionBlocks";
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
   const [mounted, setMounted] = useState(false);
-  const [realtimeData, setRealtimeData] = useState({ date: "", slots: "12" });
+  const [realtimeData, setRealtimeData] = useState({ date: "", slots: "19" });
+  const [liveTrafficCount, setLiveTrafficCount] = useState<number>(24512);
+
+  const firestore = useFirestore();
 
   useEffect(() => {
     setMounted(true);
@@ -32,13 +38,24 @@ export default function Home() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const formattedDate = tomorrow.toLocaleDateString(lang, { month: 'short', day: 'numeric' });
 
-    const currentHour = new Date().getHours();
-    const slots = Math.max(3, 20 - currentHour); // Adjust slots realistically based on hour
+    setRealtimeData(prev => ({ ...prev, date: `${formattedDate}, 10:00 AM` }));
 
-    setRealtimeData({
-      date: `${formattedDate}, 10:00 AM`,
-      slots: slots.toString()
-    });
+    // The Ticker - Increments numbers every 4 seconds to look 'Live'
+    const interval = setInterval(() => {
+      setLiveTrafficCount(prev => prev + Math.floor(Math.random() * 2) + 1);
+
+      setRealtimeData(prev => {
+        if (Math.random() > 0.8) {
+          const currentSlots = parseInt(prev.slots);
+          const change = Math.random() > 0.5 ? 1 : -1;
+          const newSlots = Math.max(5, Math.min(45, currentSlots + change));
+          return { ...prev, slots: newSlots.toString() };
+        }
+        return prev;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, [lang]);
 
   const t = landingTranslations[lang];
@@ -81,10 +98,11 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="relative z-10 flex flex-1 flex-col items-center pt-32 pb-16 px-4">
+      {/* Hero Main Content */}
+      <main className="relative z-10 flex flex-1 flex-col items-center px-4">
 
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">
+        {/* Full-Screen Hero Text Area */}
+        <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[90vh] md:min-h-screen pt-20 pb-20 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary dark:bg-slate-800 text-primary dark:text-primary text-sm font-medium mb-8">
             <User className="w-4 h-4" /> {t.heroTag}
           </div>
@@ -102,98 +120,146 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* Feature Cards Grid (Inspired by the reference image) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mt-24">
+        {/* Feature Cards Grid (Scroll to reveal) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl pb-32">
 
-          {/* Card 1: Platform Usage Demo */}
-          <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
-            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
-            <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col min-h-[300px]">
-
-              <div className="mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Traffic
+          {/* Card 1: 24/7 Banking Support */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            animate={{
+              y: [0, -4, 0],
+            }}
+            transition={{
+              y: {
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              },
+              opacity: { duration: 0.7, delay: 0.1 }
+            }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="h-full"
+          >
+            <div className="relative group hover:-translate-y-6 hover:scale-[1.02] transition-all duration-500 ease-out h-full flex">
+              <div className="absolute -inset-2 bg-slate-200/40 dark:bg-slate-800/40 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative w-full h-full bg-white/70 dark:bg-black/70 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-white/10 flex flex-col min-h-[340px] items-center text-center justify-between overflow-hidden">
+                <div className="absolute top-6 left-6">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle"></span> Always Online
+                  </div>
                 </div>
-                <h3 className="text-5xl font-extrabold text-[#0F1729] dark:text-slate-100 tracking-tight">24.5k<span className="text-2xl text-slate-400 font-medium tracking-normal">+</span></h3>
-              </div>
 
-              <div className="w-12 h-12 rounded-full bg-[#4F46E5]/10 flex items-center justify-center mb-6 shrink-0">
-                <User className="w-6 h-6 text-[#4F46E5]" />
-              </div>
-
-              <div className="mb-8">
-                <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">Monthly Visitors</h4>
-                <p className="text-sm font-medium text-slate-500 mt-1">Booking appointments daily</p>
-              </div>
-
-              <div className="mt-auto">
-                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-6 relative"></div>
-                <div className="flex flex-col items-center justify-center">
-                  <p className="text-sm font-medium text-slate-500 mb-1">Trend</p>
-                  <p className="font-semibold text-emerald-500">+12% this week</p>
+                <div className="mt-8 mb-4 relative">
+                  <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150 opacity-20" />
+                  <Image
+                    src="/.gemini/antigravity/brain/c786a99e-af24-4b44-9809-c213a9b58f6a/headset_3d_fintech_1772570982910.png"
+                    alt="24/7 Support"
+                    width={140}
+                    height={140}
+                    className="relative z-10 w-32 h-32 object-contain"
+                  />
                 </div>
-              </div>
 
-            </div>
-          </div>
-
-          {/* Card 2: Center Highlight */}
-          <div className="relative group z-10 hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
-            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
-            <div className="relative w-full h-full bg-[#4F46E5] dark:bg-[#4F46E5] rounded-[2.5rem] p-8 shadow-sm border border-[#4F46E5] group-hover:border-[#F4F4F8] group-hover:bg-[#5c54eb] transition-colors duration-300 flex flex-col justify-between min-h-[300px] overflow-hidden">
-              <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-8">
-                  <Globe className="w-3 h-3" /> {t.userFriendly}
+                <div className="mb-2">
+                  <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">24/7 Banking Support</h4>
+                  <p className="text-sm font-medium text-slate-500 mt-1">Expert assistance whenever you need it</p>
                 </div>
-                <h2 className="text-4xl font-bold text-white leading-tight mb-4">{t.bookManage}</h2>
-              </div>
-
-              <p className="text-white/80 font-medium leading-relaxed">
-                {t.customerStaff}
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3: Staff Availability */}
-          <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
-            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
-            <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
-              <div className="flex justify-between items-start mb-6">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                  {t.staffAvailability}
-                </div>
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
-                  <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
-                <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
-              </div>
-
-              <div className="mt-8 h-24 w-full relative">
-                {/* Mock Chart line */}
-                <svg className="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
-                  <path d="M0,30 C20,10 40,50 60,30 C80,10 100,40 120,20 C140,0 160,50 180,30 C190,20 200,30 200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
-                  <path d="M0,30 L20,15 L40,45 L60,30 L80,15 L100,35 L120,20 L140,5 L160,40 L180,25 L200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
-                  <circle cx="20" cy="15" r="3" fill="currentColor" className="text-primary" />
-                  <circle cx="60" cy="30" r="3" fill="currentColor" className="text-primary" />
-                  <circle cx="120" cy="20" r="3" fill="currentColor" className="text-primary" />
-                  <circle cx="160" cy="40" r="3" fill="currentColor" className="text-primary" />
-                </svg>
-                {/* Overlay lines */}
-                <div className="absolute inset-0 flex justify-between">
-                  {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-full w-px bg-border/50 dark:bg-border/20"></div>)}
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
-                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] dark:text-slate-100 font-bold">5pm</span>
               </div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* Card 2: Center Hero - Bold Gradient */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            animate={{
+              y: [0, -4, 0],
+            }}
+            transition={{
+              y: {
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5
+              },
+              opacity: { duration: 0.7, delay: 0.2 }
+            }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="h-full z-10"
+          >
+            <div className="relative group hover:-translate-y-6 hover:scale-[1.02] transition-all duration-500 ease-out h-full flex z-10">
+              <div className="absolute -inset-2 bg-primary/30 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative w-full h-full bg-[#4F46E5] rounded-[2.5rem] p-8 shadow-2xl border border-white/20 dark:border-white/10 flex flex-col justify-between min-h-[340px] overflow-hidden group">
+                {/* Breathing light effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="absolute -inset-[100%] bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-breathing pointer-events-none" />
+
+                <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-8">
+                    <Globe className="w-3 h-3" /> {t.userFriendly}
+                  </div>
+                  <h2 className="text-5xl font-bold text-white leading-tight mb-4 tracking-tight drop-shadow-sm">{t.bookManage}</h2>
+                </div>
+
+                <p className="relative z-10 text-white/80 font-medium leading-relaxed max-w-[240px]">
+                  {t.customerStaff}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Book Your Appointment */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            animate={{
+              y: [0, -4, 0],
+            }}
+            transition={{
+              y: {
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              },
+              opacity: { duration: 0.7, delay: 0.3 }
+            }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="h-full"
+          >
+            <div className="relative group hover:-translate-y-6 hover:scale-[1.02] transition-all duration-500 ease-out h-full flex">
+              <div className="absolute -inset-2 bg-slate-200/40 dark:bg-slate-800/40 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative w-full h-full bg-white/70 dark:bg-black/70 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-white/10 flex flex-col items-center text-center justify-between min-h-[340px] overflow-hidden">
+                <div className="mt-4 mb-2 relative">
+                  <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150 opacity-20" />
+                  <Image
+                    src="/.gemini/antigravity/brain/c786a99e-af24-4b44-9809-c213a9b58f6a/calendar_3d_fintech_1772570996656.png"
+                    alt="Book Appointment"
+                    width={140}
+                    height={140}
+                    className="relative z-10 w-32 h-32 object-contain"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">Book Your Appointment</h3>
+                  <p className="text-slate-500 text-sm font-medium">Secure your slot with our advisors in seconds.</p>
+                </div>
+
+                <Button asChild className="group/btn rounded-full w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-black dark:hover:bg-slate-200 h-12 transition-all duration-300">
+                  <Link href="/login">
+                    Schedule Now
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
 
         </div>
 
