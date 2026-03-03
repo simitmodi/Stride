@@ -186,6 +186,7 @@ export default function DocumentChecklistPage() {
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeItem, setActiveItem] = useState(0);
   const [isMobileDetailView, setIsMobileDetailView] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const listContainerRef = useRef<HTMLDivElement>(null);
 
   const activeData = checklistData[activeCategory];
@@ -222,12 +223,14 @@ export default function DocumentChecklistPage() {
   return (
     <div className="min-h-screen w-full bg-[#F4F4F8]">
       {/* ─── Top Bar: Category Tabs ─── */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm shadow-slate-900/[0.03]">
+      <div className="sticky top-16 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm shadow-slate-900/[0.03]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
-            <FileText className="w-5 h-5 text-indigo-400 shrink-0 hidden sm:block" />
-            <span className="text-sm font-semibold text-slate-400 mr-2 shrink-0 hidden sm:block">Services</span>
-            <div className="h-6 w-px bg-slate-200 shrink-0 hidden sm:block" />
+          
+          {/* Desktop Version: Horizontal Tabs */}
+          <div className="hidden lg:flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
+            <FileText className="w-5 h-5 text-indigo-400 shrink-0" />
+            <span className="text-sm font-semibold text-slate-400 mr-2 shrink-0">Services</span>
+            <div className="h-6 w-px bg-slate-200 shrink-0" />
             {checklistData.map((section, index) => {
               const Icon = section.icon;
               return (
@@ -260,6 +263,58 @@ export default function DocumentChecklistPage() {
                 </motion.button>
               );
             })}
+          </div>
+
+          {/* Mobile Version: Expandable Dropdown Selector */}
+          <div className="lg:hidden py-3 relative">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="flex items-center justify-between w-full bg-white border border-indigo-100 rounded-xl px-4 py-3 shadow-sm hover:border-indigo-200 transition-colors"
+            >
+              <div className="flex items-center gap-2.5 text-indigo-900 font-semibold text-sm">
+                <FileText className="w-4 h-4 text-indigo-400" />
+                Category: 
+                <span className="font-bold">{checklistData[activeCategory].category}</span>
+              </div>
+              <ChevronRight className={cn("w-5 h-5 text-indigo-400 transition-transform duration-300", isMobileMenuOpen ? "rotate-[-90deg]" : "rotate-90")} />
+            </button>
+
+            <AnimatePresence>
+              {isMobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={springBouncy}
+                  className="absolute left-4 right-4 top-[calc(100%+4px)] bg-white rounded-xl border border-slate-100 shadow-xl overflow-hidden z-50 flex flex-col p-1.5"
+                >
+                  {checklistData.map((section, index) => {
+                    const Icon = section.icon;
+                    return (
+                      <button
+                        key={section.category}
+                        onClick={() => {
+                          handleCategoryChange(index);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={cn(
+                          "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors",
+                          activeCategory === index 
+                            ? "bg-indigo-50 text-indigo-700" 
+                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        )}
+                      >
+                        <Icon className={cn("w-4 h-4", activeCategory === index ? "text-indigo-600" : "text-slate-400")} />
+                        {section.category}
+                        {activeCategory === index && (
+                          <CheckCircle2 className="w-4 h-4 text-indigo-600 ml-auto" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
