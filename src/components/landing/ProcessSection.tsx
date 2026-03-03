@@ -2,51 +2,72 @@
 
 import { AnimateIn } from "./AnimateIn";
 import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Smartphone, Bell, CreditCard, CheckCircle, ArrowRight, User } from "lucide-react";
+import { useEffect } from "react";
 
 export function ProcessSection({ lang }: { lang: LanguageCode }) {
   const t = landingTranslations[lang];
+
+  // Mouse Parallax Logic
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 150 };
+  const dx = useSpring(mouseX, springConfig);
+  const dy = useSpring(mouseY, springConfig);
+
+  // Parallax Ratios
+  const phoneX = useTransform(dx, [-500, 500], [-6, 6]);
+  const phoneY = useTransform(dy, [-500, 500], [-6, 6]);
+  const cardX = useTransform(dx, [-500, 500], [-3, 3]);
+  const cardY = useTransform(dy, [-500, 500], [-3, 3]);
+  const glowX = useTransform(dx, [-500, 500], [-1, 1]);
+  const glowY = useTransform(dy, [-500, 500], [-1, 1]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX - window.innerWidth / 2);
+      mouseY.set(e.clientY - window.innerHeight / 2);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   const steps = [
-    {
-      number: "1",
-      title: t.proc1Title,
-      delay: 100,
-    },
-    {
-      number: "2",
-      title: t.proc2Title,
-      delay: 200,
-    },
-    {
-      number: "3",
-      title: t.proc3Title,
-      delay: 300,
-    },
+    { number: "1", title: t.proc1Title, delay: 100 },
+    { number: "2", title: t.proc2Title, delay: 200 },
+    { number: "3", title: t.proc3Title, delay: 300 },
   ];
 
   return (
-    <section className="w-full py-24 bg-white dark:bg-background overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section className="w-full py-32 bg-[#020617] relative overflow-hidden">
+      {/* Background Gradient Mesh */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 opacity-50" />
+      <motion.div
+        style={{ x: glowX, y: glowY }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"
+      />
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center relative z-10">
         <div>
           <AnimateIn>
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-16">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-16 tracking-tight">
               {t.procTitle}
             </h2>
           </AnimateIn>
 
-          <div className="space-y-12 relative">
+          <div className="space-y-14 relative">
             {/* Connecting line */}
-            <div className="absolute left-[24px] top-6 bottom-10 w-0.5 bg-slate-100 dark:bg-slate-800 hidden md:block"></div>
+            <div className="absolute left-[24px] top-6 bottom-10 w-px bg-gradient-to-b from-primary/50 to-transparent hidden md:block"></div>
 
             {steps.map((step, i) => (
-              <AnimateIn key={i} delay={step.delay} className="relative flex items-center md:items-start gap-6 group">
-                {/* Number Badge */}
-                <div className="relative z-10 w-12 h-12 flex-shrink-0 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl border-2 border-white dark:border-background lg:group-hover:bg-primary lg:group-hover:text-white transition-colors duration-300">
+              <AnimateIn key={i} delay={step.delay} className="relative flex items-center md:items-start gap-8 group">
+                <div className="relative z-10 w-12 h-12 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-xl flex items-center justify-center text-primary font-bold text-xl border border-white/10 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
                   {step.number}
                 </div>
                 <div className="pt-2">
-                  <h3 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-200">
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-100 group-hover:text-white transition-colors">
                     {step.title}
                   </h3>
                 </div>
@@ -56,121 +77,132 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
         </div>
 
         {/* 3D Floating SaaS Mockup Area */}
-        <div className="relative flex justify-center items-center h-[600px] perspective-[1000px] w-full max-w-[500px] lg:max-w-none mx-auto">
+        <div className="relative flex justify-center items-center h-[700px] perspective-[2000px] w-full">
           <AnimateIn delay={400} className="relative w-full h-full flex items-center justify-center">
-            {/* Ambient Background Glows & Stage */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-slate-900/5 dark:bg-primary/5 rounded-[3rem] blur-3xl pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/20 dark:bg-primary/30 rounded-full blur-[100px] opacity-40 shrink-0" />
-            <div className="absolute top-1/4 left-1/4 w-[200px] h-[200px] bg-blue-500/20 dark:bg-blue-500/30 rounded-full blur-[80px] opacity-30 shrink-0" />
+
+            {/* Soft Ambient Glow Pulse */}
+            <motion.div
+              animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              style={{ x: glowX, y: glowY }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-primary/20 rounded-full blur-[100px] pointer-events-none"
+            />
 
             <motion.div
-              className="relative z-10 w-64 h-[500px] bg-slate-950 rounded-[3rem] border-8 border-slate-800 shadow-2xl flex flex-col p-4 overflow-hidden"
-              style={{ rotateY: -15, rotateX: 10 }}
+              className="relative z-10 w-72 h-[580px] bg-slate-950 rounded-[3.5rem] border-[10px] border-slate-900 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] flex flex-col p-4 overflow-hidden"
+              style={{
+                rotateY: -1,
+                rotateX: 1,
+                x: phoneX,
+                y: phoneY
+              }}
               animate={{
-                y: [0, -15, 0],
-                rotateY: [-15, -10, -15],
+                y: [0, -4, 0],
+                rotateZ: [0, 0.5, 0],
+                rotateX: [1, 1.5, 1],
               }}
               transition={{
-                duration: 6,
+                duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
             >
+              {/* Light Sweep Reflection */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-30"
+                animate={{ x: [-500, 500] }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 4, ease: "linear" }}
+              />
+
               {/* Internal Screen Content */}
-              <div className="flex-1 rounded-2xl bg-slate-900 border border-slate-800/50 p-4 flex flex-col">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                    <User className="w-4 h-4 text-primary" />
+              <div className="flex-1 rounded-[2.5rem] bg-[#020617] border border-white/5 p-6 flex flex-col relative overflow-hidden">
+                <div className="flex justify-between items-center mb-10">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+                    <User className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="px-2 py-1 rounded bg-slate-800 border border-white/5 text-[8px] text-slate-400 font-medium uppercase tracking-tighter">
-                    Stride Mobile
+                  <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-white/10 text-[9px] text-slate-400 font-bold uppercase tracking-widest">
+                    Stride Pay
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-8">
                   <div>
-                    <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-2">Select Date</p>
-                    <div className="grid grid-cols-7 gap-1">
+                    <p className="text-[11px] text-white/30 font-bold uppercase tracking-[0.2em] mb-4">Select Date</p>
+                    <div className="grid grid-cols-7 gap-2">
                       {[...Array(14)].map((_, i) => (
-                        <div key={i} className={`h-4 rounded-sm border border-white/5 ${i === 4 ? 'bg-primary' : 'bg-slate-800/40'}`} />
+                        <div key={i} className={`h-5 rounded-md border border-white/5 transition-colors ${i === 4 ? 'bg-primary shadow-lg shadow-primary/30 border-primary' : 'bg-slate-800/50'}`} />
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-2">Available Slots</p>
-                    <div className="space-y-2">
-                      <div className="h-8 w-full bg-primary/10 border border-primary/30 rounded-lg flex items-center px-3 justify-between">
-                        <span className="text-[10px] text-white font-bold">10:30 AM</span>
-                        <CheckCircle className="w-3 h-3 text-primary" />
+                    <p className="text-[11px] text-white/30 font-bold uppercase tracking-[0.2em] mb-4">Available Slots</p>
+                    <div className="space-y-3">
+                      <div className="h-12 w-full bg-primary/5 border border-primary/40 rounded-2xl flex items-center px-4 justify-between shadow-inner">
+                        <span className="text-xs text-white font-bold tracking-tight">10:30 AM</span>
+                        <CheckCircle className="w-4 h-4 text-primary" />
                       </div>
-                      <div className="h-8 w-full bg-slate-800/40 border border-white/5 rounded-lg flex items-center px-3">
-                        <span className="text-[10px] text-white/40">11:15 AM</span>
+                      <div className="h-12 w-full bg-slate-800/30 border border-white/5 rounded-2xl flex items-center px-4">
+                        <span className="text-xs text-white/30 font-medium">11:15 AM</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-6">
-                  <div className="h-10 w-full bg-primary rounded-xl flex items-center justify-center text-white text-[10px] font-bold gap-2 shadow-lg shadow-primary/20">
-                    Reserve Slot <ArrowRight className="w-3 h-3" />
+                <div className="mt-auto pt-8">
+                  <div className="h-14 w-full bg-primary rounded-2xl flex items-center justify-center text-white text-xs font-bold gap-3 shadow-[0_10px_20px_-5px_rgba(var(--primary),0.5)] active:scale-95 transition-transform duration-300">
+                    Reserve Slot <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
-              </div>
 
-              {/* Glass Top Overlay for Shine */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none" />
+                {/* Glass Inner Shine */}
+                <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+              </div>
             </motion.div>
 
             {/* Floating Glass Cards */}
             <motion.div
-              className="absolute -left-12 top-1/4 z-20 w-52 p-4 rounded-2xl bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-2xl flex items-center gap-3"
-              animate={{
-                y: [-10, 10, -10],
-                x: [-5, 5, -5]
-              }}
+              style={{ x: cardX, y: cardY }}
+              className="absolute -left-16 top-1/4 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              animate={{ y: [-4, 4, -4] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             >
-              <div className="w-10 h-10 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center shrink-0">
-                <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20">
+                <Bell className="w-6 h-6 text-blue-400" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-500 dark:text-white/50 uppercase font-bold tracking-wider">Reminder</p>
-                <p className="text-xs text-slate-900 dark:text-white font-bold">Tomorrow at 10:30 AM</p>
+                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Reminder</p>
+                <p className="text-sm text-white font-bold">Tomorrow at 10:30 AM</p>
               </div>
             </motion.div>
 
             <motion.div
-              className="absolute -right-8 top-1/2 z-20 w-52 p-4 rounded-2xl bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-2xl flex items-center gap-3"
-              animate={{
-                y: [10, -10, 10],
-                x: [5, -5, 5]
-              }}
+              style={{ x: cardX, y: cardY }}
+              className="absolute -right-12 top-1/2 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              animate={{ y: [4, -4, 4] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
-                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <CheckCircle className="w-6 h-6 text-emerald-400" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-500 dark:text-white/50 uppercase font-bold tracking-wider">Success</p>
-                <p className="text-xs text-slate-900 dark:text-white font-bold">Visit Confirmed</p>
+                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Success</p>
+                <p className="text-sm text-white font-bold">Visit Confirmed</p>
               </div>
             </motion.div>
 
             <motion.div
-              className="absolute left-8 bottom-12 z-20 w-52 p-4 rounded-2xl bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-2xl flex items-center gap-3"
-              animate={{
-                y: [-5, 5, -5],
-                x: [8, -8, 8]
-              }}
+              style={{ x: cardX, y: cardY }}
+              className="absolute left-10 bottom-12 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              animate={{ y: [-3, 3, -3] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             >
-              <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0">
-                <CreditCard className="w-5 h-5 text-primary" />
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                <CreditCard className="w-6 h-6 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-500 dark:text-white/50 uppercase font-bold tracking-wider">Fast Track</p>
-                <p className="text-xs text-slate-900 dark:text-white font-bold">Priority Support</p>
+                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Fast Track</p>
+                <p className="text-sm text-white font-bold">Priority Support</p>
               </div>
             </motion.div>
 
