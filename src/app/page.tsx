@@ -5,11 +5,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from '@/lib/Logo.png';
-import { ArrowRight, Globe, ArrowDownUp, User, Headset } from "lucide-react";
+import { ArrowRight, Globe, ArrowDownUp, User, Headset, CalendarCheck } from "lucide-react";
 import { landingTranslations, languages, LanguageCode } from "@/lib/landing-i18n";
 import { motion } from "framer-motion";
-import { useFirestore } from "@/firebase/provider";
-import { collection, getCountFromServer, query, where, Timestamp } from "firebase/firestore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,33 +25,10 @@ import { CtaSection } from "@/components/landing/SectionBlocks";
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
   const [mounted, setMounted] = useState(false);
-  const [realtimeData, setRealtimeData] = useState({ date: "", slots: "19" });
-
-  const firestore = useFirestore();
 
   useEffect(() => {
     setMounted(true);
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const formattedDate = tomorrow.toLocaleDateString(lang, { month: 'short', day: 'numeric' });
-
-    setRealtimeData(prev => ({ ...prev, date: `${formattedDate}, 10:00 AM` }));
-
-    // The Ticker - Increments numbers every 4 seconds to look 'Live'
-    const interval = setInterval(() => {
-      setRealtimeData(prev => {
-        if (Math.random() > 0.8) {
-          const currentSlots = parseInt(prev.slots);
-          const change = Math.random() > 0.5 ? 1 : -1;
-          const newSlots = Math.max(5, Math.min(45, currentSlots + change));
-          return { ...prev, slots: newSlots.toString() };
-        }
-        return prev;
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [lang]);
+  }, []);
 
   const t = landingTranslations[lang];
   const selectedLangName = languages.find(l => l.code === lang)?.name || 'English';
@@ -201,37 +176,27 @@ export default function Home() {
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
                 <div className="flex justify-between items-start mb-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                    {t.staffAvailability}
+                    Instant Confirmation
                   </div>
-                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
-                    <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <CalendarCheck className="w-6 h-6" />
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
-                  <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
+                  <h3 className="text-2xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">Skip the Queue. Book Your Visit.</h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    Select your branch, choose a preferred time, and receive confirmation in seconds. No waiting lines. No unnecessary delays.
+                  </p>
                 </div>
 
-                <div className="mt-8 h-24 w-full relative">
-                  {/* Mock Chart line */}
-                  <svg className="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
-                    <path d="M0,30 C20,10 40,50 60,30 C80,10 100,40 120,20 C140,0 160,50 180,30 C190,20 200,30 200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
-                    <path d="M0,30 L20,15 L40,45 L60,30 L80,15 L100,35 L120,20 L140,5 L160,40 L180,25 L200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
-                    <circle cx="20" cy="15" r="3" fill="currentColor" className="text-primary" />
-                    <circle cx="60" cy="30" r="3" fill="currentColor" className="text-primary" />
-                    <circle cx="120" cy="20" r="3" fill="currentColor" className="text-primary" />
-                    <circle cx="160" cy="40" r="3" fill="currentColor" className="text-primary" />
-                  </svg>
-                  {/* Overlay lines */}
-                  <div className="absolute inset-0 flex justify-between">
-                    {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-full w-px bg-border/50 dark:bg-border/20"></div>)}
-                  </div>
-                </div>
-
-                <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
-                  <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] dark:text-slate-100 font-bold">5pm</span>
+                <div className="mt-auto">
+                  <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 group/btn h-12">
+                    <Link href="/login" className="flex items-center justify-center gap-2">
+                      Reserve Your Slot
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
