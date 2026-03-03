@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { checklistData } from '@/lib/document-checklist-data';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklist-data';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList } from 'lucide-react';
+import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ShinyText from '@/components/ShinyText';
 import { cn } from '@/lib/utils';
@@ -185,31 +185,36 @@ const detailVariants = {
 export default function DocumentChecklistPage() {
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeItem, setActiveItem] = useState(0);
+  const [isMobileDetailView, setIsMobileDetailView] = useState(false);
   const listContainerRef = useRef<HTMLDivElement>(null);
 
   const activeData = checklistData[activeCategory];
   const selectedItem = activeData.items[activeItem];
 
   const handleCategoryChange = (index: number) => {
-    if (index === activeCategory) return;
+    if (index === activeCategory) {
+      setIsMobileDetailView(false); // tapping active category tab returns to list on mobile
+      return; 
+    }
     setActiveCategory(index);
     setActiveItem(0);
+    setIsMobileDetailView(false); // reset to list view on category change
   };
 
-  const handleItemChange = (index: number) => {
-    if (index === activeItem) return;
+  const handleItemClick = (index: number) => {
     setActiveItem(index);
+    setIsMobileDetailView(true); // switch to detail view on mobile
   };
 
-  // Scroll list item into view on mobile
+  // Scroll list item into view on mobile list
   useEffect(() => {
-    if (listContainerRef.current) {
+    if (listContainerRef.current && !isMobileDetailView) {
       const activeBtn = listContainerRef.current.querySelector('[data-active="true"]');
       if (activeBtn) {
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
-  }, [activeItem]);
+  }, [activeItem, isMobileDetailView]);
 
   const requiredCount = selectedItem.content.filter(c => c.type === 'required').length;
   const optionalCount = selectedItem.content.filter(c => c.type === 'optional').length;
@@ -261,10 +266,14 @@ export default function DocumentChecklistPage() {
 
       {/* ─── Main Content: Split Layout ─── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)]">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-120px)] relative overflow-hidden lg:overflow-visible">
 
           {/* ─── Left Panel: Document List ─── */}
-          <div className="lg:w-[340px] xl:w-[380px] shrink-0">
+          {/* Hidden on mobile if viewing details */}
+          <div className={cn(
+            "lg:w-[340px] xl:w-[380px] shrink-0 lg:block",
+            isMobileDetailView ? "hidden" : "block"
+          )}>
             <div className="sticky top-[85px]">
               {/* Category Header */}
               <motion.div
@@ -302,7 +311,7 @@ export default function DocumentChecklistPage() {
                         exit="exit"
                         layout
                         data-active={activeItem === index}
-                        onClick={() => handleItemChange(index)}
+                        onClick={() => handleItemClick(index)}
                         whileHover={{ x: 4 }}
                         whileTap={{ scale: 0.97 }}
                         className={cn(
@@ -355,7 +364,11 @@ export default function DocumentChecklistPage() {
           </div>
 
           {/* ─── Right Panel: Detail View ─── */}
-          <div className="flex-1 min-w-0">
+          {/* Hidden on mobile if viewing list */}
+          <div className={cn(
+            "flex-1 min-w-0 lg:block",
+            isMobileDetailView ? "block" : "hidden"
+          )}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${activeCategory}-${activeItem}`}
@@ -367,6 +380,15 @@ export default function DocumentChecklistPage() {
               >
                 {/* Detail Header */}
                 <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-slate-100">
+                  {/* Mobile Back Button */}
+                  <button 
+                    onClick={() => setIsMobileDetailView(false)} 
+                    className="lg:hidden flex items-center gap-2 text-sm text-indigo-600 font-semibold mb-4 group -ml-2 p-2 rounded-lg hover:bg-slate-50 transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                    Back to services
+                  </button>
+
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div>
                       <motion.h2
@@ -401,7 +423,7 @@ export default function DocumentChecklistPage() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ ...springBouncy, delay: 0.2 }}
-                      className="flex items-center gap-2 bg-indigo-50 px-3 py-1.5 rounded-full shrink-0"
+                      className="flex items-center gap-2 bg-indigo-50 px-3 py-1.5 rounded-full shrink-0 lg:-mt-2"
                     >
                       <span className="text-xs font-bold text-indigo-700">{activeItem + 1}</span>
                       <span className="text-xs text-indigo-300">/</span>
@@ -430,9 +452,10 @@ export default function DocumentChecklistPage() {
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.97 }}
                     transition={springPop}
+                    className="w-full sm:w-auto"
                   >
-                    <Button asChild variant="outline" className="border-indigo-200 bg-white hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-colors duration-300 px-5 group hover:shadow-lg hover:shadow-indigo-600/20">
-                      <Link href="/dashboard/customer/appointment-scheduling" className="flex items-center gap-2">
+                    <Button asChild variant="outline" className="w-full sm:w-auto border-indigo-200 bg-white hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-colors duration-300 px-5 group hover:shadow-lg hover:shadow-indigo-600/20">
+                      <Link href="/dashboard/customer/appointment-scheduling" className="flex items-center justify-center gap-2 w-full">
                         <ShinyText text="Book Appointment" disabled={false} speed={2} className="font-semibold text-sm group-hover:!text-white" />
                         <ArrowRight className="h-4 w-4 text-indigo-600 group-hover:text-white transition-all duration-300 group-hover:translate-x-0.5" />
                       </Link>
@@ -445,7 +468,7 @@ export default function DocumentChecklistPage() {
             {/* Navigation Arrows */}
             <div className="flex items-center justify-between mt-4 px-2">
               <motion.button
-                onClick={() => activeItem > 0 && handleItemChange(activeItem - 1)}
+                onClick={() => activeItem > 0 && handleItemClick(activeItem - 1)}
                 disabled={activeItem === 0}
                 whileHover={activeItem > 0 ? { x: -3 } : {}}
                 whileTap={activeItem > 0 ? { scale: 0.95 } : {}}
@@ -457,11 +480,11 @@ export default function DocumentChecklistPage() {
                     : "text-slate-500 hover:text-indigo-600 hover:bg-white"
                 )}
               >
-                <ChevronRight className="w-4 h-4 rotate-180" />
+                <ChevronLeft className="w-4 h-4" />
                 Previous
               </motion.button>
               <motion.button
-                onClick={() => activeItem < activeData.items.length - 1 && handleItemChange(activeItem + 1)}
+                onClick={() => activeItem < activeData.items.length - 1 && handleItemClick(activeItem + 1)}
                 disabled={activeItem === activeData.items.length - 1}
                 whileHover={activeItem < activeData.items.length - 1 ? { x: 3 } : {}}
                 whileTap={activeItem < activeData.items.length - 1 ? { scale: 0.95 } : {}}
