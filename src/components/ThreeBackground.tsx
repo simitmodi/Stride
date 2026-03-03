@@ -3,78 +3,130 @@
 
 import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
+import { PerspectiveCamera, Float, MeshDistortMaterial, MeshWobbleMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
-function Bubble({ position, size, speed, opacity }: { position: [number, number, number], size: number, speed: number, opacity: number }) {
+function ColorfulShape({
+    geometry,
+    color,
+    position,
+    size,
+    speed,
+    rotationSpeed = 1,
+    distort = 0,
+    wobble = 0
+}: {
+    geometry: "torus" | "octahedron" | "tetrahedron" | "ring";
+    color: string;
+    position: [number, number, number];
+    size: number;
+    speed: number;
+    rotationSpeed?: number;
+    distort?: number;
+    wobble?: number;
+}) {
     const meshRef = useRef<THREE.Mesh>(null!);
-    const initialY = position[1];
-    const initialX = position[0];
 
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
-        // Float upwards
-        meshRef.current.position.y += speed;
-        // Horizontal oscillation (organic sway)
-        meshRef.current.position.x = initialX + Math.sin(t + initialY) * 0.5;
-
-        // Reset to bottom if it goes too high
-        if (meshRef.current.position.y > 15) {
-            meshRef.current.position.y = -15;
-            meshRef.current.position.x = (Math.random() - 0.5) * 30;
-        }
+        meshRef.current.rotation.x = t * (rotationSpeed / 3);
+        meshRef.current.rotation.y = t * (rotationSpeed / 2);
+        meshRef.current.position.y = position[1] + Math.sin(t * speed) * 0.6;
     });
 
     return (
-        <mesh ref={meshRef} position={position}>
-            <sphereGeometry args={[size, 16, 16]} />
-            <meshPhysicalMaterial
-                color="#ffffff"
-                transparent
-                opacity={opacity}
-                transmission={0.9} // Glassy translucency
-                thickness={0.5}
-                roughness={0}
-                ior={1.2}
-            />
-        </mesh>
-    );
-}
+        <Float speed={speed * 2} rotationIntensity={1.5} floatIntensity={1}>
+            <mesh ref={meshRef} position={position}>
+                {geometry === "torus" && <torusKnotGeometry args={[size, size * 0.3, 128, 32]} />}
+                {geometry === "octahedron" && <octahedronGeometry args={[size, 0]} />}
+                {geometry === "tetrahedron" && <tetrahedronGeometry args={[size, 0]} />}
+                {geometry === "ring" && <torusGeometry args={[size, size * 0.05, 16, 100]} />}
 
-function Bubbles() {
-    const bubbleData = useMemo(() => {
-        return Array.from({ length: 100 }, () => ({
-            position: [
-                (Math.random() - 0.5) * 40, // x
-                (Math.random() - 0.5) * 30, // y
-                (Math.random() - 0.5) * 15, // z
-            ] as [number, number, number],
-            size: Math.random() * 0.15 + 0.05,
-            speed: Math.random() * 0.02 + 0.015,
-            opacity: Math.random() * 0.4 + 0.1,
-        }));
-    }, []);
-
-    return (
-        <group>
-            {bubbleData.map((data, i) => (
-                <Bubble key={i} {...data} />
-            ))}
-        </group>
+                {distort > 0 ? (
+                    <MeshDistortMaterial
+                        color={color}
+                        speed={speed}
+                        distort={distort}
+                        transparent
+                        opacity={0.7}
+                        metalness={0.9}
+                        roughness={0.1}
+                    />
+                ) : (
+                    <MeshWobbleMaterial
+                        color={color}
+                        speed={speed}
+                        factor={wobble || 0.5}
+                        transparent
+                        opacity={0.7}
+                        metalness={0.9}
+                        roughness={0.1}
+                    />
+                )}
+            </mesh>
+        </Float>
     );
 }
 
 function Scene() {
     return (
         <>
-            <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
-            <ambientLight intensity={0.8} />
-            <pointLight position={[10, 10, 10]} intensity={2} />
-            <spotLight position={[-10, 10, 10]} angle={0.25} penumbra={1} intensity={1.5} />
+            <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={50} />
+            <ambientLight intensity={0.6} />
+            <pointLight position={[10, 10, 10]} intensity={2.5} />
+            <spotLight position={[-10, 10, 10]} angle={0.3} penumbra={1} intensity={2} />
 
-            <Bubbles />
+            {/* Pink Torus Knot */}
+            <ColorfulShape
+                geometry="torus"
+                color="#FF0080"
+                position={[-6, 4, -5]}
+                size={1.2}
+                speed={1.0}
+                distort={0.3}
+            />
 
-            <fog attach="fog" args={["#F4F4F8", 5, 25]} />
+            {/* Purple Octahedron */}
+            <ColorfulShape
+                geometry="octahedron"
+                color="#7928CA"
+                position={[7, -4, -4]}
+                size={1.8}
+                speed={0.7}
+                wobble={0.6}
+            />
+
+            {/* Blue Ring */}
+            <ColorfulShape
+                geometry="ring"
+                color="#0070F3"
+                position={[3, 5, -8]}
+                size={2.5}
+                speed={1.2}
+                rotationSpeed={0.5}
+            />
+
+            {/* Cyan Tetrahedron */}
+            <ColorfulShape
+                geometry="tetrahedron"
+                color="#00DFD8"
+                position={[-8, -5, -6]}
+                size={1.5}
+                speed={0.9}
+                wobble={0.4}
+            />
+
+            {/* Indigo Accent Ring */}
+            <ColorfulShape
+                geometry="ring"
+                color="#4F46E5"
+                position={[-2, -2, -10]}
+                size={4.0}
+                speed={0.5}
+                rotationSpeed={0.3}
+            />
+
+            <fog attach="fog" args={["#F4F4F8", 10, 30]} />
         </>
     );
 }
