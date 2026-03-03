@@ -3,102 +3,94 @@
 
 import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera, MeshDistortMaterial, Stars, Sparkles, Float } from "@react-three/drei";
+import { PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 
-function LiquidBlob({
-    color,
-    position,
-    size,
-    speed,
-    distort,
-    radius = 1
-}: {
-    color: string,
-    position: [number, number, number],
-    size: number,
-    speed: number,
-    distort: number,
-    radius?: number
-}) {
-    const meshRef = useRef<THREE.Mesh>(null!);
+const THREAD_COUNT = 50;
+const SEGMENTS = 120;
+
+function Thread({ index }: { index: number }) {
+    const lineRef = useRef<THREE.Line>(null!);
+
+    // Each thread has its own unique path characteristics
+    const config = useMemo(() => ({
+        phaseOffset: index * (Math.PI * 2 / THREAD_COUNT),
+        freq: 0.12 + (index * 0.002),
+        amp: 1.8 + Math.sin(index * 0.4) * 0.8,
+        speed: 0.15 + (index * 0.005),
+        yOffset: (index - THREAD_COUNT / 2) * 0.12,
+        // Alternate colors for a rich graphic aesthetic
+        color: index % 4 === 0 ? "#4F46E5" : index % 4 === 1 ? "#9333EA" : index % 4 === 2 ? "#3B82F6" : "#6366F1",
+        opacity: 0.1 + (Math.random() * 0.25)
+    }), [index]);
+
+    const xCoords = useMemo(() => {
+        const coords = [];
+        const width = 60; // Wide enough to cover the screen
+        for (let i = 0; i <= SEGMENTS; i++) {
+            coords.push((i / SEGMENTS) * width - width / 2);
+        }
+        return coords;
+    }, []);
+
+    const initialPositions = useMemo(() => new Float32Array((SEGMENTS + 1) * 3), []);
 
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
-        meshRef.current.position.y = position[1] + Math.sin(t * (speed / 2)) * radius;
-        meshRef.current.position.x = position[0] + Math.cos(t * (speed / 3)) * radius;
+        const positions = lineRef.current.geometry.attributes.position.array as Float32Array;
+
+        for (let i = 0; i <= SEGMENTS; i++) {
+            const x = xCoords[i];
+
+            // Flowing wavy motion logic
+            // Primary wave
+            let y = Math.sin(x * config.freq + t * config.speed + config.phaseOffset) * config.amp;
+            // Secondary harmonics for organic feel
+            y += Math.cos(x * 0.08 - t * config.speed * 0.6 + config.phaseOffset * 1.5) * (config.amp * 0.4);
+
+            // Subtle depth variation
+            const z = Math.sin(x * 0.04 + t * 0.2 + config.phaseOffset) * 3;
+
+            positions[i * 3 + 0] = x;
+            positions[i * 3 + 1] = y + config.yOffset;
+            positions[i * 3 + 2] = z - (index * 0.15); // Stack in depth
+        }
+        (lineRef.current.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
     });
 
     return (
-        <Float speed={speed} rotationIntensity={0.5} floatIntensity={2}>
-            <mesh ref={meshRef} position={position}>
-                <sphereGeometry args={[size, 64, 64]} />
-                <MeshDistortMaterial
-                    color={color}
-                    speed={speed}
-                    distort={distort}
-                    transparent
-                    opacity={0.65}
-                    metalness={0.8}
-                    roughness={0.1}
+        <line ref={lineRef as any}>
+            <bufferGeometry>
+                <bufferAttribute
+                    attach="attributes-position"
+                    count={SEGMENTS + 1}
+                    args={[initialPositions, 3]}
                 />
-            </mesh>
-        </Float>
+            </bufferGeometry>
+            <lineBasicMaterial color={config.color} transparent opacity={config.opacity} />
+        </line>
+    );
+}
+
+function Threads() {
+    return (
+        <group rotation={[0.15, -0.1, 0.05]} position={[0, -2, 0]}>
+            {Array.from({ length: THREAD_COUNT }).map((_, i) => (
+                <Thread key={i} index={i} />
+            ))}
+        </group>
     );
 }
 
 function Scene() {
     return (
         <>
-            <PerspectiveCamera makeDefault position={[0, 0, 18]} fov={50} />
+            <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={45} />
+            <ambientLight intensity={1} />
 
-            {/* Ambient and Dynamic Lighting */}
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={2} color="#ffffff" />
-            <spotLight position={[-20, 20, 10]} angle={0.2} penumbra={1} intensity={2} color="#4F46E5" />
+            <Threads />
 
-            {/* Background Depth: Stars & Cosmic Dust */}
-            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-            <Sparkles count={200} scale={25} size={6} speed={0.4} opacity={0.3} color="#ffffff" />
-
-            {/* Liquid Blobs - Organic Aura */}
-            <LiquidBlob
-                color="#4F46E5"
-                position={[-6, 4, -4]}
-                size={3.5}
-                speed={1.0}
-                distort={0.5}
-                radius={2}
-            />
-
-            <LiquidBlob
-                color="#9333EA"
-                position={[8, -3, -6]}
-                size={4.5}
-                speed={0.8}
-                distort={0.4}
-                radius={2.5}
-            />
-
-            <LiquidBlob
-                color="#FF0080"
-                position={[-2, -5, -8]}
-                size={3.0}
-                speed={1.2}
-                distort={0.6}
-                radius={1.5}
-            />
-
-            <LiquidBlob
-                color="#00DFD8"
-                position={[4, 6, -10]}
-                size={2.8}
-                speed={0.7}
-                distort={0.5}
-                radius={3}
-            />
-
-            <fog attach="fog" args={["#F4F4F8", 15, 35]} />
+            <fog attach="fog" args={["#F4F4F8", 15, 45]} />
         </>
     );
 }
@@ -106,7 +98,7 @@ function Scene() {
 export default function ThreeBackground() {
     return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <Canvas dpr={[1, 2]}>
+            <Canvas dpr={[1, 2]} gl={{ alpha: true }}>
                 <color attach="background" args={["#F4F4F8"]} />
                 <Scene />
             </Canvas>
