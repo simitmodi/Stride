@@ -72,14 +72,14 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
     <div className="flex flex-col items-center gap-1.5">
       <div className="relative w-[3.2rem] h-[4rem] perspective-[400px]">
         {/* Top Half (New Value - Static) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#1e1b4b] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/10">
+        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/10">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
             {display.cur}
           </span>
         </div>
 
         {/* Bottom Half (Old Value - Static) */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#2d2a6e] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
             {display.prev}
           </span>
@@ -100,7 +100,7 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
 
             {/* Bottom flap (New value, rotating into view) */}
             <div
-              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#1e1b4b] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top"
+              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top"
               style={{ animation: 'flipBottom 0.4s ease-out forwards', zIndex: 3, transform: 'rotateX(90deg)' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">

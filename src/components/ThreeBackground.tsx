@@ -26,7 +26,7 @@ function Thread({ index }: { index: number }) {
 
     const xCoords = useMemo(() => {
         const coords = [];
-        const width = 60; // Wide enough to cover the screen
+        const width = 80; // Widen to ensure coverage
         for (let i = 0; i <= SEGMENTS; i++) {
             coords.push((i / SEGMENTS) * width - width / 2);
         }
@@ -38,21 +38,28 @@ function Thread({ index }: { index: number }) {
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
         const positions = lineRef.current.geometry.attributes.position.array as Float32Array;
+        const width = 80;
 
         for (let i = 0; i <= SEGMENTS; i++) {
             const x = xCoords[i];
 
-            // Flowing wavy motion logic
+            // Factor that is 0 at the far left and 1 as we move right
+            // This force-starts all threads at the same Y coordinate
+            const fanFactor = Math.pow(Math.max(0, (x + width / 2) / width), 1.5);
+
             // Primary wave
             let y = Math.sin(x * config.freq + t * config.speed + config.phaseOffset) * config.amp;
-            // Secondary harmonics for organic feel
+            // Secondary harmonics
             y += Math.cos(x * 0.08 - t * config.speed * 0.6 + config.phaseOffset * 1.5) * (config.amp * 0.4);
 
-            // Subtle depth variation
-            const z = Math.sin(x * 0.04 + t * 0.2 + config.phaseOffset) * 3;
+            // Scale both the wave and the vertical offset by the fanFactor
+            const finalY = (y + config.yOffset) * fanFactor;
+
+            // Subtle depth variation scaled by fanFactor
+            const z = Math.sin(x * 0.04 + t * 0.2 + config.phaseOffset) * 3 * fanFactor;
 
             positions[i * 3 + 0] = x;
-            positions[i * 3 + 1] = y + config.yOffset;
+            positions[i * 3 + 1] = finalY;
             positions[i * 3 + 2] = z - (index * 0.15); // Stack in depth
         }
         (lineRef.current.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
