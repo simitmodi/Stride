@@ -15,24 +15,11 @@ export default function LoginOptionsPage() {
   const professionalBg = PlaceHolderImages.find(p => p.id === "professional-bg-new");
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
-      {professionalBg && <Image
-        src={professionalBg.imageUrl}
-        alt={professionalBg.description}
-        fill
-        className="object-cover"
-        style={{ filter: 'blur(8px)' }}
-        data-ai-hint={professionalBg.imageHint}
-        priority
-      />}
-      <div className="absolute inset-0 bg-card/75" />
-
-      <main className="relative z-10 flex w-full max-w-lg flex-col items-center">
-        <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-primary/50 opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#F4F4F8] p-4">
+      <main className="relative z-10 flex w-full max-w-2xl flex-col items-center">
+        <div className="w-full">
           <div
-            className="relative w-full rounded-xl bg-white/90 p-8 shadow-lg transform-gpu"
-            style={{ backdropFilter: 'blur(12px)' }}
+            className="relative w-full rounded-2xl border border-gray-200 bg-white p-10 shadow-lg"
           >
             <div className="text-center text-slate-900">
               <Image src={Logo} alt="Stride Logo" width={200} height={200} className="mb-4 inline-block" />
@@ -41,32 +28,36 @@ export default function LoginOptionsPage() {
               </p>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
               <Link href="/login/customer" className="group">
-                <Card className="h-full transform-gpu border-border bg-white text-slate-900 transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl active:scale-105">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <User className="h-12 w-12 text-primary" />
+                <Card className="h-full border border-gray-200 bg-white transition-all duration-300 ease-in-out hover:border-indigo-300 hover:shadow-lg hover:-translate-y-1">
+                  <CardHeader className="flex flex-row items-center gap-4 p-6">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                      <User className="h-6 w-6" />
+                    </div>
                     <div className="flex-1">
-                      <CardTitle className="text-slate-900">Customer Login</CardTitle>
-                      <CardDescription className="text-sm text-slate-500">
+                      <CardTitle className="text-gray-900 text-lg">Customer Login</CardTitle>
+                      <CardDescription className="text-sm text-gray-500 mt-1">
                         Access your personal account.
                       </CardDescription>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
+                    <ArrowRight className="h-5 w-5 text-gray-300 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-indigo-600" />
                   </CardHeader>
                 </Card>
               </Link>
               <Link href="/login/bank" className="group">
-                <Card className="h-full transform-gpu border-border bg-white text-slate-900 transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl active:scale-105">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <Banknote className="h-4 w-4 text-primary" />
+                <Card className="h-full border border-gray-200 bg-white transition-all duration-300 ease-in-out hover:border-indigo-300 hover:shadow-lg hover:-translate-y-1">
+                  <CardHeader className="flex flex-row items-center gap-4 p-6">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                      <Banknote className="h-6 w-6" />
+                    </div>
                     <div className="flex-1">
-                      <CardTitle className="text-slate-900">Bank Login</CardTitle>
-                      <CardDescription className="text-sm text-slate-500">
+                      <CardTitle className="text-gray-900 text-lg">Bank Login</CardTitle>
+                      <CardDescription className="text-sm text-gray-500 mt-1">
                         Access the employee portal.
                       </CardDescription>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent-foreground" />
+                    <ArrowRight className="h-5 w-5 text-gray-300 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-indigo-600" />
                   </CardHeader>
                 </Card>
               </Link>
@@ -74,8 +65,8 @@ export default function LoginOptionsPage() {
           </div>
         </div>
 
-        <div className="mt-8 text-center text-sm text-foreground/80">
-          <Link href="/" className="underline hover:text-primary">
+        <div className="mt-8 text-center text-sm">
+          <Link href="/" className="text-gray-500 underline hover:text-indigo-600 transition-colors">
             Back to Home
           </Link>
         </div>
