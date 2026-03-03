@@ -400,7 +400,7 @@ export default function DocumentChecklistPage() {
   const optionalCount = selectedItem.content.filter(c => c.type === 'optional').length;
 
   return (
-    <div className="min-h-screen w-full bg-[#F4F4F8] relative">
+    <div className="h-screen w-full bg-[#F4F4F8] relative overflow-hidden flex flex-col">
       {/* ─── Background Decorative Elements ─── */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/15 rounded-full blur-[140px] pointer-events-none" />
@@ -411,13 +411,13 @@ export default function DocumentChecklistPage() {
       <SideDecorations />
 
       {/* ─── Main Content: Split Layout ─── */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-[120px] relative z-10">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-[calc(100vh-180px)] relative overflow-hidden lg:overflow-visible">
+      <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-[104px] pb-24 relative z-10 flex-1 flex flex-col min-h-0">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 min-h-0 relative">
 
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start sticky top-[110px] max-h-[calc(100vh-140px)]",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 rounded-3xl p-4 lg:p-5 flex-col self-start h-full",
             "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden lg:flex" : "flex"
           )}>
@@ -513,7 +513,7 @@ export default function DocumentChecklistPage() {
           {/* ─── Right Panel: Detail View ─── */}
           {/* Hidden on mobile if viewing list */}
           <div className={cn(
-            "flex-1 min-w-0 lg:block",
+            "flex-1 min-w-0 lg:block h-full flex flex-col",
             isMobileDetailView ? "block" : "hidden"
           )}>
             <AnimatePresence mode="wait">
@@ -523,7 +523,7 @@ export default function DocumentChecklistPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="bg-white rounded-2xl shadow-xl shadow-slate-900/[0.04] border border-slate-200/60 overflow-hidden"
+                className="bg-white/80 backdrop-blur-3xl rounded-3xl shadow-xl shadow-slate-900/[0.04] border border-slate-200/60 overflow-hidden flex flex-col h-full"
               >
                 {/* Detail Header */}
                 <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-slate-100">
@@ -580,7 +580,7 @@ export default function DocumentChecklistPage() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[360px] relative">
+                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 flex-1 overflow-y-auto relative scrollbar-none">
                   <div className="flex-1 relative z-10">
                     <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
                   </div>
