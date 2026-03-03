@@ -70,38 +70,38 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className="relative w-[3.2rem] h-[4rem] perspective-[400px]">
+      <div className="relative w-[3.2rem] h-[4rem] overflow-hidden rounded-lg">
         {/* Top Half (New Value - Static) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/10">
+        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-end justify-center pb-[0.5px] border-b border-white/10">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
             {display.cur}
           </span>
         </div>
 
         {/* Bottom Half (Old Value - Static) */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-start justify-center pt-[0.5px]">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
             {display.prev}
           </span>
         </div>
 
-        {/* Flipping Flap (Top -> Bottom) */}
+        {/* 2D Sliding Flap */}
         {display.flipping && (
           <>
-            {/* Top flap (Old value, rotating down) */}
+            {/* Sliding out old top */}
             <div
-              className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20 origin-bottom"
-              style={{ animation: 'flipTop 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards', zIndex: 2 }}
+              className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-end justify-center pb-[0.5px] border-b border-white/10 z-2"
+              style={{ animation: 'slide2DOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
                 {display.prev}
               </span>
             </div>
 
-            {/* Bottom flap (New value, rotating into view) */}
+            {/* Sliding in new bottom */}
             <div
-              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top"
-              style={{ animation: 'flipBottom 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards', zIndex: 3, transform: 'rotateX(90deg)' }}
+              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-start justify-center pt-[0.5px] z-3"
+              style={{ animation: 'slide2DIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
                 {display.cur}
@@ -149,8 +149,8 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
         }}
       >
         <style>{`
-          @keyframes flipTop      { 0%{transform:rotateX(0deg)} 100%{transform:rotateX(-90deg)} }
-          @keyframes flipBottom   { 0%{transform:rotateX(90deg)} 100%{transform:rotateX(0deg)} }
+          @keyframes slide2DOut   { 0%{transform:scaleY(1)} 100%{transform:scaleY(0)} }
+          @keyframes slide2DIn    { 0%{transform:scaleY(0)} 100%{transform:scaleY(1)} }
           @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
           @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
           @keyframes floatRandom  { 
@@ -241,7 +241,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-white/15 text-white border border-white/20 hover:bg-white/25 transition-all active:scale-95 whitespace-nowrap">
+            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-[#312e81] text-white border border-[#4338ca] hover:bg-[#3730a3] transition-all active:scale-95 shadow-lg whitespace-nowrap">
               Details →
             </span>
           </div>
