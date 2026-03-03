@@ -98,10 +98,10 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 1 - Top Left Zone */}
+                    {/* Floating Tooltip 1 - Far Top Left Zone */}
                     <div
                         className="absolute z-20 flex animate-[bounce_4s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
-                        style={{ top: `calc(-15% + ${Math.random() * 20}px)`, left: `calc(-10% + ${Math.random() * -30}px)` }}
+                        style={{ top: `calc(-25% + ${Math.random() * 20}px)`, left: `calc(-35% + ${Math.random() * 30}px)` }}
                     >
                         <div className="flex items-center gap-2">
                             <Sparkles className="h-4 w-4 text-orange-500" />
@@ -116,10 +116,10 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 2 - Top Right Zone */}
+                    {/* Floating Tooltip 2 - Far Top Right Zone */}
                     <div
                         className="absolute z-20 flex animate-[bounce_5s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
-                        style={{ top: `calc(-5% + ${Math.random() * 30}px)`, right: `calc(-25% + ${Math.random() * 20}px)`, animationDelay: '1s' }}
+                        style={{ top: `calc(-15% + ${Math.random() * 20}px)`, right: `calc(-45% + ${Math.random() * 20}px)`, animationDelay: '1s' }}
                     >
                         <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-indigo-500" />
@@ -134,10 +134,10 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 3 - Bottom Left Zone */}
+                    {/* Floating Tooltip 3 - Far Bottom Left Zone */}
                     <div
                         className="absolute z-20 flex animate-[bounce_6s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
-                        style={{ bottom: `calc(-10% + ${Math.random() * -20}px)`, left: `calc(-10% + ${Math.random() * -30}px)`, animationDelay: '2s' }}
+                        style={{ bottom: `calc(-15% + ${Math.random() * 20}px)`, left: `calc(-35% + ${Math.random() * 20}px)`, animationDelay: '2s' }}
                     >
                         <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-sky-500" />
@@ -152,10 +152,10 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 4 - Bottom Right Zone */}
+                    {/* Floating Tooltip 4 - Far Bottom Right Zone */}
                     <div
                         className="absolute z-20 flex animate-[bounce_7s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
-                        style={{ bottom: `calc(-15% + ${Math.random() * 20}px)`, right: `calc(-15% + ${Math.random() * 30}px)`, animationDelay: '0.5s' }}
+                        style={{ bottom: `calc(-25% + ${Math.random() * 20}px)`, right: `calc(-25% + ${Math.random() * 20}px)`, animationDelay: '0.5s' }}
                     >
                         <div className="flex items-center gap-2">
                             <CheckCircle className="h-4 w-4 text-emerald-500" />
