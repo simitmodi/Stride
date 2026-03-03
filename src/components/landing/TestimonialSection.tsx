@@ -14,7 +14,7 @@ export function TestimonialSection({ lang }: { lang: LanguageCode }) {
 
       <div className="max-w-4xl mx-auto px-4 md:px-8 relative z-10">
         <AnimateIn>
-          <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-3xl p-8 md:p-16 border border-slate-100 dark:border-slate-800 shadow-[0_0_40px_-15px_rgba(9,154,174,0.3)] text-center transition-all duration-500 hover:shadow-[0_0_60px_-15px_rgba(9,154,174,0.4)]">
+          <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-3xl p-8 md:p-16 border border-slate-100 dark:border-slate-800 shadow-[0_0_40px_-15px_rgba(79,70,229,0.3)] text-center transition-all duration-500 hover:shadow-[0_0_60px_-15px_rgba(79,70,229,0.4)]">
 
             <div className="w-20 h-20 mx-auto rounded-full bg-slate-100 dark:bg-black border-4 border-white dark:border-slate-800 shadow-sm flex items-center justify-center mb-8 relative">
               <User className="w-8 h-8 text-slate-400 dark:text-slate-500" />

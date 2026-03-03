@@ -105,73 +105,93 @@ export default function Home() {
         {/* Feature Cards Grid (Inspired by the reference image) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mt-24">
 
-          {/* Card 1: Upcoming Appointment */}
-          <div className="bg-white dark:bg-black rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 dark:border-slate-800 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">{t.upcomingAppointment}</p>
-              <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-6">{mounted ? realtimeData.date : t.tomorrow}</h3>
+          {/* Card 1: Platform Usage Demo */}
+          <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
+            <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col min-h-[300px]">
 
-              <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center my-4 ml-8 relative shadow-inner">
-                <User className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+              <div className="mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-4">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Traffic
+                </div>
+                <h3 className="text-5xl font-extrabold text-[#0F1729] dark:text-slate-100 tracking-tight">24.5k<span className="text-2xl text-slate-400 font-medium tracking-normal">+</span></h3>
               </div>
 
-              <p className="text-sm font-medium text-muted-foreground mb-1 mt-4">{t.branch}</p>
-              <h3 className="text-2xl font-bold text-[#0F1729] dark:text-slate-100">{t.downtownWest}</h3>
-            </div>
+              <div className="w-12 h-12 rounded-full bg-[#4F46E5]/10 flex items-center justify-center mb-6 shrink-0">
+                <User className="w-6 h-6 text-[#4F46E5]" />
+              </div>
 
-            <div className="mt-8 pt-6 border-t border-border/50 dark:border-slate-800 text-center">
-              <p className="text-xs text-muted-foreground">{t.status}</p>
-              <p className="text-sm font-bold text-emerald-500 mt-1">{t.confirmed}</p>
+              <div className="mb-8">
+                <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">Monthly Visitors</h4>
+                <p className="text-sm font-medium text-slate-500 mt-1">Booking appointments daily</p>
+              </div>
+
+              <div className="mt-auto">
+                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-6 relative"></div>
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-sm font-medium text-slate-500 mb-1">Trend</p>
+                  <p className="font-semibold text-emerald-500">+12% this week</p>
+                </div>
+              </div>
+
             </div>
           </div>
 
           {/* Card 2: Center Highlight */}
-          <div className="bg-gradient-to-br from-primary to-primary/80 rounded-[2.5rem] p-10 shadow-[0_20px_40px_rgba(139,92,246,0.3)] text-white flex flex-col justify-between min-h-[300px] md:scale-105 z-10 hover:scale-110 transition-transform duration-500">
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-medium mb-8">
-                <Globe className="w-3 h-3" /> {t.userFriendly}
+          <div className="relative group z-10 hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
+            <div className="relative w-full h-full bg-[#4F46E5] dark:bg-[#4F46E5] rounded-[2.5rem] p-8 shadow-sm border border-[#4F46E5] group-hover:border-[#F4F4F8] group-hover:bg-[#5c54eb] transition-colors duration-300 flex flex-col justify-between min-h-[300px] overflow-hidden">
+              <div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-8">
+                  <Globe className="w-3 h-3" /> {t.userFriendly}
+                </div>
+                <h2 className="text-4xl font-bold text-white leading-tight mb-4">{t.bookManage}</h2>
               </div>
-              <h2 className="text-4xl font-bold leading-tight mb-4">{t.bookManage}</h2>
-            </div>
 
-            <p className="text-white/80 font-medium leading-relaxed">
-              {t.customerStaff}
-            </p>
+              <p className="text-white/80 font-medium leading-relaxed">
+                {t.customerStaff}
+              </p>
+            </div>
           </div>
 
           {/* Card 3: Staff Availability */}
-          <div className="bg-white dark:bg-black rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border/50 dark:border-slate-800 flex flex-col justify-between min-h-[300px] hover:-translate-y-2 transition-transform duration-500">
-            <div className="flex justify-between items-start mb-6">
-              <div className="bg-secondary dark:bg-slate-800 px-4 py-2 rounded-2xl text-sm font-medium text-[#0F1729] dark:text-slate-100">{t.staffAvailability}</div>
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
-                <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
+          <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+            <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
+            <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
+              <div className="flex justify-between items-start mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
+                  {t.staffAvailability}
+                </div>
+                <div className="flex -space-x-2">
+                  <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
+                  <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-xs"><User className="w-4 h-4" /></div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
-              <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
-            </div>
-
-            <div className="mt-8 h-24 w-full relative">
-              {/* Mock Chart line */}
-              <svg className="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
-                <path d="M0,30 C20,10 40,50 60,30 C80,10 100,40 120,20 C140,0 160,50 180,30 C190,20 200,30 200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
-                <path d="M0,30 L20,15 L40,45 L60,30 L80,15 L100,35 L120,20 L140,5 L160,40 L180,25 L200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
-                <circle cx="20" cy="15" r="3" fill="currentColor" className="text-primary" />
-                <circle cx="60" cy="30" r="3" fill="currentColor" className="text-primary" />
-                <circle cx="120" cy="20" r="3" fill="currentColor" className="text-primary" />
-                <circle cx="160" cy="40" r="3" fill="currentColor" className="text-primary" />
-              </svg>
-              {/* Overlay lines */}
-              <div className="absolute inset-0 flex justify-between">
-                {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-full w-px bg-border/50 dark:bg-border/20"></div>)}
+              <div>
+                <h3 className="text-4xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{mounted ? t.slotsAvailable.replace('12', realtimeData.slots) : t.slotsAvailable}</h3>
+                <p className="text-emerald-500 text-sm font-medium flex items-center gap-1">{t.availableToday}</p>
               </div>
-            </div>
 
-            <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
-              <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] dark:text-slate-100 font-bold">5pm</span>
+              <div className="mt-8 h-24 w-full relative">
+                {/* Mock Chart line */}
+                <svg className="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
+                  <path d="M0,30 C20,10 40,50 60,30 C80,10 100,40 120,20 C140,0 160,50 180,30 C190,20 200,30 200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
+                  <path d="M0,30 L20,15 L40,45 L60,30 L80,15 L100,35 L120,20 L140,5 L160,40 L180,25 L200,30" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
+                  <circle cx="20" cy="15" r="3" fill="currentColor" className="text-primary" />
+                  <circle cx="60" cy="30" r="3" fill="currentColor" className="text-primary" />
+                  <circle cx="120" cy="20" r="3" fill="currentColor" className="text-primary" />
+                  <circle cx="160" cy="40" r="3" fill="currentColor" className="text-primary" />
+                </svg>
+                {/* Overlay lines */}
+                <div className="absolute inset-0 flex justify-between">
+                  {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-full w-px bg-border/50 dark:bg-border/20"></div>)}
+                </div>
+              </div>
+
+              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-medium uppercase">
+                <span>9am</span><span>11am</span><span>1pm</span><span>3pm</span><span className="text-[#0F1729] dark:text-slate-100 font-bold">5pm</span>
+              </div>
             </div>
           </div>
 
