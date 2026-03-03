@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from '@/lib/Logo.png';
-import { ArrowRight, Globe, ArrowDownUp, User } from "lucide-react";
+import { ArrowRight, Globe, ArrowDownUp, User, Headset } from "lucide-react";
 import { landingTranslations, languages, LanguageCode } from "@/lib/landing-i18n";
 import { motion } from "framer-motion";
 import { useFirestore } from "@/firebase/provider";
@@ -28,7 +28,6 @@ export default function Home() {
   const [lang, setLang] = useState<LanguageCode>('en');
   const [mounted, setMounted] = useState(false);
   const [realtimeData, setRealtimeData] = useState({ date: "", slots: "19" });
-  const [liveTrafficCount, setLiveTrafficCount] = useState<number>(24512);
 
   const firestore = useFirestore();
 
@@ -42,8 +41,6 @@ export default function Home() {
 
     // The Ticker - Increments numbers every 4 seconds to look 'Live'
     const interval = setInterval(() => {
-      setLiveTrafficCount(prev => prev + Math.floor(Math.random() * 2) + 1);
-
       setRealtimeData(prev => {
         if (Math.random() > 0.8) {
           const currentSlots = parseInt(prev.slots);
@@ -136,31 +133,29 @@ export default function Home() {
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col min-h-[300px]">
 
                 <div className="mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Traffic
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span> Available Now
                   </div>
                   <h3 className="text-5xl font-extrabold text-[#0F1729] dark:text-slate-100 tracking-tight">
-                    {liveTrafficCount > 999
-                      ? (liveTrafficCount / 1000).toFixed(1) + 'k'
-                      : liveTrafficCount}
-                    <span className="text-2xl text-slate-400 font-medium tracking-normal">+</span>
+                    24/7
+                    <span className="text-2xl text-slate-400 font-medium tracking-normal ml-2">Support</span>
                   </h3>
                 </div>
 
                 <div className="w-12 h-12 rounded-full bg-[#4F46E5]/10 flex items-center justify-center mb-6 shrink-0">
-                  <User className="w-6 h-6 text-[#4F46E5]" />
+                  <Headset className="w-6 h-6 text-[#4F46E5]" />
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">Monthly Visitors</h4>
-                  <p className="text-sm font-medium text-slate-500 mt-1">Booking appointments daily</p>
+                  <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">Banking Assistance</h4>
+                  <p className="text-sm font-medium text-slate-500 mt-1">Chat with our experts anytime</p>
                 </div>
 
                 <div className="mt-auto">
                   <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-6 relative"></div>
                   <div className="flex flex-col items-center justify-center">
-                    <p className="text-sm font-medium text-slate-500 mb-1">Trend</p>
-                    <p className="font-semibold text-emerald-500">+12% this week</p>
+                    <p className="text-sm font-medium text-slate-500 mb-1">Response Time</p>
+                    <p className="font-semibold text-emerald-500">&lt; 1 min average</p>
                   </div>
                 </div>
 
