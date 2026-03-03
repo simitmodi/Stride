@@ -70,42 +70,44 @@ function FlipDigit({ value, label }: { value: string; label: string }) {
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className="relative w-[3.2rem] h-[4rem] overflow-hidden rounded-lg">
+      <div className="relative w-[3.2rem] h-[4rem] perspective-[400px]">
         {/* Top Half (New Value - Static) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-end justify-center pb-[0.5px] border-b border-white/10">
+        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/10">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
             {display.cur}
           </span>
         </div>
 
         {/* Bottom Half (Old Value - Static) */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-start justify-center pt-[0.5px]">
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
           <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
             {display.prev}
           </span>
         </div>
 
-        {/* 2D Sliding Flap */}
+        {/* Realistic 3D Flipping Flaps */}
         {display.flipping && (
           <>
-            {/* Sliding out old top */}
+            {/* Top flap (Old value, rotating down) */}
             <div
-              className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-end justify-center pb-[0.5px] border-b border-white/10 z-2"
-              style={{ animation: 'slide2DOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards' }}
+              className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20 origin-bottom z-10"
+              style={{ animation: 'flipTopRealistic 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
                 {display.prev}
               </span>
+              <div className="absolute inset-0 bg-black/20" style={{ animation: 'flipShadowTop 0.6s ease-in forwards' }} />
             </div>
 
-            {/* Sliding in new bottom */}
+            {/* Bottom flap (New value, rotating into view) */}
             <div
-              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] flex items-start justify-center pt-[0.5px] z-3"
-              style={{ animation: 'slide2DIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards' }}
+              className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] origin-top z-20"
+              style={{ animation: 'flipBottomRealistic 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards', transform: 'rotateX(90deg)' }}
             >
               <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
                 {display.cur}
               </span>
+              <div className="absolute inset-0 bg-black/40" style={{ animation: 'flipShadowBottom 0.6s ease-out forwards' }} />
             </div>
           </>
         )}
@@ -149,9 +151,11 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
         }}
       >
         <style>{`
-          @keyframes slide2DOut   { 0%{transform:scaleY(1)} 100%{transform:scaleY(0)} }
-          @keyframes slide2DIn    { 0%{transform:scaleY(0)} 100%{transform:scaleY(1)} }
-          @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
+          @keyframes flipTopRealistic      { 0%{transform:rotateX(0deg)} 100%{transform:rotateX(-180deg)} }
+          @keyframes flipBottomRealistic   { 0%{transform:rotateX(180deg)} 100%{transform:rotateX(0deg)} }
+          @keyframes flipShadowTop        { 0%{opacity:0} 100%{opacity:1} }
+          @keyframes flipShadowBottom     { 0%{opacity:1} 100%{opacity:0} }
+          @keyframes coin3D               { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
           @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
           @keyframes floatRandom  { 
             0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
@@ -241,7 +245,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-[#312e81] text-white border border-[#4338ca] hover:bg-[#3730a3] transition-all active:scale-95 shadow-lg whitespace-nowrap">
+            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-[0_8px_20px_rgba(255,255,255,0.25)] whitespace-nowrap">
               Details →
             </span>
           </div>
