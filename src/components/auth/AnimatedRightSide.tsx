@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Loader2, Sparkles } from 'lucide-react';
+import { Search, Loader2, Sparkles, CheckCircle, Calendar, FileText } from 'lucide-react';
 
 export function AnimatedRightSide() {
     return (
@@ -98,8 +98,8 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* The Animated Tooltip running constantly */}
-                    <div className="absolute top-[40%] left-[15%] z-20 flex animate-[bounce_3s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105">
+                    {/* Floating Tooltip 1 - Top Left */}
+                    <div className="absolute -top-12 -left-20 z-20 flex animate-[bounce_4s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105">
                         <div className="flex items-center gap-2">
                             <Sparkles className="h-4 w-4 text-orange-500" />
                             <div className="flex flex-col">
@@ -108,6 +108,51 @@ export function AnimatedRightSide() {
                                 </span>
                                 <span className="text-sm font-medium text-gray-900 leading-snug max-w-[150px]">
                                     I found 3 open slots for you this week
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Floating Tooltip 2 - Top Right */}
+                    <div className="absolute -top-4 -right-24 z-20 flex animate-[bounce_5s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '1s' }}>
+                        <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-indigo-500" />
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                                    Schedule
+                                </span>
+                                <span className="text-sm font-medium text-gray-900 leading-snug max-w-[140px]">
+                                    Meeting confirmed for 2:00 PM
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Floating Tooltip 3 - Bottom Left */}
+                    <div className="absolute -bottom-8 -left-16 z-20 flex animate-[bounce_6s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '2s' }}>
+                        <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-sky-500" />
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                                    Documents
+                                </span>
+                                <span className="text-sm font-medium text-gray-900 leading-snug max-w-[140px]">
+                                    Loan application checklist updated
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Floating Tooltip 4 - Bottom Right */}
+                    <div className="absolute -bottom-16 -right-12 z-20 flex animate-[bounce_7s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '0.5s' }}>
+                        <div className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </span>
+                                <span className="text-sm font-medium text-gray-900 leading-snug max-w-[140px]">
+                                    KYC Documents verified successfully
                                 </span>
                             </div>
                         </div>
