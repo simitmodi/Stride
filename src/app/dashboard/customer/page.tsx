@@ -167,37 +167,37 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
           .floating-bg-object2 { animation: driftSlow 12s ease-in-out infinite; filter: blur(35px); opacity: 0.12; background: #9333ea; }
         `}</style>
 
-        {/* Floating background objects */}
-        <div className="absolute top-0 left-0 w-48 h-48 bg-white/40 rounded-full floating-bg-object pointer-events-none" />
+        {/* Floating background objects - make them more solid/graphic */}
+        <div className="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full floating-bg-object pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full floating-bg-object2 pointer-events-none" />
 
-        {/* Shimmer */}
+        {/* Shimmer - keep subtle but defined */}
         <div className="pointer-events-none absolute top-0 bottom-0 w-1/3"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)", zIndex: 1 }} />
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", zIndex: 1 }} />
 
         {/* ── 3-column balanced layout ── */}
-        <div className="relative z-10 flex items-stretch divide-x divide-white/15">
+        <div className="relative z-10 flex items-stretch divide-x divide-white/20">
 
           {/* LEFT: Stats */}
           <div className="flex flex-col justify-center items-center gap-3 px-7 py-2.5 flex-1">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/45">Overview</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50">Overview</p>
             <div className="flex items-center gap-6">
               <div className="flex flex-col items-center">
                 <span className="text-5xl font-black tabular-nums text-white leading-none">{upcomingCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/50 mt-1">Upcoming</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-white/60 mt-1">Upcoming</span>
               </div>
-              <div className="w-px h-10 bg-white/20" />
+              <div className="w-px h-10 bg-white/30" />
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-black tabular-nums text-white/45 leading-none">{completedCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/30 mt-1">Completed</span>
+                <span className="text-5xl font-black tabular-nums text-white/50 leading-none">{completedCount}</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-white/40 mt-1">Completed</span>
               </div>
             </div>
           </div>
 
           {/* CENTER: Flip Clock */}
           <div className="flex flex-col justify-center items-center px-7 py-2.5 flex-1"
-            style={{ background: "rgba(0,0,0,0.10)" }}>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/45 mb-4">Next appointment in</p>
+            style={{ background: "#00000022" }}>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 mb-4">Next appointment in</p>
             <div className="flex items-center gap-2">
               <FlipDigit value={pad(days)} label="days" />
               <span className="text-white/20 font-black text-3xl mb-7">:</span>
