@@ -26,10 +26,10 @@ const problems = [
 
 export function ProblemSection() {
   return (
-    <section className="w-full py-24 bg-[#F9FAFB] dark:bg-black">
+    <section className="w-full py-24 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
-          <h2 className="text-3xl md:text-5xl font-bold text-center text-slate-900 dark:text-slate-100 mb-16">
+          <h2 className="text-3xl md:text-5xl font-bold text-center text-slate-900 mb-16">
             Why Bank Visits Still Feel Complicated
           </h2>
         </AnimateIn>
@@ -37,15 +37,17 @@ export function ProblemSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {problems.map((prob, i) => (
             <AnimateIn key={i} delay={prob.delay} className="group">
-              <div className="bg-white dark:bg-black border border-slate-100/50 dark:border-slate-800 shadow-sm rounded-2xl p-8 flex flex-col items-center text-center hover:-translate-y-2 transition-transform duration-500 ease-in-out cursor-default">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                  {prob.icon}
+                <div className="bg-white border border-slate-100/50 shadow-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-8 flex flex-col items-center text-center hover:-translate-y-2 transition-transform duration-500 ease-in-out cursor-default min-h-[300px] justify-between">
+                  <div>
+                    <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                      {prob.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">{prob.title}</h3>
+                  </div>
+                  <p className="text-slate-500 font-medium leading-relaxed">
+                    {prob.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">{prob.title}</h3>
-                <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                  {prob.description}
-                </p>
-              </div>
             </AnimateIn>
           ))}
         </div>
