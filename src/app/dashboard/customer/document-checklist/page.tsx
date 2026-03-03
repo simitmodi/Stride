@@ -444,7 +444,7 @@ export default function DocumentChecklistPage() {
               </motion.div>
 
               {/* Document List */}
-              <div ref={listContainerRef} className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 hover:[&::-webkit-scrollbar-thumb]:bg-slate-300 transition-colors">
+              <div ref={listContainerRef} className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-2 scrollbar-none">
                 <AnimatePresence mode="popLayout">
                   {activeData.items.map((item, index) => {
                     const itemRequired = item.content.filter(c => c.type === 'required').length;
