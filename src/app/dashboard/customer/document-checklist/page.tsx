@@ -64,19 +64,19 @@ const SideDecorations = () => {
         initial={{ y: 0, rotate: 0 }}
         animate={{ y: [-20, 20, -20], rotate: [0, 5, -5, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-[2%] top-[15%] w-[300px] h-[300px] opacity-70"
+        className="absolute left-[2%] top-[15%] w-[380px] h-[380px] opacity-100"
         style={{ perspective: 1000 }}
       >
         <div 
-          className="w-full h-full rounded-full border-[24px] border-white/40 backdrop-blur-md shadow-[0_20px_60px_rgba(79,70,229,0.15)] flex items-center justify-center relative" 
+          className="w-full h-full rounded-full border-[32px] border-white/60 backdrop-blur-xl shadow-[0_30px_80px_rgba(79,70,229,0.25)] flex items-center justify-center relative" 
           style={{ transformStyle: 'preserve-3d', transform: 'rotateX(55deg) rotateY(15deg) rotateZ(-10deg)' }}
         >
           {/* Inner ring */}
-          <div className="absolute w-[200px] h-[200px] rounded-full border-[12px] border-indigo-100/50 shadow-inner" style={{ transform: 'translateZ(40px)' }} />
+          <div className="absolute w-[240px] h-[240px] rounded-full border-[16px] border-indigo-200/70 shadow-inner" style={{ transform: 'translateZ(50px)' }} />
           {/* Glowing core */}
-          <div className="absolute w-[100px] h-[100px] rounded-full bg-gradient-to-tr from-indigo-400/40 to-violet-400/40 blur-xl" style={{ transform: 'translateZ(80px)' }} />
+          <div className="absolute w-[140px] h-[140px] rounded-full bg-gradient-to-tr from-indigo-500/60 to-violet-500/60 blur-xl shadow-[0_0_60px_rgba(99,102,241,0.6)]" style={{ transform: 'translateZ(90px)' }} />
           {/* Floating icon inside */}
-          <LayoutList className="absolute w-12 h-12 text-indigo-400/80" style={{ transform: 'translateZ(120px)' }} />
+          <LayoutList className="absolute w-16 h-16 text-indigo-500" style={{ transform: 'translateZ(140px)' }} />
         </div>
       </motion.div>
 
@@ -84,50 +84,50 @@ const SideDecorations = () => {
         initial={{ y: 0, rotate: 0 }}
         animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute left-[5%] bottom-[10%] w-[200px] h-[200px] opacity-60"
+        className="absolute left-[5%] bottom-[10%] w-[260px] h-[260px] opacity-90"
         style={{ perspective: 1000 }}
       >
         <div 
-          className="w-full h-full rounded-3xl bg-white/30 backdrop-blur-lg border border-white/60 shadow-xl shadow-indigo-900/10 flex items-center justify-center relative" 
+          className="w-full h-full rounded-[40px] bg-white/40 backdrop-blur-xl border-2 border-white/80 shadow-2xl shadow-indigo-900/20 flex items-center justify-center relative" 
           style={{ transformStyle: 'preserve-3d', transform: 'rotateX(30deg) rotateY(-20deg) rotateZ(15deg)' }}
         >
-          <div className="absolute inset-4 rounded-2xl border-2 border-dashed border-indigo-300/50" style={{ transform: 'translateZ(20px)' }} />
-          <FileText className="w-16 h-16 text-indigo-300/80" style={{ transform: 'translateZ(50px)' }} />
+          <div className="absolute inset-5 rounded-[32px] border-[3px] border-dashed border-indigo-400/60" style={{ transform: 'translateZ(30px)' }} />
+          <FileText className="w-24 h-24 text-indigo-400" style={{ transform: 'translateZ(70px)' }} />
         </div>
       </motion.div>
 
       {/* --- RIGHT SIDE --- */}
       <motion.div 
         initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [25, -25, 25], rotate: [0, -8, 8, 0] }}
+        animate={{ y: [30, -30, 30], rotate: [0, -8, 8, 0] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute right-[2%] top-[12%] w-[280px] h-[280px] opacity-70"
+        className="absolute right-[2%] top-[12%] w-[360px] h-[360px] opacity-100"
         style={{ perspective: 1000 }}
       >
         <div 
-          className="w-full h-full bg-gradient-to-br from-white/50 to-white/20 backdrop-blur-md rounded-tr-[80px] rounded-bl-[80px] rounded-tl-3xl rounded-br-3xl border border-white/80 shadow-2xl shadow-violet-900/15 flex items-center justify-center relative" 
+          className="w-full h-full bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-xl rounded-tr-[100px] rounded-bl-[100px] rounded-tl-[40px] rounded-br-[40px] border-2 border-white/90 shadow-[0_40px_100px_rgba(139,92,246,0.25)] flex items-center justify-center relative" 
           style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-25deg) rotateY(-20deg) rotateZ(5deg)' }}
         >
-          <div className="w-[180px] h-[180px] bg-gradient-to-tr from-violet-300/30 to-rose-300/30 rounded-full blur-2xl absolute" style={{ transform: 'translateZ(0px)' }} />
-          <div className="w-[240px] h-[240px] border-2 border-dashed border-white/60 rounded-tr-[70px] rounded-bl-[70px] rounded-tl-[24px] rounded-br-[24px] absolute" style={{ transform: 'translateZ(30px)' }} />
-          <CheckCircle2 className="w-20 h-20 text-violet-400/80" style={{ transform: 'translateZ(60px)' }} />
+          <div className="w-[240px] h-[240px] bg-gradient-to-tr from-violet-400/50 to-rose-400/50 rounded-full blur-3xl absolute shadow-[0_0_80px_rgba(244,63,94,0.4)]" style={{ transform: 'translateZ(0px)' }} />
+          <div className="w-[300px] h-[300px] border-[3px] border-dashed border-white/80 rounded-tr-[90px] rounded-bl-[90px] rounded-tl-[32px] rounded-br-[32px] absolute" style={{ transform: 'translateZ(40px)' }} />
+          <CheckCircle2 className="w-28 h-28 text-violet-500" style={{ transform: 'translateZ(90px)' }} />
         </div>
       </motion.div>
 
       <motion.div 
         initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [-20, 20, -20], rotate: [0, 15, 0] }}
+        animate={{ y: [-25, 25, -25], rotate: [0, 15, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        className="absolute right-[6%] bottom-[12%] w-[180px] h-[180px] opacity-60"
+        className="absolute right-[6%] bottom-[12%] w-[240px] h-[240px] opacity-90"
         style={{ perspective: 1000 }}
       >
         <div 
-          className="w-full h-full rounded-full border-[12px] border-rose-100/40 backdrop-blur-md relative flex items-center justify-center" 
+          className="w-full h-full rounded-full border-[16px] border-rose-200/60 backdrop-blur-xl relative flex items-center justify-center shadow-[0_20px_60px_rgba(244,63,94,0.2)]" 
           style={{ transformStyle: 'preserve-3d', transform: 'rotateX(45deg) rotateY(30deg) rotateZ(-15deg)' }}
         >
-           <div className="absolute w-[120px] h-[120px] rounded-full border-[6px] border-rose-200/50" style={{ transform: 'translateZ(25px)' }}/>
-           <div className="absolute w-[60px] h-[60px] rounded-full bg-rose-400/30 blur-md" style={{ transform: 'translateZ(50px)' }}/>
-           <Circle className="absolute w-10 h-10 text-rose-400/80" style={{ transform: 'translateZ(75px)' }} />
+           <div className="absolute w-[160px] h-[160px] rounded-full border-[8px] border-rose-300/70" style={{ transform: 'translateZ(35px)' }}/>
+           <div className="absolute w-[80px] h-[80px] rounded-full bg-rose-500/50 blur-xl shadow-[0_0_50px_rgba(244,63,94,0.6)]" style={{ transform: 'translateZ(70px)' }}/>
+           <Circle className="absolute w-14 h-14 text-rose-500" style={{ transform: 'translateZ(100px)' }} />
         </div>
       </motion.div>
     </div>
@@ -403,9 +403,9 @@ export default function DocumentChecklistPage() {
     <div className="min-h-screen w-full bg-[#F4F4F8] relative">
       {/* ─── Background Decorative Elements ─── */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-400/10 rounded-full blur-[120px]" />
-        <div className="absolute top-[30%] right-[-10%] w-[40%] h-[50%] bg-violet-400/10 rounded-full blur-[150px]" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[30%] h-[30%] bg-rose-400/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-[25%] right-[-15%] w-[60%] h-[60%] bg-violet-500/15 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-[-15%] left-[15%] w-[40%] h-[40%] bg-rose-500/15 rounded-full blur-[140px] pointer-events-none" />
       </div>
 
       <SideDecorations />
