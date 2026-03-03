@@ -98,8 +98,11 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 1 - Top Left */}
-                    <div className="absolute -top-12 -left-20 z-20 flex animate-[bounce_4s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105">
+                    {/* Floating Tooltip 1 - Top Left Zone */}
+                    <div
+                        className="absolute z-20 flex animate-[bounce_4s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
+                        style={{ top: `calc(-15% + ${Math.random() * 20}px)`, left: `calc(-10% + ${Math.random() * -30}px)` }}
+                    >
                         <div className="flex items-center gap-2">
                             <Sparkles className="h-4 w-4 text-orange-500" />
                             <div className="flex flex-col">
@@ -113,8 +116,11 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 2 - Top Right */}
-                    <div className="absolute -top-4 -right-24 z-20 flex animate-[bounce_5s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '1s' }}>
+                    {/* Floating Tooltip 2 - Top Right Zone */}
+                    <div
+                        className="absolute z-20 flex animate-[bounce_5s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
+                        style={{ top: `calc(-5% + ${Math.random() * 30}px)`, right: `calc(-25% + ${Math.random() * 20}px)`, animationDelay: '1s' }}
+                    >
                         <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-indigo-500" />
                             <div className="flex flex-col">
@@ -128,8 +134,11 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 3 - Bottom Left */}
-                    <div className="absolute -bottom-8 -left-16 z-20 flex animate-[bounce_6s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '2s' }}>
+                    {/* Floating Tooltip 3 - Bottom Left Zone */}
+                    <div
+                        className="absolute z-20 flex animate-[bounce_6s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
+                        style={{ bottom: `calc(-10% + ${Math.random() * -20}px)`, left: `calc(-10% + ${Math.random() * -30}px)`, animationDelay: '2s' }}
+                    >
                         <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-sky-500" />
                             <div className="flex flex-col">
@@ -143,8 +152,11 @@ export function AnimatedRightSide() {
                         </div>
                     </div>
 
-                    {/* Floating Tooltip 4 - Bottom Right */}
-                    <div className="absolute -bottom-16 -right-12 z-20 flex animate-[bounce_7s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105" style={{ animationDelay: '0.5s' }}>
+                    {/* Floating Tooltip 4 - Bottom Right Zone */}
+                    <div
+                        className="absolute z-20 flex animate-[bounce_7s_ease-in-out_infinite] flex-col rounded-xl border border-white/10 bg-[#ededed] p-3 shadow-2xl transition-transform hover:scale-105"
+                        style={{ bottom: `calc(-15% + ${Math.random() * 20}px)`, right: `calc(-15% + ${Math.random() * 30}px)`, animationDelay: '0.5s' }}
+                    >
                         <div className="flex items-center gap-2">
                             <CheckCircle className="h-4 w-4 text-emerald-500" />
                             <div className="flex flex-col">
