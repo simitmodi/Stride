@@ -514,7 +514,8 @@ export default function DocumentChecklistPage() {
           {/* ─── Left Panel: Document List ─── */}
           {/* Hidden on mobile if viewing details */}
           <div className={cn(
-            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 lg:block",
+            "lg:w-[340px] xl:w-[380px] 2xl:w-[420px] shrink-0 lg:block rounded-3xl p-4 lg:p-5 relative",
+            "bg-white/70 backdrop-blur-2xl border border-white shadow-xl shadow-slate-200/50",
             isMobileDetailView ? "hidden" : "block"
           )}>
             <div className="sticky top-[85px]">
@@ -577,11 +578,11 @@ export default function DocumentChecklistPage() {
                           <div className="min-w-0">
                             <p className={cn(
                               "text-sm font-semibold transition-colors duration-200 truncate",
-                              activeItem === index ? "text-slate-900" : "text-slate-500"
+                              activeItem === index ? "text-slate-900" : "text-slate-600"
                             )}>
                               {item.title}
                             </p>
-                            <p className="text-xs text-slate-400 mt-0.5">
+                            <p className="text-xs text-slate-500 mt-0.5">
                               {itemRequired} required · {item.content.length} total
                             </p>
                           </div>
