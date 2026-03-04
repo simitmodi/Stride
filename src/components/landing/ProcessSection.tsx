@@ -41,58 +41,46 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
   ];
 
   return (
-    <section className="w-full py-32 bg-[#02040a] relative overflow-hidden">
-      {/* Premium Gradient Mesh Background */}
+    <section className="w-full py-32 bg-white relative overflow-hidden">
+      {/* Premium Light Mesh Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Base dark layer */}
-        <div className="absolute inset-0 bg-[#02040a]" />
+        {/* Subtle primary mesh layer for light mode */}
+        <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle_at_20%_35%,rgba(99,102,241,0.5)_0%,transparent_50%),radial-gradient(circle_at_80%_65%,rgba(99,102,241,0.3)_0%,transparent_50%)]" />
 
-        {/* Subtle indigo mesh layer */}
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_20%_35%,rgba(99,102,241,0.15)_0%,transparent_50%),radial-gradient(circle_at_80%_65%,rgba(99,102,241,0.1)_0%,transparent_50%)]" />
-
-        {/* Moving ambient glows */}
+        {/* Moving ambient glows (softer for light mode) */}
         <motion.div
           style={{ x: glowX, y: glowY }}
           animate={{
-            opacity: [0.3, 0.5, 0.3],
-            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.4, 0.3],
+            scale: [1, 1.1, 1],
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-500/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          style={{ x: -glowX, y: -glowY }}
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scale: [1.2, 1, 1.2],
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]"
+          className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-50 rounded-full blur-[120px]"
         />
 
         {/* Noise overlay for texture */}
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+        <div className="absolute inset-0 opacity-[0.01] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center relative z-10">
         <div>
           <AnimateIn>
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-16 tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-slate-900 mb-16 tracking-tight">
               {t.procTitle}
             </h2>
           </AnimateIn>
 
           <div className="space-y-14 relative">
             {/* Connecting line */}
-            <div className="absolute left-[24px] top-6 bottom-10 w-px bg-gradient-to-b from-primary/50 to-transparent hidden md:block"></div>
+            <div className="absolute left-[24px] top-6 bottom-10 w-px bg-slate-200 hidden md:block"></div>
 
             {steps.map((step, i) => (
               <AnimateIn key={i} delay={step.delay} className="relative flex items-center md:items-start gap-8 group">
-                <div className="relative z-10 w-12 h-12 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-xl flex items-center justify-center text-primary font-bold text-xl border border-white/10 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-500 shadow-lg shadow-black/20">
+                <div className="relative z-10 w-12 h-12 flex-shrink-0 bg-white rounded-xl flex items-center justify-center text-primary font-bold text-xl border border-slate-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-500 shadow-md shadow-slate-100">
                   {step.number}
                 </div>
                 <div className="pt-2">
-                  <h3 className="text-2xl md:text-3xl font-bold text-slate-100 group-hover:text-white transition-colors">
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
                     {step.title}
                   </h3>
                 </div>
@@ -107,10 +95,10 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
 
             {/* Soft Ambient Glow Pulse */}
             <motion.div
-              animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
+              animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.05, 1] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               style={{ x: glowX, y: glowY }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-primary/20 rounded-full blur-[100px] pointer-events-none"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"
             />
 
             <motion.div
@@ -188,46 +176,46 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
             {/* Floating Glass Cards */}
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute -left-16 top-1/4 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              className="absolute -left-16 top-1/4 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [-4, 4, -4] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20">
-                <Bell className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                <Bell className="w-6 h-6 text-blue-500" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Reminder</p>
-                <p className="text-sm text-white font-bold">Tomorrow at 10:30 AM</p>
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">Reminder</p>
+                <p className="text-sm text-slate-900 font-bold">Tomorrow at 10:30 AM</p>
               </div>
             </motion.div>
 
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute -right-12 top-1/2 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              className="absolute -right-12 top-1/2 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [4, -4, 4] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                <CheckCircle className="w-6 h-6 text-emerald-400" />
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                <CheckCircle className="w-6 h-6 text-emerald-500" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Success</p>
-                <p className="text-sm text-white font-bold">Visit Confirmed</p>
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">Success</p>
+                <p className="text-sm text-slate-900 font-bold">Visit Confirmed</p>
               </div>
             </motion.div>
 
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute left-10 bottom-12 z-20 w-60 p-5 rounded-3xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4"
+              className="absolute left-10 bottom-12 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [-3, 3, -3] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+              <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center shrink-0 border border-primary/10">
                 <CreditCard className="w-6 h-6 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-black tracking-widest mb-1">Fast Track</p>
-                <p className="text-sm text-white font-bold">Priority Support</p>
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">Fast Track</p>
+                <p className="text-sm text-slate-900 font-bold">Priority Support</p>
               </div>
             </motion.div>
 
