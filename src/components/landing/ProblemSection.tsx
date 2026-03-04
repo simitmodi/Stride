@@ -2,27 +2,24 @@
 
 import { AnimateIn } from "./AnimateIn";
 import { CopyX, FileBadge, Clock } from "lucide-react";
-import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
-
-export function ProblemSection({ lang }: { lang: LanguageCode }) {
-  const t = landingTranslations[lang];
+export function ProblemSection() {
   const problems = [
     {
       icon: <CopyX className="w-6 h-6 text-primary" />,
-      title: t.prob1Title,
-      description: t.prob1Desc,
+      title: "Multiple Visits",
+      description: "Going back and forth for a single request just because of scheduling issues.",
       delay: 100,
     },
     {
       icon: <FileBadge className="w-6 h-6 text-primary" />,
-      title: t.prob2Title,
-      description: t.prob2Desc,
+      title: "Missing Documents",
+      description: "Arriving at the branch only to find out you're missing a critical signature.",
       delay: 200,
     },
     {
       icon: <Clock className="w-6 h-6 text-primary" />,
-      title: t.prob3Title,
-      description: t.prob3Desc,
+      title: "Long Waiting Time",
+      description: "Wasting hours in line despite booking a slot over the phone.",
       delay: 300,
     },
   ];
@@ -32,7 +29,7 @@ export function ProblemSection({ lang }: { lang: LanguageCode }) {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-slate-900 dark:text-slate-100 mb-16 px-4">
-            {t.probTitle}
+            Why Bank Visits Still Feel Complicated
           </h2>
         </AnimateIn>
 

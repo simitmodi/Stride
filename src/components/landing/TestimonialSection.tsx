@@ -2,10 +2,7 @@
 
 import { AnimateIn } from "./AnimateIn";
 import { User } from "lucide-react";
-import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
-
-export function TestimonialSection({ lang }: { lang: LanguageCode }) {
-  const t = landingTranslations[lang];
+export function TestimonialSection() {
 
   return (
     <section className="w-full py-24 bg-[#F9FAFB] relative overflow-hidden">
@@ -25,12 +22,12 @@ export function TestimonialSection({ lang }: { lang: LanguageCode }) {
             </div>
 
             <blockquote className="text-2xl md:text-3xl font-medium text-slate-800 dark:text-slate-200 leading-snug mb-8">
-              {t.testQuote}
+              "Stride saved me two extra bank visits. Everything was clear beforehand and my appointment started right on time."
             </blockquote>
 
             <div className="text-sm">
-              <p className="font-bold text-slate-900 dark:text-slate-100">{t.testName}</p>
-              <p className="text-slate-500 dark:text-slate-400">{t.testRole}</p>
+              <p className="font-bold text-slate-900 dark:text-slate-100">Rajeev Kumar</p>
+              <p className="text-slate-500 dark:text-slate-400">Kirana Store Owner</p>
             </div>
           </div>
         </AnimateIn>

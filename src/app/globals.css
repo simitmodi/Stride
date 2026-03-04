@@ -100,6 +100,19 @@ body {
   }
 }
 
+/* ── Hide Google Translate UI elements ── */
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame { 
+  display: none !important; 
+}
+.goog-te-gadget { 
+  display: none !important; 
+}
+body { 
+  top: 0 !important; 
+}
+
 @layer base {
   * {
     @apply border-border;

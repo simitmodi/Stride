@@ -42,5 +42,4 @@ export function getSdks(firebaseApp: FirebaseApp) {
 }
 
 export * from './provider';
-export * from './client-provider';
 export * from './non-blocking-login';

@@ -1,5 +1,6 @@
 
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { ScrollAwareFooter } from '@/components/scroll-aware-footer';
@@ -44,6 +45,20 @@ export default function RootLayout({
               <Toaster />
               <Analytics />
               <SpeedInsights />
+              <Script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" strategy="afterInteractive" />
+              <Script id="google-translate-init" strategy="afterInteractive">
+                {`
+                  function googleTranslateElementInit() {
+                    if (document.getElementById('google_translate_element')) {
+                      new window.google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        includedLanguages: 'en,hi,bn,te,ta,gu,fr,es,de,it',
+                        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+                      }, 'google_translate_element');
+                    }
+                  }
+                `}
+              </Script>
             </SessionTimeoutHandler>
           </FirebaseClientProvider>
       </body>
