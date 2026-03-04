@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { HeroMockup } from "@/components/landing/HeroMockup";
+import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { ProcessSection } from "@/components/landing/ProcessSection";
@@ -45,6 +46,7 @@ export default function Home() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
+      <BackgroundWaves />
       {/* Navigation Bar */}
       <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
