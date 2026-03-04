@@ -276,6 +276,114 @@ export function HeroMockup() {
                 </div>
             </motion.div>
 
+            {/* NEW: Notification Card (Top Center-ish) */}
+            <motion.div
+                style={{ x: tabletX, y: tabletY }}
+                animate={{
+                    y: [0, -10, 0],
+                }}
+                transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute left-1/4 -top-8 z-20 w-72 p-4 rounded-3xl bg-white/80 dark:bg-slate-900/70 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+            >
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-400/30">
+                    <Bell className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Alert</p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Action Required: Complete Bank Verification</p>
+                </div>
+            </motion.div>
+
+            {/* NEW: Secure Card (High Left) */}
+            <motion.div
+                style={{ x: cardLX, y: cardLY }}
+                animate={{
+                    y: [10, -10, 10],
+                }}
+                transition={{
+                    duration: 7.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -left-28 top-[35%] z-20 w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+            >
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                    <CheckCircle className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Trust</p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">End-to-End Encryption Enabled</p>
+                </div>
+            </motion.div>
+
+            {/* NEW: Time Slots Card (Mid Right) */}
+            <motion.div
+                style={{ x: cardRX, y: cardRY }}
+                animate={{
+                    y: [-12, 12, -12],
+                }}
+                transition={{
+                    duration: 6.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -right-32 top-1/2 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+            >
+                <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
+                    <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Availability</p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Next Slot: Today, 2:30 PM <span className="text-emerald-500 font-black ml-1">Live</span></p>
+                </div>
+            </motion.div>
+
+            {/* NEW: Calendar Sync Card (Low Right) */}
+            <motion.div
+                style={{ x: cardRX, y: cardRY }}
+                animate={{
+                    y: [15, -15, 15],
+                }}
+                transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                whileHover={{
+                    scale: 1.05,
+                    zIndex: 50,
+                    transition: { duration: 0.3 }
+                }}
+                className="absolute -right-16 bottom-10 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+            >
+                <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
+                    <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Integration</p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Sync with Google/Outlook Calendar</p>
+                </div>
+            </motion.div>
+
         </div>
     );
 }
