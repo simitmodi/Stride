@@ -184,7 +184,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-12 top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-12 top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-400/30">
                     <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -211,7 +211,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-12 top-20 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-12 top-20 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <Calendar className="w-6 h-6 text-primary" />
@@ -238,7 +238,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-20 bottom-1/4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-20 bottom-1/4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
                     <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -265,7 +265,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-20 bottom-1/3 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-20 bottom-1/3 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
                     <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />

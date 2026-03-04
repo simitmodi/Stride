@@ -176,7 +176,7 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
             {/* Floating Glass Cards */}
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute -left-16 top-1/4 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
+              className="absolute -left-16 top-1/4 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-indigo-400/50 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [-4, 4, -4] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             >
@@ -191,7 +191,7 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
 
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute -right-12 top-1/2 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
+              className="absolute -right-12 top-1/2 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-indigo-400/50 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [4, -4, 4] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
@@ -206,7 +206,7 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
 
             <motion.div
               style={{ x: cardX, y: cardY }}
-              className="absolute left-10 bottom-12 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
+              className="absolute left-10 bottom-12 z-20 w-60 p-5 rounded-3xl bg-white/80 backdrop-blur-2xl border border-indigo-400/50 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4"
               animate={{ y: [-3, 3, -3] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             >
