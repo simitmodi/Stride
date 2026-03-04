@@ -271,8 +271,8 @@ export function HeroMockup() {
                 }}
                 className="absolute right-[10%] -bottom-16 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
-                <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
-                    <Activity className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center shrink-0 border border-violet-200 dark:border-violet-400/30">
+                    <Activity className="w-6 h-6 text-violet-600 dark:text-violet-400" />
                 </div>
                 <div>
                     <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1">Queue</p>
@@ -325,8 +325,8 @@ export function HeroMockup() {
                 }}
                 className="absolute -left-44 top-[40%] z-20 w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
-                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
-                    <ShieldCheck className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-rose-500/20 flex items-center justify-center shrink-0 border border-rose-200 dark:border-rose-400/30">
+                    <ShieldCheck className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 </div>
                 <div>
                     <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Trust</p>
@@ -352,8 +352,8 @@ export function HeroMockup() {
                 }}
                 className="absolute -right-36 top-14 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
-                <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
-                    <Timer className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-2xl bg-cyan-100 dark:bg-cyan-500/20 flex items-center justify-center shrink-0 border border-cyan-200 dark:border-cyan-400/30">
+                    <Timer className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
                     <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Availability</p>
@@ -379,8 +379,8 @@ export function HeroMockup() {
                 }}
                 className="absolute -right-32 bottom-[35%] z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
-                <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
-                    <CalendarCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <div className="w-10 h-10 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-500/20 flex items-center justify-center shrink-0 border border-fuchsia-200 dark:border-fuchsia-400/30">
+                    <CalendarCheck className="w-5 h-5 text-fuchsia-600 dark:text-fuchsia-400" />
                 </div>
                 <div>
                     <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Integration</p>
