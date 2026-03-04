@@ -355,7 +355,7 @@ function ScreenDocuments() {
             ) : (
               <div className="flex items-center gap-1.5">
                 <Upload className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[10px] text-amber-400 font-bold">Upload</span>
+                <span className="text-[10px] text-amber-400 font-bold">Report Missing</span>
               </div>
             )}
           </motion.div>
@@ -364,7 +364,7 @@ function ScreenDocuments() {
 
       <div className="mt-auto pt-4">
         <div className="h-14 w-full bg-primary rounded-2xl flex items-center justify-center text-white text-xs font-bold gap-3 shadow-[0_10px_20px_-5px_rgba(var(--primary),0.5)]">
-          Upload Missing <Upload className="w-4 h-4" />
+          Done <Upload className="w-4 h-4" />
         </div>
       </div>
     </motion.div>
