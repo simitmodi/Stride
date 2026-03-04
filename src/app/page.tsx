@@ -51,10 +51,10 @@ export default function Home() {
           <Image src={Logo} alt="Stride Logo" width={180} height={60} className="w-auto h-12" />
         </div>
 
-        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
-          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-[#0F1729] dark:text-slate-100">{t.home}</Link>
-          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.aboutUs}</Link>
-          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
+        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-0 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
+          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-[#0F1729] dark:text-slate-100">{t.home}</Link>
+          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.aboutUs}</Link>
+          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
         </div>
 
         <div className="flex items-center gap-8">
