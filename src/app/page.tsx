@@ -57,7 +57,7 @@ export default function Home() {
           <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors">
@@ -73,8 +73,8 @@ export default function Home() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">{t.login}</Link>
-          <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
+          <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm">{t.login}</Link>
+          <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50">
             <Link href="/signup/customer">{t.signup} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>
