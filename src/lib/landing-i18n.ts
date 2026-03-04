@@ -61,7 +61,7 @@ export const landingTranslations = {
     supportCardTag: "Available Now",
     supportCardTitle: "24/7 Support",
     supportCardSub: "Banking Assistance",
-    supportCardDesc: "Chat with our experts anytime",
+    supportCardDesc: "Instant AI-powered assistance for all your banking needs",
     supportCardResponse: "Response Time",
     supportCardResponseTime: "< 1 min average",
     bookingCardTag: "Instant Confirmation",

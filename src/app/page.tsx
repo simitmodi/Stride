@@ -138,7 +138,7 @@ export default function Home() {
 
                 <div className="mb-8">
                   <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">{t.supportCardSub || "Banking Assistance"}</h4>
-                  <p className="text-sm font-medium text-slate-500 mt-1">{t.supportCardDesc || "Chat with our experts anytime"}</p>
+                  <p className="text-sm font-medium text-slate-500 mt-1">{t.supportCardDesc || "Instant AI-powered assistance for all your banking needs"}</p>
                 </div>
 
                 <div className="mt-auto">
