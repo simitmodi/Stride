@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from '@/lib/Logo.png';
 import { ArrowRight, Globe, User, Headset, CalendarCheck } from "lucide-react";
-import { landingTranslations, languages, LanguageCode } from "@/lib/landing-i18n";
 import { motion } from "framer-motion";
 import {
   DropdownMenu,
@@ -24,9 +23,9 @@ import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { StatsSection } from "@/components/landing/StatsSection";
 import { TestimonialSection } from "@/components/landing/TestimonialSection";
 import { CtaSection } from "@/components/landing/SectionBlocks";
+import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
 
 export default function Home() {
-  const [lang, setLang] = useState<LanguageCode>('en');
   const [mounted, setMounted] = useState(false);
   const [realtimeData, setRealtimeData] = useState({
     date: 'tomorrow',
@@ -41,9 +40,6 @@ export default function Home() {
     });
   }, []);
 
-  const t = landingTranslations[lang] as any; // Temporary cast as we added new keys
-  const selectedLangName = languages.find(l => l.code === lang)?.name || 'English';
-
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
       <BackgroundWaves />
@@ -54,30 +50,18 @@ export default function Home() {
         </div>
 
         <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-0 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
-          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-[#0F1729] dark:text-slate-100">{t.home}</Link>
-          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.aboutUs}</Link>
-          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
+          <Link href="/" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-[#0F1729] dark:text-slate-100">Home</Link>
+          <Link href="/about" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">About Us</Link>
+          <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">FAQ</Link>
         </div>
 
         <div className="flex items-center gap-3">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors hover:scale-105 active:scale-95 transition-all duration-300">
-                <Globe className="w-4 h-4" /> <span className="hidden sm:inline">{selectedLangName}</span>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[180px]">
-              {languages.map((l) => (
-                <DropdownMenuItem key={l.code} onClick={() => setLang(l.code)} className="cursor-pointer">
-                  {l.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LanguageSwitcher />
+          <div id="google_translate_element" className="hidden"></div>
 
-          <Link href="/login" className="text-sm font-medium hover:text-primary hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-indigo-500/10 hover:border-indigo-400/80">{t.login}</Link>
+          <Link href="/login" className="text-sm font-medium hover:text-primary hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-indigo-500/10 hover:border-indigo-400/80">Login</Link>
           <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300">
-            <Link href="/signup/customer">{t.signup} <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            <Link href="/signup/customer">Sign Up <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>
       </nav>
@@ -88,19 +72,19 @@ export default function Home() {
         {/* Full-Screen Hero Text Area */}
         <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[90vh] md:min-h-screen pt-20 pb-20 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary dark:bg-slate-800 text-primary dark:text-primary text-sm font-medium mb-8">
-            <User className="w-4 h-4" /> {t.heroTag}
+            <User className="w-4 h-4" /> Next-Gen Banking is Here
           </div>
 
           <h1 className="text-balance text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line">
-            {t.heroTitle}
+            Bank Smarter, <br /> Live Better.
           </h1>
 
           <p className="max-w-[500px] text-balance text-muted-foreground md:text-lg mb-10">
-            {t.heroSubtitle}
+            Smart financial management with 24/7 AI-driven support, rapid branch booking, and advanced tools—all crafted to simplify your banking life.
           </p>
 
           <Button asChild size="lg" className="rounded-full h-14 px-8 text-base bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/25 hover:scale-105 transition-all duration-300">
-            <Link href="/login">{t.getStarted} <ArrowRight className="w-5 h-5 ml-2" /></Link>
+            <Link href="/login">Get Started <ArrowRight className="w-5 h-5 ml-2" /></Link>
           </Button>
         </div>
 
@@ -124,11 +108,11 @@ export default function Home() {
 
                 <div className="mb-6">
                   <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-4">
-                    {t.supportCardTag || "Available Now"}
+                    Available Now
                   </div>
                   <h3 className="text-5xl font-extrabold text-[#0F1729] dark:text-slate-100 tracking-tight">
-                    24/7
-                    <span className="text-2xl text-slate-400 font-medium tracking-normal ml-2">Support</span>
+                    <span>24/7</span>
+                    <span className="text-2xl text-slate-400 font-medium tracking-normal ml-2"><span>Support</span></span>
                   </h3>
                 </div>
 
@@ -137,15 +121,15 @@ export default function Home() {
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">{t.supportCardSub || "Banking Assistance"}</h4>
-                  <p className="text-sm font-medium text-slate-500 mt-1">{t.supportCardDesc || "Instant AI-powered assistance for all your banking needs"}</p>
+                  <h4 className="text-xl font-bold text-[#0F1729] dark:text-slate-100">Banking Assistance</h4>
+                  <p className="text-sm font-medium text-slate-500 mt-1">Instant AI-powered assistance for all your banking needs</p>
                 </div>
 
                 <div className="mt-auto">
                   <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-6 relative"></div>
                   <div className="flex flex-col items-center justify-center">
-                    <p className="text-sm font-medium text-slate-500 mb-1">{t.supportCardResponse || "Response Time"}</p>
-                    <p className="font-semibold text-emerald-500">{t.supportCardResponseTime || "< 1 min average"}</p>
+                    <p className="text-sm font-medium text-slate-500 mb-1"><span>Response Time</span></p>
+                    <p className="font-semibold text-emerald-500"><span>{"< 1 min average"}</span></p>
                   </div>
                 </div>
 
@@ -166,13 +150,13 @@ export default function Home() {
               <div className="relative w-full h-full bg-[#4F46E5] dark:bg-[#4F46E5] rounded-[2.5rem] p-8 shadow-sm border border-[#4F46E5] group-hover:border-[#F4F4F8] group-hover:bg-[#5c54eb] transition-colors duration-300 flex flex-col justify-between min-h-[300px] overflow-hidden">
                 <div>
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-8">
-                    <Globe className="w-3 h-3" /> {t.userFriendly}
+                    <Globe className="w-3 h-3" /> <span>User-Friendly Platform</span>
                   </div>
-                  <h2 className="text-4xl font-bold text-white leading-tight mb-4">{t.bookManage}</h2>
+                  <h2 className="text-4xl font-bold text-white leading-tight mb-4"><span>Book. Manage. Connect.</span></h2>
                 </div>
 
                 <p className="text-white/80 font-medium leading-relaxed">
-                  {t.customerStaff}
+                  <span>Customers can easily schedule branch appointments to avoid waits, while bank staff efficiently juggle their availability and impending visits.</span>
                 </p>
               </div>
             </div>
@@ -192,7 +176,7 @@ export default function Home() {
 
                 <div className="flex justify-between items-start mb-6">
                   <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
-                    {t.bookingCardTag || "Instant Confirmation"}
+                    <span>Instant Confirmation</span>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                     <CalendarCheck className="w-6 h-6" />
@@ -200,17 +184,17 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-bold text-[#0F1729] dark:text-slate-100 mb-2">{t.bookingCardTitle || "Skip the Queue. Book Your Visit."}</h3>
+                  <h3 className="text-2xl font-bold text-[#0F1729] dark:text-slate-100 mb-2"><span>Skip the Queue. Book Your Visit.</span></h3>
                   <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
-                    {t.bookingCardDesc || "Select your branch, choose a preferred time, and receive confirmation in seconds."}
+                    <span>Select your branch, choose a preferred time, and receive confirmation in seconds.</span>
                   </p>
                 </div>
 
                 <div className="mt-auto">
-                  <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 group/btn h-12">
-                    <Link href="/login" className="flex items-center justify-center gap-2">
-                      {t.bookingCardBtn || "Reserve Your Slot"}
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  <Button asChild className="w-full rounded-2xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400 group relative overflow-hidden h-12">
+                    <Link href="/login">
+                      <span className="relative z-10 font-bold">Reserve Your Slot</span>
+                      <ArrowRight className="relative z-10 w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
                 </div>
@@ -222,12 +206,12 @@ export default function Home() {
 
       </main>
 
-      <ProblemSection lang={lang} />
-      <ProcessSection lang={lang} />
-      <FeaturesSection lang={lang} />
-      <StatsSection lang={lang} />
-      <TestimonialSection lang={lang} />
-      <CtaSection lang={lang} />
+      <ProblemSection />
+      <ProcessSection />
+      <FeaturesSection />
+      <StatsSection />
+      <TestimonialSection />
+      <CtaSection />
     </div>
   );
 }

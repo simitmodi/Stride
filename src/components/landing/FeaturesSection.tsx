@@ -2,45 +2,42 @@
 
 import { AnimateIn } from "./AnimateIn";
 import { Clock, FileCheck, MapPin, BellRing, LayoutDashboard, Users } from "lucide-react";
-import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
-
-export function FeaturesSection({ lang }: { lang: LanguageCode }) {
-  const t = landingTranslations[lang];
+export function FeaturesSection() {
   const features = [
     {
       icon: <Clock className="w-5 h-5 text-primary" />,
-      title: t.feat1Title,
-      description: t.feat1Desc,
+      title: "Real-time Slot Availability",
+      description: "Instantly view and book open times without waiting on hold.",
       delay: 100,
     },
     {
       icon: <FileCheck className="w-5 h-5 text-primary" />,
-      title: t.feat2Title,
-      description: t.feat2Desc,
+      title: "Document Clarity System",
+      description: "Know exactly what forms to bring before you ever step foot in the bank.",
       delay: 150,
     },
     {
       icon: <MapPin className="w-5 h-5 text-primary" />,
-      title: t.feat3Title,
-      description: t.feat3Desc,
+      title: "Multi-Branch Support",
+      description: "Find availability across all nearby branches in one unified view.",
       delay: 200,
     },
     {
       icon: <BellRing className="w-5 h-5 text-primary" />,
-      title: t.feat4Title,
-      description: t.feat4Desc,
+      title: "Smart Notifications",
+      description: "Get updates via SMS and email if better times open up.",
       delay: 250,
     },
     {
       icon: <LayoutDashboard className="w-5 h-5 text-primary" />,
-      title: t.feat5Title,
-      description: t.feat5Desc,
+      title: "Appointment Dashboard",
+      description: "Manage, reschedule, or cancel previous and upcoming visits easily.",
       delay: 300,
     },
     {
       icon: <Users className="w-5 h-5 text-primary" />,
-      title: t.feat6Title,
-      description: t.feat6Desc,
+      title: "Bank Staff Integration",
+      description: "Tools for tellers and managers to handle walk-ins and appointments seamlessly.",
       delay: 350,
     },
   ];
@@ -51,7 +48,7 @@ export function FeaturesSection({ lang }: { lang: LanguageCode }) {
         <AnimateIn>
           <div className="text-center md:text-left mb-16">
             <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">
-              {t.featMain}
+              Built for First-Visit Success
             </h2>
           </div>
         </AnimateIn>

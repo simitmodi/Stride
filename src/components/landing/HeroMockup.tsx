@@ -194,8 +194,8 @@ export function HeroMockup() {
                     <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div>
-                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1">Status</p>
-                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight line-clamp-2">Documents Ready, Checklist Verified</p>
+                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1"><span>Status</span></p>
+                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight line-clamp-2"><span>Documents Ready, Checklist Verified</span></p>
                 </div>
             </motion.div>
 
@@ -221,8 +221,8 @@ export function HeroMockup() {
                     <Calendar className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1">Booking</p>
-                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight">Appointment Confirmed Tomorrow, 10:30 AM</p>
+                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1"><span>Booking</span></p>
+                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight"><span>Appointment Confirmed Tomorrow, 10:30 AM</span></p>
                 </div>
             </motion.div>
 
@@ -248,8 +248,8 @@ export function HeroMockup() {
                     <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1">Navigation</p>
-                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight">Find Nearby Branch <span className="text-primary block">3 open slots</span></p>
+                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1"><span>Navigation</span></p>
+                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight"><span>Find Nearby Branch</span> <span className="text-primary block"><span>3 open slots</span></span></p>
                 </div>
             </motion.div>
 
@@ -275,8 +275,8 @@ export function HeroMockup() {
                     <Activity className="w-6 h-6 text-violet-600 dark:text-violet-400" />
                 </div>
                 <div>
-                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1">Queue</p>
-                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight">Live Queue Status Real-Time Updates</p>
+                    <p className="text-[10px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-1"><span>Queue</span></p>
+                    <p className="text-sm text-slate-900 dark:text-white font-bold leading-tight"><span>Live Queue Status Real-Time Updates</span></p>
                 </div>
             </motion.div>
 
@@ -302,8 +302,8 @@ export function HeroMockup() {
                     <Bell className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
-                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Alert</p>
-                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Action Required: Complete Bank Verification</p>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5"><span>Alert</span></p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug"><span>Action Required: Complete Bank Verification</span></p>
                 </div>
             </motion.div>
 
@@ -329,8 +329,8 @@ export function HeroMockup() {
                     <ShieldCheck className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 </div>
                 <div>
-                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Trust</p>
-                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">End-to-End Encryption Enabled</p>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5"><span>Trust</span></p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug"><span>End-to-End Encryption Enabled</span></p>
                 </div>
             </motion.div>
 
@@ -356,8 +356,8 @@ export function HeroMockup() {
                     <Timer className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
-                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Availability</p>
-                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Next Slot: Today, 2:30 PM <span className="text-emerald-500 font-black ml-1">Live</span></p>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5"><span>Availability</span></p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug"><span>Next Slot: Today, 2:30 PM</span> <span className="text-emerald-500 font-black ml-1"><span>Live</span></span></p>
                 </div>
             </motion.div>
 
@@ -383,8 +383,8 @@ export function HeroMockup() {
                     <CalendarCheck className="w-5 h-5 text-fuchsia-600 dark:text-fuchsia-400" />
                 </div>
                 <div>
-                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5">Integration</p>
-                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug">Sync with Google/Outlook Calendar</p>
+                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-black uppercase tracking-widest mb-0.5"><span>Integration</span></p>
+                    <p className="text-xs text-slate-900 dark:text-white font-bold leading-snug"><span>Sync with Google/Outlook Calendar</span></p>
                 </div>
             </motion.div>
 

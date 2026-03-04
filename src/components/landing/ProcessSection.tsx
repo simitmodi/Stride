@@ -1,13 +1,11 @@
 "use client";
 
 import { AnimateIn } from "./AnimateIn";
-import { landingTranslations, LanguageCode } from "@/lib/landing-i18n";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Smartphone, Bell, CreditCard, CheckCircle, ArrowRight, User } from "lucide-react";
 import { useEffect } from "react";
 
-export function ProcessSection({ lang }: { lang: LanguageCode }) {
-  const t = landingTranslations[lang];
+export function ProcessSection() {
 
   // Mouse Parallax Logic
   const mouseX = useMotionValue(0);
@@ -35,9 +33,9 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
   }, [mouseX, mouseY]);
 
   const steps = [
-    { number: "1", title: t.proc1Title, delay: 100 },
-    { number: "2", title: t.proc2Title, delay: 200 },
-    { number: "3", title: t.proc3Title, delay: 300 },
+    { number: "1", title: "Choose Bank & Service", delay: 100 },
+    { number: "2", title: "View Required Documents", delay: 200 },
+    { number: "3", title: "Book Appointment", delay: 300 },
   ];
 
   return (
@@ -66,7 +64,7 @@ export function ProcessSection({ lang }: { lang: LanguageCode }) {
         <div>
           <AnimateIn>
             <h2 className="text-4xl md:text-6xl font-extrabold text-slate-900 mb-16 tracking-tight">
-              {t.procTitle}
+              How Stride Works
             </h2>
           </AnimateIn>
 
