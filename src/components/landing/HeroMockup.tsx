@@ -184,7 +184,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-12 top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-20 top-2 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-400/30">
                     <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -211,7 +211,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-12 top-20 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute right-[5%] -top-10 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <Calendar className="w-6 h-6 text-primary" />
@@ -238,7 +238,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-20 bottom-1/4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-28 bottom-4 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
                     <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -265,7 +265,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-20 bottom-1/3 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute right-[10%] -bottom-16 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
                     <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
@@ -276,7 +276,7 @@ export function HeroMockup() {
                 </div>
             </motion.div>
 
-            {/* NEW: Notification Card (Top Center-ish) */}
+            {/* NEW: Notification Card (Top Left-ish) */}
             <motion.div
                 style={{ x: tabletX, y: tabletY }}
                 animate={{
@@ -292,7 +292,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute left-1/4 -top-8 z-20 w-72 p-4 rounded-3xl bg-white/80 dark:bg-slate-900/70 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute left-[10%] -top-14 z-20 w-72 p-4 rounded-3xl bg-white/80 dark:bg-slate-900/70 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-400/30">
                     <Bell className="w-5 h-5 text-amber-600 dark:text-amber-400" />
@@ -303,7 +303,7 @@ export function HeroMockup() {
                 </div>
             </motion.div>
 
-            {/* NEW: Secure Card (High Left) */}
+            {/* NEW: Secure Card (Middle Left) */}
             <motion.div
                 style={{ x: cardLX, y: cardLY }}
                 animate={{
@@ -319,7 +319,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-28 top-[35%] z-20 w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-44 top-[40%] z-20 w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <CheckCircle className="w-5 h-5 text-primary" />
@@ -330,7 +330,7 @@ export function HeroMockup() {
                 </div>
             </motion.div>
 
-            {/* NEW: Time Slots Card (Mid Right) */}
+            {/* NEW: Time Slots Card (Top Right Orbit) */}
             <motion.div
                 style={{ x: cardRX, y: cardRY }}
                 animate={{
@@ -346,7 +346,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-32 top-1/2 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-36 top-14 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-400/30">
                     <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -357,7 +357,7 @@ export function HeroMockup() {
                 </div>
             </motion.div>
 
-            {/* NEW: Calendar Sync Card (Low Right) */}
+            {/* NEW: Calendar Sync Card (Middle Right Orbit) */}
             <motion.div
                 style={{ x: cardRX, y: cardRY }}
                 animate={{
@@ -373,7 +373,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-16 bottom-10 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-32 bottom-[35%] z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
             >
                 <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-400/30">
                     <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
