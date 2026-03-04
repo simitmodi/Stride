@@ -14,21 +14,21 @@ export function BackgroundWaves() {
                 <defs>
                     <linearGradient id="wave-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="rgba(99, 102, 241, 0)" />
-                        <stop offset="50%" stopColor="rgba(99, 102, 241, 0.15)" />
+                        <stop offset="50%" stopColor="rgba(99, 102, 241, 0.45)" />
                         <stop offset="100%" stopColor="rgba(99, 102, 241, 0)" />
                     </linearGradient>
                     <linearGradient id="wave-gradient-2" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="rgba(168, 85, 247, 0)" />
-                        <stop offset="50%" stopColor="rgba(168, 85, 247, 0.1)" />
+                        <stop offset="50%" stopColor="rgba(168, 85, 247, 0.35)" />
                         <stop offset="100%" stopColor="rgba(168, 85, 247, 0)" />
                     </linearGradient>
                 </defs>
 
-                {/* Wave 1 */}
+                {/* Wave 1 - Main Primary */}
                 <motion.path
                     d="M-200 600 Q 300 400 720 500 T 1640 400"
                     stroke="url(#wave-gradient-1)"
-                    strokeWidth="2"
+                    strokeWidth="4"
                     fill="transparent"
                     animate={{
                         d: [
@@ -36,20 +36,20 @@ export function BackgroundWaves() {
                             "M-200 550 Q 400 600 720 450 T 1640 550",
                             "M-200 600 Q 300 400 720 500 T 1640 400",
                         ],
-                        x: [-50, 50, -50],
+                        x: [-100, 100, -100],
                     }}
                     transition={{
-                        duration: 25,
+                        duration: 18,
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
                 />
 
-                {/* Wave 2 */}
+                {/* Wave 2 - Purple Accent */}
                 <motion.path
                     d="M-200 400 Q 400 600 720 400 T 1640 600"
                     stroke="url(#wave-gradient-2)"
-                    strokeWidth="1.5"
+                    strokeWidth="3"
                     fill="transparent"
                     animate={{
                         d: [
@@ -57,32 +57,54 @@ export function BackgroundWaves() {
                             "M-200 450 Q 300 300 720 550 T 1640 350",
                             "M-200 400 Q 400 600 720 400 T 1640 600",
                         ],
-                        x: [50, -50, 50],
+                        x: [100, -100, 100],
                     }}
                     transition={{
-                        duration: 30,
+                        duration: 22,
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
                 />
 
-                {/* Wave 3 - Faster Drifting */}
+                {/* Wave 3 - High Subtle */}
                 <motion.path
-                    d="M-200 300 Q 500 200 720 450 T 1640 200"
+                    d="M-200 200 Q 500 100 720 300 T 1640 100"
                     stroke="url(#wave-gradient-1)"
-                    strokeWidth="1"
-                    opacity="0.5"
+                    strokeWidth="2.5"
+                    opacity="0.8"
                     fill="transparent"
                     animate={{
                         d: [
-                            "M-200 300 Q 500 200 720 450 T 1640 200",
-                            "M-200 350 Q 600 500 720 300 T 1640 450",
-                            "M-200 300 Q 500 200 720 450 T 1640 200",
+                            "M-200 200 Q 500 100 720 300 T 1640 100",
+                            "M-200 250 Q 600 400 720 150 T 1640 300",
+                            "M-200 200 Q 500 100 720 300 T 1640 100",
                         ],
-                        x: [-100, 100, -100],
+                        x: [-150, 150, -150],
                     }}
                     transition={{
-                        duration: 20,
+                        duration: 15,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                    }}
+                />
+
+                {/* Wave 4 - Deep Low */}
+                <motion.path
+                    d="M-200 750 Q 400 650 720 700 T 1640 650"
+                    stroke="url(#wave-gradient-1)"
+                    strokeWidth="5"
+                    opacity="0.6"
+                    fill="transparent"
+                    animate={{
+                        d: [
+                            "M-200 750 Q 400 650 720 700 T 1640 650",
+                            "M-200 700 Q 500 750 720 650 T 1640 700",
+                            "M-200 750 Q 400 650 720 700 T 1640 650",
+                        ],
+                        x: [80, -80, 80],
+                    }}
+                    transition={{
+                        duration: 25,
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
