@@ -23,7 +23,6 @@ import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { StatsSection } from "@/components/landing/StatsSection";
 import { TestimonialSection } from "@/components/landing/TestimonialSection";
 import { CtaSection } from "@/components/landing/SectionBlocks";
-import { AboutSection } from "@/components/landing/AboutSection";
 import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
 
 export default function Home() {
@@ -204,8 +203,6 @@ export default function Home() {
           </motion.div>
 
         </div>
-
-        <AboutSection />
 
       </main>
 
