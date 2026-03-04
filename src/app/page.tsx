@@ -16,6 +16,7 @@ import {
 
 import { HeroMockup } from "@/components/landing/HeroMockup";
 import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { ProcessSection } from "@/components/landing/ProcessSection";
@@ -43,10 +44,11 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
       <BackgroundWaves />
+      <FloatingDoodles />
       {/* Navigation Bar */}
-      <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto w-full">
+      <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
-          <Image src={Logo} alt="Stride Logo" width={180} height={60} className="w-auto h-12" />
+          <Image src={Logo} alt="Stride Logo" width={180} height={60} className="w-32 sm:w-auto h-auto sm:h-12" />
         </div>
 
         <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-0 bg-secondary/50 dark:bg-slate-900/50 rounded-full p-1 backdrop-blur-sm">
@@ -55,13 +57,13 @@ export default function Home() {
           <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">FAQ</Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <LanguageSwitcher />
           <div id="google_translate_element" className="hidden"></div>
 
-          <Link href="/login" className="text-sm font-medium hover:text-primary hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-indigo-500/10 hover:border-indigo-400/80">Login</Link>
-          <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300">
-            <Link href="/signup/customer">Sign Up <ArrowRight className="w-4 h-4 ml-2" /></Link>
+          <Link href="/login" className="text-sm font-medium hover:text-primary hidden md:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-indigo-500/10 hover:border-indigo-400/80">Login</Link>
+          <Button asChild size="sm" className="rounded-full px-4 sm:px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300">
+            <Link href="/signup/customer" className="text-xs sm:text-sm">Sign Up <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" /></Link>
           </Button>
         </div>
       </nav>
@@ -75,8 +77,8 @@ export default function Home() {
             <User className="w-4 h-4" /> Next-Gen Banking is Here
           </div>
 
-          <h1 className="text-balance text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line">
-            Bank Smarter, <br /> Live Better.
+          <h1 className="text-balance text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-[#0F1729] dark:text-slate-50 leading-[1.1] mb-6 whitespace-pre-line px-2">
+            Bank Smarter, <br className="hidden sm:block" /> Live Better.
           </h1>
 
           <p className="max-w-[500px] text-balance text-muted-foreground md:text-lg mb-10">
