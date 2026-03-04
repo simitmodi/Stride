@@ -57,10 +57,10 @@ export default function Home() {
           <Link href="/faq" className="px-5 py-2 rounded-full text-sm font-medium border border-transparent hover:border-indigo-400/30 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-300 text-muted-foreground hover:text-[#0F1729] dark:hover:text-slate-100">{t.faq}</Link>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors">
+              <div className="flex items-center gap-2 text-sm font-medium cursor-pointer text-[#0F1729] dark:text-slate-100 hover:text-primary transition-colors hover:scale-105 active:scale-95 transition-all duration-300">
                 <Globe className="w-4 h-4" /> <span className="hidden sm:inline">{selectedLangName}</span>
               </div>
             </DropdownMenuTrigger>
@@ -73,8 +73,8 @@ export default function Home() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm">{t.login}</Link>
-          <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50">
+          <Link href="/login" className="text-sm font-medium hover:text-primary hidden sm:block px-5 py-2.5 rounded-full border border-indigo-400/50 bg-white/50 backdrop-blur-sm shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-indigo-500/10 hover:border-indigo-400/80">{t.login}</Link>
+          <Button asChild className="rounded-full px-6 bg-primary hover:bg-primary/90 text-white shadow-gradient border border-indigo-400/50 hover:scale-105 active:scale-95 transition-all duration-300">
             <Link href="/signup/customer">{t.signup} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>
