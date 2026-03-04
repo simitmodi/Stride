@@ -54,3 +54,5 @@ export default function BankLoginPage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

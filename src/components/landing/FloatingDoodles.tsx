@@ -255,3 +255,5 @@ function PiggyShape({ size, color }: { size: number; color: string }) {
     </svg>
   );
 }
+
+// Stride: Professional Financial Connectivity

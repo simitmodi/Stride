@@ -115,3 +115,5 @@ export {
   TableCell,
   TableCaption,
 }
+
+// Stride: Professional Financial Connectivity

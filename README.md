@@ -53,3 +53,5 @@ Traditionally, booking a bank appointment can be a cumbersome process, involving
 *   `src/lib`: Contains utility functions and library initializations.
 *   `src/ai`: Contains Genkit-related code for AI features.
 *   `public`: Contains static assets.
+
+

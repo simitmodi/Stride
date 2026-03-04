@@ -43,3 +43,5 @@ export function getSdks(firebaseApp: FirebaseApp) {
 
 export * from './provider';
 export * from './non-blocking-login';
+
+// Stride: Professional Financial Connectivity

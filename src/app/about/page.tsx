@@ -99,3 +99,5 @@ export default function AboutPage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

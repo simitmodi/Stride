@@ -76,3 +76,5 @@ export function FeaturesSection() {
     </section>
   );
 }
+
+// Stride: Professional Financial Connectivity

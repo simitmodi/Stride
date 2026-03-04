@@ -256,3 +256,5 @@ export function AnimatedRightSide() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

@@ -58,3 +58,5 @@ export default function Footer({ className }: { className?: string }) {
     </footer>
   );
 }
+
+// Stride: Professional Financial Connectivity

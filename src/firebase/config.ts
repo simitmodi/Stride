@@ -6,3 +6,5 @@ export const firebaseConfig = {
   "measurementId": "",
   "messagingSenderId": "863254815612"
 };
+
+// Stride: Professional Financial Connectivity

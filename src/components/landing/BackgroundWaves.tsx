@@ -113,3 +113,5 @@ export function BackgroundWaves() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

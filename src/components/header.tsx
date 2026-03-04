@@ -138,3 +138,5 @@ export default function Header() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

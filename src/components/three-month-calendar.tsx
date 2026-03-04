@@ -271,3 +271,5 @@ export default function ThreeMonthCalendar({
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

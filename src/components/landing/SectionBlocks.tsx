@@ -33,3 +33,5 @@ export function CtaSection() {
   );
 }
 
+
+// Stride: Professional Financial Connectivity

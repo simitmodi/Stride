@@ -331,3 +331,5 @@ export function CustomerLoginForm() {
     </motion.form>
   );
 }
+
+// Stride: Professional Financial Connectivity

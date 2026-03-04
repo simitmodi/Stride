@@ -17,3 +17,4 @@
 - Accent color: Muted teal (#7FFFD4), an analogous color to slate blue, for highlights and interactive elements to maintain visual interest.
 - Font: 'Inter', a sans-serif font known for its modern, neutral appearance, suitable for both body text and headlines.
 - Keep the layout simple and functional with a focus on usability and clear navigation.
+

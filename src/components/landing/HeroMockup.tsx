@@ -391,3 +391,5 @@ export function HeroMockup() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

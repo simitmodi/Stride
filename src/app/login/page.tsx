@@ -117,3 +117,5 @@ export default function LoginOptionsPage() {
     </motion.div>
   );
 }
+
+// Stride: Professional Financial Connectivity

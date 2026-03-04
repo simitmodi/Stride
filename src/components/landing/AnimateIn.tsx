@@ -47,3 +47,5 @@ export function AnimateIn({
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

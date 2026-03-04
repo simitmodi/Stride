@@ -179,3 +179,5 @@ export const useUser = (): UserHookResult => {
   const { user, isUserLoading, userError } = useFirebase();
   return { user, isUserLoading, userError };
 };
+
+// Stride: Professional Financial Connectivity
