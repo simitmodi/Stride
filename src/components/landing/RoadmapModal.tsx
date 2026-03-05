@@ -22,11 +22,12 @@ import {
     ArrowRight,
     Sparkles,
     BarChart3,
-    Smartphone
+    Smartphone,
+    ChevronRight,
+    ArrowRightLeft
 } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { FloatingDoodles } from "./FloatingDoodles";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const roadmapPhases = [
     {
@@ -36,6 +37,8 @@ const roadmapPhases = [
         icon: Layers,
         items: ["Financial Core", "3D Architecture", "Auth System"],
         color: "text-emerald-500",
+        bgColor: "bg-emerald-500/10",
+        borderColor: "border-emerald-500/20",
         glow: "shadow-emerald-500/20"
     },
     {
@@ -45,6 +48,8 @@ const roadmapPhases = [
         icon: Palette,
         items: ["Elite Glass", "Motion Engine", "Help Center"],
         color: "text-indigo-500",
+        bgColor: "bg-indigo-500/10",
+        borderColor: "border-indigo-500/20",
         glow: "shadow-indigo-500/20"
     },
     {
@@ -54,6 +59,8 @@ const roadmapPhases = [
         icon: RefreshCw,
         items: ["Landing Integration", "Roadmap Launch", "Cross-Platform"],
         color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+        borderColor: "border-blue-500/20",
         glow: "shadow-blue-500/20"
     },
     {
@@ -63,6 +70,8 @@ const roadmapPhases = [
         icon: Cpu,
         items: ["AI Scheduling", "Bank APIs", "Mobile Apps"],
         color: "text-purple-500",
+        bgColor: "bg-purple-500/10",
+        borderColor: "border-purple-500/20",
         glow: "shadow-purple-500/20"
     }
 ];
@@ -72,28 +81,19 @@ const bentoCards = [
         id: "security",
         title: "Institutional Security",
         icon: Lock,
-        desc: "AES-256 Banking Grade Encryption",
-        content: "Shielding every transaction with military-grade protocols and real-time fraud detection.",
-        size: "col-span-1 row-span-1",
-        color: "border-blue-500/20 bg-blue-500/5"
+        desc: "AES-256 Encryption",
+        content: "Shielding every transaction with military-grade protocols.",
+        color: "border-blue-500/20 bg-blue-500/5",
+        accent: "text-blue-500"
     },
     {
         id: "ai",
         title: "AI Intelligence",
         icon: BrainCircuit,
-        desc: "Predictive Capacity Mapping",
-        content: "Our neural core optimizes branch operations and customer scheduling automatically.",
-        size: "col-span-1 row-span-1",
-        color: "border-purple-500/20 bg-purple-500/5"
-    },
-    {
-        id: "global",
-        title: "Global Horizons",
-        icon: Globe,
-        desc: "Institutional Mesh Networking",
-        content: "Phase 9+ will see the launch of our cross-border liquidity network and international bank pipes.",
-        size: "col-span-2 row-span-1",
-        color: "border-emerald-500/20 bg-emerald-500/5"
+        desc: "Neural Core",
+        content: "Our neural core optimizes branch operations automatically.",
+        color: "border-purple-500/20 bg-purple-500/5",
+        accent: "text-purple-500"
     }
 ];
 
@@ -103,205 +103,184 @@ interface RoadmapModalProps {
 }
 
 export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
-    const [activeTab, setActiveTab] = useState(roadmapPhases[2].title);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[95vw] lg:max-w-[1400px] h-[95vh] lg:h-[90vh] p-0 overflow-hidden border-white/20 dark:border-white/10 bg-white/40 dark:bg-slate-950/40 backdrop-blur-[120px] shadow-2xl rounded-[3rem]">
+            <DialogContent className="max-w-[95vw] lg:max-w-7xl h-[95vh] lg:h-[90vh] p-0 overflow-hidden border-white/20 dark:border-white/10 bg-white/40 dark:bg-slate-950/40 backdrop-blur-[120px] shadow-2xl rounded-[3rem]">
                 {/* Unified Landing Page Background */}
                 <div className="absolute inset-0 z-0">
                     <FloatingDoodles />
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.1)_0%,transparent_50%)]" />
                 </div>
 
                 <div className="relative z-10 flex flex-col h-full items-center">
-                    {/* Header */}
-                    <div className="w-full px-8 pt-12 pb-8 flex flex-col items-center justify-center text-center">
+                    {/* Header - Centered & Premium */}
+                    <div className="w-full px-8 pt-10 pb-6 flex flex-col items-center justify-center text-center shrink-0">
                         <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="px-4 py-2 rounded-full bg-white/50 dark:bg-slate-900/50 border border-white/20 dark:border-white/10 backdrop-blur-xl mb-6 shadow-xl"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="px-4 py-2 rounded-full bg-white/50 dark:bg-slate-900/50 border border-white/20 dark:border-white/10 backdrop-blur-xl mb-4 shadow-xl"
                         >
-                            <span className="flex items-center gap-2 text-primary font-black uppercase tracking-[0.3em] text-[10px]">
-                                <Sparkles className="w-3 h-3" /> Stride Evolution Journey
+                            <span className="flex items-center gap-2 text-primary font-black uppercase tracking-[0.3em] text-[9px]">
+                                <Rocket className="w-3 h-3" /> Stride Evolution Roadmap
                             </span>
                         </motion.div>
-                        <DialogTitle className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none text-center">
-                            The Future <span className="text-primary italic">Syncs</span> Now
+                        <DialogTitle className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none text-center">
+                            The Journey of <span className="text-primary italic">Innovation</span>
                         </DialogTitle>
                     </div>
 
-                    <ScrollArea className="flex-1 w-full overflow-hidden">
-                        <div className="w-full px-6 lg:px-12 py-6">
-                            {/* Premium Bento Grid Layout */}
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    {/* MAIN SCROLLABLE CONTENT AREA */}
+                    <div className="flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-hide px-6 lg:px-12 py-4">
+                        <div className="max-w-7xl mx-auto space-y-6 pb-12">
 
-                                {/* 1. Left Feature Cards (Mobile Hidden or Stacked) */}
-                                <div className="lg:col-span-3 flex flex-col gap-6">
-                                    {bentoCards.slice(0, 2).map((card) => (
-                                        <motion.div
-                                            key={card.id}
-                                            initial={{ opacity: 0, x: -30 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            className={`p-8 rounded-[2.5rem] border ${card.color} backdrop-blur-2xl flex flex-col justify-between group h-full shadow-lg hover:shadow-2xl transition-all duration-500`}
-                                        >
-                                            <div>
-                                                <div className="w-12 h-12 rounded-2xl bg-white/40 dark:bg-slate-900/40 flex items-center justify-center mb-6 border border-white/20 group-hover:rotate-12 transition-transform duration-500 shadow-sm">
-                                                    <card.icon className="w-6 h-6 text-primary" />
-                                                </div>
-                                                <h5 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">{card.title}</h5>
-                                                <p className="text-xs font-bold text-primary mb-4 uppercase tracking-widest">{card.desc}</p>
-                                            </div>
-                                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                                {card.content}
-                                            </p>
-                                        </motion.div>
-                                    ))}
-                                </div>
-
-                                {/* 2. CENTER PIECE: THE MASTER EVOLUTION HUB */}
-                                <div className="lg:col-span-6 flex flex-col">
+                            {/* TOP BENTO ROW */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {bentoCards.map((card) => (
                                     <motion.div
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        className="flex-1 rounded-[3.5rem] bg-white/60 dark:bg-slate-900/60 border border-white/40 dark:border-white/20 shadow-2xl backdrop-blur-3xl p-8 lg:p-12 relative overflow-hidden flex flex-col justify-between min-h-[500px]"
+                                        key={card.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={`p-6 rounded-[2.5rem] border ${card.color} backdrop-blur-3xl flex items-start gap-4 shadow-lg hover:shadow-2xl transition-all duration-500`}
                                     >
-                                        {/* Inner HUD Glow */}
-                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_100%)] pointer-events-none" />
-
-                                        <div>
-                                            <div className="flex justify-between items-center mb-12">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-3 h-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
-                                                    <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest">Mainstream Sync Active</span>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Current Node</span>
-                                                    <p className="text-sm font-black text-primary uppercase">PHASE 08 (LIVE)</p>
-                                                </div>
-                                            </div>
-
-                                            {/* Main Timeline Navigation */}
-                                            <div className="space-y-6">
-                                                {roadmapPhases.map((phase) => (
-                                                    <motion.button
-                                                        key={phase.title}
-                                                        onClick={() => setActiveTab(phase.title)}
-                                                        className={`w-full flex items-center justify-between p-6 rounded-[2rem] border transition-all duration-500 group ${activeTab === phase.title
-                                                                ? "bg-primary border-primary shadow-[0_20px_40px_rgba(99,102,241,0.3)]"
-                                                                : "bg-white/40 dark:bg-slate-900/40 border-white/20 hover:border-primary/50"
-                                                            }`}
-                                                    >
-                                                        <div className="flex items-center gap-6">
-                                                            <span className={`text-2xl font-black ${activeTab === phase.title ? "text-white" : "text-slate-300 dark:text-slate-700"} tracking-tighter`}>
-                                                                {phase.phase}
-                                                            </span>
-                                                            <div className="text-left">
-                                                                <h4 className={`text-xl font-bold tracking-tight ${activeTab === phase.title ? "text-white" : "text-slate-900 dark:text-white"}`}>
-                                                                    {phase.title}
-                                                                </h4>
-                                                                <div className="flex items-center gap-2 mt-1">
-                                                                    <phase.icon className={`w-3 h-3 ${activeTab === phase.title ? "text-white/80" : "text-primary"}`} />
-                                                                    <span className={`text-[10px] font-bold uppercase tracking-widest ${activeTab === phase.title ? "text-white/60" : "text-slate-400"}`}>
-                                                                        {phase.status}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <ArrowRight className={`w-5 h-5 transition-transform duration-500 ${activeTab === phase.title ? "text-white translate-x-1" : "text-slate-300 group-hover:text-primary"}`} />
-                                                    </motion.button>
-                                                ))}
-                                            </div>
+                                        <div className={`p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-white/20 ${card.accent}`}>
+                                            <card.icon className="w-5 h-5" />
                                         </div>
-
-                                        {/* Active Detail Footer */}
-                                        <AnimatePresence mode="wait">
-                                            <motion.div
-                                                key={activeTab}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -20 }}
-                                                className="mt-12 p-8 rounded-[2rem] bg-slate-900/10 dark:bg-white/5 border border-white/10 flex items-center justify-between"
-                                            >
-                                                <div className="flex gap-4">
-                                                    {roadmapPhases.find(p => p.title === activeTab)?.items.map((item, i) => (
-                                                        <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 dark:bg-white/5 border border-white/10">
-                                                            <CheckCircle2 className="w-3 h-3 text-primary" />
-                                                            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">{item}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <BarChart3 className="w-8 h-8 text-primary/30" />
-                                            </motion.div>
-                                        </AnimatePresence>
+                                        <div>
+                                            <h5 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{card.title}</h5>
+                                            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{card.desc}</p>
+                                            <p className="text-[11px] font-medium text-slate-400 mt-2 leading-relaxed">{card.content}</p>
+                                        </div>
                                     </motion.div>
-                                </div>
+                                ))}
 
-                                {/* 3. Right & Bottom Features */}
-                                <div className="lg:col-span-3 flex flex-col gap-6">
-                                    {/* Global Card (Wide on Bottom or Tall on Right) */}
-                                    <div className="lg:col-span-3 flex flex-col gap-6 h-full">
-                                        {bentoCards.slice(2).map((card) => (
-                                            <motion.div
-                                                key={card.id}
-                                                initial={{ opacity: 0, x: 30 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                className={`p-8 rounded-[2.5rem] border ${card.color} backdrop-blur-2xl flex flex-col justify-between group h-full shadow-lg hover:shadow-2xl transition-all duration-500`}
-                                            >
-                                                <div>
-                                                    <div className="w-12 h-12 rounded-2xl bg-white/40 dark:bg-slate-900/40 flex items-center justify-center mb-6 border border-white/20 group-hover:rotate-12 transition-transform duration-500 shadow-sm">
-                                                        <card.icon className="w-6 h-6 text-primary" />
-                                                    </div>
-                                                    <h5 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">{card.title}</h5>
-                                                    <p className="text-xs font-bold text-primary mb-4 uppercase tracking-widest">{card.desc}</p>
-                                                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                                        {card.content}
-                                                    </p>
-                                                </div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-6 rounded-[2.5rem] border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-3xl flex items-center justify-between group shadow-lg"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-white/20 text-emerald-500">
+                                            <Globe className="w-5 h-5 animate-spin-slow" />
+                                        </div>
+                                        <div>
+                                            <h5 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">Institutional Mesh</h5>
+                                            <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Global Status: Active</p>
+                                        </div>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                                </motion.div>
+                            </div>
 
-                                                <div className="mt-8 pt-8 border-t border-white/10 flex items-center gap-4 text-primary">
-                                                    <Globe className="w-8 h-8 animate-spin-slow" />
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Institutional Mesh Active</span>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-
-                                        {/* Secondary Detail Card */}
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 30 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="p-8 rounded-[2.5rem] bg-white/40 dark:bg-slate-900/40 border border-white/20 backdrop-blur-xl flex items-center gap-6 group hover:border-primary/40 transition-all shadow-lg"
-                                        >
-                                            <div className="p-4 rounded-2xl bg-primary text-white shadow-[0_10px_20px_rgba(99,102,241,0.4)]">
-                                                <Smartphone className="w-6 h-6" />
-                                            </div>
-                                            <div>
-                                                <h6 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest">Mobile App</h6>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Alpha Testing</p>
-                                            </div>
-                                        </motion.div>
+                            {/* CENTRAL MASTER JOURNEY (HORIZONTAL SLIDER RESTORED & BETTER) */}
+                            <div className="relative rounded-[3.5rem] bg-white/60 dark:bg-slate-900/60 border border-white/40 dark:border-white/20 shadow-2xl backdrop-blur-3xl p-8 lg:p-12 overflow-hidden">
+                                <div className="flex items-center justify-between mb-10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+                                        <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest">Sync Evolution Node</h4>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-slate-400">
+                                        <ArrowRightLeft className="w-4 h-4" />
+                                        <span className="text-[10px] font-bold uppercase tracking-widest">Swipe to Explore Journey</span>
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-                        <ScrollBar orientation="vertical" />
-                    </ScrollArea>
+                                {/* HORIZONTAL SWIPE CONTAINER */}
+                                <div
+                                    ref={scrollRef}
+                                    className="relative overflow-x-auto pb-12 pt-6 px-4 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+                                >
+                                    <div className="flex gap-8 items-start min-w-max pb-4">
+                                        {/* Glowing Progress Background Line */}
+                                        <div className="absolute top-[3.75rem] left-0 right-0 h-1 bg-slate-200/50 dark:bg-white/10 z-0 rounded-full mx-12">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: "66%" }}
+                                                transition={{ duration: 2, ease: "easeInOut" }}
+                                                className="h-full bg-gradient-to-r from-emerald-500 via-indigo-500 to-blue-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] rounded-full"
+                                            />
+                                        </div>
 
-                    {/* Footer UI - Premium Branding */}
-                    <div className="w-full px-8 py-8 border-t border-white/10 bg-white/10 dark:bg-slate-950/10 backdrop-blur-md flex flex-wrap items-center justify-between gap-6">
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Infrastructure Stability: 99.9%</span>
+                                        {roadmapPhases.map((item, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: index * 0.1, duration: 0.6 }}
+                                                className="relative z-10 w-[280px] md:w-[340px] group snap-center"
+                                            >
+                                                {/* Node Icon */}
+                                                <div className="flex justify-center mb-8">
+                                                    <div className={`w-14 h-14 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-lg group-hover:scale-120 transition-all duration-500 relative bg-white dark:bg-slate-950`}>
+                                                        <item.icon className="w-6 h-6 flex-shrink-0" />
+                                                        {item.status === "Active" && (
+                                                            <div className="absolute -inset-2 bg-blue-500/20 rounded-full animate-ping" />
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Node Card */}
+                                                <div className={`relative p-8 rounded-[3rem] border border-white/50 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl shadow-xl transition-all duration-500 group-hover:-translate-y-2 ${item.glow}`}>
+                                                    <div className="mb-4">
+                                                        <span className={`text-[9px] font-black uppercase tracking-[0.3em] ${item.color} block mb-1`}>
+                                                            Node {item.phase}
+                                                        </span>
+                                                        <h5 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                                                            {item.title}
+                                                        </h5>
+                                                    </div>
+
+                                                    <div className="space-y-3 mb-8">
+                                                        {item.items.map((point, pIdx) => (
+                                                            <div key={pIdx} className="flex items-center gap-3">
+                                                                <CheckCircle2 className={`w-3.5 h-3.5 ${item.status === "Upcoming" ? "text-slate-300 dark:text-slate-700" : item.color}`} />
+                                                                <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                                                                    {point}
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    <div className={`inline-flex px-4 py-1.5 rounded-full text-[10px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
+                                                        {item.status}
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Main Branch: SYNCED</span>
+
+                            {/* BOTTOM METRICS ROW */}
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                {[
+                                    { icon: BarChart3, label: "Operational Load", val: "42%", sub: "Nodes Primary" },
+                                    { icon: Network, label: "Network Health", val: "99.9%", sub: "Edge Encrypted" },
+                                    { icon: Smartphone, label: "Mobile Sync", val: "ALPHA", sub: "V2.0.4" },
+                                    { icon: ShieldCheck, label: "Safety Audit", val: "Passed", sub: "AES-256V" }
+                                ].map((stat, i) => (
+                                    <div key={i} className="p-6 rounded-[2.5rem] bg-white/30 dark:bg-slate-950/30 border border-white/10 flex items-center gap-4 group">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+                                            <stat.icon className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</p>
+                                            <h6 className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">{stat.val}</h6>
+                                            <p className="text-[9px] font-bold text-slate-400 uppercase">{stat.sub}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
+
                         </div>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em]">
-                            * Phase 08 Release • Stride Ecosystem © 2026
+                    </div>
+
+                    {/* Footer - Static Labels */}
+                    <div className="w-full px-8 py-6 border-t border-white/5 bg-white/5 dark:bg-slate-950/5 backdrop-blur-md flex items-center justify-center shrink-0">
+                        <p className="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.5em] text-center">
+                            * Stride Evolution Protocol v8.4.1 • Global Innovation Sync © 2026
                         </p>
                     </div>
                 </div>
