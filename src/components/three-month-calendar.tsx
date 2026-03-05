@@ -74,7 +74,7 @@ function MiniCalendar({ year, month, role, today, appointments, selectedDate, on
     ];
 
     return (
-        <div className={cn("flex flex-col transition-all duration-300", !isCenter && "opacity-[0.18] grayscale-[0.3]")}>
+        <div className={cn("flex flex-col transition-all duration-300", !isCenter && "opacity-50")}>
             {/* Month name (Hide for center as it's in the header) */}
             {!isCenter && (
                 <p className="text-center font-bold mb-2 text-[10px]" style={{ color: "#94a3b8" }}>
