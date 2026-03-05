@@ -15,7 +15,13 @@ import {
     Cpu,
     ShieldCheck,
     Database,
-    Instagram
+    Instagram,
+    Crown,
+    Layout,
+    Layers,
+    Zap,
+    Component,
+    Paintbrush
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
@@ -29,8 +35,8 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/simitmodi/",
         portfolio: "https://simitmodi.vercel.app/",
         instagram: "https://www.instagram.com/simit.io/",
-        icon: Code2,
-        color: "bg-blue-500/20 text-blue-500",
+        icon: Crown,
+        color: "bg-amber-500/20 text-amber-500",
     },
     {
         name: "Hardi Patel",
@@ -40,7 +46,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/hardipatel2510/",
         portfolio: "https://hardipatel.vercel.app/",
         instagram: "https://www.instagram.com/hardiptl.io/",
-        icon: Terminal,
+        icon: Layout,
         color: "bg-indigo-500/20 text-indigo-500",
     },
     {
@@ -51,8 +57,8 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/bansimakwana/",
         portfolio: "#",
         instagram: "https://www.instagram.com/bansiiii_._/",
-        icon: Palette,
-        color: "bg-purple-500/20 text-purple-500",
+        icon: Layers,
+        color: "bg-blue-500/20 text-blue-500",
     },
     {
         name: "Ankit Nandoliya",
@@ -62,7 +68,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
         portfolio: "#",
         instagram: "https://www.instagram.com/ankit_n2/",
-        icon: Globe,
+        icon: Zap,
         color: "bg-emerald-500/20 text-emerald-500",
     },
     {
@@ -73,8 +79,8 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/sharvi-bhavsar-914344344/",
         portfolio: "#",
         instagram: "https://www.instagram.com/sharvi1206/",
-        icon: Cpu,
-        color: "bg-amber-500/20 text-amber-500",
+        icon: Component,
+        color: "bg-purple-500/20 text-purple-500",
     },
     {
         name: "Krishna Patel",
@@ -84,7 +90,7 @@ const developers = [
         linkedin: "#",
         portfolio: "#",
         instagram: "https://www.instagram.com/__krishna276/",
-        icon: ShieldCheck,
+        icon: Paintbrush,
         color: "bg-rose-500/20 text-rose-500",
     },
 ];
