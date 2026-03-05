@@ -47,71 +47,39 @@ function QuickActionCard({ icon, label, sub, href, filled }: { icon: React.React
   );
 }
 
-// ── Flip Clock digit ─────────────────────────────────────────────────────────
-function FlipDigit({ value, label }: { value: string; label: string }) {
-  const [display, setDisplay] = useState({ cur: value, prev: value, flipping: false });
-
-  useEffect(() => {
-    if (value === display.cur) return;
-    setDisplay(d => ({ cur: d.cur, prev: d.cur, flipping: true }));
-
-    // We update 'cur' state after a tiny delay to ensure the 'prev' is captured on the flap's front
-    const t1 = setTimeout(() => {
-      setDisplay(d => ({ cur: value, prev: d.prev, flipping: true }));
-    }, 20);
-
-    const t2 = setTimeout(() => {
-      setDisplay(d => ({ cur: value, prev: value, flipping: false }));
-    }, 700); // slightly longer but smoother
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [value]);
-
+// ── Sleek Digital Countdown ──────────────────────────────────────────────
+function DigitalTimer({ days, hrs, mins, sec }: { days: string; hrs: string; mins: string; sec: string }) {
   return (
-    <div className="flex flex-col items-center gap-1.5 min-w-[3.2rem]">
-      <div className="relative w-[3.2rem] h-[4rem] perspective-[500px]">
-        {/* UPPER HALF (New State) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/5">
-          <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
-            {display.cur}
+    <div className="flex flex-col items-center justify-center py-2 px-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-inner">
+      <div className="flex items-baseline gap-1.5">
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {days}
           </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">days</span>
         </div>
-
-        {/* LOWER HALF (Previous State) */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
-          <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
-            {display.prev}
+        <span className="text-2xl font-light text-white/20 pb-4">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {hrs}
           </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">hrs</span>
         </div>
-
-        {/* THE FLIPPER (The physical flap) */}
-        <div className={`absolute top-0 left-0 right-0 h-1/2 origin-bottom transition-none preserve-3d z-30 ${display.flipping ? 'animate-physical-flip' : ''}`}
-          style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}>
-
-          {/* FRONT: Current Top (Value before flip started) */}
-          <div className="absolute inset-0 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20"
-            style={{ backfaceVisibility: 'hidden' }}>
-            <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
-              {display.prev}
-            </span>
-          </div>
-
-          {/* BACK: New Bottom (Value flipping into view) */}
-          <div className="absolute inset-0 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] rotate-x-180"
-            style={{ transform: 'rotateX(180deg)', backfaceVisibility: 'hidden' }}>
-            <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
-              {display.cur}
-            </span>
-          </div>
+        <span className="text-2xl font-light text-white/20 pb-4 animate-pulse">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {mins}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">min</span>
         </div>
-
-        {/* Subtle mid-line hinge */}
-        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-black/30 z-40 transform -translate-y-1/2" />
+        <span className="text-2xl font-light text-white/20 pb-4 animate-pulse">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {sec}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">sec</span>
+        </div>
       </div>
-      <span className="text-[8px] text-white/40 font-bold uppercase tracking-[0.15em]">{label}</span>
     </div>
   );
 }
@@ -143,17 +111,13 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
     <div className="px-4 md:px-8 mb-7">
       <button
         onClick={onOpen}
-        className="banner-btn w-full text-left rounded-2xl overflow-hidden relative"
+        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative"
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
-          boxShadow: `0 8px 32px ${INDIGO}50, 0 2px 8px rgba(0,0,0,0.18)`,
+          boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
         }}
       >
         <style>{`
-          @keyframes animate-physical-flip {
-            0%   { transform: rotateX(0deg); z-index: 50; }
-            100% { transform: rotateX(-180deg); z-index: 50; }
-          }
           @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
           @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
           @keyframes floatRandom  { 
@@ -162,7 +126,6 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
             66%  { transform: translate(-40px, 60px) scale(0.9) rotate(-5deg); }
             100% { transform: translate(0, 0) scale(1) rotate(0deg); }
           }
-          .animate-physical-flip { animation: animate-physical-flip 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
           .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
           .cal-float { animation: calFloat 3s ease-in-out infinite; transform-style: preserve-3d; }
           @keyframes pulseScale   { 0%,100%{transform:scale(1);opacity:0.15} 50%{transform:scale(1.2);opacity:0.25} }
@@ -173,81 +136,57 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
           .floating-bg-object2 { animation: driftSlow 12s ease-in-out infinite; filter: blur(35px); opacity: 0.12; background: #9333ea; }
         `}</style>
 
-        {/* Floating background objects - make them more solid/graphic */}
+        {/* Floating background objects */}
         <div className="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full floating-bg-object pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full floating-bg-object2 pointer-events-none" />
 
-        {/* Shimmer - keep subtle but defined */}
+        {/* Shimmer */}
         <div className="pointer-events-none absolute top-0 bottom-0 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", zIndex: 1 }} />
 
         {/* ── 3-column balanced layout ── */}
-        <div className="relative z-10 flex items-stretch divide-x divide-white/20">
+        <div className="relative z-10 flex items-stretch divide-x divide-white/10">
 
           {/* LEFT: Stats */}
-          <div className="flex flex-col justify-center items-center gap-3 px-7 py-2.5 flex-1">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50">Overview</p>
-            <div className="flex items-center gap-6">
+          <div className="flex flex-col justify-center items-center gap-3 px-8 py-5 flex-1">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40">Overview</p>
+            <div className="flex items-center gap-8">
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-black tabular-nums text-white leading-none">{upcomingCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/60 mt-1">Upcoming</span>
+                <span className="text-5xl font-black tabular-nums text-white tracking-tighter leading-none">{upcomingCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mt-1">Upcoming</span>
               </div>
-              <div className="w-px h-10 bg-white/30" />
+              <div className="w-px h-10 bg-white/10" />
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-black tabular-nums text-white/50 leading-none">{completedCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/40 mt-1">Completed</span>
+                <span className="text-5xl font-black tabular-nums text-white/30 tracking-tighter leading-none">{completedCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/30 mt-1">Completed</span>
               </div>
             </div>
           </div>
 
-          {/* CENTER: Flip Clock */}
-          <div className="flex flex-col justify-center items-center px-7 py-2.5 flex-1"
-            style={{ background: "#00000022" }}>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 mb-4">Next appointment in</p>
-            <div className="flex items-center gap-2">
-              <FlipDigit value={pad(days)} label="days" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(hrs)} label="hrs" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(mins)} label="min" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(sec)} label="sec" />
-            </div>
+          {/* CENTER: Digital Timer */}
+          <div className="flex flex-col justify-center items-center px-8 py-5 flex-1"
+            style={{ background: "rgba(0,0,0,0.15)" }}>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Next appointment in</p>
+            <DigitalTimer days={pad(days)} hrs={pad(hrs)} mins={pad(mins)} sec={pad(sec)} />
           </div>
 
           {/* RIGHT: Appointment + decor */}
-          <div className="flex items-center gap-5 px-7 py-2.5 flex-1 relative overflow-hidden">
-            {/* 3D floating calendar */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float"
-              style={{ transformStyle: "preserve-3d" }}>
-              <svg width="60" height="60" viewBox="0 0 52 52" fill="none">
-                <rect x="2" y="8" width="48" height="42" rx="6" fill="white" />
-                <rect x="2" y="8" width="48" height="16" rx="6" fill="white" fillOpacity="0.6" />
-                <rect x="16" y="2" width="4" height="10" rx="2" fill="white" />
-                <rect x="32" y="2" width="4" height="10" rx="2" fill="white" />
-                {[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => (
-                  <rect key={`${r}-${c}`} x={8 + c * 6} y={29 + r * 6} width="3" height="3" rx="0.5" fill="white" fillOpacity="0.5" />
-                )))}
-              </svg>
+          <div className="flex items-center gap-6 px-8 py-5 flex-1 relative overflow-hidden">
+            {/* Decoration items */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float">
+              {/* Simplified icon for performance */}
+              <Landmark className="h-16 w-16 text-white" />
             </div>
-            {/* 3D spinning coin */}
-            <div className="absolute right-16 bottom-2 pointer-events-none" style={{ perspective: "200px" }}>
-              <div className="coin-3d">
-                <svg width="28" height="28" viewBox="0 0 26 26" fill="none">
-                  <circle cx="13" cy="13" r="12" fill="white" fillOpacity="0.15" stroke="white" strokeOpacity="0.3" strokeWidth="1" />
-                  <text x="13" y="17" textAnchor="middle" fontSize="11" fill="white" fillOpacity="0.7">₹</text>
-                </svg>
-              </div>
-            </div>
-            {/* Text */}
+
+            {/* Content */}
             <div className="min-w-0 pr-4">
-              <p className="text-sm font-extrabold uppercase tracking-widest text-white/45 mb-1.5">Next up</p>
-              <p className="text-xl font-bold text-white leading-tight">{nextAppt.specificService}</p>
-              <p className="text-sm text-white/55 mt-1.5">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-1.5">Next up</p>
+              <p className="text-xl font-bold text-white leading-tight truncate">{nextAppt.specificService}</p>
+              <p className="text-sm text-white/60 mt-2 font-medium">
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-[0_8px_20px_rgba(255,255,255,0.25)] whitespace-nowrap">
+            <span className="flex-shrink-0 ml-auto px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-xl whitespace-nowrap">
               Details →
             </span>
           </div>
