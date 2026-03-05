@@ -26,47 +26,25 @@ const doodles = [
 ];
 
 export function FloatingDoodles() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 50, stiffness: 100 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set((e.clientX - window.innerWidth / 2) / window.innerWidth);
-      mouseY.set((e.clientY - window.innerHeight / 2) / window.innerHeight);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden" aria-hidden="true">
       {doodles.map((d, i) => (
-        <Doodle key={i} {...d} smoothX={smoothX} smoothY={smoothY} />
+        <Doodle key={i} {...d} />
       ))}
     </div>
   );
 }
 
 function Doodle({
-  shape, x, y, size, color, rotate, parallax, delay, smoothX, smoothY,
+  shape, x, y, size, color, rotate, delay,
 }: {
   shape: string; x: string; y: string; size: number; color: string;
-  rotate: number; parallax: number; delay: number;
-  smoothX: ReturnType<typeof useSpring>; smoothY: ReturnType<typeof useSpring>;
+  rotate: number; delay: number;
 }) {
-  const dx = useTransform(smoothX, [-0.5, 0.5], [-30 * parallax, 30 * parallax]);
-  const dy = useTransform(smoothY, [-0.5, 0.5], [-30 * parallax, 30 * parallax]);
-  const rotateX = useTransform(smoothY, [-0.5, 0.5], [-12 * parallax, 12 * parallax]);
-  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-12 * parallax, 12 * parallax]);
-
   return (
     <motion.div
       className="absolute"
-      style={{ left: x, top: y, x: dx, y: dy, rotateX, rotateY, perspective: 600 }}
+      style={{ left: x, top: y, perspective: 600 }}
       animate={{
         y: [-8, 8, -8],
         rotateZ: [rotate - 4, rotate + 4, rotate - 4],

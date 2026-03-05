@@ -20,7 +20,6 @@ import {
   ArrowRight
 } from "lucide-react";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 
 const faqCategories = [
   {
@@ -152,7 +151,6 @@ export default function FaqPage() {
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950">
       {/* Background Layers */}
       <div className="absolute inset-0 z-0">
-        <BackgroundWaves />
         <FloatingDoodles />
         {/* Extra Atmospheric Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />

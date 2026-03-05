@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import Logo from '@/lib/Logo.png';
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 
 export default function AboutPage() {
   const pillars = [
@@ -58,7 +57,6 @@ export default function AboutPage() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background">
-      <BackgroundWaves />
       <FloatingDoodles />
 
       <main className="relative z-10 w-full max-w-7xl px-4 md:px-8 py-20 flex flex-col items-center">
