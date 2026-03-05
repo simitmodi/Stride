@@ -14,70 +14,76 @@ import {
     Terminal,
     Cpu,
     ShieldCheck,
-    Database
+    Database,
+    Instagram
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DevelopersFloatingBackground } from "@/components/landing/DevelopersFloatingBackground";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 
 const developers = [
     {
-        name: "Hardik Patel",
-        role: "Lead Systems Architect",
-        contribution: "Engineered the core scheduling engine and real-time synchronization layer.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Terminal,
-        color: "bg-indigo-500/20 text-indigo-500",
-    },
-    {
         name: "Simit Modi",
-        role: "Full-Stack Developer",
-        contribution: "Developed the glassmorphic UI framework and integrated Firebase authentication.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
+        role: "Frontend & Backend",
+        contribution: "The visionary leader of the Stride development team, coordinating all project phases and technical architecture.",
+        github: "https://github.com/simitmodi",
+        linkedin: "https://www.linkedin.com/in/simitmodi/",
+        portfolio: "https://simitmodi.vercel.app/",
+        instagram: "https://www.instagram.com/simit.io/",
         icon: Code2,
         color: "bg-blue-500/20 text-blue-500",
     },
     {
-        name: "Aarav Sharma",
-        role: "UI/UX Designer",
-        contribution: "Designed the 'Elite Glass' aesthetic and interactive prototype flows.",
-        github: "#",
-        linkedin: "#",
+        name: "Hardi Patel",
+        role: "Frontend & UI Design",
+        contribution: "Spearheaded the visual identity of Stride, focusing on the seamless blend of intuitive UI layouts and responsive frontend components.",
+        github: "https://github.com/hardipatel2510",
+        linkedin: "https://www.linkedin.com/in/hardipatel2510/",
+        portfolio: "https://hardipatel.vercel.app/",
+        instagram: "https://www.instagram.com/hardiptl.io/",
+        icon: Terminal,
+        color: "bg-indigo-500/20 text-indigo-500",
+    },
+    {
+        name: "Bansari Makwana",
+        role: "Frontend & UI Design",
+        contribution: "Crafted the elegant glassmorphic components and ensured a consistent, high-fidelity user experience across all platform interfaces.",
+        github: "https://github.com/MakwBansari",
+        linkedin: "https://www.linkedin.com/in/bansimakwana/",
         portfolio: "#",
+        instagram: "https://www.instagram.com/bansiiii_._/",
         icon: Palette,
         color: "bg-purple-500/20 text-purple-500",
     },
     {
-        name: "Priya Gupta",
-        role: "Frontend Specialist",
-        contribution: "Implemented complex framer-motion animations and responsive layouts.",
-        github: "#",
-        linkedin: "#",
+        name: "Ankit Nandoliya",
+        role: "Frontend & UI Design",
+        contribution: "Specialized in bridge-building between design and code, implementing precise layouts and fluid interactive elements.",
+        github: "https://github.com/ankit5287",
+        linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
         portfolio: "#",
+        instagram: "https://www.instagram.com/ankit_n2/",
         icon: Globe,
         color: "bg-emerald-500/20 text-emerald-500",
     },
     {
-        name: "Rohan Mehta",
-        role: "DevOps Engineer",
-        contribution: "Architected the CI/CD pipeline and optimized Vercel deployment performance.",
-        github: "#",
-        linkedin: "#",
+        name: "Sharvi Bhavsar",
+        role: "Frontend & UI Design",
+        contribution: "Focused on the structural integrity of the frontend, ensuring that the bespoke UI designs translated perfectly into functional, high-performance code.",
+        github: "https://github.com/sharvibhavsar",
+        linkedin: "https://www.linkedin.com/in/sharvi-bhavsar-914344344/",
         portfolio: "#",
+        instagram: "https://www.instagram.com/sharvi1206/",
         icon: Cpu,
         color: "bg-amber-500/20 text-amber-500",
     },
     {
-        name: "Ananya Iyer",
-        role: "Security Analyst",
-        contribution: "Implemented banking-grade encryption and secure document handling.",
+        name: "Krishna Patel",
+        role: "Canvas",
+        contribution: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
         github: "#",
         linkedin: "#",
         portfolio: "#",
+        instagram: "https://www.instagram.com/__krishna276/",
         icon: ShieldCheck,
         color: "bg-rose-500/20 text-rose-500",
     },
@@ -88,8 +94,7 @@ export default function DevelopersPage() {
         <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24">
             {/* Background Layers */}
             <div className="absolute inset-0 z-0">
-                <DevelopersFloatingBackground />
-                <BackgroundWaves />
+                <FloatingDoodles />
                 <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
             </div>
 
@@ -152,6 +157,11 @@ export default function DevelopersPage() {
                                         <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                             <Globe className="w-5 h-5" />
                                         </Link>
+                                        {dev.instagram && (
+                                            <Link href={dev.instagram} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Instagram className="w-5 h-5" />
+                                            </Link>
+                                        )}
                                     </div>
                                     <Link href={dev.portfolio} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                         Portfolio <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />

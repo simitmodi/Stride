@@ -75,8 +75,7 @@ const privacyPolicyContent = [
     id: 'contact-us',
     title: '9. Contact Us',
     content: [
-      'For questions or concerns regarding privacy or terms, contact:',
-      '📧 support@strideapp.in',
+      'For questions regarding privacy or terms, please use the Contact Us form on our website.',
     ],
   },
 ];
@@ -103,15 +102,15 @@ export default function PrivacyPolicyPage() {
 
       <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <div className="flex items-center gap-3 mb-8">
-            <FileText className="h-10 w-10 text-primary" />
-            <h1 className="text-4xl font-bold text-foreground">Privacy Policy</h1>
+          <FileText className="h-10 w-10 text-primary" />
+          <h1 className="text-4xl font-bold text-foreground">Privacy Policy</h1>
         </div>
 
         <div className="grid w-full grid-cols-1 gap-6">
           {privacyPolicyContent.map((section) => (
             <div key={section.id} className="group relative">
-               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-              <Card 
+              <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
+              <Card
                 className="relative h-full w-full transform-gpu bg-card shadow-lg"
                 style={{ backdropFilter: 'blur(12px)' }}
               >
