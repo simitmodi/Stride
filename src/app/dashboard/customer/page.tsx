@@ -39,8 +39,8 @@ function QuickActionCard({ icon, label, sub, href, filled }: { icon: React.React
         <span style={{ color: filled ? "#fff" : INDIGO }}>{icon}</span>
       </div>
       <div className="min-w-0">
-        <p className="font-bold text-base truncate" style={{ color: filled ? "#fff" : "#1e293b" }}>{label}</p>
-        <p className="text-sm mt-0.5 truncate" style={{ color: filled ? "rgba(255,255,255,0.75)" : "#94a3b8" }}>{sub}</p>
+        <p className="font-bold text-base" style={{ color: filled ? "#fff" : "#1e293b" }}>{label}</p>
+        <p className="text-sm mt-0.5" style={{ color: filled ? "rgba(255,255,255,0.75)" : "#94a3b8" }}>{sub}</p>
       </div>
       <ArrowRight className="ml-auto h-5 w-5 flex-shrink-0 opacity-60 group-hover:translate-x-1 transition-transform" style={{ color: filled ? "#fff" : INDIGO }} />
     </Link>
