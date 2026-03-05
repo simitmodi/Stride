@@ -11,7 +11,8 @@ import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
 import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark } from "lucide-react";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
-import ThreeBackground from "@/components/ThreeBackground";
+import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 
 const INDIGO = "#4F46E5";
 
@@ -280,7 +281,8 @@ export default function CustomerDashboardPage() {
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <ThreeBackground />
+        <BackgroundWaves />
+        <FloatingDoodles />
       </div>
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
         <style>{`
