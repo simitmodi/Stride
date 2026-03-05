@@ -79,19 +79,19 @@ const roadmapPhases = [
 const bentoCards = [
     {
         id: "security",
-        title: "Institutional Security",
+        title: "Security Core",
         icon: Lock,
-        desc: "AES-256 Encryption",
-        content: "Shielding every transaction with military-grade protocols.",
+        desc: "AES-256V",
+        content: "Military-grade encryption protocols.",
         color: "border-blue-500/20 bg-blue-500/5",
         accent: "text-blue-500"
     },
     {
         id: "ai",
-        title: "AI Intelligence",
+        title: "AI Neural Core",
         icon: BrainCircuit,
-        desc: "Neural Core",
-        content: "Our neural core optimizes branch operations automatically.",
+        desc: "V2.0.4",
+        content: "Optimized branch operations.",
         color: "border-purple-500/20 bg-purple-500/5",
         accent: "text-purple-500"
     }
@@ -107,16 +107,16 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[94vw] lg:max-w-7xl h-[92vh] p-0 overflow-hidden border-white/20 dark:border-white/10 bg-white shadow-2xl rounded-[2.5rem]">
-                {/* Unified Landing Page Background - Pure White Base */}
+            <DialogContent className="max-w-[98vw] lg:max-w-7xl h-[92vh] p-0 overflow-hidden border-white/20 dark:border-white/10 bg-white shadow-2xl rounded-[2.5rem]">
+                {/* Unified Landing Page Background */}
                 <div className="absolute inset-0 z-0 bg-white">
                     <FloatingDoodles />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.03)_0%,transparent_50%)]" />
                 </div>
 
                 <div className="relative z-10 flex flex-col h-full items-center">
-                    {/* Header - Compact & Precise */}
-                    <div className="w-full px-12 pt-6 pb-2 flex flex-col items-center justify-center text-center shrink-0">
+                    {/* Header - Compact */}
+                    <div className="w-full px-8 pt-6 pb-2 flex flex-col items-center justify-center text-center shrink-0">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -132,25 +132,24 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                     </div>
 
                     {/* MAIN SCROLLABLE CONTENT AREA */}
-                    <div className="flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-hide px-6 lg:px-12 py-2">
-                        <div className="max-w-7xl mx-auto space-y-4 pb-8">
+                    <div className="flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-hide px-3 lg:px-8 py-2">
+                        <div className="max-w-7xl mx-auto space-y-4 pb-12">
 
-                            {/* TOP BENTO ROW - Compacted with better padding */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-2">
+                            {/* TOP BENTO ROW - Fixed: Added px-2 and more fluid grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-2">
                                 {bentoCards.map((card) => (
                                     <motion.div
                                         key={card.id}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className={`p-4 md:p-5 rounded-[2rem] border ${card.color} flex items-start gap-4 shadow-sm hover:shadow-md transition-all duration-500`}
+                                        className={`p-4 rounded-[1.5rem] md:rounded-[2rem] border ${card.color} flex items-center gap-3 shadow-sm hover:shadow-md transition-all duration-500`}
                                     >
                                         <div className={`p-2 rounded-xl bg-white border border-slate-200 ${card.accent} shrink-0`}>
                                             <card.icon className="w-4 h-4" />
                                         </div>
-                                        <div>
-                                            <h5 className="text-[12px] font-black text-slate-900 uppercase tracking-tight">{card.title}</h5>
-                                            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{card.desc}</p>
-                                            <p className="text-[10px] font-medium text-slate-500 mt-1 leading-relaxed">{card.content}</p>
+                                        <div className="min-w-0">
+                                            <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-tight truncate">{card.title}</h5>
+                                            <p className="text-[10px] font-medium text-slate-500 leading-tight">{card.content}</p>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -158,48 +157,46 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 md:p-5 rounded-[2rem] border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between group shadow-sm"
+                                    className="p-4 rounded-[1.5rem] md:rounded-[2rem] border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between group shadow-sm col-sm-span-2 lg:col-span-1"
                                 >
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-3 min-w-0">
                                         <div className="p-2 rounded-xl bg-white border border-slate-200 text-emerald-500 shrink-0">
                                             <Globe className="w-4 h-4 animate-spin-slow" />
                                         </div>
-                                        <div>
-                                            <h5 className="text-[12px] font-black text-slate-900 uppercase tracking-tight">Institutional Mesh</h5>
-                                            <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Status: Active</p>
+                                        <div className="min-w-0">
+                                            <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-tight truncate">Institutional Mesh</h5>
+                                            <p className="text-[10px] font-medium text-emerald-600 truncate">Status: Active</p>
                                         </div>
                                     </div>
-                                    <ChevronRight className="w-3 h-3 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                                    <ChevronRight className="w-3 h-3 text-emerald-500 group-hover:translate-x-1 transition-transform shrink-0" />
                                 </motion.div>
                             </div>
 
-                            {/* CENTRAL MASTER JOURNEY - Refined for Edge visibility */}
-                            <div className="relative rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-xl p-4 lg:p-8 overflow-hidden">
-                                <div className="flex items-center justify-between mb-6 px-6">
-                                    <div className="flex items-center gap-3">
+                            {/* CENTRAL MASTER JOURNEY */}
+                            <div className="relative mx-2 rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-xl p-4 lg:p-6 overflow-hidden">
+                                <div className="flex items-center justify-between mb-4 px-4 overflow-hidden">
+                                    <div className="flex items-center gap-3 shrink-0">
                                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
-                                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Sync Evolution Node</h4>
+                                        <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Evolution Node</h4>
                                     </div>
-                                    {/* Enhanced Visibility Badge for Swipe */}
-                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary animate-bounce-horizontal">
+                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary animate-bounce-horizontal shrink-0">
                                         <ArrowRightLeft className="w-3 h-3" />
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Swipe to Explore</span>
+                                        <span className="text-[8px] font-black uppercase tracking-widest">Swipe</span>
                                     </div>
                                 </div>
 
-                                {/* HORIZONTAL SWIPE CONTAINER - Adjusted for full journey visibility */}
                                 <div
                                     ref={scrollRef}
-                                    className="relative overflow-x-auto pb-6 pt-2 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing px-6"
+                                    className="relative overflow-x-auto pb-4 pt-2 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing px-2"
                                 >
-                                    <div className="flex gap-6 items-start min-w-max pb-2 pr-32">
-                                        {/* Glowing Progress Background Line */}
-                                        <div className="absolute top-[3rem] left-0 right-0 h-0.5 bg-slate-200 z-0 rounded-full mx-10">
+                                    <div className="flex gap-4 items-start min-w-max pb-2 pr-48">
+                                        {/* Progress Line */}
+                                        <div className="absolute top-[2.75rem] left-0 right-0 h-0.5 bg-slate-200 z-0 rounded-full mx-8">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "66%" }}
                                                 transition={{ duration: 2, ease: "easeInOut" }}
-                                                className="h-full bg-gradient-to-r from-emerald-500 via-indigo-500 to-blue-500 shadow-[0_0_15px_rgba(99,102,241,0.4)] rounded-full"
+                                                className="h-full bg-primary shadow-[0_0_15px_rgba(99,102,241,0.4)] rounded-full"
                                             />
                                         </div>
 
@@ -210,41 +207,34 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                                 viewport={{ once: true }}
                                                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                                                className="relative z-10 w-[230px] md:w-[290px] group snap-start"
+                                                className="relative z-10 w-[200px] md:w-[240px] group snap-start"
                                             >
-                                                {/* Node Icon */}
-                                                <div className="flex justify-center mb-6">
-                                                    <div className={`w-11 h-11 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm group-hover:scale-110 transition-all duration-500 relative bg-white`}>
-                                                        <item.icon className="w-4.5 h-4.5 flex-shrink-0" />
-                                                        {item.status === "Active" && (
-                                                            <div className="absolute -inset-1.5 bg-blue-500/20 rounded-full animate-ping" />
-                                                        )}
+                                                <div className="flex justify-center mb-5">
+                                                    <div className={`w-9 h-9 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm bg-white relative`}>
+                                                        <item.icon className="w-4 h-4 flex-shrink-0" />
                                                     </div>
                                                 </div>
 
-                                                {/* Node Card - Compacted & Precise */}
-                                                <div className={`relative p-6 rounded-[2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
+                                                <div className={`relative p-5 rounded-[2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
                                                     <div className="mb-2">
-                                                        <span className={`text-[7.5px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
+                                                        <span className={`text-[7px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
                                                             Node {item.phase}
                                                         </span>
-                                                        <h5 className="text-[17px] font-black text-slate-900 tracking-tight leading-none">
+                                                        <h5 className="text-[14px] font-black text-slate-900 tracking-tight leading-none">
                                                             {item.title}
                                                         </h5>
                                                     </div>
-
-                                                    <div className="space-y-2 mb-5">
+                                                    <div className="space-y-1.5 mb-4">
                                                         {item.items.map((point, pIdx) => (
                                                             <div key={pIdx} className="flex items-center gap-2">
-                                                                <CheckCircle2 className={`w-3.5 h-3.5 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
-                                                                <span className="text-[11px] font-semibold text-slate-500">
+                                                                <CheckCircle2 className={`w-2.5 h-2.5 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
+                                                                <span className="text-[9px] font-semibold text-slate-500 truncate">
                                                                     {point}
                                                                 </span>
                                                             </div>
                                                         ))}
                                                     </div>
-
-                                                    <div className={`inline-flex px-3 py-1 rounded-full text-[7.5px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
+                                                    <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[7px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
                                                         {item.status}
                                                     </div>
                                                 </div>
@@ -254,22 +244,22 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                 </div>
                             </div>
 
-                            {/* BOTTOM METRICS ROW - Scaled Down */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-3">
+                            {/* BOTTOM METRICS ROW - Fixed: Added px-2 and fluid col-spanning */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-4">
                                 {[
                                     { icon: BarChart3, label: "Operational Load", val: "42%", sub: "Nodes" },
                                     { icon: Network, label: "Network Health", val: "99.9%", sub: "Encrypted" },
                                     { icon: Smartphone, label: "Mobile Sync", val: "ALPHA", sub: "V2.0.4" },
                                     { icon: ShieldCheck, label: "Safety Audit", val: "Passed", sub: "AES-256V" }
                                 ].map((stat, i) => (
-                                    <div key={i} className="p-4 md:p-5 rounded-[1.5rem] bg-slate-50 border border-slate-200 flex items-center gap-4 group">
-                                        <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shrink-0">
-                                            <stat.icon className="w-4 h-4" />
+                                    <div key={i} className="p-3 rounded-[1.25rem] bg-slate-50 border border-slate-200 flex items-center gap-3 group shadow-sm">
+                                        <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shrink-0">
+                                            <stat.icon className="w-3.5 h-3.5" />
                                         </div>
-                                        <div className="overflow-hidden">
-                                            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest truncate">{stat.label}</p>
-                                            <h6 className="text-[15px] font-black text-slate-900 tracking-tighter leading-none mt-1">{stat.val}</h6>
-                                            <p className="text-[8px] font-bold text-slate-400 uppercase mt-0.5 truncate">{stat.sub}</p>
+                                        <div className="min-w-0">
+                                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest truncate">{stat.label}</p>
+                                            <h6 className="text-[12px] font-black text-slate-900 tracking-tighter leading-none mt-0.5">{stat.val}</h6>
+                                            <p className="text-[7px] font-bold text-slate-500 uppercase mt-0.5 truncate">{stat.sub}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -279,8 +269,8 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                     </div>
 
                     {/* Footer - Precise Static Labels */}
-                    <div className="w-full px-8 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-center shrink-0">
-                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.5em] text-center">
+                    <div className="w-full px-8 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-center shrink-0">
+                        <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.5em] text-center">
                             * Stride Evolution Protocol v8.4.1 • Global Innovation Sync © 2026
                         </p>
                     </div>
