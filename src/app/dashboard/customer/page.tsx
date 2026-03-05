@@ -224,7 +224,7 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
         }}
       >
-        {/* Floating background objects (Matching CountdownWidget) */}
+        {/* Floating background objects */}
         <div className="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full floating-bg-object pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full floating-bg-object2 pointer-events-none" />
 
@@ -232,10 +232,10 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
         <div className="pointer-events-none absolute top-0 bottom-0 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", zIndex: 1 }} />
 
-        {/* ── 3-column balanced layout (Exact match to CountdownWidget) ── */}
+        {/* ── 3-column balanced layout ── */}
         <div className="relative z-10 flex items-stretch divide-x divide-white/10">
 
-          {/* LEFT: Stats (Same as CountdownWidget) */}
+          {/* LEFT: Stats */}
           <div className="flex flex-col justify-center items-center gap-3 px-8 py-5 flex-1">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40">Overview</p>
             <div className="flex items-center gap-8">
@@ -251,40 +251,47 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
             </div>
           </div>
 
-          {/* CENTER: Ambient Message (Matches DigitalTimer area background) */}
+          {/* CENTER: Ambient Message (Silky Smooth Animation) */}
           <div className="flex flex-col justify-center items-center px-8 py-5 flex-1 text-center"
             style={{ background: "rgba(0,0,0,0.15)" }}>
-            <motion.div
-              animate={{ y: [-4, 4, -4], rotate: [-1, 1, -1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="mb-2"
-            >
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 shadow-lg">
-                <Landmark className="h-6 w-6 text-white" strokeWidth={1.5} />
-              </div>
-            </motion.div>
-            <h2 className="text-lg font-black text-white tracking-tight">
-              Schedule is clear.
-            </h2>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-1">
-              Everything is in order.
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Status Update</p>
+            <div className="flex flex-col items-center" style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+              <motion.div
+                animate={{ y: [-3, 3, -3] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="flex flex-col items-center"
+                style={{ willChange: 'transform' }}
+              >
+                <h2 className="text-2xl font-black text-white tracking-tight">
+                  Schedule Clear
+                </h2>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-1">
+                  Everything is in order
+                </p>
+              </motion.div>
+            </div>
           </div>
 
-          {/* RIGHT: Actions (Matches Appointment area) */}
-          <div className="flex items-center justify-center gap-4 px-8 py-5 flex-1 relative overflow-hidden">
-            {/* Decorative landmark matching CountdownWidget */}
+          {/* RIGHT: Actions */}
+          <div className="flex items-center gap-6 px-8 py-5 flex-1 relative overflow-hidden">
+            {/* Decoration */}
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float">
               <Landmark className="h-16 w-16 text-white" />
             </div>
 
-            <div className="relative z-10 flex flex-col sm:flex-row items-center gap-3">
+            <div className="min-w-0 pr-4">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-1.5">Action Center</p>
+              <p className="text-xl font-bold text-white leading-tight truncate">Ready for next?</p>
+              <p className="text-sm text-white/60 mt-2 font-medium">Quick link to scheduler</p>
+            </div>
+
+            <div className="flex-shrink-0 ml-auto flex flex-col gap-2">
               <Link href="/dashboard/customer/appointment-scheduling"
-                className="px-6 py-3 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-white/90 transition-all hover:-translate-y-0.5 active:scale-95 whitespace-nowrap">
-                Book Appointment
+                className="px-6 py-2.5 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-white/90 transition-all active:scale-95 whitespace-nowrap text-center">
+                Book Now
               </Link>
               <Link href="/dashboard/customer/document-checklist"
-                className="px-6 py-3 rounded-2xl bg-white/10 text-white font-bold text-sm border border-white/20 transition-all hover:bg-white/20 active:scale-95 whitespace-nowrap">
+                className="px-6 py-2.5 rounded-2xl bg-white/10 text-white font-bold text-sm border border-white/20 transition-all hover:bg-white/20 active:scale-95 whitespace-nowrap text-center">
                 Checklist →
               </Link>
             </div>
