@@ -214,6 +214,78 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
 }
 
 
+// ── Empty State Widget (Option 2: Ambient Focus - Standardized Dimensions) ──
+function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: number; completedCount: number }) {
+  return (
+    <div className="px-4 md:px-8 mb-7">
+      <div className="w-full rounded-3xl overflow-hidden relative"
+        style={{
+          background: "rgba(255, 255, 255, 0.45)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          boxShadow: `0 8px 32px rgba(0, 0, 0, 0.04)`,
+        }}>
+
+        {/* Shimmer/Overlay Effect */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-50 z-1" />
+
+        <div className="relative z-10 flex flex-col xl:flex-row items-stretch divide-y xl:divide-y-0 xl:divide-x divide-slate-200/30">
+
+          {/* LEFT: Stats Overview */}
+          <div className="flex flex-col justify-center items-center gap-2 px-8 py-7 flex-1">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-400">Overview</p>
+            <div className="flex items-center gap-8">
+              <div className="flex flex-col items-center">
+                <span className="text-5xl font-black tabular-nums text-slate-400/30 tracking-tighter leading-none">{upcomingCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400/40 mt-1">Upcoming</span>
+              </div>
+              <div className="w-px h-10 bg-slate-200/40" />
+              <div className="flex flex-col items-center">
+                <span className="text-5xl font-black tabular-nums text-indigo-600/60 tracking-tighter leading-none">{completedCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600/40 mt-1">Completed</span>
+              </div>
+            </div>
+          </div>
+
+          {/* CENTER: Ambient Message */}
+          <div className="flex flex-col justify-center items-center px-10 py-7 flex-[1.4] bg-white/10">
+            <motion.div
+              animate={{ y: [-4, 4, -4], rotate: [-1, 1, -1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="mb-3"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-indigo-600/20 flex items-center justify-center border border-indigo-500/20 shadow-lg">
+                <Landmark className="h-7 w-7 text-indigo-600" strokeWidth={1.5} />
+              </div>
+            </motion.div>
+            <h2 className="text-xl font-black text-slate-800 tracking-tight text-center">
+              Your schedule is clear.
+            </h2>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mt-1 text-center opacity-80">
+              Everything is in order.
+            </p>
+          </div>
+
+          {/* RIGHT: Actions */}
+          <div className="flex items-center justify-center gap-4 px-8 py-7 flex-1">
+            <Link href="/dashboard/customer/appointment-scheduling"
+              className="px-6 py-3.5 rounded-2xl bg-indigo-600 text-white font-bold text-sm shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all hover:-translate-y-0.5 active:scale-95 whitespace-nowrap">
+              Book Appointment
+            </Link>
+            <Link href="/dashboard/customer/document-checklist"
+              className="px-6 py-3.5 rounded-2xl bg-white/50 text-indigo-600 font-bold text-sm border border-indigo-100 transition-all hover:bg-white active:scale-95 whitespace-nowrap">
+              List →
+            </Link>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // ── Activity Timeline ────────────────────────────────────────────────────────
 function ActivityTimeline({ items }: { items: AppointmentData[] }) {
   const events = useMemo(() => items.slice(0, 6).map(apt => ({
@@ -366,8 +438,11 @@ export default function CustomerDashboardPage() {
             onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
           />
         ) : (
-          /* Option 2: Ambient Focus Empty State */
-          <EmptyStateWidget completedCount={past.filter(a => !a.deleted).length} />
+          /* Option 2: Ambient Focus Empty State (Standardized) */
+          <EmptyStateWidget
+            upcomingCount={upcoming.length}
+            completedCount={past.filter(a => !a.deleted).length}
+          />
         )}
       </div>
 
