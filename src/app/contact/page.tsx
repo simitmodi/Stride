@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Github,
   Users,
-  BookOpen,
+  Share2,
   Send,
   MessageSquare,
   ArrowRight,
@@ -37,12 +37,12 @@ const projectDetails = [
     link: "/developers"
   },
   {
-    icon: BookOpen,
-    title: "Technical Specs",
-    value: "Project Wiki",
-    description: "In-depth documentation on features and data flow.",
-    color: "bg-emerald-500/20 text-emerald-500",
-    link: "#"
+    icon: Share2,
+    title: "Social Connect",
+    value: "Follow our Journey",
+    description: "Stay updated with the latest news and milestones on LinkedIn.",
+    color: "bg-blue-500/20 text-blue-500",
+    link: "https://linkedin.com"
   }
 ];
 
