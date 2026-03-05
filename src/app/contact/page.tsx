@@ -65,15 +65,15 @@ export default function ContactPage() {
           className="text-center mb-16 md:mb-24"
         >
           <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-sm">
-            Project Showcase
+            Get in Touch
           </h1>
           <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
-            Explore the architecture of Stride and connect with the developers.
+            Explore the architecture of Stride and connect with our team.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
-          {/* Left: Project Links */}
+          {/* Left: Quick Links */}
           <div className="lg:col-span-5 space-y-8 order-2 lg:order-1">
             {projectDetails.map((detail, index) => (
               <motion.div
@@ -115,10 +115,10 @@ export default function ContactPage() {
             >
               <div className="flex items-center gap-4 mb-4">
                 <MessageSquare className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Give Feedback</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Share your Feedback</h3>
               </div>
               <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Found a bug or have a feature request? Let us know your thoughts on our banking project.
+                Have a thought or a suggestion? Let us know what you think about your experience with Stride.
               </p>
               <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300">
                 <Link href="#" className="flex items-center justify-center gap-2">
@@ -139,7 +139,7 @@ export default function ContactPage() {
               <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 via-transparent to-accent/30 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-60 transition-all duration-700 pointer-events-none" />
 
               <div className="relative h-full p-8 md:p-12 rounded-[2.5rem] border border-white/50 dark:border-white/10 bg-white/70 dark:bg-slate-950/70 backdrop-blur-[100px] shadow-2xl">
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Project Feedback</h2>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Direct Feedback</h2>
                 <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">We appreciate your insights and suggestions.</p>
 
                 <form className="space-y-6">
