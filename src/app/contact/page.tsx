@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ContactFloatingBackground } from "@/components/landing/ContactFloatingBackground";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 import { useToast } from "@/hooks/use-toast";
 
