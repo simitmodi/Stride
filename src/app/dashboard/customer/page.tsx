@@ -353,33 +353,35 @@ export default function CustomerDashboardPage() {
         <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" style={{ animation: 'ambientPulse 15s ease-in-out infinite' }} />
       </div>
 
-      {/* Greeting */}
-      <Greeting />
+      {/* Greeting and Top Stats (Ensuring they are above background) */}
+      <div className="relative z-10">
+        <Greeting />
 
-      {/* ── Unified stats + countdown banner ── */}
-      {nextAppt ? (
-        <CountdownWidget
-          nextAppt={nextAppt}
-          upcomingCount={upcoming.length}
-          completedCount={past.filter(a => !a.deleted).length}
-          onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
-        />
-      ) : (
-        /* No upcoming — show plain stat strip */
-        <div className="px-4 md:px-8 mb-8">
-          <div className="w-full rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-0"
-            style={{ background: "rgba(255,255,255,0.72)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", boxShadow: `0 8px 32px ${INDIGO}12` }}>
-            <div className="flex flex-col items-center sm:items-start sm:pr-8 sm:border-r sm:border-slate-100">
-              <span className="text-[56px] leading-none font-black tabular-nums" style={{ color: INDIGO }}>{upcoming.length}</span>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400 mt-1">Upcoming</span>
-            </div>
-            <div className="flex flex-col items-center sm:items-start sm:pl-8">
-              <span className="text-[56px] leading-none font-black tabular-nums text-slate-300">{past.filter(a => !a.deleted).length}</span>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-300 mt-1">Completed</span>
+        {/* ── Unified stats + countdown banner ── */}
+        {nextAppt ? (
+          <CountdownWidget
+            nextAppt={nextAppt}
+            upcomingCount={upcoming.length}
+            completedCount={past.filter(a => !a.deleted).length}
+            onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
+          />
+        ) : (
+          /* No upcoming — show plain stat strip */
+          <div className="px-4 md:px-8 mb-8">
+            <div className="w-full rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-0"
+              style={{ background: "rgba(255,255,255,0.72)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", boxShadow: `0 8px 32px ${INDIGO}12` }}>
+              <div className="flex flex-col items-center sm:items-start sm:pr-8 sm:border-r sm:border-slate-100">
+                <span className="text-[56px] leading-none font-black tabular-nums" style={{ color: INDIGO }}>{upcoming.length}</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400 mt-1">Upcoming</span>
+              </div>
+              <div className="flex flex-col items-center sm:items-start sm:pl-8">
+                <span className="text-[56px] leading-none font-black tabular-nums text-slate-300">{past.filter(a => !a.deleted).length}</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-300 mt-1">Completed</span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* ── Main 2-column layout ── */}
       <div className="px-4 md:px-8 flex flex-col xl:flex-row gap-8 items-start relative z-10">
