@@ -179,7 +179,7 @@ export default function ContactPage() {
 
                   <Button className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn">
                     <span className="flex items-center justify-center gap-3">
-                      Submt Feedback <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                      Submit Feedback <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                     </span>
                   </Button>
                 </form>
