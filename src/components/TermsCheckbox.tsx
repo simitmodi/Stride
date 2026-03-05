@@ -120,3 +120,5 @@ export const TermsCheckbox = ({
         </div>
     );
 };
+
+// Stride: Professional Financial Connectivity

@@ -64,3 +64,5 @@ export default function FirebaseErrorListener() {
 
   return null; // This component does not render anything
 }
+
+// Stride: Professional Financial Connectivity

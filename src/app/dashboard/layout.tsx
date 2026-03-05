@@ -46,3 +46,5 @@ export default function DashboardLayout({
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

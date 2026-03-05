@@ -50,3 +50,5 @@ export function BackgroundSlideshow({ images, className }: BackgroundSlideshowPr
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

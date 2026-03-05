@@ -27,3 +27,5 @@ auth = getAuth(app);
 db = getFirestore(app);
 
 export { auth, db };
+
+// Stride: Professional Financial Connectivity

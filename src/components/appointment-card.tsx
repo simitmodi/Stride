@@ -43,3 +43,5 @@ export function AppointmentCard({ appointment, onCardClick }: AppointmentCardPro
   );
 }
 
+
+// Stride: Professional Financial Connectivity

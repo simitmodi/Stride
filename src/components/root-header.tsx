@@ -32,3 +32,5 @@ export default function RootHeader() {
   // Render the header only if there is an authenticated user.
   return user ? <Header /> : null;
 }
+
+// Stride: Professional Financial Connectivity

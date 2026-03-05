@@ -112,3 +112,5 @@ export default function ThreeBackground() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

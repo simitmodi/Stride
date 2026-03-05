@@ -46,14 +46,14 @@ export function FeaturesSection() {
     <section className="w-full py-24 bg-[#F4F4F8] dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <AnimateIn>
-          <div className="text-center md:text-left mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100">
+          <div className="text-center lg:text-left mb-16 px-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 italic">
               Built for First-Visit Success
             </h2>
           </div>
         </AnimateIn>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, i) => (
             <AnimateIn key={i} delay={feat.delay} className="group relative hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-xl blur-xl opacity-60 transition duration-500 group-hover:opacity-100" />
@@ -76,3 +76,5 @@ export function FeaturesSection() {
     </section>
   );
 }
+
+// Stride: Professional Financial Connectivity

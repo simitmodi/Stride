@@ -345,3 +345,5 @@ export function CustomerAppointmentDetailsModal({
     </Dialog>
   );
 }
+
+// Stride: Professional Financial Connectivity

@@ -23,3 +23,5 @@ export function ScrollAwareFooter() {
 
   return isClient ? <Footer /> : null;
 }
+
+// Stride: Professional Financial Connectivity
