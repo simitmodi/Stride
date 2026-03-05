@@ -1,5 +1,4 @@
-"use client";
-
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -19,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { useToast } from "@/hooks/use-toast";
+import { RoadmapModal } from "@/components/landing/RoadmapModal";
 
 const projectDetails = [
   {
@@ -49,6 +49,7 @@ const projectDetails = [
 
 export default function ContactPage() {
   const { toast } = useToast();
+  const [roadmapOpen, setRoadmapOpen] = useState(false);
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24 md:py-32">
@@ -123,10 +124,7 @@ export default function ContactPage() {
                 Explore our planned milestones and the future vision for the next generation of Stride.
               </p>
               <Button
-                onClick={() => toast({
-                  title: "Roadmap Explorer",
-                  description: "The interactive Roadmap module is currently being finalized for Phase 8.",
-                })}
+                onClick={() => setRoadmapOpen(true)}
                 className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300"
               >
                 <span className="flex items-center justify-center gap-2">
@@ -227,6 +225,8 @@ export default function ContactPage() {
           </Button>
         </motion.div>
       </main>
+
+      <RoadmapModal isOpen={roadmapOpen} onOpenChange={setRoadmapOpen} />
     </div>
   );
 }
