@@ -53,7 +53,7 @@ export default function Greeting() {
   const fullGreeting = `${greeting}, ${firstName || "Valued Customer"}.`;
 
   return (
-    <div className="text-center py-8">
+    <div className="text-center pt-12 pb-8">
       <AnimatedSplitText
         key={fullGreeting}
         text={fullGreeting}
