@@ -74,11 +74,12 @@ function MiniCalendar({ year, month, role, today, appointments, selectedDate, on
 
     return (
         <div className={cn("flex flex-col", !isCenter && "opacity-40")}>
-            {/* Month name */}
-            <p className={cn("text-center font-bold mb-2", isCenter ? "text-base" : "text-[10px]")}
-                style={{ color: isCenter ? INDIGO : "#94a3b8" }}>
-                {isCenter ? MONTH_NAMES[month] : MONTH_NAMES[month].slice(0, 3)}
-            </p>
+            {/* Month name (Hide for center as it's in the header) */}
+            {!isCenter && (
+                <p className="text-center font-bold mb-2 text-[10px]" style={{ color: "#94a3b8" }}>
+                    {MONTH_NAMES[month].slice(0, 3)}
+                </p>
+            )}
 
             {/* Day labels */}
             <div className="grid grid-cols-7">
@@ -179,11 +180,13 @@ interface ThreeMonthCalendarProps {
     onCenterChange: (month: number, year: number) => void;
     onSelectDate: (d: Date) => void;
     onAppointmentClick: (apt: AppointmentData) => void;
+    standalone?: boolean;
 }
 
 export default function ThreeMonthCalendar({
     appointments, selectedDate, centerMonth, centerYear,
     onCenterChange, onSelectDate, onAppointmentClick,
+    standalone = true
 }: ThreeMonthCalendarProps) {
     const today = useMemo(() => new Date(), []);
     const getRelativeMonth = (offset: number) => {
@@ -204,8 +207,8 @@ export default function ThreeMonthCalendar({
 
     const isCurrentMonth = centerMonth === today.getMonth() && centerYear === today.getFullYear();
 
-    return (
-        <div className="w-full rounded-2xl border shadow-sm overflow-hidden bg-white" style={{ borderColor: "#e2e8f0" }}>
+    const calendarContent = (
+        <>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid #f1f5f9" }}>
                 <button onClick={() => nav(-1)} className="p-1.5 rounded-lg transition-colors hover:bg-slate-100" style={{ color: "#64748b" }} aria-label="Previous month">
@@ -268,6 +271,14 @@ export default function ThreeMonthCalendar({
                     </div>
                 </button>
             </div>
+        </>
+    );
+
+    if (!standalone) return calendarContent;
+
+    return (
+        <div className="w-full rounded-2xl border shadow-sm overflow-hidden bg-white" style={{ borderColor: "#e2e8f0" }}>
+            {calendarContent}
         </div>
     );
 }
