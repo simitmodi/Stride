@@ -336,3 +336,5 @@ export const checklistData: ChecklistSection[] = [
     ],
   },
 ];
+
+// Stride: Professional Financial Connectivity

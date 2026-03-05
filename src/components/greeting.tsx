@@ -63,3 +63,4 @@ export default function Greeting() {
     </div>
   );
 }
+// Stride: Professional Financial Connectivity

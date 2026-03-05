@@ -41,3 +41,5 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
+
+// Stride: Professional Financial Connectivity

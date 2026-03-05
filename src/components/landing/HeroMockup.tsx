@@ -47,7 +47,7 @@ export function HeroMockup() {
     }, [mouseX, mouseY]);
 
     return (
-        <div className="relative w-full max-w-6xl mx-auto h-[600px] flex items-center justify-center perspective-[2000px] mb-24 pointer-events-none">
+        <div className="relative w-full max-w-6xl mx-auto h-[400px] sm:h-[500px] lg:h-[600px] flex items-center justify-center perspective-[2000px] mb-12 sm:mb-24 pointer-events-none px-4">
 
             {/* Background Ambient Glows */}
             <motion.div
@@ -70,7 +70,7 @@ export function HeroMockup() {
                     scale: 1.01,
                     transition: { duration: 0.5, ease: "easeOut" }
                 }}
-                className="relative z-10 w-full max-w-4xl aspect-[16/10] bg-slate-100 dark:bg-slate-900 rounded-[2.5rem] border-[12px] border-[#6366f1]/20 dark:border-indigo-500/10 shadow-[0_60px_100px_-20px_rgba(0,0,0,0.3),0_0_50px_rgba(99,102,241,0.1)] flex overflow-hidden pointer-events-auto transition-shadow hover:shadow-[0_80px_150px_-30px_rgba(99,102,241,0.3)]"
+                className="relative z-10 w-full max-w-4xl aspect-[16/10] bg-slate-100 dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2.5rem] border-[6px] sm:border-[12px] border-[#6366f1]/20 dark:border-indigo-500/10 shadow-[0_60px_100px_-20px_rgba(0,0,0,0.3),0_0_50px_rgba(99,102,241,0.1)] flex overflow-hidden pointer-events-auto transition-shadow hover:shadow-[0_80px_150px_-30px_rgba(99,102,241,0.3)] scale-[0.85] sm:scale-100"
             >
                 {/* Sidebar */}
                 <div className="w-20 md:w-56 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-8">
@@ -176,7 +176,7 @@ export function HeroMockup() {
             <motion.div
                 style={{ x: cardLX, y: cardLY }}
                 animate={{
-                    y: [-10, 10, -10],
+                    y: [-15, 15, -15],
                 }}
                 transition={{
                     duration: 6,
@@ -188,7 +188,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-20 top-2 z-20 w-64 p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-10 sm:-left-44 top-10 z-20 w-52 sm:w-64 p-3 sm:p-5 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer hidden lg:flex"
             >
                 <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-400/30">
                     <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -323,7 +323,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -left-44 top-[40%] z-20 w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -left-10 sm:-left-44 top-[40%] z-20 w-52 sm:w-60 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer hidden lg:flex"
             >
                 <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-rose-500/20 flex items-center justify-center shrink-0 border border-rose-200 dark:border-rose-400/30">
                     <ShieldCheck className="w-5 h-5 text-rose-600 dark:text-rose-400" />
@@ -350,7 +350,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-36 top-14 z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-10 sm:-right-36 top-14 z-20 w-52 sm:w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer hidden lg:flex"
             >
                 <div className="w-10 h-10 rounded-2xl bg-cyan-100 dark:bg-cyan-500/20 flex items-center justify-center shrink-0 border border-cyan-200 dark:border-cyan-400/30">
                     <Timer className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
@@ -377,7 +377,7 @@ export function HeroMockup() {
                     zIndex: 50,
                     transition: { duration: 0.3 }
                 }}
-                className="absolute -right-32 bottom-[35%] z-20 w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer"
+                className="absolute -right-10 sm:-right-32 bottom-[35%] z-20 w-52 sm:w-64 p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-indigo-400/50 shadow-2xl flex items-center gap-4 pointer-events-auto cursor-pointer hidden lg:flex"
             >
                 <div className="w-10 h-10 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-500/20 flex items-center justify-center shrink-0 border border-fuchsia-200 dark:border-fuchsia-400/30">
                     <CalendarCheck className="w-5 h-5 text-fuchsia-600 dark:text-fuchsia-400" />
@@ -391,3 +391,5 @@ export function HeroMockup() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

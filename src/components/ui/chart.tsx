@@ -364,3 +364,5 @@ export {
   ChartLegendContent,
   ChartStyle,
 }
+
+// Stride: Professional Financial Connectivity

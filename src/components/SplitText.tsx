@@ -207,3 +207,5 @@ const AnimatedSplitText: React.FC<SplitTextProps> = ({
 };
 
 export default AnimatedSplitText;
+
+// Stride: Professional Financial Connectivity

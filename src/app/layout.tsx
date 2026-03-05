@@ -65,3 +65,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+// Stride: Professional Financial Connectivity

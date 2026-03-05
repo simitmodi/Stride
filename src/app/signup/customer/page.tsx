@@ -71,3 +71,5 @@ export default function CustomerSignUpPage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

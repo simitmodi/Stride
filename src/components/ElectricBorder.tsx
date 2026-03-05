@@ -145,3 +145,5 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
 };
 
 export default ElectricBorder;
+
+// Stride: Professional Financial Connectivity

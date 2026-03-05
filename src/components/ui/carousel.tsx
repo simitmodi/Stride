@@ -260,3 +260,5 @@ export {
   CarouselPrevious,
   CarouselNext,
 }
+
+// Stride: Professional Financial Connectivity

@@ -18,3 +18,5 @@ const ShinyText: React.FC<ShinyTextProps> = ({ text, disabled = false, speed = 2
 };
 
 export default ShinyText;
+
+// Stride: Professional Financial Connectivity

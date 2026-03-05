@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export function BackgroundWaves() {
     return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1] opacity-40 dark:opacity-20">
             <svg
                 className="absolute w-full h-full"
                 viewBox="0 0 1440 800"
@@ -113,3 +113,5 @@ export function BackgroundWaves() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity

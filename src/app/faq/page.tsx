@@ -268,3 +268,5 @@ export default function FaqPage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

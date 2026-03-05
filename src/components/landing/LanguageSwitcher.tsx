@@ -85,3 +85,5 @@ export function LanguageSwitcher() {
     </DropdownMenu>
   );
 }
+
+// Stride: Professional Financial Connectivity

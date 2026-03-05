@@ -30,3 +30,5 @@ export function StatsSection() {
     </section>
   );
 }
+
+// Stride: Professional Financial Connectivity

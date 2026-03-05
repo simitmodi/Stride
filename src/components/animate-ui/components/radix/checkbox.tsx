@@ -66,3 +66,5 @@ function Checkbox({
 }
 
 export { Checkbox, type CheckboxProps };
+
+// Stride: Professional Financial Connectivity
