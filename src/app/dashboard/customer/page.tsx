@@ -11,9 +11,26 @@ import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
 import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark } from "lucide-react";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
-import ThreeBackground from "@/components/ThreeBackground";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
+import { motion, AnimatePresence } from "framer-motion";
 
 const INDIGO = "#4F46E5";
+
+const BANKING_TIPS = [
+  "Prepare your documents 48 hours before your appointment for a smoother experience.",
+  "Check your bank's mobile app for real-time status updates on your service requests.",
+  "Consider enabling two-factor authentication for enhanced security on all your banking apps.",
+  "Always shield your PIN when using ATMs or point-of-sale terminals.",
+  "Regularly review your monthly statements to detect any unauthorized transactions early.",
+  "Did you know? Most basic document verifications take less than 15 minutes if all papers are ready.",
+  "Keep your contact information updated with the bank to receive important alerts.",
+  "Understand your credit score; it's a vital part of your financial health.",
+  "Use the document checklist feature to ensure you don't miss any critical papers.",
+  "Digital banking is available 24/7—consider using it for routine balance checks and transfers.",
+  "Plan your branch visits during mid-week to avoid the weekend rush.",
+  "Setting up automatic bill payments can help you avoid late fees and save time.",
+  "Always log out from your online banking session once you've finished your transactions."
+];
 
 interface AppointmentData {
   id: string;
@@ -39,79 +56,47 @@ function QuickActionCard({ icon, label, sub, href, filled }: { icon: React.React
         <span style={{ color: filled ? "#fff" : INDIGO }}>{icon}</span>
       </div>
       <div className="min-w-0">
-        <p className="font-bold text-base truncate" style={{ color: filled ? "#fff" : "#1e293b" }}>{label}</p>
-        <p className="text-sm mt-0.5 truncate" style={{ color: filled ? "rgba(255,255,255,0.75)" : "#94a3b8" }}>{sub}</p>
+        <p className="font-bold text-base" style={{ color: filled ? "#fff" : "#1e293b" }}>{label}</p>
+        <p className="text-sm mt-0.5" style={{ color: filled ? "rgba(255,255,255,0.75)" : "#94a3b8" }}>{sub}</p>
       </div>
       <ArrowRight className="ml-auto h-5 w-5 flex-shrink-0 opacity-60 group-hover:translate-x-1 transition-transform" style={{ color: filled ? "#fff" : INDIGO }} />
     </Link>
   );
 }
 
-// ── Flip Clock digit ─────────────────────────────────────────────────────────
-function FlipDigit({ value, label }: { value: string; label: string }) {
-  const [display, setDisplay] = useState({ cur: value, prev: value, flipping: false });
-
-  useEffect(() => {
-    if (value === display.cur) return;
-    setDisplay(d => ({ cur: d.cur, prev: d.cur, flipping: true }));
-
-    // We update 'cur' state after a tiny delay to ensure the 'prev' is captured on the flap's front
-    const t1 = setTimeout(() => {
-      setDisplay(d => ({ cur: value, prev: d.prev, flipping: true }));
-    }, 20);
-
-    const t2 = setTimeout(() => {
-      setDisplay(d => ({ cur: value, prev: value, flipping: false }));
-    }, 700); // slightly longer but smoother
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [value]);
-
+// ── Sleek Digital Countdown ──────────────────────────────────────────────
+function DigitalTimer({ days, hrs, mins, sec }: { days: string; hrs: string; mins: string; sec: string }) {
   return (
-    <div className="flex flex-col items-center gap-1.5 min-w-[3.2rem]">
-      <div className="relative w-[3.2rem] h-[4rem] perspective-[500px]">
-        {/* UPPER HALF (New State) */}
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-white/5">
-          <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
-            {display.cur}
+    <div className="flex flex-col items-center justify-center py-2 px-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-inner">
+      <div className="flex items-baseline gap-1.5">
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {days}
           </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">days</span>
         </div>
-
-        {/* LOWER HALF (Previous State) */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px]">
-          <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
-            {display.prev}
+        <span className="text-2xl font-light text-white/20 pb-4">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {hrs}
           </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">hrs</span>
         </div>
-
-        {/* THE FLIPPER (The physical flap) */}
-        <div className={`absolute top-0 left-0 right-0 h-1/2 origin-bottom transition-none preserve-3d z-30 ${display.flipping ? 'animate-physical-flip' : ''}`}
-          style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}>
-
-          {/* FRONT: Current Top (Value before flip started) */}
-          <div className="absolute inset-0 bg-[#312e81] rounded-t-lg overflow-hidden flex items-end justify-center pb-[0.5px] border-b border-black/20"
-            style={{ backfaceVisibility: 'hidden' }}>
-            <span className="text-3xl font-black tabular-nums text-white leading-none transform translate-y-1/2">
-              {display.prev}
-            </span>
-          </div>
-
-          {/* BACK: New Bottom (Value flipping into view) */}
-          <div className="absolute inset-0 bg-[#312e81] rounded-b-lg overflow-hidden flex items-start justify-center pt-[0.5px] rotate-x-180"
-            style={{ transform: 'rotateX(180deg)', backfaceVisibility: 'hidden' }}>
-            <span className="text-3xl font-black tabular-nums text-white leading-none transform -translate-y-1/2">
-              {display.cur}
-            </span>
-          </div>
+        <span className="text-2xl font-light text-white/20 pb-4 animate-pulse">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {mins}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">min</span>
         </div>
-
-        {/* Subtle mid-line hinge */}
-        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-black/30 z-40 transform -translate-y-1/2" />
+        <span className="text-2xl font-light text-white/20 pb-4 animate-pulse">:</span>
+        <div className="flex flex-col items-center">
+          <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+            {sec}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">sec</span>
+        </div>
       </div>
-      <span className="text-[8px] text-white/40 font-bold uppercase tracking-[0.15em]">{label}</span>
     </div>
   );
 }
@@ -143,17 +128,13 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
     <div className="px-4 md:px-8 mb-7">
       <button
         onClick={onOpen}
-        className="banner-btn w-full text-left rounded-2xl overflow-hidden relative"
+        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative"
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
-          boxShadow: `0 8px 32px ${INDIGO}50, 0 2px 8px rgba(0,0,0,0.18)`,
+          boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
         }}
       >
         <style>{`
-          @keyframes animate-physical-flip {
-            0%   { transform: rotateX(0deg); z-index: 50; }
-            100% { transform: rotateX(-180deg); z-index: 50; }
-          }
           @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
           @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
           @keyframes floatRandom  { 
@@ -162,7 +143,6 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
             66%  { transform: translate(-40px, 60px) scale(0.9) rotate(-5deg); }
             100% { transform: translate(0, 0) scale(1) rotate(0deg); }
           }
-          .animate-physical-flip { animation: animate-physical-flip 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
           .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
           .cal-float { animation: calFloat 3s ease-in-out infinite; transform-style: preserve-3d; }
           @keyframes pulseScale   { 0%,100%{transform:scale(1);opacity:0.15} 50%{transform:scale(1.2);opacity:0.25} }
@@ -173,81 +153,57 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
           .floating-bg-object2 { animation: driftSlow 12s ease-in-out infinite; filter: blur(35px); opacity: 0.12; background: #9333ea; }
         `}</style>
 
-        {/* Floating background objects - make them more solid/graphic */}
+        {/* Floating background objects */}
         <div className="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full floating-bg-object pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full floating-bg-object2 pointer-events-none" />
 
-        {/* Shimmer - keep subtle but defined */}
+        {/* Shimmer */}
         <div className="pointer-events-none absolute top-0 bottom-0 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", zIndex: 1 }} />
 
         {/* ── 3-column balanced layout ── */}
-        <div className="relative z-10 flex items-stretch divide-x divide-white/20">
+        <div className="relative z-10 flex items-stretch divide-x divide-white/10">
 
           {/* LEFT: Stats */}
-          <div className="flex flex-col justify-center items-center gap-3 px-7 py-2.5 flex-1">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50">Overview</p>
-            <div className="flex items-center gap-6">
+          <div className="flex flex-col justify-center items-center gap-3 px-8 py-5 flex-1">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40">Overview</p>
+            <div className="flex items-center gap-8">
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-black tabular-nums text-white leading-none">{upcomingCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/60 mt-1">Upcoming</span>
+                <span className="text-5xl font-black tabular-nums text-white tracking-tighter leading-none">{upcomingCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mt-1">Upcoming</span>
               </div>
-              <div className="w-px h-10 bg-white/30" />
+              <div className="w-px h-10 bg-white/10" />
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-black tabular-nums text-white/50 leading-none">{completedCount}</span>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-white/40 mt-1">Completed</span>
+                <span className="text-5xl font-black tabular-nums text-white/30 tracking-tighter leading-none">{completedCount}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/30 mt-1">Completed</span>
               </div>
             </div>
           </div>
 
-          {/* CENTER: Flip Clock */}
-          <div className="flex flex-col justify-center items-center px-7 py-2.5 flex-1"
-            style={{ background: "#00000022" }}>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 mb-4">Next appointment in</p>
-            <div className="flex items-center gap-2">
-              <FlipDigit value={pad(days)} label="days" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(hrs)} label="hrs" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(mins)} label="min" />
-              <span className="text-white/20 font-black text-3xl mb-7">:</span>
-              <FlipDigit value={pad(sec)} label="sec" />
-            </div>
+          {/* CENTER: Digital Timer */}
+          <div className="flex flex-col justify-center items-center px-8 py-5 flex-1"
+            style={{ background: "rgba(0,0,0,0.15)" }}>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Next appointment in</p>
+            <DigitalTimer days={pad(days)} hrs={pad(hrs)} mins={pad(mins)} sec={pad(sec)} />
           </div>
 
           {/* RIGHT: Appointment + decor */}
-          <div className="flex items-center gap-5 px-7 py-2.5 flex-1 relative overflow-hidden">
-            {/* 3D floating calendar */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float"
-              style={{ transformStyle: "preserve-3d" }}>
-              <svg width="60" height="60" viewBox="0 0 52 52" fill="none">
-                <rect x="2" y="8" width="48" height="42" rx="6" fill="white" />
-                <rect x="2" y="8" width="48" height="16" rx="6" fill="white" fillOpacity="0.6" />
-                <rect x="16" y="2" width="4" height="10" rx="2" fill="white" />
-                <rect x="32" y="2" width="4" height="10" rx="2" fill="white" />
-                {[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => (
-                  <rect key={`${r}-${c}`} x={8 + c * 6} y={29 + r * 6} width="3" height="3" rx="0.5" fill="white" fillOpacity="0.5" />
-                )))}
-              </svg>
+          <div className="flex items-center gap-6 px-8 py-5 flex-1 relative overflow-hidden">
+            {/* Decoration items */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float">
+              {/* Simplified icon for performance */}
+              <Landmark className="h-16 w-16 text-white" />
             </div>
-            {/* 3D spinning coin */}
-            <div className="absolute right-16 bottom-2 pointer-events-none" style={{ perspective: "200px" }}>
-              <div className="coin-3d">
-                <svg width="28" height="28" viewBox="0 0 26 26" fill="none">
-                  <circle cx="13" cy="13" r="12" fill="white" fillOpacity="0.15" stroke="white" strokeOpacity="0.3" strokeWidth="1" />
-                  <text x="13" y="17" textAnchor="middle" fontSize="11" fill="white" fillOpacity="0.7">₹</text>
-                </svg>
-              </div>
-            </div>
-            {/* Text */}
+
+            {/* Content */}
             <div className="min-w-0 pr-4">
-              <p className="text-sm font-extrabold uppercase tracking-widest text-white/45 mb-1.5">Next up</p>
-              <p className="text-xl font-bold text-white leading-tight">{nextAppt.specificService}</p>
-              <p className="text-sm text-white/55 mt-1.5">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-1.5">Next up</p>
+              <p className="text-xl font-bold text-white leading-tight truncate">{nextAppt.specificService}</p>
+              <p className="text-sm text-white/60 mt-2 font-medium">
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-6 py-2.5 rounded-xl text-base font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-[0_8px_20px_rgba(255,255,255,0.25)] whitespace-nowrap">
+            <span className="flex-shrink-0 ml-auto px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-xl whitespace-nowrap">
               Details →
             </span>
           </div>
@@ -264,6 +220,7 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
     ...apt,
     label: apt.deleted ? "Cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date()))
       ? "Completed" : "Upcoming",
+    status: apt.deleted ? "cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "completed" : "upcoming",
     color: apt.deleted ? "#f87171" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "#10b981" : INDIGO,
     icon: apt.deleted ? "✕" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "✓" : "◎",
   })), [items]);
@@ -273,30 +230,60 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
   );
 
   return (
-    <div className="relative pl-5">
-      {/* vertical line */}
-      <div className="absolute left-[9px] top-2 bottom-2 w-px bg-slate-100" />
-      {events.map((ev, i) => (
-        <div key={ev.id} className="relative flex gap-3 mb-5 last:mb-0">
-          {/* dot */}
-          <div
-            className="absolute -left-5 mt-0.5 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white flex-shrink-0"
-            style={{ background: ev.color, boxShadow: `0 0 0 3px ${ev.color}20` }}
-          >
-            {ev.icon}
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="text-sm font-bold text-slate-700 truncate">{ev.specificService}</p>
-              <span className="text-[9px] font-extrabold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
-                style={{ background: `${ev.color}15`, color: ev.color }}>
-                {ev.label}
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">{format(ev.date.toDate(), "MMM d, yyyy")} · {ev.bankName}</p>
-          </div>
-        </div>
-      ))}
+    <div className="relative pt-2 pl-3">
+      {/* Dynamic Connector line with gradient */}
+      <div className="absolute left-[21px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-slate-100 via-indigo-100 to-slate-100 opacity-80" />
+
+      <div className="space-y-6">
+        <AnimatePresence mode="popLayout">
+          {events.map((ev, i) => (
+            <motion.div
+              key={ev.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
+              className="relative flex gap-5 group"
+            >
+              {/* Timeline Indicator */}
+              <div className="relative flex-shrink-0 z-10">
+                <div
+                  className="w-4.5 h-4.5 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm ring-4 ring-white"
+                  style={{
+                    background: ev.color,
+                    boxShadow: ev.status === "upcoming" ? `0 0 12px ${ev.color}40` : "none",
+                    width: "18px",
+                    height: "18px"
+                  }}
+                >
+                  {ev.icon}
+                </div>
+                {ev.status === "upcoming" && (
+                  <motion.div
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: ev.color }}
+                  />
+                )}
+              </div>
+
+              {/* Content Card-like structure */}
+              <div className="flex-1 min-w-0 pb-1">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <p className="text-sm font-bold text-slate-700 leading-tight group-hover:text-indigo-600 transition-colors">{ev.specificService}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="text-[11px] font-medium text-slate-400">{format(ev.date.toDate(), "MMM d")} · {ev.bankName}</p>
+                  <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md"
+                    style={{ background: `${ev.color}10`, color: ev.color, border: `1px solid ${ev.color}20` }}>
+                    {ev.label}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -333,15 +320,26 @@ export default function CustomerDashboardPage() {
   const upcoming = useMemo(() => allAppointments.filter(a => !a.deleted && !isAfter(today, startOfDay(a.date.toDate()))), [allAppointments, today]);
   const past = useMemo(() => allAppointments.filter(a => isBefore(startOfDay(a.date.toDate()), today) || a.deleted), [allAppointments, today]);
   const nextAppt = upcoming[0] ?? null;
+  const now = useMemo(() => new Date().getTime(), []);
 
-  // All events sorted newest-first for timeline
-  const allEvents = useMemo(() => [...allAppointments].sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime()), [allAppointments]);
+  // All events sorted by nearness to current time
+  const allEvents = useMemo(() =>
+    [...allAppointments].sort((a, b) =>
+      Math.abs(a.date.toDate().getTime() - now) - Math.abs(b.date.toDate().getTime() - now)
+    )
+    , [allAppointments, now]);
+
+  // Dynamic Tip of the Day selection logic
+  const dailyTip = useMemo(() => {
+    const dayIndex = Math.floor(now / (1000 * 60 * 60 * 24));
+    return BANKING_TIPS[dayIndex % BANKING_TIPS.length];
+  }, [now]);
 
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <ThreeBackground />
+        <FloatingDoodles />
       </div>
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
         <style>{`
@@ -355,33 +353,35 @@ export default function CustomerDashboardPage() {
         <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" style={{ animation: 'ambientPulse 15s ease-in-out infinite' }} />
       </div>
 
-      {/* Greeting */}
-      <Greeting />
+      {/* Greeting and Top Stats (Ensuring they are above background) */}
+      <div className="relative z-10">
+        <Greeting />
 
-      {/* ── Unified stats + countdown banner ── */}
-      {nextAppt ? (
-        <CountdownWidget
-          nextAppt={nextAppt}
-          upcomingCount={upcoming.length}
-          completedCount={past.filter(a => !a.deleted).length}
-          onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
-        />
-      ) : (
-        /* No upcoming — show plain stat strip */
-        <div className="px-4 md:px-8 mb-8">
-          <div className="w-full rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-0"
-            style={{ background: "rgba(255,255,255,0.72)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", boxShadow: `0 8px 32px ${INDIGO}12` }}>
-            <div className="flex flex-col items-center sm:items-start sm:pr-8 sm:border-r sm:border-slate-100">
-              <span className="text-[56px] leading-none font-black tabular-nums" style={{ color: INDIGO }}>{upcoming.length}</span>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400 mt-1">Upcoming</span>
-            </div>
-            <div className="flex flex-col items-center sm:items-start sm:pl-8">
-              <span className="text-[56px] leading-none font-black tabular-nums text-slate-300">{past.filter(a => !a.deleted).length}</span>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-300 mt-1">Completed</span>
+        {/* ── Unified stats + countdown banner ── */}
+        {nextAppt ? (
+          <CountdownWidget
+            nextAppt={nextAppt}
+            upcomingCount={upcoming.length}
+            completedCount={past.filter(a => !a.deleted).length}
+            onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
+          />
+        ) : (
+          /* No upcoming — show plain stat strip */
+          <div className="px-4 md:px-8 mb-8">
+            <div className="w-full rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-0"
+              style={{ background: "rgba(255,255,255,0.72)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", boxShadow: `0 8px 32px ${INDIGO}12` }}>
+              <div className="flex flex-col items-center sm:items-start sm:pr-8 sm:border-r sm:border-slate-100">
+                <span className="text-[56px] leading-none font-black tabular-nums" style={{ color: INDIGO }}>{upcoming.length}</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400 mt-1">Upcoming</span>
+              </div>
+              <div className="flex flex-col items-center sm:items-start sm:pl-8">
+                <span className="text-[56px] leading-none font-black tabular-nums text-slate-300">{past.filter(a => !a.deleted).length}</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-300 mt-1">Completed</span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* ── Main 2-column layout ── */}
       <div className="px-4 md:px-8 flex flex-col xl:flex-row gap-8 items-start relative z-10">
@@ -434,7 +434,7 @@ export default function CustomerDashboardPage() {
           {/* Tips card */}
           <div className="rounded-2xl p-5 text-white relative z-10" style={{ background: `linear-gradient(135deg, ${INDIGO}, #7c3aed)` }}>
             <p className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2">Tip of the day</p>
-            <p className="font-bold text-sm leading-relaxed">Prepare your documents 48 hours before your appointment for a smoother experience.</p>
+            <p className="font-bold text-sm leading-relaxed">{dailyTip}</p>
             <Link href="/dashboard/customer/document-checklist" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold opacity-80 hover:opacity-100 transition-opacity">
               View checklist <ArrowRight className="h-3 w-3" />
             </Link>

@@ -40,7 +40,7 @@ export default function DashboardLayout({
   return (
     <div className="dashboard-theme flex min-h-screen w-full flex-col">
       <Header />
-      <main className="flex flex-1 flex-col">
+      <main className="flex flex-1 flex-col p-4 md:p-8 pt-6">
         {children}
       </main>
     </div>
