@@ -11,8 +11,8 @@ import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
 import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark } from "lucide-react";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
+import { motion, AnimatePresence } from "framer-motion";
 
 const INDIGO = "#4F46E5";
 
@@ -204,6 +204,7 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
     ...apt,
     label: apt.deleted ? "Cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date()))
       ? "Completed" : "Upcoming",
+    status: apt.deleted ? "cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "completed" : "upcoming",
     color: apt.deleted ? "#f87171" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "#10b981" : INDIGO,
     icon: apt.deleted ? "✕" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "✓" : "◎",
   })), [items]);
@@ -213,30 +214,60 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
   );
 
   return (
-    <div className="relative pl-5">
-      {/* vertical line */}
-      <div className="absolute left-[9px] top-2 bottom-2 w-px bg-slate-100" />
-      {events.map((ev, i) => (
-        <div key={ev.id} className="relative flex gap-3 mb-5 last:mb-0">
-          {/* dot */}
-          <div
-            className="absolute -left-5 mt-0.5 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white flex-shrink-0"
-            style={{ background: ev.color, boxShadow: `0 0 0 3px ${ev.color}20` }}
-          >
-            {ev.icon}
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="text-sm font-bold text-slate-700 truncate">{ev.specificService}</p>
-              <span className="text-[9px] font-extrabold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
-                style={{ background: `${ev.color}15`, color: ev.color }}>
-                {ev.label}
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">{format(ev.date.toDate(), "MMM d, yyyy")} · {ev.bankName}</p>
-          </div>
-        </div>
-      ))}
+    <div className="relative pt-2 pl-3">
+      {/* Dynamic Connector line with gradient */}
+      <div className="absolute left-[21px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-slate-100 via-indigo-100 to-slate-100 opacity-80" />
+
+      <div className="space-y-6">
+        <AnimatePresence mode="popLayout">
+          {events.map((ev, i) => (
+            <motion.div
+              key={ev.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
+              className="relative flex gap-5 group"
+            >
+              {/* Timeline Indicator */}
+              <div className="relative flex-shrink-0 z-10">
+                <div
+                  className="w-4.5 h-4.5 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm ring-4 ring-white"
+                  style={{
+                    background: ev.color,
+                    boxShadow: ev.status === "upcoming" ? `0 0 12px ${ev.color}40` : "none",
+                    width: "18px",
+                    height: "18px"
+                  }}
+                >
+                  {ev.icon}
+                </div>
+                {ev.status === "upcoming" && (
+                  <motion.div
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: ev.color }}
+                  />
+                )}
+              </div>
+
+              {/* Content Card-like structure */}
+              <div className="flex-1 min-w-0 pb-1">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <p className="text-sm font-bold text-slate-700 leading-tight group-hover:text-indigo-600 transition-colors">{ev.specificService}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="text-[11px] font-medium text-slate-400">{format(ev.date.toDate(), "MMM d")} · {ev.bankName}</p>
+                  <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md"
+                    style={{ background: `${ev.color}10`, color: ev.color, border: `1px solid ${ev.color}20` }}>
+                    {ev.label}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -273,15 +304,19 @@ export default function CustomerDashboardPage() {
   const upcoming = useMemo(() => allAppointments.filter(a => !a.deleted && !isAfter(today, startOfDay(a.date.toDate()))), [allAppointments, today]);
   const past = useMemo(() => allAppointments.filter(a => isBefore(startOfDay(a.date.toDate()), today) || a.deleted), [allAppointments, today]);
   const nextAppt = upcoming[0] ?? null;
+  const now = useMemo(() => new Date().getTime(), []);
 
-  // All events sorted newest-first for timeline
-  const allEvents = useMemo(() => [...allAppointments].sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime()), [allAppointments]);
+  // All events sorted by nearness to current time
+  const allEvents = useMemo(() =>
+    [...allAppointments].sort((a, b) =>
+      Math.abs(a.date.toDate().getTime() - now) - Math.abs(b.date.toDate().getTime() - now)
+    )
+    , [allAppointments, now]);
 
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <BackgroundWaves />
         <FloatingDoodles />
       </div>
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
