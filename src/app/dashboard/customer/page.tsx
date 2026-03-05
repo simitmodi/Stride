@@ -16,6 +16,22 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const INDIGO = "#4F46E5";
 
+const BANKING_TIPS = [
+  "Prepare your documents 48 hours before your appointment for a smoother experience.",
+  "Check your bank's mobile app for real-time status updates on your service requests.",
+  "Consider enabling two-factor authentication for enhanced security on all your banking apps.",
+  "Always shield your PIN when using ATMs or point-of-sale terminals.",
+  "Regularly review your monthly statements to detect any unauthorized transactions early.",
+  "Did you know? Most basic document verifications take less than 15 minutes if all papers are ready.",
+  "Keep your contact information updated with the bank to receive important alerts.",
+  "Understand your credit score; it's a vital part of your financial health.",
+  "Use the document checklist feature to ensure you don't miss any critical papers.",
+  "Digital banking is available 24/7—consider using it for routine balance checks and transfers.",
+  "Plan your branch visits during mid-week to avoid the weekend rush.",
+  "Setting up automatic bill payments can help you avoid late fees and save time.",
+  "Always log out from your online banking session once you've finished your transactions."
+];
+
 interface AppointmentData {
   id: string;
   customAppointmentId: string;
@@ -313,6 +329,12 @@ export default function CustomerDashboardPage() {
     )
     , [allAppointments, now]);
 
+  // Dynamic Tip of the Day selection logic
+  const dailyTip = useMemo(() => {
+    const dayIndex = Math.floor(now / (1000 * 60 * 60 * 24));
+    return BANKING_TIPS[dayIndex % BANKING_TIPS.length];
+  }, [now]);
+
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
       {/* ── Ambient Background Layer ── */}
@@ -410,7 +432,7 @@ export default function CustomerDashboardPage() {
           {/* Tips card */}
           <div className="rounded-2xl p-5 text-white relative z-10" style={{ background: `linear-gradient(135deg, ${INDIGO}, #7c3aed)` }}>
             <p className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2">Tip of the day</p>
-            <p className="font-bold text-sm leading-relaxed">Prepare your documents 48 hours before your appointment for a smoother experience.</p>
+            <p className="font-bold text-sm leading-relaxed">{dailyTip}</p>
             <Link href="/dashboard/customer/document-checklist" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold opacity-80 hover:opacity-100 transition-opacity">
               View checklist <ArrowRight className="h-3 w-3" />
             </Link>
