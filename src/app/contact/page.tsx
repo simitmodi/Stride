@@ -5,7 +5,8 @@ import Link from "next/link";
 import {
   Github,
   Users,
-  Share2,
+  HelpCircle,
+  Bell,
   Send,
   MessageSquare,
   ArrowRight,
@@ -37,12 +38,12 @@ const projectDetails = [
     link: "/developers"
   },
   {
-    icon: Share2,
-    title: "Social Connect",
-    value: "Follow our Journey",
-    description: "Stay updated with the latest news and milestones on LinkedIn.",
-    color: "bg-blue-500/20 text-blue-500",
-    link: "https://linkedin.com"
+    icon: HelpCircle,
+    title: "Help Center",
+    value: "Common Questions",
+    description: "Find instant answers to frequently asked questions about Stride.",
+    color: "bg-emerald-500/20 text-emerald-500",
+    link: "/faq"
   }
 ];
 
@@ -89,7 +90,7 @@ export default function ContactPage() {
                   href={detail.link}
                   className="relative flex items-start gap-6 p-8 rounded-[2rem] border border-white/40 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl shadow-xl transition-all duration-500 group-hover:bg-white/70 dark:group-hover:bg-slate-900/60 block"
                 >
-                  <div className={`shrink-0 w-14 h-14 rounded-2xl ${detail.color} flex items-center justify-center border border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                  <div className={`shrink - 0 w - 14 h - 14 rounded - 2xl ${detail.color} flex items - center justify - center border border - white / 20 shadow - lg group - hover: scale - 110 transition - transform duration - 500`}>
                     <detail.icon className="w-7 h-7" strokeWidth={1.5} />
                   </div>
                   <div className="space-y-1">
@@ -106,7 +107,7 @@ export default function ContactPage() {
               </motion.div>
             ))}
 
-            {/* Additional Interaction */}
+            {/* Additional Newsletter Option */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -114,15 +115,15 @@ export default function ContactPage() {
               className="p-8 rounded-[2rem] border border-primary/20 bg-primary/5 backdrop-blur-3xl"
             >
               <div className="flex items-center gap-4 mb-4">
-                <MessageSquare className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Share your Feedback</h3>
+                <Bell className="w-6 h-6 text-primary" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Stay Informed</h3>
               </div>
               <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Have a thought or a suggestion? Let us know what you think about your experience with Stride.
+                Subscribe to our newsletter to receive the latest updates, feature releases, and banking news.
               </p>
               <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300">
                 <Link href="#" className="flex items-center justify-center gap-2">
-                  Submit Feedback <ArrowRight className="w-4 h-4" />
+                  Join Newsletter <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
             </motion.div>
