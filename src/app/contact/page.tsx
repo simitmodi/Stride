@@ -55,8 +55,8 @@ export default function ContactPage() {
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24 md:py-32">
       {/* Background Layers */}
       <div className="absolute inset-0 z-0">
-        <ContactFloatingBackground />
         <BackgroundWaves />
+        <FloatingDoodles />
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
       </div>
 
