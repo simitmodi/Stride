@@ -34,7 +34,7 @@ export default function Header() {
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
   );
-  
+
   const { data: userData } = useDoc(userDocRef);
 
   const handleLogout = async () => {
@@ -60,10 +60,11 @@ export default function Header() {
     if (nameParts.length > 1 && nameParts[1]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
-    return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
+    return name.length > 1 ? name.substring(0, 2).toUpperCase() : name.toUpperCase();
   };
 
-  const avatarText = userData?.initials || getInitials(user?.displayName);
+  const avatarText = userData?.initials || getInitials(userData?.displayName || user?.displayName);
+  const cleanAvatarText = avatarText && avatarText !== "undefined" ? avatarText : "";
 
   const getProfileLink = () => {
     if (pathname.startsWith('/dashboard/bank')) {
@@ -74,7 +75,7 @@ export default function Header() {
     }
     return "/dashboard/customer/profile";
   };
-  
+
   const getDashboardLink = () => {
     if (pathname.startsWith('/dashboard/bank')) {
       return "/dashboard/bank";
@@ -87,53 +88,61 @@ export default function Header() {
 
 
   return (
-    <div className="fixed top-4 left-4 right-4 md:left-8 md:right-8 z-50 pointer-events-none flex justify-center">
-      <header className="pointer-events-auto flex items-center justify-between w-full max-w-[1440px] h-16 px-4 md:px-6 rounded-full bg-white/70 backdrop-blur-2xl border border-white/60 shadow-xl shadow-slate-900/5 transition-all">
+    <div className="sticky top-0 z-50 flex justify-center w-full">
+      <header className="flex items-center justify-between w-full max-w-[1440px] h-16 px-4 md:px-6 bg-white/5 backdrop-blur-2xl border-b border-x border-white/60 rounded-b-2xl shadow-xl shadow-slate-900/5 transition-all">
         <nav className="flex w-full flex-row items-center justify-between gap-5 text-lg font-medium md:gap-6">
-        <Link
-          href={getDashboardLink()}
-          className="flex items-center gap-2 text-lg font-semibold md:text-base"
-        >
-          <Image src={Logo} alt="Stride Logo" width={100} height={100} />
-          <span className="sr-only">Stride</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                <Avatar className="h-10 w-10 border-2 border-primary">
-                  <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
-                  <AvatarFallback className="bg-card text-primary font-bold">
-                    {avatarText || <UserIcon />}
-                  </AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.displayName}</p>
-                  <p className="text-xs leading-none" style={{ color: '#000F00' }}>
-                    {user?.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={getProfileLink()}>
-                  <UserIcon className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </nav>
+          <Link
+            href={getDashboardLink()}
+            className="flex items-center gap-2 text-lg font-semibold md:text-base"
+          >
+            <Image src={Logo} alt="Stride Logo" width={100} height={100} />
+            <span className="sr-only">Stride</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-10 w-10 border-2 border-primary">
+                    {cleanAvatarText ? (
+                      <AvatarFallback className="bg-card text-primary font-bold text-base">
+                        {cleanAvatarText}
+                      </AvatarFallback>
+                    ) : (
+                      <>
+                        <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
+                        <AvatarFallback className="bg-card text-primary font-bold">
+                          <UserIcon />
+                        </AvatarFallback>
+                      </>
+                    )}
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{userData?.displayName || user?.displayName}</p>
+                    <p className="text-xs leading-none" style={{ color: '#000F00' }}>
+                      {user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={getProfileLink()}>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>My Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </nav>
       </header>
     </div>
   );

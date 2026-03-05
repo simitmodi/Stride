@@ -5,68 +5,54 @@ import { useEffect } from "react";
 
 const doodles = [
   // Top-left area
-  { shape: "rupee", x: "6%", y: "6%", size: 38, color: "rgba(99,102,241,0.14)", rotate: -15, parallax: 1.2, delay: 0 },
-  { shape: "card", x: "12%", y: "38%", size: 50, color: "rgba(168,85,247,0.1)", rotate: 12, parallax: 0.8, delay: 1 },
-  { shape: "coin", x: "4%", y: "68%", size: 32, color: "rgba(99,102,241,0.12)", rotate: 0, parallax: 1.5, delay: 2 },
+  { shape: "rupee", x: "6%", y: "6%", size: 38, color: "rgba(99,102,241,0.14)", rotate: -15, delay: 0 },
+  { shape: "card", x: "12%", y: "38%", size: 50, color: "rgba(168,85,247,0.1)", rotate: 12, delay: 1 },
+  { shape: "coin", x: "4%", y: "68%", size: 32, color: "rgba(99,102,241,0.12)", rotate: 0, delay: 2 },
+  { shape: "shield", x: "18%", y: "15%", size: 28, color: "rgba(99,102,241,0.08)", rotate: -10, delay: 1.5 },
 
   // Top-right area
-  { shape: "shield", x: "90%", y: "7%", size: 36, color: "rgba(168,85,247,0.12)", rotate: 0, parallax: 1.0, delay: 0.5 },
-  { shape: "chart", x: "88%", y: "42%", size: 42, color: "rgba(99,102,241,0.1)", rotate: 0, parallax: 1.3, delay: 1.5 },
-  { shape: "wallet", x: "85%", y: "72%", size: 38, color: "rgba(168,85,247,0.12)", rotate: -10, parallax: 0.7, delay: 2.5 },
+  { shape: "shield", x: "90%", y: "7%", size: 36, color: "rgba(168,85,247,0.12)", rotate: 0, delay: 0.5 },
+  { shape: "chart", x: "88%", y: "42%", size: 42, color: "rgba(99,102,241,0.1)", rotate: 0, delay: 1.5 },
+  { shape: "wallet", x: "85%", y: "72%", size: 38, color: "rgba(168,85,247,0.12)", rotate: -10, delay: 2.5 },
+  { shape: "rupee", x: "78%", y: "12%", size: 30, color: "rgba(168,85,247,0.07)", rotate: 15, delay: 0.2 },
 
   // Middle scattered
-  { shape: "calendar", x: "48%", y: "12%", size: 28, color: "rgba(99,102,241,0.07)", rotate: 5, parallax: 1.8, delay: 0.8 },
-  { shape: "piggy", x: "72%", y: "22%", size: 34, color: "rgba(168,85,247,0.09)", rotate: -8, parallax: 0.6, delay: 3 },
-  { shape: "rupee", x: "22%", y: "82%", size: 30, color: "rgba(99,102,241,0.1)", rotate: 15, parallax: 1.4, delay: 1.2 },
-  { shape: "coin", x: "62%", y: "88%", size: 28, color: "rgba(168,85,247,0.08)", rotate: 0, parallax: 1.1, delay: 2.2 },
+  { shape: "calendar", x: "48%", y: "12%", size: 28, color: "rgba(99,102,241,0.07)", rotate: 5, delay: 0.8 },
+  { shape: "piggy", x: "72%", y: "22%", size: 34, color: "rgba(168,85,247,0.09)", rotate: -8, delay: 3 },
+  { shape: "rupee", x: "22%", y: "82%", size: 30, color: "rgba(99,102,241,0.1)", rotate: 15, delay: 1.2 },
+  { shape: "coin", x: "62%", y: "88%", size: 28, color: "rgba(168,85,247,0.08)", rotate: 0, delay: 2.2 },
+  { shape: "wallet", x: "35%", y: "5%", size: 32, color: "rgba(99,102,241,0.06)", rotate: -5, delay: 1.1 },
+  { shape: "chart", x: "15%", y: "90%", size: 35, color: "rgba(168,85,247,0.06)", rotate: 10, delay: 3.2 },
 
   // Extra depth
-  { shape: "card", x: "52%", y: "55%", size: 40, color: "rgba(99,102,241,0.05)", rotate: -20, parallax: 2.0, delay: 0 },
-  { shape: "shield", x: "32%", y: "58%", size: 24, color: "rgba(168,85,247,0.07)", rotate: 10, parallax: 0.5, delay: 1.8 },
+  { shape: "card", x: "52%", y: "55%", size: 40, color: "rgba(99,102,241,0.05)", rotate: -20, delay: 0 },
+  { shape: "shield", x: "32%", y: "58%", size: 24, color: "rgba(168,85,247,0.07)", rotate: 10, delay: 1.8 },
+  { shape: "piggy", x: "65%", y: "45%", size: 30, color: "rgba(99,102,241,0.04)", rotate: -15, delay: 2.4 },
+  { shape: "calendar", x: "8%", y: "25%", size: 26, color: "rgba(168,85,247,0.05)", rotate: 12, delay: 0.6 },
+  { shape: "rupee", x: "94%", y: "85%", size: 34, color: "rgba(99,102,241,0.08)", rotate: -20, delay: 1.7 },
+  { shape: "coin", x: "42%", y: "92%", size: 24, color: "rgba(168,85,247,0.06)", rotate: 5, delay: 2.9 },
 ];
 
 export function FloatingDoodles() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 50, stiffness: 100 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set((e.clientX - window.innerWidth / 2) / window.innerWidth);
-      mouseY.set((e.clientY - window.innerHeight / 2) / window.innerHeight);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden" aria-hidden="true">
       {doodles.map((d, i) => (
-        <Doodle key={i} {...d} smoothX={smoothX} smoothY={smoothY} />
+        <Doodle key={i} {...d} />
       ))}
     </div>
   );
 }
 
 function Doodle({
-  shape, x, y, size, color, rotate, parallax, delay, smoothX, smoothY,
+  shape, x, y, size, color, rotate, delay,
 }: {
   shape: string; x: string; y: string; size: number; color: string;
-  rotate: number; parallax: number; delay: number;
-  smoothX: ReturnType<typeof useSpring>; smoothY: ReturnType<typeof useSpring>;
+  rotate: number; delay: number;
 }) {
-  const dx = useTransform(smoothX, [-0.5, 0.5], [-30 * parallax, 30 * parallax]);
-  const dy = useTransform(smoothY, [-0.5, 0.5], [-30 * parallax, 30 * parallax]);
-  const rotateX = useTransform(smoothY, [-0.5, 0.5], [-12 * parallax, 12 * parallax]);
-  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-12 * parallax, 12 * parallax]);
-
   return (
     <motion.div
       className="absolute"
-      style={{ left: x, top: y, x: dx, y: dy, rotateX, rotateY, perspective: 600 }}
+      style={{ left: x, top: y, perspective: 600 }}
       animate={{
         y: [-8, 8, -8],
         rotateZ: [rotate - 4, rotate + 4, rotate - 4],

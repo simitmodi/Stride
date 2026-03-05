@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
 import { startOfDay, isAfter, isSameDay } from "date-fns";
+import { motion } from "framer-motion";
 
 const INDIGO = "#4F46E5";
 const DAY_LABELS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -73,12 +74,13 @@ function MiniCalendar({ year, month, role, today, appointments, selectedDate, on
     ];
 
     return (
-        <div className={cn("flex flex-col", !isCenter && "opacity-40")}>
-            {/* Month name */}
-            <p className={cn("text-center font-bold mb-2", isCenter ? "text-base" : "text-[10px]")}
-                style={{ color: isCenter ? INDIGO : "#94a3b8" }}>
-                {isCenter ? MONTH_NAMES[month] : MONTH_NAMES[month].slice(0, 3)}
-            </p>
+        <div className={cn("flex flex-col transition-all duration-300", !isCenter && "opacity-70")}>
+            {/* Month name (Hide for center as it's in the header) */}
+            {!isCenter && (
+                <p className="text-center font-bold mb-2 text-[10px]" style={{ color: "#94a3b8" }}>
+                    {MONTH_NAMES[month].slice(0, 3)}
+                </p>
+            )}
 
             {/* Day labels */}
             <div className="grid grid-cols-7">
@@ -149,16 +151,27 @@ function MiniCalendar({ year, month, role, today, appointments, selectedDate, on
                     // Side panels
                     const nextHasAppt = isNext && hasFuture;
                     const prevHasAppt = isPrev && hasPast;
+                    const hasAppt = nextHasAppt || prevHasAppt;
+
                     return (
                         <div key={idx} className="relative flex items-center justify-center mx-auto w-full aspect-square max-w-[1.5rem] rounded-md"
                             style={{
                                 fontSize: "10px",
-                                fontWeight: todayDay || nextHasAppt ? 700 : 400,
-                                background: todayDay ? INDIGO : nextHasAppt ? `${INDIGO}20` : "transparent",
-                                color: todayDay ? "#fff" : nextHasAppt ? INDIGO : "#94a3b8",
-                                outline: nextHasAppt && !todayDay ? `1.5px solid ${INDIGO}50` : "none",
+                                fontWeight: todayDay || hasAppt ? 700 : 400,
+                                background: todayDay ? INDIGO : hasAppt ? `${INDIGO}25` : "transparent",
+                                color: todayDay ? "#fff" : hasAppt ? INDIGO : "#94a3b8",
+                                outline: (hasAppt && !todayDay) ? `1px solid ${INDIGO}40` : "none",
                             }}>
                             {day}
+                            {hasAppt && !todayDay && (
+                                <motion.div
+                                    className="absolute inset-0 rounded-md pointer-events-none"
+                                    animate={{
+                                        boxShadow: [`0 0 0px ${INDIGO}00`, `0 0 8px ${INDIGO}30`, `0 0 0px ${INDIGO}00`]
+                                    }}
+                                    transition={{ repeat: Infinity, duration: 3, delay: (day % 5) * 0.2 }}
+                                />
+                            )}
                             {prevHasAppt && !todayDay && (
                                 <span className="absolute rounded" style={{ bottom: "2px", left: "50%", transform: "translateX(-50%)", width: "10px", height: "1.5px", background: `${INDIGO}80` }} />
                             )}
@@ -179,11 +192,13 @@ interface ThreeMonthCalendarProps {
     onCenterChange: (month: number, year: number) => void;
     onSelectDate: (d: Date) => void;
     onAppointmentClick: (apt: AppointmentData) => void;
+    standalone?: boolean;
 }
 
 export default function ThreeMonthCalendar({
     appointments, selectedDate, centerMonth, centerYear,
     onCenterChange, onSelectDate, onAppointmentClick,
+    standalone = true
 }: ThreeMonthCalendarProps) {
     const today = useMemo(() => new Date(), []);
     const getRelativeMonth = (offset: number) => {
@@ -204,8 +219,8 @@ export default function ThreeMonthCalendar({
 
     const isCurrentMonth = centerMonth === today.getMonth() && centerYear === today.getFullYear();
 
-    return (
-        <div className="w-full rounded-2xl border shadow-sm overflow-hidden bg-white" style={{ borderColor: "#e2e8f0" }}>
+    const calendarContent = (
+        <>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid #f1f5f9" }}>
                 <button onClick={() => nav(-1)} className="p-1.5 rounded-lg transition-colors hover:bg-slate-100" style={{ color: "#64748b" }} aria-label="Previous month">
@@ -268,6 +283,14 @@ export default function ThreeMonthCalendar({
                     </div>
                 </button>
             </div>
+        </>
+    );
+
+    if (!standalone) return calendarContent;
+
+    return (
+        <div className="w-full rounded-2xl border shadow-sm overflow-hidden bg-white" style={{ borderColor: "#e2e8f0" }}>
+            {calendarContent}
         </div>
     );
 }

@@ -73,172 +73,172 @@ interface AppointmentHistoryData {
 }
 
 function AppointmentHistory() {
-    const { user } = useUser();
-    const [appointments, setAppointments] = useState<AppointmentHistoryData[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [filter, setFilter] = useState<'all' | 'upcoming' | 'past' | 'cancelled'>('all');
-    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const { user } = useUser();
+  const [appointments, setAppointments] = useState<AppointmentHistoryData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past' | 'cancelled'>('all');
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
-    const userDocRef = useMemoFirebase(
-      () => (user ? doc(db, "users", user.uid) : null),
-      [user]
-    );
-    const { data: userData, isLoading: isUserLoading } = useDoc(userDocRef);
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(db, "users", user.uid) : null),
+    [user]
+  );
+  const { data: userData, isLoading: isUserLoading } = useDoc(userDocRef);
 
-    useEffect(() => {
-        if (isUserLoading) return;
-        if (!userData?.appointmentIds || userData.appointmentIds.length === 0) {
-            setIsLoading(false);
-            return;
-        }
-
-        const fetchAppointments = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const appointmentsRef = collection(db, "appointments");
-                const q = query(appointmentsRef, where('__name__', 'in', userData.appointmentIds));
-                const appointmentSnapshots = await getDocs(q);
-                
-                const fetchedAppointments: AppointmentHistoryData[] = [];
-                appointmentSnapshots.forEach((doc) => {
-                    fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentHistoryData);
-                });
-                
-                setAppointments(fetchedAppointments);
-            } catch (e: any) {
-                console.error("Error fetching appointment history:", e);
-                setError("Could not load appointment history.");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchAppointments();
-    }, [userData, isUserLoading]);
-
-    const filteredAndSortedAppointments = useMemo(() => {
-      const today = startOfDay(new Date());
-
-      const filtered = appointments.filter(apt => {
-        if (filter === 'cancelled') {
-          return apt.deleted === true;
-        }
-        if (apt.deleted) return false;
-
-        const aptDate = startOfDay(apt.date.toDate());
-        if (filter === 'upcoming') {
-          return !isBefore(aptDate, today);
-        }
-        if (filter === 'past') {
-          return isBefore(aptDate, today);
-        }
-        return true; // 'all'
-      });
-
-      return filtered;
-
-    }, [appointments, filter]);
-    
-    const grouped = useMemo(() => {
-      const groupedData = filteredAndSortedAppointments.reduce((acc, apt) => {
-        const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
-        if (!acc[dateKey]) {
-          acc[dateKey] = [];
-        }
-        acc[dateKey].push(apt);
-        return acc;
-      }, {} as Record<string, AppointmentHistoryData[]>);
-
-      return groupedData;
-    }, [filteredAndSortedAppointments]);
-
-    const sortedDateKeys = useMemo(() => {
-      const keys = Object.keys(grouped);
-      return keys.sort((a, b) => {
-        const dateA = parse(a, 'yyyy-MM-dd', new Date()).getTime();
-        const dateB = parse(b, 'yyyy-MM-dd', new Date()).getTime();
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-      });
-    }, [grouped, sortOrder]);
-
-
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center p-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="ml-4">Loading your appointment history...</p>
-            </div>
-        );
+  useEffect(() => {
+    if (isUserLoading) return;
+    if (!userData?.appointmentIds || userData.appointmentIds.length === 0) {
+      setIsLoading(false);
+      return;
     }
 
-    if (error) {
-        return <p className="text-center text-destructive mt-8">{error}</p>;
-    }
+    const fetchAppointments = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const appointmentsRef = collection(db, "appointments");
+        const q = query(appointmentsRef, where('__name__', 'in', userData.appointmentIds));
+        const appointmentSnapshots = await getDocs(q);
 
+        const fetchedAppointments: AppointmentHistoryData[] = [];
+        appointmentSnapshots.forEach((doc) => {
+          fetchedAppointments.push({ id: doc.id, ...doc.data() } as AppointmentHistoryData);
+        });
+
+        setAppointments(fetchedAppointments);
+      } catch (e: any) {
+        console.error("Error fetching appointment history:", e);
+        setError("Could not load appointment history.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [userData, isUserLoading]);
+
+  const filteredAndSortedAppointments = useMemo(() => {
+    const today = startOfDay(new Date());
+
+    const filtered = appointments.filter(apt => {
+      if (filter === 'cancelled') {
+        return apt.deleted === true;
+      }
+      if (apt.deleted) return false;
+
+      const aptDate = startOfDay(apt.date.toDate());
+      if (filter === 'upcoming') {
+        return !isBefore(aptDate, today);
+      }
+      if (filter === 'past') {
+        return isBefore(aptDate, today);
+      }
+      return true; // 'all'
+    });
+
+    return filtered;
+
+  }, [appointments, filter]);
+
+  const grouped = useMemo(() => {
+    const groupedData = filteredAndSortedAppointments.reduce((acc, apt) => {
+      const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(apt);
+      return acc;
+    }, {} as Record<string, AppointmentHistoryData[]>);
+
+    return groupedData;
+  }, [filteredAndSortedAppointments]);
+
+  const sortedDateKeys = useMemo(() => {
+    const keys = Object.keys(grouped);
+    return keys.sort((a, b) => {
+      const dateA = parse(a, 'yyyy-MM-dd', new Date()).getTime();
+      const dateB = parse(b, 'yyyy-MM-dd', new Date()).getTime();
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+    });
+  }, [grouped, sortOrder]);
+
+
+  if (isLoading) {
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-card/50 rounded-lg border border-primary/20">
-                <div className="flex flex-wrap gap-2">
-                    {(['all', 'upcoming', 'past', 'cancelled'] as const).map(f => (
-                        <Button 
-                            key={f} 
-                            variant={filter === f ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => setFilter(f)}
-                            className="capitalize"
-                        >
-                            {f}
-                        </Button>
-                    ))}
-                </div>
-                <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
-                >
-                    <ArrowUpDown className="h-4 w-4 mr-2" />
-                    {sortOrder === 'desc' ? 'Newest First' : 'Oldest First'}
-                </Button>
-            </div>
-
-            {appointments.length === 0 ? (
-                <p className="text-center text-foreground mt-8">You have no appointment history.</p>
-            ) : sortedDateKeys.length === 0 ? (
-                <p className="text-center text-foreground mt-8">No appointments match the current filter.</p>
-            ) : (
-                <div className="space-y-8">
-                    {sortedDateKeys.map(dateKey => (
-                        <div key={dateKey}>
-                            <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do, yyyy')}</h3>
-                            <div className="space-y-4">
-                                {grouped[dateKey].map(apt => (
-                                    <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-md ${apt.deleted ? 'opacity-60' : ''}`}>
-                                        <CardContent className="p-4 flex justify-between items-center gap-4">
-                                            <div className="flex-1">
-                                                <CardTitle className="text-lg">{apt.specificService}</CardTitle>
-                                                <CardDescription className="text-foreground/80">{apt.bankName} - {apt.branch}</CardDescription>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="font-semibold">{apt.time}</p>
-                                                <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
-                                            </div>
-                                            {apt.deleted && (
-                                                <div className="border-l border-foreground/20 pl-4">
-                                                    <span className="text-sm font-bold text-destructive">CANCELLED</span>
-                                                </div>
-                                            )}
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-4">Loading your appointment history...</p>
+      </div>
     );
+  }
+
+  if (error) {
+    return <p className="text-center text-destructive mt-8">{error}</p>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-card/50 rounded-lg border border-primary/20">
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'upcoming', 'past', 'cancelled'] as const).map(f => (
+            <Button
+              key={f}
+              variant={filter === f ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter(f)}
+              className="capitalize"
+            >
+              {f}
+            </Button>
+          ))}
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+        >
+          <ArrowUpDown className="h-4 w-4 mr-2" />
+          {sortOrder === 'desc' ? 'Newest First' : 'Oldest First'}
+        </Button>
+      </div>
+
+      {appointments.length === 0 ? (
+        <p className="text-center text-foreground mt-8">You have no appointment history.</p>
+      ) : sortedDateKeys.length === 0 ? (
+        <p className="text-center text-foreground mt-8">No appointments match the current filter.</p>
+      ) : (
+        <div className="space-y-8">
+          {sortedDateKeys.map(dateKey => (
+            <div key={dateKey}>
+              <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do, yyyy')}</h3>
+              <div className="space-y-4">
+                {grouped[dateKey].map(apt => (
+                  <Card key={apt.id} className={`bg-card/75 transition-shadow hover:shadow-md ${apt.deleted ? 'opacity-60' : ''}`}>
+                    <CardContent className="p-4 flex justify-between items-center gap-4">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{apt.specificService}</CardTitle>
+                        <CardDescription className="text-foreground/80">{apt.bankName} - {apt.branch}</CardDescription>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold">{apt.time}</p>
+                        <p className="text-sm text-foreground/80">ID: {apt.customAppointmentId}</p>
+                      </div>
+                      {apt.deleted && (
+                        <div className="border-l border-foreground/20 pl-4">
+                          <span className="text-sm font-bold text-destructive">CANCELLED</span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function ProfilePage() {
@@ -270,7 +270,7 @@ export default function ProfilePage() {
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
   );
-  
+
   const { data: userData, isLoading: isFirestoreLoading, error: firestoreError } = useDoc(userDocRef);
 
   const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
@@ -318,7 +318,7 @@ export default function ProfilePage() {
       setIsVerifying(false);
     }
   };
-  
+
   const handleUpdateEmail = async (newEmail: string) => {
     try {
       await updateUserEmail(newEmail);
@@ -327,7 +327,7 @@ export default function ProfilePage() {
         title: "Verification Email Sent",
         description: `A verification email has been sent to ${newEmail}. Please verify to update your email address.`,
       });
-    } catch(error: any) {
+    } catch (error: any) {
       if (error.code === 'auth/requires-recent-login') {
         toast({
           variant: "destructive",
@@ -338,7 +338,7 @@ export default function ProfilePage() {
         setOnReauthSuccess(() => () => handleUpdateEmail(newEmail));
         setIsReauthDialogOpen(true);
       } else {
-         toast({
+        toast({
           variant: "destructive",
           title: "Update Failed",
           description: error.message || "Could not update your email.",
@@ -362,7 +362,7 @@ export default function ProfilePage() {
         const lastName = lastNameParts.join(' ');
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
-        if(auth.currentUser) {
+        if (auth.currentUser) {
           await updateProfile(auth.currentUser, { displayName: value as string });
         }
       } else if (field === 'dateOfBirth' && value instanceof Date) {
@@ -370,9 +370,9 @@ export default function ProfilePage() {
       } else {
         updates[field] = value;
       }
-      
+
       await updateUserProfile(user.uid, updates);
-      
+
       toast({
         title: "Profile Updated",
         description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
@@ -387,7 +387,7 @@ export default function ProfilePage() {
     }
   };
 
-    const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async () => {
     if (!user || !deletePassword) {
       toast({ variant: "destructive", title: "Error", description: "Password is required." });
       return;
@@ -402,7 +402,7 @@ export default function ProfilePage() {
       router.push("/");
     } catch (error: any) {
       if (error.code === 'auth/requires-recent-login') {
-         toast({
+        toast({
           variant: "destructive",
           title: "Action Required",
           description: "For security, please re-enter your password to continue.",
@@ -432,29 +432,29 @@ export default function ProfilePage() {
     if (nameParts.length > 1 && nameParts[nameParts.length - 1][0]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
-    return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
+    return name.length > 1 ? name.substring(0, 2).toUpperCase() : name.toUpperCase();
   };
-  
+
   const avatarText = userData?.initials || getInitials(userData?.displayName || user?.displayName);
 
   const handleInitialsSave = async () => {
     if (!user) return;
     try {
-        await updateUserProfile(user.uid, { initials: newInitials });
-        toast({
-            title: "Profile Updated",
-            description: "Your Avatar has been updated.",
-        });
-        setIsInitialsDialogOpen(false);
+      await updateUserProfile(user.uid, { initials: newInitials });
+      toast({
+        title: "Profile Updated",
+        description: "Your Avatar has been updated.",
+      });
+      setIsInitialsDialogOpen(false);
     } catch (error: any) {
-        toast({
-            variant: "destructive",
-            title: "Update Failed",
-            description: error.message || "Could not update your profile.",
-        });
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: error.message || "Could not update your profile.",
+      });
     }
   };
-  
+
   const onSubmitPasswordChange = async (values: z.infer<typeof passwordFormSchema>) => {
     try {
       await changeUserPassword(values.currentPassword, values.newPassword);
@@ -520,8 +520,8 @@ export default function ProfilePage() {
   const dobTimestamp = userData?.dateOfBirth;
 
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
-      dobDate = dobTimestamp.toDate();
-      formattedDob = format(dobDate, 'dd/MM/yyyy');
+    dobDate = dobTimestamp.toDate();
+    formattedDob = format(dobDate, 'dd/MM/yyyy');
   }
 
 
@@ -542,13 +542,13 @@ export default function ProfilePage() {
                 value={userData.displayName || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
               />
-              <Separator className="bg-primary/20"/>
+              <Separator className="bg-primary/20" />
               <EditableField
                 label="Username"
                 value={userData.username || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('username', newValue)}
               />
-              <Separator className="bg-primary/20"/>
+              <Separator className="bg-primary/20" />
               <EditableField
                 label="Date of Birth"
                 value={formattedDob}
@@ -556,40 +556,40 @@ export default function ProfilePage() {
                 onSave={(newValue) => handleUpdateProfile('dateOfBirth', newValue)}
                 inputType="date"
               />
-              <Separator className="bg-primary/20"/>
-               <EditableField
+              <Separator className="bg-primary/20" />
+              <EditableField
                 label="Phone Number"
                 value={userData.phoneNumber ? `+91 ${userData.phoneNumber}` : "N/A"}
                 editValue={userData.phoneNumber || ""}
                 onSave={(newValue) => handleUpdateProfile('phoneNumber', newValue as string)}
                 inputType="tel"
               />
-              <Separator className="bg-primary/20"/>
+              <Separator className="bg-primary/20" />
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-foreground/70">Email Verified</p>
                   <p className="text-foreground">{user.emailVerified ? "Yes" : "No"}</p>
                 </div>
-                 {!user.emailVerified && (
-                  <Button 
-                    variant="link" 
-                    className="text-primary hover:text-accent" 
+                {!user.emailVerified && (
+                  <Button
+                    variant="link"
+                    className="text-primary hover:text-accent"
                     onClick={handleSendVerification}
                     disabled={isVerifying}
                   >
-                    {isVerifying ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : null}
+                    {isVerifying ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                     Send Verification
                   </Button>
                 )}
               </div>
-              <Separator className="bg-primary/20"/>
+              <Separator className="bg-primary/20" />
               <EditableField
                 label="Email Address"
                 value={userData.email || "N/A"}
                 onSave={(newValue) => handleUpdateProfile('email', newValue)}
                 inputType="email"
               />
-              <Separator className="bg-primary/20"/>
+              <Separator className="bg-primary/20" />
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-foreground/70">Last Sign in</p>
@@ -601,7 +601,7 @@ export default function ProfilePage() {
         );
       case "notifications":
         return (
-           <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
+          <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-primary font-headline">Notifications</CardTitle>
               <CardDescription className="text-foreground/80 font-body">This feature will be added soon</CardDescription>
@@ -613,13 +613,13 @@ export default function ProfilePage() {
         );
       case "appointments":
         return (
-           <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
+          <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-primary font-headline">My Appointments</CardTitle>
               <CardDescription className="text-foreground/80 font-body">A complete history of all your appointments.</CardDescription>
             </CardHeader>
             <CardContent>
-                <AppointmentHistory />
+              <AppointmentHistory />
             </CardContent>
           </Card>
         );
@@ -632,9 +632,9 @@ export default function ProfilePage() {
     <div className="flex w-full flex-grow flex-col md:flex-row bg-background font-body text-foreground">
       {/* Sidebar */}
       <aside className="w-full md:w-80 lg:w-96 flex-shrink-0 p-4 md:p-6">
-        <div className="sticky top-24 flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
+        <div className="flex flex-col gap-8 rounded-lg bg-card/75 p-6 border border-primary/20">
           <div className="flex flex-col items-center text-center gap-4">
-             <Dialog open={isInitialsDialogOpen} onOpenChange={setIsInitialsDialogOpen}>
+            <Dialog open={isInitialsDialogOpen} onOpenChange={setIsInitialsDialogOpen}>
               <DialogTrigger asChild>
                 <div className="relative group cursor-pointer">
                   <Avatar className="h-24 w-24 border-2 border-primary">
@@ -665,7 +665,7 @@ export default function ProfilePage() {
                       placeholder="2 characters or emoji"
                     />
                   </div>
-                   <DialogDescriptionComponent className="text-foreground/80 text-sm col-span-4 text-center pt-2">
+                  <DialogDescriptionComponent className="text-foreground/80 text-sm col-span-4 text-center pt-2">
                     To use an emoji, use the keyboard shortcut for your OS (Windows: Win + . | macOS: Ctrl + Cmd + Space).
                   </DialogDescriptionComponent>
                 </div>
@@ -690,8 +690,8 @@ export default function ProfilePage() {
             <Button
               variant="ghost"
               className={`justify-start items-center gap-3 text-base h-12 px-4 transition-all
-                ${activeView === 'account' 
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' 
+                ${activeView === 'account'
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground'
                   : 'text-foreground hover:bg-accent/50'
                 }`}
               onClick={() => setActiveView("account")}
@@ -700,11 +700,11 @@ export default function ProfilePage() {
               <span>Account Settings</span>
               {activeView === 'account' && <ChevronRight className="ml-auto h-5 w-5" />}
             </Button>
-             <Button
+            <Button
               variant="ghost"
               className={`justify-start items-center gap-3 text-base h-12 px-4 transition-all
-                ${activeView === 'appointments' 
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' 
+                ${activeView === 'appointments'
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground'
                   : 'text-foreground hover:bg-accent/50'
                 }`}
               onClick={() => setActiveView("appointments")}
@@ -716,8 +716,8 @@ export default function ProfilePage() {
             <Button
               variant="ghost"
               className={`justify-start items-center gap-3 text-base h-12 px-4 transition-all
-                ${activeView === 'notifications' 
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' 
+                ${activeView === 'notifications'
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground'
                   : 'text-foreground hover:bg-accent/50'
                 }`}
               onClick={() => setActiveView("notifications")}
@@ -784,7 +784,7 @@ export default function ProfilePage() {
                                 {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                               </Button>
                             </div>
-                             {newPassword && <PasswordStrength password={newPassword} />}
+                            {newPassword && <PasswordStrength password={newPassword} />}
                             <FormMessage />
                           </FormItem>
                         )}
@@ -795,7 +795,7 @@ export default function ProfilePage() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Confirm New Password</FormLabel>
-                             <div className="relative">
+                            <div className="relative">
                               <FormControl>
                                 <Input type={showConfirmPassword ? "text" : "password"} {...field} className="pr-10" />
                               </FormControl>
@@ -874,7 +874,7 @@ export default function ProfilePage() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            
+
             <Button
               variant="ghost"
               className="justify-start items-center gap-3 text-base h-12 px-4 text-destructive hover:bg-destructive/10"

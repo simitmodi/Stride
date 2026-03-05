@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { format, isSameDay, startOfDay, isAfter } from "date-fns";
-import { Loader2, CalendarDays } from "lucide-react";
+import { Loader2, CalendarDays, FileText, CalendarPlus } from "lucide-react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { useDoc } from "@/firebase/firestore/use-doc";
@@ -118,99 +118,89 @@ export default function UpcomingAppointments({ calendarJumpDate }: { calendarJum
   }
 
   return (
-    <div className="w-full px-4 md:px-8">
-      {/* ── Full-width calendar ── */}
-      <ThreeMonthCalendar
-        appointments={appointments}
-        selectedDate={selectedDate}
-        centerMonth={calendarMonth}
-        centerYear={calendarYear}
-        onCenterChange={(m, y) => { setCalendarMonth(m); setCalendarYear(y); }}
-        onSelectDate={(d) => setSelectedDate(d)}
-        onAppointmentClick={(apt) => setSelectedAppointment(apt)}
-      />
+    <div className="w-full space-y-8">
+      {/* ── 1. Calendar Container ── */}
+      <div className="rounded-2xl bg-white shadow-sm border border-[#e2e8f0] overflow-hidden relative z-10">
+        <ThreeMonthCalendar
+          appointments={appointments}
+          selectedDate={selectedDate}
+          centerMonth={calendarMonth}
+          centerYear={calendarYear}
+          onCenterChange={(m, y) => { setCalendarMonth(m); setCalendarYear(y); }}
+          onSelectDate={(d) => setSelectedDate(d)}
+          onAppointmentClick={(apt) => setSelectedAppointment(apt)}
+          standalone={false}
+        />
+      </div>
 
-      {/* ── Appointments for selected date ── */}
-      <div className="mt-10">
-        <div className="flex items-center gap-3 mb-6">
-          <CalendarDays className="h-8 w-8 flex-shrink-0" style={{ color: INDIGO }} />
-          <h2 className="text-4xl font-bold leading-tight">
-            <ShinyText
-              text={`Appointments for ${format(selectedDate, "MMMM d, yyyy")}`}
-              disabled={false}
-              speed={3}
-              className="custom-class"
-            />
-          </h2>
+      {/* ── 2. Daily View Container ── */}
+      <div className="p-6 md:p-8 rounded-2xl bg-white shadow-sm border border-[#e2e8f0] relative z-10">
+        <div className="relative z-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-12 w-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm">
+              <CalendarDays className="h-6 w-6" style={{ color: INDIGO }} />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
+              <ShinyText
+                text={`Appointments for ${format(selectedDate, "MMMM d, yyyy")}`}
+                disabled={false}
+                speed={3}
+                className="font-bold"
+              />
+            </h2>
+          </div>
+
+          {error && (
+            <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm text-center mb-6">
+              {error}
+            </div>
+          )}
+
+          {selectedDateAppointments.length === 0 ? (
+            <div
+              key={selectedDate.toISOString()}
+              className="group relative overflow-hidden flex flex-col md:flex-row items-center gap-6 p-8 rounded-2xl bg-white border border-[#e2e8f0] hover:bg-slate-50/50 transition-all duration-300"
+            >
+              {/* Icon Container */}
+              <div className="relative flex-shrink-0">
+                <div className="relative w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={INDIGO} strokeWidth="1.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Text Content */}
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold text-slate-900 mb-1">Schedule is clear</h3>
+                <p className="text-slate-400 text-sm font-medium max-w-sm leading-relaxed">No appointments booked for this day. Ready to fill your schedule?</p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 relative z-10">
+                <a href="/dashboard/customer/document-checklist"
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95 shadow-sm">
+                  <FileText className="h-4 w-4" />
+                  Docs
+                </a>
+                <a href="/dashboard/customer/appointment-scheduling"
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all active:scale-95 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                  style={{ background: INDIGO }}>
+                  <CalendarPlus className="h-4 w-4" />
+                  Book New
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {selectedDateAppointments.map((apt) => (
+                <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
+              ))}
+            </div>
+          )}
         </div>
-
-        {error && <p className="text-destructive text-center mb-4">{error}</p>}
-
-        {selectedDateAppointments.length === 0 ? (
-          <div
-            key={selectedDate.toISOString()}
-            className="relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl"
-            style={{ background: `linear-gradient(145deg, ${INDIGO}08, ${INDIGO}04)`, border: `1px solid ${INDIGO}18` }}
-          >
-            <style>{`
-              @keyframes vaultPop { 0%{opacity:0;transform:scale(0.6) rotate(-10deg)} 70%{transform:scale(1.1) rotate(3deg);opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
-              @keyframes esSlide  { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
-              @keyframes esBtnIn  { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
-              @keyframes esShimmer { 0%{opacity:0.05} 50%{opacity:0.12} 100%{opacity:0.05} }
-              .es3-vault { animation: vaultPop  0.5s cubic-bezier(.34,1.56,.64,1) 0.05s both; }
-              .es3-text  { animation: esSlide   0.35s ease-out 0.4s both; }
-              .es3-btn1  { animation: esBtnIn   0.3s cubic-bezier(.34,1.56,.64,1) 0.55s both; }
-              .es3-btn2  { animation: esBtnIn   0.3s cubic-bezier(.34,1.56,.64,1) 0.68s both; }
-              .es3-glow  { animation: esShimmer 3s ease-in-out infinite; }
-            `}</style>
-
-            {/* shimmer bg */}
-            <div className="es3-glow absolute -top-6 -right-6 w-32 h-32 rounded-full pointer-events-none"
-              style={{ background: `radial-gradient(circle, ${INDIGO}35, transparent 70%)` }} />
-
-            {/* Vault icon */}
-            <div className="es3-vault flex-shrink-0">
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-                <rect x="4" y="4" width="36" height="36" rx="8" fill={`${INDIGO}12`} stroke={INDIGO} strokeWidth="1.5" />
-                <circle cx="22" cy="22" r="11" stroke={INDIGO} strokeWidth="1.5" fill={`${INDIGO}08`} />
-                <circle cx="22" cy="22" r="6" stroke={`${INDIGO}70`} strokeWidth="1.2" fill={`${INDIGO}12`} />
-                <circle cx="22" cy="22" r="2.5" fill={INDIGO} />
-                <line x1="22" y1="11" x2="22" y2="16" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="22" y1="28" x2="22" y2="33" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="11" y1="22" x2="16" y2="22" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="28" y1="22" x2="33" y2="22" stroke={INDIGO} strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            </div>
-
-            {/* Text */}
-            <div className="es3-text flex-1 min-w-0">
-              <p className="text-sm font-black" style={{ color: INDIGO }}>Schedule is clear</p>
-              <p className="text-xs text-slate-400 mt-0.5 truncate">Nothing booked — ready when you are.</p>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex gap-2 flex-shrink-0">
-              <a href="/dashboard/customer/document-checklist"
-                className="es3-btn1 flex items-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold transition-all hover:shadow-md hover:-translate-y-0.5"
-                style={{ border: `1.5px solid ${INDIGO}`, color: INDIGO, background: "white" }}>
-                <svg width="11" height="11" viewBox="0 0 15 15" fill="none"><rect x="2" y="1" width="11" height="13" rx="2" stroke={INDIGO} strokeWidth="1.4" /><line x1="5" y1="5" x2="10" y2="5" stroke={INDIGO} strokeWidth="1.2" strokeLinecap="round" /><line x1="5" y1="8" x2="10" y2="8" stroke={INDIGO} strokeWidth="1.2" strokeLinecap="round" /></svg>
-                Docs
-              </a>
-              <a href="/dashboard/customer/appointment-scheduling"
-                className="es3-btn2 flex items-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
-                style={{ background: INDIGO, boxShadow: `0 3px 12px ${INDIGO}40` }}>
-                <svg width="11" height="11" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="11" rx="2" stroke="white" strokeWidth="1.4" /><line x1="1" y1="7" x2="14" y2="7" stroke="white" strokeWidth="1.2" /><line x1="5" y1="1" x2="5" y2="5" stroke="white" strokeWidth="1.4" strokeLinecap="round" /><line x1="10" y1="1" x2="10" y2="5" stroke="white" strokeWidth="1.4" strokeLinecap="round" /></svg>
-                Book
-              </a>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {selectedDateAppointments.map((apt) => (
-              <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
-            ))}
-          </div>
-        )}
       </div>
 
       {selectedAppointment && (
