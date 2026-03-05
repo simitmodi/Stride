@@ -1,12 +1,8 @@
-"use client";
-
-import { motion } from "framer-motion";
-import Link from "next/link";
 import {
   Github,
   Users,
   HelpCircle,
-  Bell,
+  Rocket,
   Send,
   MessageSquare,
   ArrowRight,
@@ -19,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContactFloatingBackground } from "@/components/landing/ContactFloatingBackground";
 import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { useToast } from "@/hooks/use-toast";
 
 const projectDetails = [
   {
@@ -48,6 +45,8 @@ const projectDetails = [
 ];
 
 export default function ContactPage() {
+  const { toast } = useToast();
+
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24 md:py-32">
       {/* Background Layers */}
@@ -90,7 +89,7 @@ export default function ContactPage() {
                   href={detail.link}
                   className="relative flex items-start gap-6 p-8 rounded-[2rem] border border-white/40 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl shadow-xl transition-all duration-500 group-hover:bg-white/70 dark:group-hover:bg-slate-900/60 block"
                 >
-                  <div className={`shrink - 0 w - 14 h - 14 rounded - 2xl ${detail.color} flex items - center justify - center border border - white / 20 shadow - lg group - hover: scale - 110 transition - transform duration - 500`}>
+                  <div className={`shrink-0 w-14 h-14 rounded-2xl ${detail.color} flex items-center justify-center border border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                     <detail.icon className="w-7 h-7" strokeWidth={1.5} />
                   </div>
                   <div className="space-y-1">
@@ -107,7 +106,7 @@ export default function ContactPage() {
               </motion.div>
             ))}
 
-            {/* Additional Newsletter Option */}
+            {/* Additional Evolution Option */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -115,16 +114,22 @@ export default function ContactPage() {
               className="p-8 rounded-[2rem] border border-primary/20 bg-primary/5 backdrop-blur-3xl"
             >
               <div className="flex items-center gap-4 mb-4">
-                <Bell className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Stay Informed</h3>
+                <Rocket className="w-6 h-6 text-primary" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Stride Evolution</h3>
               </div>
               <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Subscribe to our newsletter to receive the latest updates, feature releases, and banking news.
+                Explore our planned milestones and the future vision for the next generation of Stride.
               </p>
-              <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300">
-                <Link href="#" className="flex items-center justify-center gap-2">
-                  Join Newsletter <ArrowRight className="w-4 h-4" />
-                </Link>
+              <Button
+                onClick={() => toast({
+                  title: "Roadmap Explorer",
+                  description: "The interactive Roadmap module is currently being finalized for Phase 8.",
+                })}
+                className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Explore Roadmap <ArrowRight className="w-4 h-4" />
+                </span>
               </Button>
             </motion.div>
           </div>
@@ -143,11 +148,21 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Direct Feedback</h2>
                 <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">We appreciate your insights and suggestions.</p>
 
-                <form className="space-y-6">
+                <form
+                  className="space-y-6"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    toast({
+                      title: "Feedback Submitted",
+                      description: "Thank you for your thoughts! Our team will review your message soon.",
+                    });
+                  }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Full Name</label>
                       <Input
+                        required
                         placeholder="Enter your name"
                         className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
                       />
@@ -155,6 +170,7 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Email Address</label>
                       <Input
+                        required
                         type="email"
                         placeholder="name@example.com"
                         className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
@@ -165,6 +181,7 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Subject</label>
                     <Input
+                      required
                       placeholder="What's this about?"
                       className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
                     />
@@ -173,12 +190,16 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Message</label>
                     <Textarea
+                      required
                       placeholder="Tell us what you need..."
                       className="min-h-[160px] rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg p-6 resize-none"
                     />
                   </div>
 
-                  <Button className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn">
+                  <Button
+                    type="submit"
+                    className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn"
+                  >
                     <span className="flex items-center justify-center gap-3">
                       Submit Feedback <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                     </span>
