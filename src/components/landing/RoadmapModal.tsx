@@ -115,7 +115,7 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                 </div>
 
                 <div className="relative z-10 flex flex-col h-full items-center">
-                    {/* Header - Compact */}
+                    {/* Header - Balanced Styling */}
                     <div className="w-full px-8 pt-6 pb-2 flex flex-col items-center justify-center text-center shrink-0">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -132,11 +132,11 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                     </div>
 
                     {/* MAIN SCROLLABLE CONTENT AREA */}
-                    <div className="flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-hide px-3 lg:px-8 py-2">
+                    <div className="flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-hide px-4 lg:px-8 py-2">
                         <div className="max-w-7xl mx-auto space-y-4 pb-12">
 
-                            {/* TOP BENTO ROW - Fixed: Added px-2 and more fluid grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-2">
+                            {/* TOP BENTO ROW - Responsive & Centered */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                 {bentoCards.map((card) => (
                                     <motion.div
                                         key={card.id}
@@ -157,7 +157,7 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 rounded-[1.5rem] md:rounded-[2rem] border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between group shadow-sm col-sm-span-2 lg:col-span-1"
+                                    className="p-4 rounded-[1.5rem] md:rounded-[2rem] border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between group shadow-sm sm:col-span-2 lg:col-span-1"
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
                                         <div className="p-2 rounded-xl bg-white border border-slate-200 text-emerald-500 shrink-0">
@@ -172,80 +172,77 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                 </motion.div>
                             </div>
 
-                            {/* CENTRAL MASTER JOURNEY */}
-                            <div className="relative mx-2 rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-xl p-4 lg:p-6 overflow-hidden">
-                                <div className="flex items-center justify-between mb-4 px-4 overflow-hidden">
-                                    <div className="flex items-center gap-3 shrink-0">
-                                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
-                                        <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Evolution Node</h4>
-                                    </div>
-                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary animate-bounce-horizontal shrink-0">
-                                        <ArrowRightLeft className="w-3 h-3" />
-                                        <span className="text-[8px] font-black uppercase tracking-widest">Swipe</span>
-                                    </div>
-                                </div>
-
-                                <div
-                                    ref={scrollRef}
-                                    className="relative overflow-x-auto pb-4 pt-2 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing px-2"
-                                >
-                                    <div className="flex gap-4 items-start min-w-max pb-2 pr-48">
-                                        {/* Progress Line */}
-                                        <div className="absolute top-[2.75rem] left-0 right-0 h-0.5 bg-slate-200 z-0 rounded-full mx-8">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: "66%" }}
-                                                transition={{ duration: 2, ease: "easeInOut" }}
-                                                className="h-full bg-primary shadow-[0_0_15px_rgba(99,102,241,0.4)] rounded-full"
-                                            />
+                            {/* CENTRAL MASTER JOURNEY - Fix: Standardized Symmetrical Alignment */}
+                            <div className="relative rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-xl overflow-hidden">
+                                <div className="p-6 lg:p-8">
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+                                            <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Stride Evolution Journey</h4>
                                         </div>
+                                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary text-white animate-bounce-horizontal shrink-0">
+                                            <ArrowRightLeft className="w-3 h-3" />
+                                            <span className="text-[8px] font-black uppercase tracking-widest">Swipe to Explore</span>
+                                        </div>
+                                    </div>
 
-                                        {roadmapPhases.map((item, index) => (
-                                            <motion.div
-                                                key={index}
-                                                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: index * 0.1, duration: 0.6 }}
-                                                className="relative z-10 w-[200px] md:w-[240px] group snap-start"
-                                            >
-                                                <div className="flex justify-center mb-5">
-                                                    <div className={`w-9 h-9 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm bg-white relative`}>
-                                                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                                    {/* HORIZONTAL SWIPE CONTAINER - Precision Symmetrical Gutters */}
+                                    <div
+                                        ref={scrollRef}
+                                        className="relative overflow-x-auto pb-4 pt-4 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+                                    >
+                                        <div className="flex gap-6 items-start min-w-max pb-2 px-1">
+                                            {/* Node 01 aligns precisely with the start of the container padding */}
+                                            {roadmapPhases.map((item, index) => (
+                                                <motion.div
+                                                    key={index}
+                                                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                                    viewport={{ once: true }}
+                                                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                                                    className={`relative z-10 w-[200px] md:w-[260px] group snap-start`}
+                                                >
+                                                    <div className="flex justify-center mb-5">
+                                                        <div className={`w-10 h-10 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm bg-white relative`}>
+                                                            <item.icon className="w-4 h-4 flex-shrink-0" />
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div className={`relative p-5 rounded-[2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
-                                                    <div className="mb-2">
-                                                        <span className={`text-[7px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
-                                                            Node {item.phase}
-                                                        </span>
-                                                        <h5 className="text-[14px] font-black text-slate-900 tracking-tight leading-none">
-                                                            {item.title}
-                                                        </h5>
+                                                    <div className={`relative p-5 rounded-[2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
+                                                        <div className="mb-2">
+                                                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
+                                                                Node {item.phase}
+                                                            </span>
+                                                            <h5 className="text-[14px] font-black text-slate-900 tracking-tight leading-none">
+                                                                {item.title}
+                                                            </h5>
+                                                        </div>
+                                                        <div className="space-y-1.5 mb-4">
+                                                            {item.items.map((point, pIdx) => (
+                                                                <div key={pIdx} className="flex items-center gap-2">
+                                                                    <CheckCircle2 className={`w-2.5 h-2.5 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
+                                                                    <span className="text-[9px] font-semibold text-slate-500 truncate">
+                                                                        {point}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[7px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
+                                                            {item.status}
+                                                        </div>
                                                     </div>
-                                                    <div className="space-y-1.5 mb-4">
-                                                        {item.items.map((point, pIdx) => (
-                                                            <div key={pIdx} className="flex items-center gap-2">
-                                                                <CheckCircle2 className={`w-2.5 h-2.5 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
-                                                                <span className="text-[9px] font-semibold text-slate-500 truncate">
-                                                                    {point}
-                                                                </span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[7px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
-                                                        {item.status}
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        ))}
+                                                </motion.div>
+                                            ))}
+
+                                            {/* Precise End-Gutter Spacer */}
+                                            <div className="w-[10px] md:w-[20px] shrink-0" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* BOTTOM METRICS ROW - Fixed: Added px-2 and fluid col-spanning */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-4">
+                            {/* BOTTOM METRICS ROW - Responsive & Aligned */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 {[
                                     { icon: BarChart3, label: "Operational Load", val: "42%", sub: "Nodes" },
                                     { icon: Network, label: "Network Health", val: "99.9%", sub: "Encrypted" },
@@ -268,7 +265,7 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                         </div>
                     </div>
 
-                    {/* Footer - Precise Static Labels */}
+                    {/* Footer - Professional Finish */}
                     <div className="w-full px-8 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-center shrink-0">
                         <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.5em] text-center">
                             * Stride Evolution Protocol v8.4.1 • Global Innovation Sync © 2026
