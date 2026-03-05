@@ -7,9 +7,9 @@ import { useForm, Controller, FormProvider, useFieldArray } from 'react-hook-for
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useUser } from '@/firebase/provider';
-import { collection, doc, Timestamp, setDoc, updateDoc, arrayUnion, getDocs, query, where, startOfDay, endOfDay } from 'firebase/firestore';
+import { collection, doc, Timestamp, setDoc, updateDoc, arrayUnion, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { format } from 'date-fns';
+import { format, startOfDay, endOfDay } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -112,21 +112,21 @@ function AppointmentDetailsForm() {
     const selectedServices = data.activities.map(a => a.specificService);
     const uniqueServices = new Set(selectedServices);
     if (selectedServices.length !== uniqueServices.size) {
-        toast({ title: "Duplicate Service", description: "You have selected the same service multiple times.", variant: "destructive" });
-        return;
+      toast({ title: "Duplicate Service", description: "You have selected the same service multiple times.", variant: "destructive" });
+      return;
     }
-    
+
     // Check against already booked appointments for the same day
     const existingServices = new Set(upcomingAppointments.map(a => a.specificService));
     const duplicate = selectedServices.find(service => existingServices.has(service));
 
     if (duplicate) {
-        toast({
-            title: "Duplicate Appointment",
-            description: `You already have an appointment for "${duplicate}" on ${date ? format(new Date(date), 'PPP') : 'this day'}.`,
-            variant: "destructive",
-        });
-        return;
+      toast({
+        title: "Duplicate Appointment",
+        description: `You already have an appointment for "${duplicate}" on ${date ? format(new Date(date), 'PPP') : 'this day'}.`,
+        variant: "destructive",
+      });
+      return;
     }
 
 
@@ -142,7 +142,7 @@ function AppointmentDetailsForm() {
           .map(([key, value]) => (typeof value === 'string' ? `${key}: ${value}` : key));
 
         const newAppointmentRef = doc(collection(db, 'appointments'));
-        
+
         const bankNameFormatted = bankName?.replace(/\s+/g, '') || 'NoBank';
         const timeSlotFormatted = time?.replace(/[\s:-]+/g, '') || 'NoTime';
         const customId = `${newAppointmentRef.id.substring(0, 12)}${bankNameFormatted}${timeSlotFormatted}`;
@@ -168,7 +168,7 @@ function AppointmentDetailsForm() {
         });
         appointmentIds.push(newAppointmentRef.id);
       }
-      
+
       toast({
         title: 'Appointments Confirmed!',
         description: `Successfully booked ${appointmentIds.length} appointment(s).`,
@@ -184,7 +184,7 @@ function AppointmentDetailsForm() {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="flex w-full flex-col items-center p-4 md:p-8" style={{ backgroundColor: '#BFBAB0' }}>
       <Card className="w-full max-w-2xl shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
@@ -206,7 +206,7 @@ function AppointmentDetailsForm() {
 
                   return (
                     <Card key={field.id} className="bg-card/70 border border-primary/20 p-4 relative">
-                       {fields.length > 1 && (
+                      {fields.length > 1 && (
                         <Button
                           type="button"
                           variant="ghost"
@@ -241,7 +241,7 @@ function AppointmentDetailsForm() {
                               </Select>
                             )}
                           />
-                           {methods.formState.errors.activities?.[index]?.serviceCategory && <p className="text-sm text-destructive">{methods.formState.errors.activities?.[index]?.serviceCategory?.message}</p>}
+                          {methods.formState.errors.activities?.[index]?.serviceCategory && <p className="text-sm text-destructive">{methods.formState.errors.activities?.[index]?.serviceCategory?.message}</p>}
                         </div>
 
                         {/* Specific Service */}
@@ -266,13 +266,13 @@ function AppointmentDetailsForm() {
                                 </Select>
                               )}
                             />
-                             {methods.formState.errors.activities?.[index]?.specificService && <p className="text-sm text-destructive">{methods.formState.errors.activities?.[index]?.specificService?.message}</p>}
+                            {methods.formState.errors.activities?.[index]?.specificService && <p className="text-sm text-destructive">{methods.formState.errors.activities?.[index]?.specificService?.message}</p>}
                           </div>
                         )}
 
                         {/* Document Checklist */}
                         {selectedService && (
-                           <div className="space-y-4 rounded-lg border border-foreground/20 bg-background/5 p-4">
+                          <div className="space-y-4 rounded-lg border border-foreground/20 bg-background/5 p-4">
                             <h3 className="text-lg font-semibold" style={{ color: '#092910' }}>
                               Please confirm the documents you will bring:
                             </h3>
@@ -340,14 +340,14 @@ function AppointmentDetailsForm() {
               </div>
 
               <div className="flex justify-center">
-                 <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => append({ serviceCategory: '', specificService: '', documents: {} })}
-                    className="w-full max-w-xs border-dashed"
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => append({ serviceCategory: '', specificService: '', documents: {} })}
+                  className="w-full max-w-xs border-dashed"
                 >
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Another Service
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Add Another Service
                 </Button>
               </div>
 
@@ -372,11 +372,10 @@ function AppointmentDetailsForm() {
 }
 
 export default function AppointmentDetailsPage() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <AppointmentDetailsForm />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AppointmentDetailsForm />
+    </Suspense>
+  )
 }
 
-    
