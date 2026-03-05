@@ -3,10 +3,9 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
+  Github,
+  Users,
+  BookOpen,
   Send,
   MessageSquare,
   ArrowRight,
@@ -20,29 +19,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { ContactFloatingBackground } from "@/components/landing/ContactFloatingBackground";
 import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
 
-const contactDetails = [
+const projectDetails = [
   {
-    icon: Mail,
-    title: "Email Us",
-    value: "support@stride.in",
-    description: "For general inquiries and support requests.",
+    icon: Github,
+    title: "Source Code",
+    value: "GitHub Repository",
+    description: "Explore the codebase and technical architecture of Stride.",
+    color: "bg-slate-900/20 text-slate-900 dark:bg-white/10 dark:text-white",
+    link: "https://github.com/simitmodi/Stride"
+  },
+  {
+    icon: Users,
+    title: "Meet the Creators",
+    value: "Developer Team",
+    description: "Discover the visionary team behind this project.",
     color: "bg-indigo-500/20 text-indigo-500",
-    link: "mailto:support@stride.in"
+    link: "/developers"
   },
   {
-    icon: Phone,
-    title: "Call Us",
-    value: "1800-123-4567",
-    description: "Toll-free support available Mon-Fri, 9am-6pm.",
-    color: "bg-blue-500/20 text-blue-500",
-    link: "tel:+9118001234567"
-  },
-  {
-    icon: MapPin,
-    title: "Visit Us",
-    value: "Corporate Office, Mumbai",
-    description: "123 Finance Avenue, BKC, Mumbai 400051.",
-    color: "bg-purple-500/20 text-purple-500",
+    icon: BookOpen,
+    title: "Technical Specs",
+    value: "Project Wiki",
+    description: "In-depth documentation on features and data flow.",
+    color: "bg-emerald-500/20 text-emerald-500",
     link: "#"
   }
 ];
@@ -66,17 +65,17 @@ export default function ContactPage() {
           className="text-center mb-16 md:mb-24"
         >
           <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-sm">
-            Get in Touch
+            Project Showcase
           </h1>
           <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
-            Have questions? Our team is here to help you navigate your banking journey.
+            Explore the architecture of Stride and connect with the developers.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
-          {/* Left: Contact Info */}
+          {/* Left: Project Links */}
           <div className="lg:col-span-5 space-y-8 order-2 lg:order-1">
-            {contactDetails.map((detail, index) => (
+            {projectDetails.map((detail, index) => (
               <motion.div
                 key={detail.title}
                 initial={{ opacity: 0, x: -30 }}
@@ -84,22 +83,30 @@ export default function ContactPage() {
                 transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
                 className="group relative"
               >
-                <div className="absolute -inset-1 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
+                <div className="absolute -inset-1 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none" />
 
-                <div className="relative flex items-start gap-6 p-8 rounded-[2rem] border border-white/40 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl shadow-xl transition-all duration-500 group-hover:bg-white/70 dark:group-hover:bg-slate-900/60">
+                <Link
+                  href={detail.link}
+                  className="relative flex items-start gap-6 p-8 rounded-[2rem] border border-white/40 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl shadow-xl transition-all duration-500 group-hover:bg-white/70 dark:group-hover:bg-slate-900/60 block"
+                >
                   <div className={`shrink-0 w-14 h-14 rounded-2xl ${detail.color} flex items-center justify-center border border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                     <detail.icon className="w-7 h-7" strokeWidth={1.5} />
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold text-primary uppercase tracking-widest">{detail.title}</h3>
-                    <p className="text-xl font-bold text-slate-900 dark:text-white">{detail.value}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      {detail.value}
+                    </p>
                     <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{detail.description}</p>
                   </div>
-                </div>
+                  <div className="absolute top-8 right-8 text-primary opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:translate-x-1">
+                    <ArrowRight className="w-6 h-6" />
+                  </div>
+                </Link>
               </motion.div>
             ))}
 
-            {/* Additional Quick Help */}
+            {/* Additional Interaction */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -107,21 +114,21 @@ export default function ContactPage() {
               className="p-8 rounded-[2rem] border border-primary/20 bg-primary/5 backdrop-blur-3xl"
             >
               <div className="flex items-center gap-4 mb-4">
-                <Headset className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Helpdesk Support</h3>
+                <MessageSquare className="w-6 h-6 text-primary" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Give Feedback</h3>
               </div>
               <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Need quick answers? Check our FAQs or speak to a representative for immediate assistance.
+                Found a bug or have a feature request? Let us know your thoughts on our banking project.
               </p>
-              <Button asChild variant="outline" className="w-full rounded-full border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-300">
-                <Link href="/faq" className="flex items-center justify-center gap-2">
-                  Visit Help Center <ArrowRight className="w-4 h-4" />
+              <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300">
+                <Link href="#" className="flex items-center justify-center gap-2">
+                  Submit Feedback <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
             </motion.div>
           </div>
 
-          {/* Right: Contact Form */}
+          {/* Right: Feedback Form */}
           <div className="lg:col-span-7 order-1 lg:order-2">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -132,8 +139,8 @@ export default function ContactPage() {
               <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 via-transparent to-accent/30 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-60 transition-all duration-700 pointer-events-none" />
 
               <div className="relative h-full p-8 md:p-12 rounded-[2.5rem] border border-white/50 dark:border-white/10 bg-white/70 dark:bg-slate-950/70 backdrop-blur-[100px] shadow-2xl">
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Send a Message</h2>
-                <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">We'll get back to you within 24 hours.</p>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Project Feedback</h2>
+                <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">We appreciate your insights and suggestions.</p>
 
                 <form className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -172,7 +179,7 @@ export default function ContactPage() {
 
                   <Button className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn">
                     <span className="flex items-center justify-center gap-3">
-                      Send Message <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                      Submt Feedback <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                     </span>
                   </Button>
                 </form>
