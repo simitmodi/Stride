@@ -214,6 +214,71 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
 }
 
 
+// ── Empty State Widget (Option 2: Ambient Focus) ───────────────────────────
+function EmptyStateWidget({ completedCount }: { completedCount: number }) {
+  return (
+    <div className="px-4 md:px-8 mb-8">
+      <div className="w-full rounded-3xl overflow-hidden relative"
+        style={{
+          background: "rgba(255, 255, 255, 0.4)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          boxShadow: `0 20px 50px rgba(0, 0, 0, 0.05)`,
+        }}>
+
+        {/* Decorative Background Glows */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+        <div className="relative z-10 py-12 px-8 flex flex-col items-center text-center">
+          {/* 3D Vault Icon / Illustration */}
+          <div className="mb-6 relative">
+            <motion.div
+              animate={{
+                y: [-10, 10, -10],
+                rotateZ: [-2, 2, -2]
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="relative z-10"
+            >
+              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-indigo-500/40">
+                <Landmark className="h-12 w-12 text-white" strokeWidth={1.5} />
+              </div>
+            </motion.div>
+            {/* Glow behind icon */}
+            <div className="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150" />
+          </div>
+
+          <h2 className="text-3xl font-black text-slate-800 tracking-tight mb-3">
+            Your schedule is clear.
+          </h2>
+          <p className="text-slate-500 max-w-md leading-relaxed mb-8 font-medium">
+            Everything is in order. You've completed {completedCount} appointments with Stride.
+            Ready to schedule your next session?
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Link href="/dashboard/customer/appointment-scheduling"
+              className="px-8 py-4 rounded-2xl bg-indigo-600 text-white font-bold text-lg shadow-xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all hover:-translate-y-1 active:scale-95">
+              Book Appointment
+            </Link>
+            <Link href="/dashboard/customer/document-checklist"
+              className="px-8 py-4 rounded-2xl bg-white text-indigo-600 font-bold text-lg border-2 border-indigo-50 transition-all hover:bg-indigo-50/50">
+              View Checklist
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // ── Activity Timeline ────────────────────────────────────────────────────────
 function ActivityTimeline({ items }: { items: AppointmentData[] }) {
   const events = useMemo(() => items.slice(0, 6).map(apt => ({
