@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { useToast } from "@/hooks/use-toast";
-import { RoadmapModal } from "@/components/landing/RoadmapModal";
 
 const projectDetails = [
   {
@@ -51,7 +50,6 @@ const projectDetails = [
 
 export default function ContactPage() {
   const { toast } = useToast();
-  const [roadmapOpen, setRoadmapOpen] = useState(false);
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24 md:py-32">
@@ -111,29 +109,7 @@ export default function ContactPage() {
               </motion.div>
             ))}
 
-            {/* Additional Evolution Option */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="p-8 rounded-[2rem] border border-primary/20 bg-primary/5 backdrop-blur-3xl"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <Rocket className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Stride Evolution</h3>
-              </div>
-              <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Explore our planned milestones and the future vision for the next generation of Stride.
-              </p>
-              <Button
-                onClick={() => setRoadmapOpen(true)}
-                className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300"
-              >
-                <span className="flex items-center justify-center gap-2">
-                  Explore Roadmap <ArrowRight className="w-4 h-4" />
-                </span>
-              </Button>
-            </motion.div>
+
           </div>
 
           {/* Right: Feedback Form */}
@@ -227,8 +203,6 @@ export default function ContactPage() {
           </Button>
         </motion.div>
       </main>
-
-      <RoadmapModal isOpen={roadmapOpen} onOpenChange={setRoadmapOpen} />
     </div>
   );
 }

@@ -186,12 +186,13 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                         </div>
                                     </div>
 
-                                    {/* HORIZONTAL SWIPE CONTAINER - Precision Scaling for Scrolling */}
+                                    {/* HORIZONTAL SWIPE CONTAINER - Precision Symmetrical Gutters */}
                                     <div
                                         ref={scrollRef}
                                         className="relative overflow-x-auto pb-4 pt-4 scrollbar-hide snap-x snap-mandatory cursor-grab active:cursor-grabbing"
                                     >
-                                        <div className="flex gap-8 items-start min-w-max pb-2 px-1">
+                                        <div className="flex gap-6 items-start min-w-max pb-2 px-1">
+                                            {/* Node 01 aligns precisely with the start of the container padding */}
                                             {roadmapPhases.map((item, index) => (
                                                 <motion.div
                                                     key={index}
@@ -199,34 +200,34 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                                     whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                                     viewport={{ once: true }}
                                                     transition={{ delay: index * 0.1, duration: 0.6 }}
-                                                    className={`relative z-10 w-[240px] md:w-[350px] group snap-start`}
+                                                    className={`relative z-10 w-[200px] md:w-[260px] group snap-start`}
                                                 >
                                                     <div className="flex justify-center mb-5">
-                                                        <div className={`w-11 h-11 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm bg-white relative`}>
-                                                            <item.icon className="w-5 h-5 flex-shrink-0" />
+                                                        <div className={`w-10 h-10 rounded-full ${item.bgColor} border-2 ${item.borderColor} flex items-center justify-center ${item.color} shadow-sm bg-white relative`}>
+                                                            <item.icon className="w-4 h-4 flex-shrink-0" />
                                                         </div>
                                                     </div>
 
-                                                    <div className={`relative p-6 rounded-[2.2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
-                                                        <div className="mb-3">
-                                                            <span className={`text-[8px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
+                                                    <div className={`relative p-5 rounded-[2rem] border border-slate-200 bg-white shadow-md transition-all duration-500 group-hover:-translate-y-1 ${item.glow}`}>
+                                                        <div className="mb-2">
+                                                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] ${item.color} block mb-0.5`}>
                                                                 Node {item.phase}
                                                             </span>
-                                                            <h5 className="text-[18px] font-black text-slate-900 tracking-tight leading-none">
+                                                            <h5 className="text-[14px] font-black text-slate-900 tracking-tight leading-none">
                                                                 {item.title}
                                                             </h5>
                                                         </div>
-                                                        <div className="space-y-2 mb-6">
+                                                        <div className="space-y-1.5 mb-4">
                                                             {item.items.map((point, pIdx) => (
-                                                                <div key={pIdx} className="flex items-center gap-2.5">
-                                                                    <CheckCircle2 className={`w-3 h-3 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
-                                                                    <span className="text-[11px] font-semibold text-slate-500">
+                                                                <div key={pIdx} className="flex items-center gap-2">
+                                                                    <CheckCircle2 className={`w-2.5 h-2.5 ${item.status === "Upcoming" ? "text-slate-100" : item.color}`} />
+                                                                    <span className="text-[9px] font-semibold text-slate-500 truncate">
                                                                         {point}
                                                                     </span>
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                        <div className={`inline-flex px-3 py-1 rounded-full text-[8px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
+                                                        <div className={`inline-flex px-2.5 py-0.5 rounded-full text-[7px] font-black border ${item.borderColor} ${item.bgColor} ${item.color} uppercase tracking-widest`}>
                                                             {item.status}
                                                         </div>
                                                     </div>
@@ -234,7 +235,7 @@ export function RoadmapModal({ isOpen, onOpenChange }: RoadmapModalProps) {
                                             ))}
 
                                             {/* Precise End-Gutter Spacer */}
-                                            <div className="w-[40px] md:w-[80px] shrink-0" />
+                                            <div className="w-[10px] md:w-[20px] shrink-0" />
                                         </div>
                                     </div>
                                 </div>
