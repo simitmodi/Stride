@@ -66,7 +66,7 @@ const developers = [
         contribution: "Specialized in bridge-building between design and code, implementing precise layouts and fluid interactive elements.",
         github: "https://github.com/ankit5287",
         linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
-        portfolio: "#",
+        portfolio: "https://ankit52.vercel.app/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAQX0ztleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaeNPku9-1bha-01C_0cRpQx1Jmm6bLRDHtqgZNRlTIserrwHr6sDiJI22Pxcg_aem_0COMMqCUFWx57Wh6KXFIdA",
         instagram: "https://www.instagram.com/ankit_n2/",
         icon: Zap,
         color: "bg-emerald-500/20 text-emerald-500",
