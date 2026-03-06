@@ -86,8 +86,8 @@ const developers = [
         name: "Krishna Patel",
         role: "Canvas",
         contribution: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
-        github: "#",
-        linkedin: "#",
+        github: "https://github.com/krishna276-cloud",
+        linkedin: "https://www.linkedin.com/in/krishna-patel-900523387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         portfolio: null,
         instagram: "https://www.instagram.com/__krishna276/",
         icon: Paintbrush,
@@ -154,12 +154,16 @@ export default function DevelopersPage() {
                                 {/* Social Links */}
                                 <div className="flex items-center justify-between pt-6 border-t border-slate-200/50 dark:border-white/5">
                                     <div className="flex gap-4">
-                                        <Link href={dev.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Github className="w-5 h-5" />
-                                        </Link>
-                                        <Link href={dev.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Linkedin className="w-5 h-5" />
-                                        </Link>
+                                        {dev.github && dev.github !== "#" && (
+                                            <Link href={dev.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Github className="w-5 h-5" />
+                                            </Link>
+                                        )}
+                                        {dev.linkedin && dev.linkedin !== "#" && (
+                                            <Link href={dev.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Linkedin className="w-5 h-5" />
+                                            </Link>
+                                        )}
                                         {dev.portfolio && dev.portfolio !== "#" && (
                                             <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Globe className="w-5 h-5" />
