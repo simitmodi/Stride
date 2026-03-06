@@ -16,7 +16,9 @@ import {
   Landmark,
   RefreshCcw,
   Zap,
-  Info
+  Info,
+  Lock,
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
