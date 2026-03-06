@@ -88,7 +88,7 @@ const developers = [
         contribution: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
         github: "#",
         linkedin: "#",
-        portfolio: "#",
+        portfolio: null,
         instagram: "https://www.instagram.com/__krishna276/",
         icon: Paintbrush,
         color: "bg-rose-500/20 text-rose-500",
@@ -160,18 +160,22 @@ export default function DevelopersPage() {
                                         <Link href={dev.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                             <Linkedin className="w-5 h-5" />
                                         </Link>
-                                        <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Globe className="w-5 h-5" />
-                                        </Link>
+                                        {dev.portfolio && dev.portfolio !== "#" && (
+                                            <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Globe className="w-5 h-5" />
+                                            </Link>
+                                        )}
                                         {dev.instagram && (
                                             <Link href={dev.instagram} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Instagram className="w-5 h-5" />
                                             </Link>
                                         )}
                                     </div>
-                                    <Link href={dev.portfolio} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                        Portfolio <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                                    </Link>
+                                    {dev.portfolio && dev.portfolio !== "#" && (
+                                        <Link href={dev.portfolio} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                            Portfolio <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
