@@ -35,6 +35,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/simitmodi/",
         portfolio: "https://simitmodi.vercel.app/",
         instagram: "https://www.instagram.com/simit.io/",
+        slug: "simit",
         icon: Crown,
         color: "bg-amber-500/20 text-amber-500",
     },
@@ -46,6 +47,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/hardipatel2510/",
         portfolio: "https://hardipatel.vercel.app/",
         instagram: "https://www.instagram.com/hardiptl.io/",
+        slug: "hardi",
         icon: Layout,
         color: "bg-indigo-500/20 text-indigo-500",
     },
@@ -57,6 +59,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/bansimakwana/",
         portfolio: "#",
         instagram: "https://www.instagram.com/bansiiii_._/",
+        slug: "bansari",
         icon: Layers,
         color: "bg-blue-500/20 text-blue-500",
     },
@@ -68,6 +71,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
         portfolio: "https://ankit52.vercel.app/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAQX0ztleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaeNPku9-1bha-01C_0cRpQx1Jmm6bLRDHtqgZNRlTIserrwHr6sDiJI22Pxcg_aem_0COMMqCUFWx57Wh6KXFIdA",
         instagram: "https://www.instagram.com/ankit_n2/",
+        slug: "ankit",
         icon: Zap,
         color: "bg-emerald-500/20 text-emerald-500",
     },
@@ -79,6 +83,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/sharvi-bhavsar-914344344/",
         portfolio: "https://sharvi-bhavsar-portfolio.vercel.app/",
         instagram: "https://www.instagram.com/sharvi1206/",
+        slug: "sharvi",
         icon: Component,
         color: "bg-purple-500/20 text-purple-500",
     },
@@ -90,6 +95,7 @@ const developers = [
         linkedin: "https://www.linkedin.com/in/krishna-patel-900523387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         portfolio: null,
         instagram: "https://www.instagram.com/__krishna276/",
+        slug: "krishna",
         icon: Paintbrush,
         color: "bg-rose-500/20 text-rose-500",
     },
@@ -141,7 +147,9 @@ export default function DevelopersPage() {
                                         <dev.icon className="w-7 h-7" strokeWidth={1.5} />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{dev.name}</h3>
+                                        <Link href={`/developers/${dev.slug}`}>
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight hover:text-primary transition-colors cursor-pointer">{dev.name}</h3>
+                                        </Link>
                                         <span className="text-sm font-semibold text-primary/80 uppercase tracking-widest">{dev.role}</span>
                                     </div>
                                 </div>
@@ -175,11 +183,9 @@ export default function DevelopersPage() {
                                             </Link>
                                         )}
                                     </div>
-                                    {dev.portfolio && dev.portfolio !== "#" && (
-                                        <Link href={dev.portfolio} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                            Portfolio <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                                        </Link>
-                                    )}
+                                    <Link href={`/developers/${dev.slug}`} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                        View Profile <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                                    </Link>
                                 </div>
                             </div>
                         </motion.div>
