@@ -12,10 +12,13 @@ import {
     Globe,
     ArrowLeft,
     GraduationCap,
-    Lightbulb,
-    Code2,
-    Heart,
-    Languages
+    Hexagon,
+    Target,
+    Compass,
+    Sparkles,
+    Users2,
+    Zap,
+    ArrowRight
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -40,6 +43,11 @@ export default function DeveloperAboutPage() {
 
     const Icon = dev.icon;
 
+    // Helper to split bio into paragraphs if it's long
+    const bioParagraphs = dev.bio.split(". ").map((p, i, arr) =>
+        p + (i === arr.length - 1 ? "" : ".")
+    );
+
     return (
         <div className="relative min-h-screen w-full bg-slate-950 text-slate-200 overflow-x-hidden pt-24 pb-20 px-4 md:px-8">
             {/* Background Layers */}
@@ -48,12 +56,12 @@ export default function DeveloperAboutPage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none" />
             </div>
 
-            <main className="relative z-10 max-w-5xl mx-auto">
-                {/* Back Button */}
+            <main className="relative z-10 max-w-6xl mx-auto space-y-20">
+                {/* Header Navigation */}
                 <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="mb-12"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex justify-between items-center"
                 >
                     <Button
                         onClick={() => router.push("/developers")}
@@ -62,238 +70,215 @@ export default function DeveloperAboutPage() {
                     >
                         <ArrowLeft className="mr-2 h-5 w-5" /> Back to Team
                     </Button>
+                    <div className="flex gap-4">
+                        {dev.contact.github && (
+                            <Link href={dev.contact.github} target="_blank" className="p-2 rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                                <Github className="w-5 h-5" />
+                            </Link>
+                        )}
+                        {dev.contact.linkedin && (
+                            <Link href={dev.contact.linkedin} target="_blank" className="p-2 rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                                <Linkedin className="w-5 h-5" />
+                            </Link>
+                        )}
+                    </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                    {/* Left Column: Intro & Contact */}
-                    <div className="lg:col-span-7 space-y-12">
-                        {/* About Me Header Pill */}
+                {/* Hero / About Me Section */}
+                <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    {/* Portrait Left */}
+                    <div className="lg:col-span-4">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="inline-block relative"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="relative aspect-square group"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 blur-2xl opacity-40 rounded-full" />
-                            <div className="relative px-12 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full">
-                                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight">About me</h1>
+                            <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 blur-2xl rounded-3xl" />
+                            <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden border-2 border-purple-500/30 bg-slate-900 group-hover:border-purple-500/60 transition-colors duration-500 shadow-2xl">
+                                <div className="absolute inset-0 flex items-center justify-center opacity-20 bg-gradient-to-tr from-purple-600/10 to-transparent">
+                                    <Icon className="w-32 h-32" />
+                                </div>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span className="text-white/30 font-black uppercase tracking-[0.4em] text-[10px]">Creator</span>
+                                </div>
                             </div>
                         </motion.div>
+                    </div>
 
-                        {/* Bio Text */}
+                    {/* Bio Right */}
+                    <div className="lg:col-span-8 space-y-8">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
                             className="space-y-6"
                         >
-                            <p className="text-lg text-slate-400 font-medium">Hi!</p>
-                            <h2 className="text-2xl md:text-3xl font-bold text-white">
-                                My name is <span className="text-purple-400">{dev.name}</span>.
-                            </h2>
-                            <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-medium">
-                                I am a <span className="text-indigo-400">{dev.role}</span> {dev.bio}
-                            </p>
-                            <div className="space-y-3">
-                                <p className="text-lg text-slate-400 font-bold uppercase tracking-widest text-sm">My objective:</p>
-                                <p className="text-lg text-slate-300 leading-relaxed italic">
-                                    "{dev.objective}"
-                                </p>
-                            </div>
-                        </motion.div>
-
-                        {/* Contact Info */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="space-y-8"
-                        >
-                            <h3 className="text-2xl font-black text-white italic tracking-tight underline decoration-purple-500/50 underline-offset-8">Contact</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="flex items-center gap-4 group">
-                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                                        <Mail className="w-5 h-5" />
-                                    </div>
-                                    <span className="text-slate-300 font-medium truncate">{dev.contact.email}</span>
-                                </div>
-                                <div className="flex items-center gap-4 group">
-                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                                        <Phone className="w-5 h-5" />
-                                    </div>
-                                    <span className="text-slate-300 font-medium">{dev.contact.phone}</span>
-                                </div>
-                                <div className="flex items-center gap-4 group text-slate-300 hover:text-white transition-colors">
-                                    <Link href={dev.contact.linkedin} target="_blank" className="flex items-center gap-4 w-full">
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                            <Linkedin className="w-5 h-5" />
-                                        </div>
-                                        <span className="font-medium">LinkedIn Profile</span>
-                                    </Link>
-                                </div>
-                                <div className="flex items-center gap-4 group text-slate-300 hover:text-white transition-colors">
-                                    <Link href={dev.contact.github} target="_blank" className="flex items-center gap-4 w-full">
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-slate-700 group-hover:text-white transition-all">
-                                            <Github className="w-5 h-5" />
-                                        </div>
-                                        <span className="font-medium">GitHub Repository</span>
-                                    </Link>
-                                </div>
+                            <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter italic">
+                                About me:
+                            </h1>
+                            <div className="space-y-6 text-xl text-slate-400 font-medium leading-relaxed max-w-3xl">
+                                {bioParagraphs.map((para, idx) => (
+                                    <p key={idx}>{para}</p>
+                                ))}
                             </div>
                         </motion.div>
                     </div>
+                </section>
 
-                    {/* Right Column: Portrait */}
-                    <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                            transition={{ type: "spring", stiffness: 100, delay: 0.3 }}
-                            className="relative w-full max-w-sm aspect-[4/5]"
-                        >
-                            {/* Organic Background Blobs */}
-                            <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 blur-3xl rounded-full" />
-                            <div className="absolute -inset-2 bg-gradient-to-br from-purple-500/30 to-indigo-500/30 blur-xl rounded-[3rem]" />
-
-                            {/* The Portrait Container */}
-                            <div className="relative h-full w-full rounded-[4rem] overflow-hidden border-4 border-white/10 shadow-2xl">
-                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80 z-10" />
-                                <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
-                                    {/* Placeholder for actual image */}
-                                    <Icon className="w-32 h-32 opacity-20" />
-                                    <span className="absolute bottom-10 left-0 right-0 text-center text-white/40 font-black uppercase tracking-[0.3em] text-xs">Portrait</span>
-                                </div>
-                                {dev.contact.portfolio && (
-                                    <Link
-                                        href={dev.contact.portfolio}
-                                        target="_blank"
-                                        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 bg-white text-slate-950 px-8 py-3 rounded-full font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform"
-                                    >
-                                        Visit site
-                                    </Link>
-                                )}
-                            </div>
-
-                            {/* Decorative Waves */}
-                            <svg className="absolute -right-12 top-12 w-32 h-32 text-purple-500/20 overflow-visible" viewBox="0 0 100 100">
-                                <path d="M0,50 Q25,0 50,50 T100,50" fill="none" stroke="currentColor" strokeWidth="2" />
-                                <path d="M0,60 Q25,10 50,60 T100,60" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50" />
-                            </svg>
-                        </motion.div>
-                    </div>
-                </div>
-
-                {/* Bottom Section: Skills & Education (The large gradient box) */}
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
+                {/* Education Module */}
+                <motion.section
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="mt-20 relative p-1 rounded-[4rem] bg-gradient-to-br from-purple-600/30 via-indigo-600/30 to-slate-900/30"
+                    className="relative"
                 >
-                    <div className="bg-gradient-to-br from-[#1e1a4d] to-[#0f0c29] rounded-[3.9rem] p-8 md:p-16 overflow-hidden relative">
-                        {/* Background Glows */}
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 blur-[100px] pointer-events-none" />
-                        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-600/10 blur-[100px] pointer-events-none" />
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
-                            {/* Left Side: Education & Tech Skills */}
-                            <div className="space-y-16">
-                                {/* Education */}
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-4">
-                                        <h3 className="text-3xl font-black text-white italic">Education</h3>
-                                        <div className="px-4 py-1 bg-white/10 rounded-full border border-white/20">
-                                            <span className="text-xs font-bold text-slate-300">{dev.education.year}</span>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <p className="text-lg text-slate-200 font-bold">{dev.education.school}</p>
-                                        <p className="text-slate-400 font-medium">{dev.education.degree}</p>
-                                    </div>
-                                </div>
-
-                                {/* Technical Skills */}
-                                <div className="space-y-8">
-                                    <h3 className="text-3xl font-black text-white italic">Technical skill</h3>
-                                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-                                        {dev.technicalSkills.map((skill, i) => (
-                                            <motion.div
-                                                key={i}
-                                                whileHover={{ y: -5 }}
-                                                className={`w-14 h-14 rounded-2xl ${skill.color} flex items-center justify-center shadow-xl group cursor-help`}
-                                            >
-                                                <span className="text-[10px] font-black text-white opacity-0 group-hover:opacity-100 transition-opacity absolute -top-10 bg-slate-800 px-3 py-1 rounded-full whitespace-nowrap">
-                                                    {skill.name}
-                                                </span>
-                                                <span className="text-xs font-black text-white uppercase tracking-tighter text-center px-1">
-                                                    {skill.name.substring(0, 2)}
-                                                </span>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Interests */}
-                                <div className="space-y-6">
-                                    <h3 className="text-3xl font-black text-white italic">Interest</h3>
-                                    <div className="flex flex-wrap gap-4">
-                                        {dev.interests.map((interest, i) => (
-                                            <div key={i} className="flex items-center gap-3">
-                                                <span className="text-lg text-slate-300 font-medium">{interest}</span>
-                                                {i < dev.interests.length - 1 && <div className="w-px h-6 bg-white/20" />}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                    <h2 className="text-4xl font-black text-white mb-10 tracking-tight italic">Education</h2>
+                    <div className="p-8 md:p-12 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-xl relative overflow-hidden group hover:bg-white/10 transition-all duration-500">
+                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <GraduationCap className="w-40 h-40" />
+                        </div>
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
+                            <div className="w-16 h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                                <GraduationCap className="w-8 h-8" />
                             </div>
-
-                            {/* Right Side: Soft Skills, Skill Set, Languages */}
-                            <div className="space-y-16">
-                                {/* Soft Skills */}
-                                <div className="space-y-6">
-                                    <h3 className="text-3xl font-black text-white italic">Soft skill</h3>
-                                    <div className="grid grid-cols-2 gap-6">
-                                        {dev.softSkills.map((skill, i) => (
-                                            <div key={i} className="flex items-center gap-4 group">
-                                                <div className="w-1 h-8 bg-white/10 group-hover:bg-purple-500 transition-colors" />
-                                                <span className="text-lg text-slate-300 font-medium">{skill}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Skill Set */}
-                                <div className="space-y-6">
-                                    <h3 className="text-3xl font-black text-white italic">Skill set</h3>
-                                    <div className="grid grid-cols-2 gap-6">
-                                        {dev.skillSet.map((skill, i) => (
-                                            <div key={i} className="flex items-center gap-4 group">
-                                                <div className="w-1 h-8 bg-white/10 group-hover:bg-indigo-500 transition-colors" />
-                                                <span className="text-lg text-slate-300 font-medium">{skill}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Language */}
-                                <div className="space-y-6">
-                                    <h3 className="text-3xl font-black text-white italic">Language</h3>
-                                    <div className="flex flex-wrap gap-4">
-                                        {dev.languages.map((lang, i) => (
-                                            <div key={i} className="flex items-center gap-3">
-                                                <span className="text-lg text-slate-300 font-medium">{lang}</span>
-                                                {i < dev.languages.length - 1 && <div className="w-px h-6 bg-white/20" />}
-                                            </div>
-                                        ))}
-                                    </div>
+                            <div className="space-y-2">
+                                <h3 className="text-2xl md:text-3xl font-bold text-white">{dev.education.degree}</h3>
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-400 font-semibold">
+                                    <span>{dev.education.school}</span>
+                                    <div className="hidden md:block w-2 h-2 rounded-full bg-white/10" />
+                                    <span className="text-purple-400">({dev.education.year})</span>
                                 </div>
                             </div>
                         </div>
-
-                        {/* Bottom Glow */}
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 blur-3xl rounded-full" />
                     </div>
-                </motion.div>
+                </motion.section>
+
+                {/* Highlights / Soft Skills Cards */}
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {dev.softSkills.slice(0, 3).map((skill, idx) => {
+                        const Icons = [Compass, Users2, Sparkles, Target, Zap];
+                        const SpecificIcon = Icons[idx % Icons.length];
+                        return (
+                            <motion.div
+                                key={skill}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="p-8 rounded-[2rem] bg-white/5 border border-white/10 group hover:border-indigo-500/50 hover:bg-white/10 transition-all duration-300"
+                            >
+                                <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                                    <SpecificIcon className="w-6 h-6" />
+                                </div>
+                                <h4 className="text-2xl font-bold text-white mb-4">{skill}</h4>
+                                <p className="text-slate-400 font-medium leading-relaxed">
+                                    Dedicated to maintaining high standards of {skill.toLowerCase()} in every phase of the project cycle.
+                                </p>
+                            </motion.div>
+                        );
+                    })}
+                </section>
+
+                {/* Tech Stack Bento Grid */}
+                <motion.section
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="relative overflow-hidden p-1 rounded-[3.5rem] bg-gradient-to-br from-indigo-500/30 to-purple-500/30"
+                >
+                    <div className="bg-[#0f0c29] rounded-[3.4rem] p-10 md:p-16 space-y-16">
+                        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                            <div className="space-y-4">
+                                <h2 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">Technical Stack</h2>
+                                <p className="text-slate-400 font-medium">Expertise in modern web technologies and infrastructure.</p>
+                            </div>
+                            {dev.contact.portfolio && (
+                                <Button asChild className="rounded-full bg-white text-black hover:bg-slate-200 px-8 h-12">
+                                    <Link href={dev.contact.portfolio} target="_blank">
+                                        View Portfolio <ArrowRight className="ml-2 w-4 h-4" />
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0 },
+                                show: {
+                                    opacity: 1,
+                                    transition: { staggerChildren: 0.05 }
+                                }
+                            }}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{ once: true }}
+                            className="grid grid-cols-2 lg:grid-cols-4 gap-6"
+                        >
+                            {dev.technicalSkills.map((skill, idx) => (
+                                <motion.div
+                                    key={skill.name}
+                                    variants={{
+                                        hidden: { opacity: 0, y: 20 },
+                                        show: { opacity: 1, y: 0 }
+                                    }}
+                                    whileHover={{ y: -5, scale: 1.02 }}
+                                    className="relative group cursor-default"
+                                >
+                                    {/* Glass Base */}
+                                    <div className="relative p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl overflow-hidden transition-all duration-300 group-hover:bg-white/10 group-hover:border-white/20">
+                                        {/* Colored Accent Strip */}
+                                        <div className={`absolute top-0 left-0 w-1.5 h-full ${skill.color} opacity-80 group-hover:opacity-100 transition-opacity`} />
+
+                                        <div className="flex flex-col gap-4 pl-4">
+                                            {/* Logo & Abbr */}
+                                            <div className="flex justify-between items-start">
+                                                <div className={`p-2 rounded-lg ${skill.color}/20 ${skill.color.replace('bg-', 'text-')} group-hover:scale-110 transition-transform`}>
+                                                    <skill.icon className="w-6 h-6" />
+                                                </div>
+                                                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+                                                    {skill.name.substring(0, 3).toUpperCase()}
+                                                </span>
+                                            </div>
+
+                                            {/* Name */}
+                                            <span className="text-xl font-bold text-white tracking-tight group-hover:text-indigo-400 transition-colors">
+                                                {skill.name}
+                                            </span>
+                                        </div>
+
+                                        {/* Subtle Glow on Hover */}
+                                        <div className={`absolute -inset-px rounded-3xl ${skill.color}/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none`} />
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+
+                        {/* Interests & Contact quick footer */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-white/5">
+                            <div className="space-y-6">
+                                <h3 className="text-2xl font-black text-white italic">Interests</h3>
+                                <div className="flex flex-wrap gap-3">
+                                    {dev.interests.map(interest => (
+                                        <span key={interest} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-300 font-medium">
+                                            {interest}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <h3 className="text-2xl font-black text-white italic">Languages</h3>
+                                <div className="flex gap-6">
+                                    {dev.languages.map(lang => (
+                                        <div key={lang} className="flex flex-col">
+                                            <span className="text-white font-bold">{lang}</span>
+                                            <span className="text-slate-500 text-sm font-bold uppercase tracking-widest">Native</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.section>
             </main>
-        </div>
+        </div >
     );
 }

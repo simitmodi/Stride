@@ -16,7 +16,16 @@ import {
     Globe,
     Mail,
     Phone,
-    Briefcase
+    Briefcase,
+    Coffee,
+    Flame,
+    PenTool,
+    Compass,
+    Sparkles,
+    Atom,
+    Webhook,
+    Box,
+    Binary
 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 
@@ -25,6 +34,7 @@ export interface DeveloperData {
     slug: string;
     role: string;
     bio: string;
+    summary: string; // Brief 3-4 line summary for main grid
     objective: string;
     contact: {
         email: string;
@@ -41,7 +51,7 @@ export interface DeveloperData {
     };
     technicalSkills: {
         name: string;
-        icon?: string; // Optional URL or key
+        icon: LucideIcon; // Required Lucide icon
         color: string;
     }[];
     softSkills: string[];
@@ -58,6 +68,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "simit",
         role: "Project Lead & Product Architect",
         bio: "behind Stride, where I conceptualized and designed the platform to simplify how users interact with banking services. I led the development team, defiend the product vision and engineered the system architecture to deliver a seamless and intuitive digital experience.",
+        summary: "Visionary Fullstack Developer and PR Head at ISTE. Expert in C, Java, and Python, specializing in Data-Driven Optimization and user-centric banking infrastructure.",
         objective: "To build impactful digital products that simplify the real-world process through thought full system design, intuitive user experience and reliable technology.",
         contact: {
             email: "simitmodi@gostride.online",
@@ -73,12 +84,16 @@ export const developersData: Record<string, DeveloperData> = {
             year: "2023 - Present"
         },
         technicalSkills: [
-            { name: "React", color: "bg-blue-500" },
-            { name: "Next.js", color: "bg-black" },
-            { name: "Node.js", color: "bg-green-600" },
-            { name: "Firebase", color: "bg-amber-500" },
-            { name: "PostgreSQL", color: "bg-indigo-600" },
-            { name: "TypeScript", color: "bg-blue-600" }
+            { name: "C", icon: Terminal, color: "bg-blue-600" },
+            { name: "Java", icon: Coffee, color: "bg-red-600" },
+            { name: "Python", icon: Binary, color: "bg-yellow-600" },
+            { name: "TypeScript", icon: Code2, color: "bg-blue-500" },
+            { name: "React", icon: Atom, color: "bg-cyan-500" },
+            { name: "Next.js", icon: Layers, color: "bg-indigo-400" },
+            { name: "Node.js", icon: Zap, color: "bg-green-600" },
+            { name: "MongoDB", icon: Database, color: "bg-emerald-600" },
+            { name: "Firebase", icon: Flame, color: "bg-orange-500" },
+            { name: "Figma", icon: PenTool, color: "bg-purple-500" }
         ],
         softSkills: ["Team Leadership", "Strategic Planning", "Problem Solving", "Communication"],
         skillSet: ["System Design", "Cloud Architecture", "Fullstack Development", "API Security"],
@@ -91,7 +106,8 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Hardi Patel",
         slug: "hardi",
         role: "Frontend & UI Design",
-        bio: "Spearheaded the visual identity of Stride, focusing on the seamless blend of intuitive UI layouts and responsive frontend components.",
+        bio: "I’m a computer engineering student with a curious mindset and a willingness to explore new opportunities. While I’m still discovering my path, I enjoy being part of collaborative environments where I can learn, contribute, and grow. I believe in showing up, asking questions, and doing my best – no matter the challenge. I’m someone who values consistency, teamwork, and self-improvement. I may not have everything figured out yet, but I’m committed to learning, trying new things, and becoming the best version of myself – one step at a time.",
+        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium banking interfaces.",
         objective: "Crafting visually stunning, user-centric interfaces that make complex banking tasks feel effortless and premium.",
         contact: {
             email: "hardipatel@stride.in",
@@ -102,19 +118,23 @@ export const developersData: Record<string, DeveloperData> = {
             portfolio: "https://hardipatel.vercel.app/"
         },
         education: {
-            school: "LDRP Institute",
-            degree: "Information Technology",
-            year: "2021 - Present"
+            school: "SAL Institute of Technology and Engineering Research (GTU)",
+            degree: "Computer Engineering",
+            year: "2023 - 2027"
         },
         technicalSkills: [
-            { name: "Figma", color: "bg-purple-600" },
-            { name: "React", color: "bg-blue-500" },
-            { name: "Tailwind", color: "bg-cyan-500" },
-            { name: "Framer", color: "bg-pink-600" },
-            { name: "UI Design", color: "bg-indigo-500" },
-            { name: "JavaScript", color: "bg-yellow-500" }
+            { name: "Figma", icon: PenTool, color: "bg-purple-500" },
+            { name: "React", icon: Atom, color: "bg-cyan-500" },
+            { name: "Next.js", icon: Layers, color: "bg-indigo-400" },
+            { name: "TypeScript", icon: Code2, color: "bg-blue-500" },
+            { name: "Tailwind", icon: Palette, color: "bg-sky-500" },
+            { name: "C", icon: Terminal, color: "bg-blue-600" },
+            { name: "Java", icon: Coffee, color: "bg-red-600" },
+            { name: "Python", icon: Binary, color: "bg-yellow-600" },
+            { name: "Node.js", icon: Zap, color: "bg-green-600" },
+            { name: "Firebase", icon: Flame, color: "bg-orange-500" }
         ],
-        softSkills: ["UI/UX Strategy", "Visual Thinking", "Adaptability", "Time Management"],
+        softSkills: ["Curiosity", "Collaboration", "Self-Improvement", "Teamwork", "Consistency"],
         skillSet: ["Wireframing", "Prototyping", "Component Design", "Responsive Web"],
         interests: ["Interaction Design", "Typography", "Motion UI"],
         languages: ["English", "Gujarati", "Hindi"],
@@ -126,6 +146,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "bansari",
         role: "Frontend & UI Design",
         bio: "Crafted the elegant glassmorphic components and ensured a consistent, high-fidelity user experience across all platform interfaces.",
+        summary: "Specialist in Glassmorphism and UI consistency. Expert in React and Tailwind, delivering high-fidelity platform components.",
         objective: "Achieving pixel-perfect implementation and premium visual consistency through specialized frontend components.",
         contact: {
             email: "bansari@stride.in",
@@ -135,17 +156,17 @@ export const developersData: Record<string, DeveloperData> = {
             instagram: "https://www.instagram.com/bansiiii_._/"
         },
         education: {
-            school: "LDRP Institute",
+            school: "SAL Institute of Technology and Engineering Research (GTU)",
             degree: "Computer Engineering",
-            year: "2021 - Present"
+            year: "2023 - 2027"
         },
         technicalSkills: [
-            { name: "React", color: "bg-blue-500" },
-            { name: "Glassmorphism", color: "bg-white/20" },
-            { name: "Tailwind", color: "bg-cyan-500" },
-            { name: "Next.js", color: "bg-black" },
-            { name: "CSS3", color: "bg-blue-600" },
-            { name: "HTML5", color: "bg-orange-600" }
+            { name: "React", icon: Atom, color: "bg-blue-500" },
+            { name: "Glassmorphism", icon: Layers, color: "bg-indigo-400" },
+            { name: "Tailwind", icon: Palette, color: "bg-cyan-500" },
+            { name: "Next.js", icon: Code2, color: "bg-slate-300" },
+            { name: "CSS3", icon: Compass, color: "bg-blue-600" },
+            { name: "HTML5", icon: Globe, color: "bg-orange-600" }
         ],
         softSkills: ["Attention to Detail", "Collaboration", "Creative Design", "Resourcefulness"],
         skillSet: ["Glass UI Systems", "Layout Design", "Frontend Implementation", "Design Ops"],
@@ -159,6 +180,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "ankit",
         role: "Frontend & UI Design",
         bio: "Specialized in bridge-building between design and code, implementing precise layouts and fluid interactive elements.",
+        summary: "Bridging tech and art with fluid motion and responsive code. Expert in Framer Motion and interaction design.",
         objective: "To translate complex aesthetic visions into functional, interactive code that feels alive and responsive.",
         contact: {
             email: "ankit@stride.in",
@@ -169,23 +191,23 @@ export const developersData: Record<string, DeveloperData> = {
             portfolio: "https://ankit52.vercel.app/"
         },
         education: {
-            school: "LDRP Institute",
-            degree: "Information Technology",
-            year: "2021 - Present"
+            school: "SAL Institute of Technology and Engineering Research (GTU)",
+            degree: "Computer Engineering",
+            year: "2023 - 2027"
         },
         technicalSkills: [
-            { name: "Frontend", color: "bg-emerald-500" },
-            { name: "UI Design", color: "bg-indigo-500" },
-            { name: "React", color: "bg-blue-500" },
-            { name: "Tailwind", color: "bg-cyan-500" },
-            { name: "Motion", color: "bg-pink-600" },
-            { name: "Git", color: "bg-orange-600" }
+            { name: "Frontend", icon: Layout, color: "bg-emerald-500" },
+            { name: "UI Design", icon: PenTool, color: "bg-indigo-500" },
+            { name: "React", icon: Atom, color: "bg-blue-500" },
+            { name: "Tailwind", icon: Palette, color: "bg-cyan-500" },
+            { name: "Motion", icon: Sparkles, color: "bg-pink-600" },
+            { name: "Git", icon: Github, color: "bg-orange-600" }
         ],
         softSkills: ["Critical Thinking", "Self Learning", "Communication", "Efficiency"],
         skillSet: ["Interactive Layouts", "Code Architecture", "UI Polish", "Responsive Flow"],
         interests: ["Bridging Tech & Art", "Performance", "Clean Code"],
         languages: ["English", "Gujarati", "Hindi"],
-        icon: Zap,
+        icon: Binary,
         brandColor: "from-emerald-500 to-teal-600"
     },
     sharvi: {
@@ -193,6 +215,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "sharvi",
         role: "Frontend & UI Design",
         bio: "Focused on the structural integrity of the frontend, ensuring that the bespoke UI designs translated perfectly into functional, high-performance code.",
+        summary: "Frontend Architect focused on logic and structural integrity. Specializes in scalable UI and performant web systems.",
         objective: "Delivering high-performance, maintainable frontend structures that support elite-scale platform expansion.",
         contact: {
             email: "sharvi@stride.in",
@@ -203,17 +226,17 @@ export const developersData: Record<string, DeveloperData> = {
             portfolio: "https://sharvi-bhavsar-portfolio.vercel.app/"
         },
         education: {
-            school: "LDRP Institute",
+            school: "SAL Institute of Technology and Engineering Research (GTU)",
             degree: "Computer Engineering",
-            year: "2021 - Present"
+            year: "2023 - 2027"
         },
         technicalSkills: [
-            { name: "Logic Architecture", color: "bg-purple-600" },
-            { name: "React", color: "bg-blue-500" },
-            { name: "Structure", color: "bg-slate-700" },
-            { name: "Tailwind", color: "bg-cyan-500" },
-            { name: "JavaScript", color: "bg-yellow-500" },
-            { name: "State Mgmt", color: "bg-indigo-600" }
+            { name: "Logic Architecture", icon: Cpu, color: "bg-purple-600" },
+            { name: "React", icon: Atom, color: "bg-blue-500" },
+            { name: "Structure", icon: Layers, color: "bg-indigo-400" },
+            { name: "Tailwind", icon: Palette, color: "bg-cyan-500" },
+            { name: "JavaScript", icon: Code2, color: "bg-yellow-500" },
+            { name: "State Mgmt", icon: Database, color: "bg-indigo-600" }
         ],
         softSkills: ["Quality Control", "Structural Analysis", "Resilience", "Logic"],
         skillSet: ["Optimization", "Scalable UI", "Performance Audits", "Bug Squashing"],
@@ -227,6 +250,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "krishna",
         role: "Canvas",
         bio: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
+        summary: "Creative Canvas Specialist. Focusing on artistic visual storytelling and elegant, thematic platform layouts.",
         objective: "To elevate the platform's visual narrative through artistic expression and elegant storytelling layouts.",
         contact: {
             email: "krishna@stride.in",
@@ -236,17 +260,17 @@ export const developersData: Record<string, DeveloperData> = {
             instagram: "https://www.instagram.com/__krishna276/"
         },
         education: {
-            school: "LDRP Institute",
-            degree: "Information Technology",
-            year: "2021 - Present"
+            school: "SAL Institute of Technology and Engineering Research (GTU)",
+            degree: "Computer Engineering",
+            year: "2023 - 2027"
         },
         technicalSkills: [
-            { name: "Visual Art", color: "bg-rose-500" },
-            { name: "Canvas UI", color: "bg-orange-500" },
-            { name: "Layout Art", color: "bg-indigo-500" },
-            { name: "Styling", color: "bg-pink-500" },
-            { name: "Design Narr.", color: "bg-amber-500" },
-            { name: "UI Flow", color: "bg-cyan-500" }
+            { name: "Visual Art", icon: Paintbrush, color: "bg-rose-500" },
+            { name: "Canvas UI", icon: Layout, color: "bg-orange-500" },
+            { name: "Layout Art", icon: Palette, color: "bg-indigo-500" },
+            { name: "Styling", icon: Sparkles, color: "bg-pink-500" },
+            { name: "Design Narr.", icon: Layers, color: "bg-amber-500" },
+            { name: "UI Flow", icon: Component, color: "bg-cyan-500" }
         ],
         softSkills: ["Storytelling", "Visual Empathy", "Patience", "Innovative Thinking"],
         skillSet: ["Canvas Narratives", "Creative Direction", "Thematic Layouts", "Aesthetic Flow"],

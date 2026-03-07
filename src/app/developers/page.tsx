@@ -85,9 +85,9 @@ export default function DevelopersPage() {
                                     </div>
                                 </div>
 
-                                {/* Contribution */}
+                                {/* Short Summary */}
                                 <p className="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 flex-grow">
-                                    {dev.bio}
+                                    {dev.summary}
                                 </p>
 
                                 {/* Social Links */}
