@@ -77,7 +77,7 @@ const developers = [
         contribution: "Focused on the structural integrity of the frontend, ensuring that the bespoke UI designs translated perfectly into functional, high-performance code.",
         github: "https://github.com/sharvibhavsar",
         linkedin: "https://www.linkedin.com/in/sharvi-bhavsar-914344344/",
-        portfolio: "#",
+        portfolio: "https://sharvi-bhavsar-portfolio.vercel.app/",
         instagram: "https://www.instagram.com/sharvi1206/",
         icon: Component,
         color: "bg-purple-500/20 text-purple-500",
