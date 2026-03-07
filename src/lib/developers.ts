@@ -56,21 +56,21 @@ export const developersData: Record<string, DeveloperData> = {
     simit: {
         name: "Simit Modi",
         slug: "simit",
-        role: "Frontend & Backend",
-        bio: "The visionary leader of the Stride development team, specializing in end-to-end architecture and high-performance system design.",
-        objective: "To redefine the banking experience by merging secure backend infrastructure with elite, intuitive frontend aesthetics.",
+        role: "Project Lead & Product Architect",
+        bio: "behind Stride, where I conceptualized and designed the platform to simplify how users interact with banking services. I led the development team, defiend the product vision and engineered the system architecture to deliver a seamless and intuitive digital experience.",
+        objective: "To build impactful digital products that simplify the real-world process through thought full system design, intuitive user experience and reliable technology.",
         contact: {
-            email: "simitmodi@stride.in",
-            phone: "+91 98765 43210", // Placeholder
+            email: "simitmodi@gostride.online",
+            phone: "+91 97232 87331",
             linkedin: "https://www.linkedin.com/in/simitmodi/",
             github: "https://github.com/simitmodi",
             instagram: "https://www.instagram.com/simit.io/",
             portfolio: "https://simitmodi.vercel.app/"
         },
         education: {
-            school: "LDRP Institute",
+            school: "SAL Institute of Technology and Engineering Research",
             degree: "Computer Engineering",
-            year: "2021 - Present"
+            year: "2023 - Present"
         },
         technicalSkills: [
             { name: "React", color: "bg-blue-500" },
