@@ -67,7 +67,7 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Simit Modi",
         slug: "simit",
         role: "Project Lead & Product Architect",
-        bio: "behind Stride, where I conceptualized and designed the platform to simplify how users interact with banking services. I led the development team, defiend the product vision and engineered the system architecture to deliver a seamless and intuitive digital experience.",
+        bio: "Project Lead and Product Architect behind Stride, responsible for conceptualizing the platform and leading its development. He designed the core idea of the product and guided the team in building a system that simplifies how users interact with banking services. His work focuses on translating complex real-world processes into intuitive digital experiences, combining product thinking with scalable system design. Within the Stride project, he leads architectural decisions, product direction, and overall development strategy.",
         summary: "Visionary Fullstack Developer and PR Head at ISTE. Expert in C, Java, and Python, specializing in Data-Driven Optimization and user-centric banking infrastructure.",
         objective: "To build impactful digital products that simplify the real-world process through thought full system design, intuitive user experience and reliable technology.",
         contact: {
@@ -91,13 +91,12 @@ export const developersData: Record<string, DeveloperData> = {
             { name: "React", icon: Atom, color: "bg-cyan-500" },
             { name: "Next.js", icon: Layers, color: "bg-indigo-400" },
             { name: "Node.js", icon: Zap, color: "bg-green-600" },
-            { name: "MongoDB", icon: Database, color: "bg-emerald-600" },
             { name: "Firebase", icon: Flame, color: "bg-orange-500" },
             { name: "Figma", icon: PenTool, color: "bg-purple-500" }
         ],
         softSkills: ["Team Leadership", "Strategic Planning", "Problem Solving", "Communication"],
         skillSet: ["System Design", "Cloud Architecture", "Fullstack Development", "API Security"],
-        interests: ["FinTech", "AI Research", "System Performance"],
+        interests: ["AI Research","Algorithm Desing", "System Performance", "Formula 1", "Aviation"],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Crown,
         brandColor: "from-amber-500 to-orange-600"
@@ -248,7 +247,7 @@ export const developersData: Record<string, DeveloperData> = {
     krishna: {
         name: "Krishna Patel",
         slug: "krishna",
-        role: "Canvas",
+        role: "Canvas & Documentation",
         bio: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
         summary: "Creative Canvas Specialist. Focusing on artistic visual storytelling and elegant, thematic platform layouts.",
         objective: "To elevate the platform's visual narrative through artistic expression and elegant storytelling layouts.",

@@ -62,9 +62,9 @@ export default function AboutPage() {
       <main className="relative z-10 w-full max-w-7xl px-4 md:px-8 py-20 flex flex-col items-center">
         {/* Header Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
@@ -77,9 +77,9 @@ export default function AboutPage() {
 
         {/* Main Glass Card */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
           className="relative w-full group"
         >
           {/* Subtle Outer Glow */}
@@ -90,9 +90,9 @@ export default function AboutPage() {
             {/* Left Column: The Narrative */}
             <div className="p-8 md:p-12 lg:border-r border-white/20 dark:border-white/10 flex flex-col justify-center">
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
               >
                 <Image src={Logo} alt="Stride Logo" width={180} height={60} className="mb-10 brightness-0 dark:brightness-100 opacity-80" />
 
@@ -125,9 +125,9 @@ export default function AboutPage() {
               {pillars.map((item, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: item.delay + 0.5, duration: 0.6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.3 + i * 0.1 }}
                   className="flex items-start gap-5 group/item"
                 >
                   <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center shrink-0 border border-white/20 shadow-lg transition-transform group-hover/item:scale-110 drop-shadow-sm`}>

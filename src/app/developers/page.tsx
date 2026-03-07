@@ -41,9 +41,9 @@ export default function DevelopersPage() {
             <main className="relative z-10 w-full max-w-7xl flex flex-col items-center">
                 {/* Header Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                    initial={{ opacity: 0, y: -20, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                     className="text-center mb-20"
                 >
                     <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-sm">
@@ -59,9 +59,14 @@ export default function DevelopersPage() {
                     {developers.map((dev, index) => (
                         <motion.div
                             key={dev.name}
-                            initial={{ opacity: 0, y: 40, rotateX: -5 }}
-                            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                            transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ 
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 30,
+                                delay: index * 0.1 
+                            }}
                             className="group relative h-full"
                         >
                             {/* Outer Glow */}
