@@ -25,81 +25,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
+import { developersData } from "@/lib/developers";
 
-const developers = [
-    {
-        name: "Simit Modi",
-        role: "Frontend & Backend",
-        contribution: "The visionary leader of the Stride development team, coordinating all project phases and technical architecture.",
-        github: "https://github.com/simitmodi",
-        linkedin: "https://www.linkedin.com/in/simitmodi/",
-        portfolio: "https://simitmodi.vercel.app/",
-        instagram: "https://www.instagram.com/simit.io/",
-        slug: "simit",
-        icon: Crown,
-        color: "bg-amber-500/20 text-amber-500",
-    },
-    {
-        name: "Hardi Patel",
-        role: "Frontend & UI Design",
-        contribution: "Spearheaded the visual identity of Stride, focusing on the seamless blend of intuitive UI layouts and responsive frontend components.",
-        github: "https://github.com/hardipatel2510",
-        linkedin: "https://www.linkedin.com/in/hardipatel2510/",
-        portfolio: "https://hardipatel.vercel.app/",
-        instagram: "https://www.instagram.com/hardiptl.io/",
-        slug: "hardi",
-        icon: Layout,
-        color: "bg-indigo-500/20 text-indigo-500",
-    },
-    {
-        name: "Bansari Makwana",
-        role: "Frontend & UI Design",
-        contribution: "Crafted the elegant glassmorphic components and ensured a consistent, high-fidelity user experience across all platform interfaces.",
-        github: "https://github.com/MakwBansari",
-        linkedin: "https://www.linkedin.com/in/bansimakwana/",
-        portfolio: "#",
-        instagram: "https://www.instagram.com/bansiiii_._/",
-        slug: "bansari",
-        icon: Layers,
-        color: "bg-blue-500/20 text-blue-500",
-    },
-    {
-        name: "Ankit Nandoliya",
-        role: "Frontend & UI Design",
-        contribution: "Specialized in bridge-building between design and code, implementing precise layouts and fluid interactive elements.",
-        github: "https://github.com/ankit5287",
-        linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
-        portfolio: "https://ankit52.vercel.app/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAQX0ztleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaeNPku9-1bha-01C_0cRpQx1Jmm6bLRDHtqgZNRlTIserrwHr6sDiJI22Pxcg_aem_0COMMqCUFWx57Wh6KXFIdA",
-        instagram: "https://www.instagram.com/ankit_n2/",
-        slug: "ankit",
-        icon: Zap,
-        color: "bg-emerald-500/20 text-emerald-500",
-    },
-    {
-        name: "Sharvi Bhavsar",
-        role: "Frontend & UI Design",
-        contribution: "Focused on the structural integrity of the frontend, ensuring that the bespoke UI designs translated perfectly into functional, high-performance code.",
-        github: "https://github.com/sharvibhavsar",
-        linkedin: "https://www.linkedin.com/in/sharvi-bhavsar-914344344/",
-        portfolio: "https://sharvi-bhavsar-portfolio.vercel.app/",
-        instagram: "https://www.instagram.com/sharvi1206/",
-        slug: "sharvi",
-        icon: Component,
-        color: "bg-purple-500/20 text-purple-500",
-    },
-    {
-        name: "Krishna Patel",
-        role: "Canvas",
-        contribution: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
-        github: "https://github.com/krishna276-cloud",
-        linkedin: "https://www.linkedin.com/in/krishna-patel-900523387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-        portfolio: null,
-        instagram: "https://www.instagram.com/__krishna276/",
-        slug: "krishna",
-        icon: Paintbrush,
-        color: "bg-rose-500/20 text-rose-500",
-    },
-];
+const developers = Object.values(developersData);
 
 export default function DevelopersPage() {
     return (
@@ -143,8 +71,11 @@ export default function DevelopersPage() {
 
                                 {/* Header: Icon & Name */}
                                 <div className="flex items-center gap-5 mb-6">
-                                    <div className={`w-14 h-14 rounded-2xl ${dev.color} flex items-center justify-center border border-white/20 shadow-lg transition-transform group-hover:scale-110 duration-500`}>
-                                        <dev.icon className="w-7 h-7" strokeWidth={1.5} />
+                                    <div className={`w-14 h-14 rounded-2xl ${dev.brandColor.split(' ')[0].replace('from-', 'bg-')}/20 ${dev.brandColor.split(' ')[0].replace('from-', 'text-')} flex items-center justify-center border border-white/20 shadow-lg transition-transform group-hover:scale-110 duration-500`}>
+                                        {(() => {
+                                            const Icon = dev.icon;
+                                            return <Icon className="w-7 h-7" strokeWidth={1.5} />;
+                                        })()}
                                     </div>
                                     <div>
                                         <Link href={`/developers/${dev.slug}`}>
@@ -156,29 +87,29 @@ export default function DevelopersPage() {
 
                                 {/* Contribution */}
                                 <p className="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 flex-grow">
-                                    {dev.contribution}
+                                    {dev.bio}
                                 </p>
 
                                 {/* Social Links */}
                                 <div className="flex items-center justify-between pt-6 border-t border-slate-200/50 dark:border-white/5">
                                     <div className="flex gap-4">
-                                        {dev.github && dev.github !== "#" && (
-                                            <Link href={dev.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                        {dev.contact.github && dev.contact.github !== "#" && (
+                                            <Link href={dev.contact.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Github className="w-5 h-5" />
                                             </Link>
                                         )}
-                                        {dev.linkedin && dev.linkedin !== "#" && (
-                                            <Link href={dev.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                        {dev.contact.linkedin && dev.contact.linkedin !== "#" && (
+                                            <Link href={dev.contact.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Linkedin className="w-5 h-5" />
                                             </Link>
                                         )}
-                                        {dev.portfolio && dev.portfolio !== "#" && (
-                                            <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                        {dev.contact.portfolio && dev.contact.portfolio !== "#" && (
+                                            <Link href={dev.contact.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Globe className="w-5 h-5" />
                                             </Link>
                                         )}
-                                        {dev.instagram && (
-                                            <Link href={dev.instagram} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                        {dev.contact.instagram && (
+                                            <Link href={dev.contact.instagram} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
                                                 <Instagram className="w-5 h-5" />
                                             </Link>
                                         )}

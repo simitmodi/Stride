@@ -20,7 +20,6 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
-import Image from "next/image";
 
 export default function DeveloperAboutPage() {
     const params = useParams();
@@ -38,6 +37,8 @@ export default function DeveloperAboutPage() {
             </div>
         );
     }
+
+    const Icon = dev.icon;
 
     return (
         <div className="relative min-h-screen w-full bg-slate-950 text-slate-200 overflow-x-hidden pt-24 pb-20 px-4 md:px-8">
@@ -158,7 +159,7 @@ export default function DeveloperAboutPage() {
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80 z-10" />
                                 <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
                                     {/* Placeholder for actual image */}
-                                    <dev.icon className="w-32 h-32 opacity-20" />
+                                    <Icon className="w-32 h-32 opacity-20" />
                                     <span className="absolute bottom-10 left-0 right-0 text-center text-white/40 font-black uppercase tracking-[0.3em] text-xs">Portrait</span>
                                 </div>
                                 {dev.contact.portfolio && (
