@@ -14,91 +14,36 @@ import {
     Terminal,
     Cpu,
     ShieldCheck,
-    Database
+    Database,
+    Instagram,
+    Crown,
+    Layout,
+    Layers,
+    Zap,
+    Component,
+    Paintbrush
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DevelopersFloatingBackground } from "@/components/landing/DevelopersFloatingBackground";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
+import { developersData } from "@/lib/developers";
 
-const developers = [
-    {
-        name: "Hardik Patel",
-        role: "Lead Systems Architect",
-        contribution: "Engineered the core scheduling engine and real-time synchronization layer.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Terminal,
-        color: "bg-indigo-500/20 text-indigo-500",
-    },
-    {
-        name: "Simit Modi",
-        role: "Full-Stack Developer",
-        contribution: "Developed the glassmorphic UI framework and integrated Firebase authentication.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Code2,
-        color: "bg-blue-500/20 text-blue-500",
-    },
-    {
-        name: "Aarav Sharma",
-        role: "UI/UX Designer",
-        contribution: "Designed the 'Elite Glass' aesthetic and interactive prototype flows.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Palette,
-        color: "bg-purple-500/20 text-purple-500",
-    },
-    {
-        name: "Priya Gupta",
-        role: "Frontend Specialist",
-        contribution: "Implemented complex framer-motion animations and responsive layouts.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Globe,
-        color: "bg-emerald-500/20 text-emerald-500",
-    },
-    {
-        name: "Rohan Mehta",
-        role: "DevOps Engineer",
-        contribution: "Architected the CI/CD pipeline and optimized Vercel deployment performance.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: Cpu,
-        color: "bg-amber-500/20 text-amber-500",
-    },
-    {
-        name: "Ananya Iyer",
-        role: "Security Analyst",
-        contribution: "Implemented banking-grade encryption and secure document handling.",
-        github: "#",
-        linkedin: "#",
-        portfolio: "#",
-        icon: ShieldCheck,
-        color: "bg-rose-500/20 text-rose-500",
-    },
-];
+const developers = Object.values(developersData);
 
 export default function DevelopersPage() {
     return (
         <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24">
             {/* Background Layers */}
             <div className="absolute inset-0 z-0">
-                <DevelopersFloatingBackground />
-                <BackgroundWaves />
+                <FloatingDoodles />
                 <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
             </div>
 
             <main className="relative z-10 w-full max-w-7xl flex flex-col items-center">
                 {/* Header Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                    initial={{ opacity: 0, y: -20, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                     className="text-center mb-20"
                 >
                     <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-sm">
@@ -114,9 +59,14 @@ export default function DevelopersPage() {
                     {developers.map((dev, index) => (
                         <motion.div
                             key={dev.name}
-                            initial={{ opacity: 0, y: 40, rotateX: -5 }}
-                            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                            transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ 
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 30,
+                                delay: index * 0.1 
+                            }}
                             className="group relative h-full"
                         >
                             {/* Outer Glow */}
@@ -126,35 +76,51 @@ export default function DevelopersPage() {
 
                                 {/* Header: Icon & Name */}
                                 <div className="flex items-center gap-5 mb-6">
-                                    <div className={`w-14 h-14 rounded-2xl ${dev.color} flex items-center justify-center border border-white/20 shadow-lg transition-transform group-hover:scale-110 duration-500`}>
-                                        <dev.icon className="w-7 h-7" strokeWidth={1.5} />
+                                    <div className={`w-14 h-14 rounded-2xl ${dev.brandColor.split(' ')[0].replace('from-', 'bg-')}/20 ${dev.brandColor.split(' ')[0].replace('from-', 'text-')} flex items-center justify-center border border-white/20 shadow-lg transition-transform group-hover:scale-110 duration-500`}>
+                                        {(() => {
+                                            const Icon = dev.icon;
+                                            return <Icon className="w-7 h-7" strokeWidth={1.5} />;
+                                        })()}
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{dev.name}</h3>
+                                        <Link href={`/developers/${dev.slug}`}>
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight hover:text-primary transition-colors cursor-pointer">{dev.name}</h3>
+                                        </Link>
                                         <span className="text-sm font-semibold text-primary/80 uppercase tracking-widest">{dev.role}</span>
                                     </div>
                                 </div>
 
-                                {/* Contribution */}
+                                {/* Short Summary */}
                                 <p className="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 flex-grow">
-                                    {dev.contribution}
+                                    {dev.summary}
                                 </p>
 
                                 {/* Social Links */}
                                 <div className="flex items-center justify-between pt-6 border-t border-slate-200/50 dark:border-white/5">
                                     <div className="flex gap-4">
-                                        <Link href={dev.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Github className="w-5 h-5" />
-                                        </Link>
-                                        <Link href={dev.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Linkedin className="w-5 h-5" />
-                                        </Link>
-                                        <Link href={dev.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
-                                            <Globe className="w-5 h-5" />
-                                        </Link>
+                                        {dev.contact.github && dev.contact.github !== "#" && (
+                                            <Link href={dev.contact.github} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Github className="w-5 h-5" />
+                                            </Link>
+                                        )}
+                                        {dev.contact.linkedin && dev.contact.linkedin !== "#" && (
+                                            <Link href={dev.contact.linkedin} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Linkedin className="w-5 h-5" />
+                                            </Link>
+                                        )}
+                                        {dev.contact.portfolio && dev.contact.portfolio !== "#" && (
+                                            <Link href={dev.contact.portfolio} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Globe className="w-5 h-5" />
+                                            </Link>
+                                        )}
+                                        {dev.contact.instagram && (
+                                            <Link href={dev.contact.instagram} className="p-2 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-all">
+                                                <Instagram className="w-5 h-5" />
+                                            </Link>
+                                        )}
                                     </div>
-                                    <Link href={dev.portfolio} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                        Portfolio <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                                    <Link href={`/developers/${dev.slug}`} className="group/link flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                        View Profile <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                                     </Link>
                                 </div>
                             </div>

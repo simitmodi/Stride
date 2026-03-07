@@ -9,7 +9,7 @@ export default function Footer({ className }: { className?: string }) {
   return (
     <footer className={cn("w-full py-16 bg-white border-t border-slate-100 relative z-[20]", className)}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
 
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="inline-block mb-4">
@@ -30,12 +30,6 @@ export default function Footer({ className }: { className?: string }) {
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-bold text-slate-900 mb-4 tracking-tight">Team</h4>
-            <ul className="space-y-3 text-sm text-slate-500">
-              <li><Link href="/developers" className="hover:text-primary transition-colors">Developers</Link></li>
-            </ul>
-          </div>
 
           <div>
             <h4 className="font-bold text-slate-900 mb-4 tracking-tight">Legal</h4>
@@ -46,10 +40,10 @@ export default function Footer({ className }: { className?: string }) {
           </div>
 
           <div>
-            <h4 className="font-bold text-slate-900 mb-4 tracking-tight">Contact</h4>
+            <h4 className="font-bold text-slate-900 mb-4 tracking-tight">Connect</h4>
             <ul className="space-y-3 text-sm text-slate-500">
-              <li><a href="mailto:support@stride.in" className="hover:text-primary transition-colors">support@stride.in</a></li>
-              <li><a href="tel:+9118001234567" className="hover:text-primary transition-colors">1800-123-4567</a></li>
+              <li><a href="https://github.com/simitmodi/Stride" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub Repository</a></li>
+              <li><Link href="/developers" className="hover:text-primary transition-colors">Meet the Team</Link></li>
             </ul>
           </div>
 
@@ -58,8 +52,7 @@ export default function Footer({ className }: { className?: string }) {
         <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
           <p>© {new Date().getFullYear()} Stride Banking. All rights reserved.</p>
           <div className="flex gap-4">
-            <span className="cursor-pointer hover:text-slate-600 transition-colors">Twitter</span>
-            <span className="cursor-pointer hover:text-slate-600 transition-colors">LinkedIn</span>
+            {/* Social spans removed as they are now in the Connect column */}
           </div>
         </div>
       </div>

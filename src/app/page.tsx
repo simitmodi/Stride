@@ -98,10 +98,10 @@ export default function Home() {
 
           {/* Card 1: Support Demo */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
             className="h-full"
           >
             <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
@@ -141,10 +141,10 @@ export default function Home() {
 
           {/* Card 2: Center Highlight (The blue one) */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.15 }}
             className="h-full z-10"
           >
             <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex z-10">
@@ -166,10 +166,10 @@ export default function Home() {
 
           {/* Card 3: Booking / Availability Highlight */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
             className="h-full"
           >
             <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">

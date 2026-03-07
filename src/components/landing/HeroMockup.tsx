@@ -68,7 +68,7 @@ export function HeroMockup() {
                     rotateX: 14,
                     rotateY: 2,
                     scale: 1.01,
-                    transition: { duration: 0.5, ease: "easeOut" }
+                    transition: { duration: 0.3, ease: "easeOut" }
                 }}
                 className="relative z-10 w-full max-w-4xl aspect-[16/10] bg-slate-100 dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2.5rem] border-[6px] sm:border-[12px] border-[#6366f1]/20 dark:border-indigo-500/10 shadow-[0_60px_100px_-20px_rgba(0,0,0,0.3),0_0_50px_rgba(99,102,241,0.1)] flex overflow-hidden pointer-events-auto transition-shadow hover:shadow-[0_80px_150px_-30px_rgba(99,102,241,0.3)] scale-[0.85] sm:scale-100"
             >

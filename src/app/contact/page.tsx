@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   Github,
   Users,
-  Share2,
+  HelpCircle,
+  Rocket,
   Send,
   MessageSquare,
   ArrowRight,
@@ -16,8 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ContactFloatingBackground } from "@/components/landing/ContactFloatingBackground";
-import { BackgroundWaves } from "@/components/landing/BackgroundWaves";
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
+import { useToast } from "@/hooks/use-toast";
 
 const projectDetails = [
   {
@@ -37,22 +39,23 @@ const projectDetails = [
     link: "/developers"
   },
   {
-    icon: Share2,
-    title: "Social Connect",
-    value: "Follow our Journey",
-    description: "Stay updated with the latest news and milestones on LinkedIn.",
-    color: "bg-blue-500/20 text-blue-500",
-    link: "https://linkedin.com"
+    icon: HelpCircle,
+    title: "Help Center",
+    value: "Common Questions",
+    description: "Find instant answers to frequently asked questions about Stride.",
+    color: "bg-emerald-500/20 text-emerald-500",
+    link: "/faq"
   }
 ];
 
 export default function ContactPage() {
+  const { toast } = useToast();
+
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950 px-4 py-24 md:py-32">
       {/* Background Layers */}
       <div className="absolute inset-0 z-0">
-        <ContactFloatingBackground />
-        <BackgroundWaves />
+        <FloatingDoodles />
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
       </div>
 
@@ -106,26 +109,7 @@ export default function ContactPage() {
               </motion.div>
             ))}
 
-            {/* Additional Interaction */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="p-8 rounded-[2rem] border border-primary/20 bg-primary/5 backdrop-blur-3xl"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <MessageSquare className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Share your Feedback</h3>
-              </div>
-              <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                Have a thought or a suggestion? Let us know what you think about your experience with Stride.
-              </p>
-              <Button asChild className="w-full rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-12 shadow-lg shadow-primary/20 transition-all duration-300">
-                <Link href="#" className="flex items-center justify-center gap-2">
-                  Submit Feedback <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
-            </motion.div>
+
           </div>
 
           {/* Right: Feedback Form */}
@@ -142,11 +126,21 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Direct Feedback</h2>
                 <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">We appreciate your insights and suggestions.</p>
 
-                <form className="space-y-6">
+                <form
+                  className="space-y-6"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    toast({
+                      title: "Feedback Submitted",
+                      description: "Thank you for your thoughts! Our team will review your message soon.",
+                    });
+                  }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Full Name</label>
                       <Input
+                        required
                         placeholder="Enter your name"
                         className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
                       />
@@ -154,6 +148,7 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Email Address</label>
                       <Input
+                        required
                         type="email"
                         placeholder="name@example.com"
                         className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
@@ -164,6 +159,7 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Subject</label>
                     <Input
+                      required
                       placeholder="What's this about?"
                       className="h-14 rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg px-6"
                     />
@@ -172,12 +168,16 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-4">Message</label>
                     <Textarea
+                      required
                       placeholder="Tell us what you need..."
                       className="min-h-[160px] rounded-2xl bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 focus:ring-primary/20 backdrop-blur-md transition-all text-lg p-6 resize-none"
                     />
                   </div>
 
-                  <Button className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn">
+                  <Button
+                    type="submit"
+                    className="w-full h-16 rounded-[1.5rem] bg-primary text-white text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:bg-primary/90 hover:shadow-[0_0_60px_rgba(79,70,229,0.5)] transition-all duration-500 group/btn"
+                  >
                     <span className="flex items-center justify-center gap-3">
                       Submit Feedback <Send className="w-6 h-6 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                     </span>
