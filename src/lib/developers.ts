@@ -96,7 +96,7 @@ export const developersData: Record<string, DeveloperData> = {
         ],
         softSkills: ["Team Leadership", "Strategic Planning", "Problem Solving", "Communication"],
         skillSet: ["System Design", "Cloud Architecture", "Fullstack Development", "API Security"],
-        interests: ["AI Research","Algorithm Desing", "System Performance", "Formula 1", "Aviation"],
+        interests: ["AI Research", "Algorithm Desing", "System Performance", "Formula 1", "Aviation"],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Crown,
         brandColor: "from-amber-500 to-orange-600"
@@ -106,7 +106,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "hardi",
         role: "Frontend & UI Design",
         bio: "I’m a computer engineering student with a curious mindset and a willingness to explore new opportunities. While I’m still discovering my path, I enjoy being part of collaborative environments where I can learn, contribute, and grow. I believe in showing up, asking questions, and doing my best – no matter the challenge. I’m someone who values consistency, teamwork, and self-improvement. I may not have everything figured out yet, but I’m committed to learning, trying new things, and becoming the best version of myself – one step at a time.",
-        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium banking interfaces.",
+        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium interfaces.",
         objective: "Crafting visually stunning, user-centric interfaces that make complex banking tasks feel effortless and premium.",
         contact: {
             email: "hardipatel@stride.in",
@@ -152,7 +152,8 @@ export const developersData: Record<string, DeveloperData> = {
             phone: "+91 76543 21098",
             linkedin: "https://www.linkedin.com/in/bansimakwana/",
             github: "https://github.com/MakwBansari",
-            instagram: "https://www.instagram.com/bansiiii_._/"
+            instagram: "https://www.instagram.com/bansiiii_._/",
+            portfolio: "https://bansarimakwana.vercel.app"
         },
         education: {
             school: "SAL Institute of Technology and Engineering Research (GTU)",
@@ -248,15 +249,16 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Krishna Patel",
         slug: "krishna",
         role: "Canvas & Documentation",
-        bio: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
-        summary: "Creative Canvas Specialist. Focusing on artistic visual storytelling and elegant, thematic platform layouts.",
-        objective: "To elevate the platform's visual narrative through artistic expression and elegant storytelling layouts.",
+        bio: "Created pre-devopment canvas for the platform and documented the entire process. Gathered all the requirements from the bank users and created a detailed canvas which gave the direction for the development of the platform.",
+        summary: "Creative Canvas Maker. Made necessary canvas for the approval of the project by the Faculty",
+        objective: "To show the canvas to the Faculty for the approval of the project",
         contact: {
             email: "krishna@stride.in",
             phone: "+91 43210 98765",
             linkedin: "https://www.linkedin.com/in/krishna-patel-900523387",
             github: "https://github.com/krishna276-cloud",
-            instagram: "https://www.instagram.com/__krishna276/"
+            instagram: "https://www.instagram.com/__krishna276/",
+            portfolio: "https://krishna276-portfolio.netlify.app"
         },
         education: {
             school: "SAL Institute of Technology and Engineering Research (GTU)",
