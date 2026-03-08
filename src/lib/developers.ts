@@ -249,9 +249,9 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Krishna Patel",
         slug: "krishna",
         role: "Canvas & Documentation",
-        bio: "Dedicated to the creative 'Canvas' of the project, focusing on the artistic layout and visual storytelling elements that make Stride unique.",
-        summary: "Creative Canvas Specialist. Focusing on artistic visual storytelling and elegant, thematic platform layouts.",
-        objective: "To elevate the platform's visual narrative through artistic expression and elegant storytelling layouts.",
+        bio: "Created pre-devopment canvas for the platform and documented the entire process. Gathered all the requirements from the bank users and created a detailed canvas which gave the direction for the development of the platform.",
+        summary: "Creative Canvas Maker. Made necessary canvas for the approval of the project by the Faculty",
+        objective: "To show the canvas to the Faculty for the approval of the project",
         contact: {
             email: "krishna@stride.in",
             phone: "+91 43210 98765",
