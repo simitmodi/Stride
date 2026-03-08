@@ -56,7 +56,7 @@ export interface DeveloperData {
     }[];
     softSkills: string[];
     skillSet: string[];
-    interests: string[];
+    interests: (string | { title: string; description: string })[];
     languages: string[];
     icon: LucideIcon;
     brandColor: string;
@@ -105,8 +105,8 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Hardi Patel",
         slug: "hardi",
         role: "Frontend & UI Design",
-        bio: "I’m a computer engineering student with a curious mindset and a willingness to explore new opportunities. While I’m still discovering my path, I enjoy being part of collaborative environments where I can learn, contribute, and grow. I believe in showing up, asking questions, and doing my best – no matter the challenge. I’m someone who values consistency, teamwork, and self-improvement. I may not have everything figured out yet, but I’m committed to learning, trying new things, and becoming the best version of myself – one step at a time.",
-        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium interfaces.",
+        bio: "I am a Computer Engineering student with a strong curiosity for technology and problem-solving. I enjoy building modern web applications and exploring tools that improve user experience and system efficiency.\n\nDuring my learning journey, I have worked with technologies such as React, Next.js, Java, Firebase, and modern frontend tools to develop practical projects and strengthen my development skills.\n\nI enjoy working in collaborative environments where ideas are shared, challenges are solved creatively, and teams grow together through learning and experimentation.\n\nMy goal is to become a skilled software developer who builds efficient, scalable, and user-focused digital solutions.\n\nI believe in consistency, continuous learning, and improving a little every day as I grow in my engineering journey.",
+        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium banking interfaces.",
         objective: "Crafting visually stunning, user-centric interfaces that make complex banking tasks feel effortless and premium.",
         contact: {
             email: "hardipatel@stride.in",
@@ -135,7 +135,12 @@ export const developersData: Record<string, DeveloperData> = {
         ],
         softSkills: ["Curiosity", "Collaboration", "Self-Improvement", "Teamwork", "Consistency"],
         skillSet: ["Wireframing", "Prototyping", "Component Design", "Responsive Web"],
-        interests: ["Interaction Design", "Typography", "Motion UI"],
+        interests: [
+            { title: "Web Development", description: "Building responsive and modern web applications using contemporary technologies." },
+            { title: "Software Development", description: "Designing efficient software solutions while continuously improving programming skills." },
+            { title: "Problem Solving", description: "Enjoy solving logical challenges and developing optimized solutions using programming." },
+            { title: "Learning New Technologies", description: "Exploring modern frameworks, tools, and development practices to expand technical knowledge." }
+        ],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Layout,
         brandColor: "from-indigo-500 to-purple-600"

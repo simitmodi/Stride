@@ -67,7 +67,7 @@ export default function DeveloperAboutPage() {
             const prsData = await prsRes.json();
             const commitsData = await commitsRes.json();
 
-            const totalStars = Array.isArray(reposData) 
+            const totalStars = Array.isArray(reposData)
                 ? reposData.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0)
                 : 0;
 
@@ -98,10 +98,13 @@ export default function DeveloperAboutPage() {
 
     const Icon = dev.icon;
 
-    // Helper to split bio into paragraphs if it's long
-    const bioParagraphs = dev.bio.split(". ").map((p, i, arr) =>
-        p + (i === arr.length - 1 ? "" : ".")
-    );
+    // Helper to split bio into paragraphs. Supports both ". " and "\n\n"
+    const bioParagraphs = dev.bio.split(/\n\n|\. /).map((p, i, arr) => {
+        const trimmed = p.trim();
+        if (!trimmed) return null;
+        // Add back the dot if we split by ". "
+        return trimmed + (trimmed.endsWith(".") || i === arr.length - 1 ? "" : ".");
+    }).filter(Boolean);
 
     return (
         <div className="relative min-h-screen w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 overflow-x-hidden pt-24 pb-20 px-4 md:px-8">
@@ -151,8 +154,8 @@ export default function DeveloperAboutPage() {
                             <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 blur-2xl rounded-3xl" />
                             <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden border-2 border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl group-hover:border-indigo-500/50 transition-colors duration-500 shadow-2xl flex items-center justify-center">
                                 {githubStats?.avatarUrl ? (
-                                    <img 
-                                        src={githubStats.avatarUrl} 
+                                    <img
+                                        src={githubStats.avatarUrl}
                                         alt={dev.name}
                                         className="h-full w-full object-cover transition-transform group-hover:scale-110 duration-500"
                                     />
@@ -198,7 +201,7 @@ export default function DeveloperAboutPage() {
                         className="relative"
                     >
                         <h2 className="text-4xl font-black text-slate-900 dark:text-white mb-10 tracking-tight italic">GitHub Presence</h2>
-                        
+
                         {isStatsLoading ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
                                 {[1, 2, 3, 4].map(i => (
@@ -368,12 +371,25 @@ export default function DeveloperAboutPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-slate-200 dark:border-white/5">
                             <div className="space-y-6">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white italic tracking-tight">Interests</h3>
-                                <div className="flex flex-wrap gap-3">
-                                    {dev.interests.map(interest => (
-                                        <span key={interest} className="px-5 py-2.5 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold text-sm backdrop-blur-md shadow-sm">
-                                            {interest}
-                                        </span>
-                                    ))}
+                                <div className="space-y-4">
+                                    {dev.interests.map((interest, idx) => {
+                                        const isObject = typeof interest === "object";
+                                        const title = isObject ? interest.title : interest;
+                                        const desc = isObject ? interest.description : null;
+
+                                        return (
+                                            <div key={idx} className="space-y-2 group/interest">
+                                                <div className="inline-block px-5 py-2.5 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold text-sm backdrop-blur-md shadow-sm group-hover/interest:border-indigo-500/50 transition-colors">
+                                                    {title}
+                                                </div>
+                                                {desc && (
+                                                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed pl-1 max-w-md">
+                                                        {desc}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                             <div className="space-y-6">
