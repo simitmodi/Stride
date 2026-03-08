@@ -96,7 +96,7 @@ export const developersData: Record<string, DeveloperData> = {
         ],
         softSkills: ["Team Leadership", "Strategic Planning", "Problem Solving", "Communication"],
         skillSet: ["System Design", "Cloud Architecture", "Fullstack Development", "API Security"],
-        interests: ["AI Research","Algorithm Desing", "System Performance", "Formula 1", "Aviation"],
+        interests: ["AI Research", "Algorithm Desing", "System Performance", "Formula 1", "Aviation"],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Crown,
         brandColor: "from-amber-500 to-orange-600"
@@ -152,7 +152,8 @@ export const developersData: Record<string, DeveloperData> = {
             phone: "+91 76543 21098",
             linkedin: "https://www.linkedin.com/in/bansimakwana/",
             github: "https://github.com/MakwBansari",
-            instagram: "https://www.instagram.com/bansiiii_._/"
+            instagram: "https://www.instagram.com/bansiiii_._/",
+            portfolio: "https://bansarimakwana.vercel.app"
         },
         education: {
             school: "SAL Institute of Technology and Engineering Research (GTU)",
@@ -256,7 +257,8 @@ export const developersData: Record<string, DeveloperData> = {
             phone: "+91 43210 98765",
             linkedin: "https://www.linkedin.com/in/krishna-patel-900523387",
             github: "https://github.com/krishna276-cloud",
-            instagram: "https://www.instagram.com/__krishna276/"
+            instagram: "https://www.instagram.com/__krishna276/",
+            portfolio: "https://krishna276-portfolio.netlify.app"
         },
         education: {
             school: "SAL Institute of Technology and Engineering Research (GTU)",
