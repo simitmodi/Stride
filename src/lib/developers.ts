@@ -106,7 +106,7 @@ export const developersData: Record<string, DeveloperData> = {
         slug: "hardi",
         role: "Frontend & UI Design",
         bio: "I’m a computer engineering student with a curious mindset and a willingness to explore new opportunities. While I’m still discovering my path, I enjoy being part of collaborative environments where I can learn, contribute, and grow. I believe in showing up, asking questions, and doing my best – no matter the challenge. I’m someone who values consistency, teamwork, and self-improvement. I may not have everything figured out yet, but I’m committed to learning, trying new things, and becoming the best version of myself – one step at a time.",
-        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium banking interfaces.",
+        summary: "Creative Frontend Developer focused on UI/UX excellence. Passionate about learning, collaboration, and crafting premium interfaces.",
         objective: "Crafting visually stunning, user-centric interfaces that make complex banking tasks feel effortless and premium.",
         contact: {
             email: "hardipatel@stride.in",
