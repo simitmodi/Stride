@@ -371,23 +371,38 @@ export default function DeveloperAboutPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-slate-200 dark:border-white/5">
                             <div className="space-y-6">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white italic tracking-tight">Interests</h3>
-                                <div className="space-y-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {dev.interests.map((interest, idx) => {
                                         const isObject = typeof interest === "object";
                                         const title = isObject ? interest.title : interest;
                                         const desc = isObject ? interest.description : null;
+                                        const InterestIcon = isObject ? interest.icon : Sparkles;
 
                                         return (
-                                            <div key={idx} className="space-y-2 group/interest">
-                                                <div className="inline-block px-5 py-2.5 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold text-sm backdrop-blur-md shadow-sm group-hover/interest:border-indigo-500/50 transition-colors">
-                                                    {title}
+                                            <motion.div
+                                                key={idx}
+                                                whileHover={{ y: -5 }}
+                                                className="relative group/interest p-6 rounded-3xl bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl transition-all duration-300 hover:bg-white/60 dark:hover:bg-white/10 hover:border-indigo-500/30 overflow-hidden shadow-lg shadow-black/5"
+                                            >
+                                                {/* Card Glow Effect */}
+                                                <div className="absolute -inset-24 bg-indigo-500/5 blur-3xl rounded-full opacity-0 group-hover/interest:opacity-100 transition-opacity pointer-events-none" />
+
+                                                <div className="relative z-10 flex items-start gap-4">
+                                                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-500/10 group-hover/interest:scale-110 transition-transform">
+                                                        <InterestIcon className="w-5 h-5" />
+                                                    </div>
+                                                    <div className="space-y-1.5 pt-0.5">
+                                                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white leading-none tracking-tight">
+                                                            {title}
+                                                        </h4>
+                                                        {desc && (
+                                                            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold leading-relaxed line-clamp-2">
+                                                                {desc}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                {desc && (
-                                                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed pl-1 max-w-md">
-                                                        {desc}
-                                                    </p>
-                                                )}
-                                            </div>
+                                            </motion.div>
                                         );
                                     })}
                                 </div>

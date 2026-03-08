@@ -56,7 +56,7 @@ export interface DeveloperData {
     }[];
     softSkills: string[];
     skillSet: string[];
-    interests: (string | { title: string; description: string })[];
+    interests: (string | { title: string; description: string; icon: LucideIcon })[];
     languages: string[];
     icon: LucideIcon;
     brandColor: string;
@@ -136,10 +136,10 @@ export const developersData: Record<string, DeveloperData> = {
         softSkills: ["Curiosity", "Collaboration", "Self-Improvement", "Teamwork", "Consistency"],
         skillSet: ["Wireframing", "Prototyping", "Component Design", "Responsive Web"],
         interests: [
-            { title: "Web Development", description: "Building responsive and modern web applications using contemporary technologies." },
-            { title: "Software Development", description: "Designing efficient software solutions while continuously improving programming skills." },
-            { title: "Problem Solving", description: "Enjoy solving logical challenges and developing optimized solutions using programming." },
-            { title: "Learning New Technologies", description: "Exploring modern frameworks, tools, and development practices to expand technical knowledge." }
+            { title: "Web Development", description: "Building responsive and modern web applications using contemporary technologies.", icon: Globe },
+            { title: "Software Development", description: "Designing efficient software solutions while continuously improving programming skills.", icon: Cpu },
+            { title: "Problem Solving", description: "Enjoy solving logical challenges and developing optimized solutions using programming.", icon: Terminal },
+            { title: "Learning New Technologies", description: "Exploring modern frameworks, tools, and development practices to expand technical knowledge.", icon: Zap }
         ],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Layout,
