@@ -35,7 +35,7 @@ export function ProblemSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {problems.map((prob, i) => (
-            <AnimateIn key={i} delay={prob.delay} className="group relative hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+            <AnimateIn key={i} delay={prob.delay} className="relative h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-2xl blur-xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-white dark:bg-black border border-slate-100/50 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 shadow-sm rounded-2xl p-8 flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors z-10">

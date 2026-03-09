@@ -30,19 +30,6 @@ export function BackgroundWaves() {
                     stroke="url(#wave-gradient-1)"
                     strokeWidth="4"
                     fill="transparent"
-                    animate={{
-                        d: [
-                            "M-200 600 Q 300 400 720 500 T 1640 400",
-                            "M-200 550 Q 400 600 720 450 T 1640 550",
-                            "M-200 600 Q 300 400 720 500 T 1640 400",
-                        ],
-                        x: [-100, 100, -100],
-                    }}
-                    transition={{
-                        duration: 18,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
                 />
 
                 {/* Wave 2 - Purple Accent */}
@@ -51,19 +38,6 @@ export function BackgroundWaves() {
                     stroke="url(#wave-gradient-2)"
                     strokeWidth="3"
                     fill="transparent"
-                    animate={{
-                        d: [
-                            "M-200 400 Q 400 600 720 400 T 1640 600",
-                            "M-200 450 Q 300 300 720 550 T 1640 350",
-                            "M-200 400 Q 400 600 720 400 T 1640 600",
-                        ],
-                        x: [100, -100, 100],
-                    }}
-                    transition={{
-                        duration: 22,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
                 />
 
                 {/* Wave 3 - High Subtle */}
@@ -73,19 +47,6 @@ export function BackgroundWaves() {
                     strokeWidth="2.5"
                     opacity="0.8"
                     fill="transparent"
-                    animate={{
-                        d: [
-                            "M-200 200 Q 500 100 720 300 T 1640 100",
-                            "M-200 250 Q 600 400 720 150 T 1640 300",
-                            "M-200 200 Q 500 100 720 300 T 1640 100",
-                        ],
-                        x: [-150, 150, -150],
-                    }}
-                    transition={{
-                        duration: 15,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
                 />
 
                 {/* Wave 4 - Deep Low */}
@@ -95,19 +56,6 @@ export function BackgroundWaves() {
                     strokeWidth="5"
                     opacity="0.6"
                     fill="transparent"
-                    animate={{
-                        d: [
-                            "M-200 750 Q 400 650 720 700 T 1640 650",
-                            "M-200 700 Q 500 750 720 650 T 1640 700",
-                            "M-200 750 Q 400 650 720 700 T 1640 650",
-                        ],
-                        x: [80, -80, 80],
-                    }}
-                    transition={{
-                        duration: 25,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
                 />
             </svg>
         </div>

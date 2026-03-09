@@ -136,22 +136,9 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
         }}
       >
         <style>{`
-          @keyframes coin3D       { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
-          @keyframes calFloat     { 0%,100%{transform:translateY(0px) rotateX(8deg) rotateY(-12deg)} 50%{transform:translateY(-6px) rotateX(8deg) rotateY(-12deg)} }
-          @keyframes floatRandom  { 
-            0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33%  { transform: translate(120px, 40px) scale(1.1) rotate(10deg); }
-            66%  { transform: translate(-40px, 60px) scale(0.9) rotate(-5deg); }
-            100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-          }
-          .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
-          .cal-float { animation: calFloat 3s ease-in-out infinite; transform-style: preserve-3d; }
-          @keyframes pulseScale   { 0%,100%{transform:scale(1);opacity:0.15} 50%{transform:scale(1.2);opacity:0.25} }
-          @keyframes driftSlow    { 0%{transform:translate(0,0)} 50%{transform:translate(40px, -20px)} 100%{transform:translate(0,0)} }
-          .coin-3d   { animation: coin3D   4s linear infinite; transform-style: preserve-3d; }
-          .cal-float { animation: calFloat 3s ease-in-out infinite; transform-style: preserve-3d; }
-          .floating-bg-object  { animation: floatRandom 15s ease-in-out infinite; filter: blur(40px); opacity: 0.15; }
-          .floating-bg-object2 { animation: driftSlow 12s ease-in-out infinite; filter: blur(35px); opacity: 0.12; background: #9333ea; }
+          .coin-3d   { transform-style: preserve-3d; }
+          .floating-bg-object  { filter: blur(40px); opacity: 0.15; }
+          .floating-bg-object2 { filter: blur(35px); opacity: 0.12; background: #9333ea; }
         `}</style>
 
         {/* Floating background objects */}
@@ -166,7 +153,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
         <div className="relative z-10 flex items-stretch divide-x divide-white/10">
 
           {/* LEFT: Stats */}
-          <div className="flex flex-col justify-center items-center gap-3 px-8 py-5 flex-1">
+          <div className="flex flex-col justify-center items-center gap-3 px-10 py-5 flex-1">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40">Overview</p>
             <div className="flex items-center gap-8">
               <div className="flex flex-col items-center">
@@ -182,29 +169,29 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
           </div>
 
           {/* CENTER: Digital Timer */}
-          <div className="flex flex-col justify-center items-center px-8 py-5 flex-1"
+          <div className="flex flex-col justify-center items-center px-10 py-5 flex-1"
             style={{ background: "rgba(0,0,0,0.15)" }}>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Next appointment in</p>
             <DigitalTimer days={pad(days)} hrs={pad(hrs)} mins={pad(mins)} sec={pad(sec)} />
           </div>
 
           {/* RIGHT: Appointment + decor */}
-          <div className="flex items-center gap-6 px-8 py-5 flex-1 relative overflow-hidden">
+          <div className="flex items-center gap-6 px-10 py-5 flex-1 relative overflow-hidden">
             {/* Decoration items */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float">
-              {/* Simplified icon for performance */}
-              <Landmark className="h-16 w-16 text-white" />
+            <div className="absolute -right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-10">
+              <Landmark className="h-24 w-24 text-white" />
             </div>
 
             {/* Content */}
-            <div className="min-w-0 pr-4">
+            <div className="min-w-0 pr-4 relative z-10">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-1.5">Next up</p>
               <p className="text-xl font-bold text-white leading-tight truncate">{nextAppt.specificService}</p>
               <p className="text-sm text-white/60 mt-2 font-medium">
                 {nextAppt.bankName} · {format(nextAppt.date.toDate(), "MMM d")}
               </p>
             </div>
-            <span className="flex-shrink-0 ml-auto px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-white/90 transition-all active:scale-95 shadow-xl whitespace-nowrap">
+
+            <span className="flex-shrink-0 ml-auto px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-slate-50 transition-all active:scale-95 shadow-xl whitespace-nowrap relative z-10">
               Details →
             </span>
           </div>
@@ -237,7 +224,7 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
         <div className="relative z-10 flex items-stretch divide-x divide-white/10">
 
           {/* LEFT: Stats */}
-          <div className="flex flex-col justify-center items-center gap-3 px-8 py-5 flex-1">
+          <div className="flex flex-col justify-center items-center gap-3 px-10 py-5 flex-1">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40">Overview</p>
             <div className="flex items-center gap-8">
               <div className="flex flex-col items-center">
@@ -253,46 +240,41 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
           </div>
 
           {/* CENTER: Ambient Message (Silky Smooth Animation) */}
-          <div className="flex flex-col justify-center items-center px-8 py-5 flex-1 text-center"
+          <div className="flex flex-col justify-center items-center px-10 py-5 flex-1 text-center"
             style={{ background: "rgba(0,0,0,0.15)" }}>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Status Update</p>
-            <div className="flex flex-col items-center" style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
-              <motion.div
-                animate={{ y: [-3, 3, -3] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className="flex flex-col items-center"
-                style={{ willChange: 'transform' }}
-              >
+            <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center">
                 <h2 className="text-2xl font-black text-white tracking-tight">
                   Schedule Clear
                 </h2>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-1">
                   Everything is in order
                 </p>
-              </motion.div>
+              </div>
             </div>
           </div>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-6 px-8 py-5 flex-1 relative overflow-hidden">
+          <div className="flex items-center gap-6 px-10 py-5 flex-1 relative overflow-hidden">
             {/* Decoration */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 cal-float">
-              <Landmark className="h-16 w-16 text-white" />
+            <div className="absolute -right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-10">
+              <Landmark className="h-24 w-24 text-white" />
             </div>
 
-            <div className="min-w-0 pr-4">
+            <div className="min-w-0 pr-4 relative z-10">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-1.5">Action Center</p>
               <p className="text-xl font-bold text-white leading-tight truncate">Ready for next?</p>
               <p className="text-sm text-white/60 mt-2 font-medium">Quick link to scheduler</p>
             </div>
 
-            <div className="flex-shrink-0 ml-auto flex flex-col gap-2">
+            <div className="flex-shrink-0 ml-auto flex flex-col gap-2 relative z-10">
               <Link href="/dashboard/customer/appointment-scheduling"
-                className="px-6 py-2.5 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-white/90 transition-all active:scale-95 whitespace-nowrap text-center">
+                className="px-6 py-2.5 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-slate-50 transition-all active:scale-95 whitespace-nowrap text-center">
                 Book Now
               </Link>
               <Link href="/dashboard/customer/document-checklist"
-                className="px-6 py-2.5 rounded-2xl bg-white/10 text-white font-bold text-sm border border-white/20 transition-all hover:bg-white/20 active:scale-95 whitespace-nowrap text-center">
+                className="px-6 py-2.5 rounded-2xl bg-white/20 text-white font-bold text-sm border border-white/30 backdrop-blur-sm transition-all hover:bg-white/30 active:scale-95 whitespace-nowrap text-center text-shadow-sm">
                 Checklist →
               </Link>
             </div>
@@ -433,14 +415,11 @@ export default function CustomerDashboardPage() {
       </div>
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
         <style>{`
-          @keyframes ambientDrift1 { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(10vw, 5vh) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
-          @keyframes ambientDrift2 { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(-8vw, 10vh) rotate(15deg)} 100%{transform:translate(0,0) rotate(0deg)} }
-          @keyframes ambientPulse  { 0%,100%{opacity:0.3} 50%{opacity:0.6} }
           .ambient-glow { filter: blur(140px); border-radius: 9999px; position: fixed; }
         `}</style>
-        <div className="ambient-glow w-[50vw] h-[50vh] bg-indigo-500/10 top-[-10%] left-[-10%]" style={{ animation: 'ambientDrift1 25s ease-in-out infinite' }} />
-        <div className="ambient-glow w-[40vw] h-[40vh] bg-purple-500/10 bottom-[10%] right-[-5%]" style={{ animation: 'ambientDrift2 30s ease-in-out infinite' }} />
-        <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" style={{ animation: 'ambientPulse 15s ease-in-out infinite' }} />
+        <div className="ambient-glow w-[50vw] h-[50vh] bg-indigo-500/10 top-[-10%] left-[-10%]" />
+        <div className="ambient-glow w-[40vw] h-[40vh] bg-purple-500/10 bottom-[10%] right-[-5%]" />
+        <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" />
       </div>
 
       {/* Greeting and Top Stats (Ensuring they are above background) */}

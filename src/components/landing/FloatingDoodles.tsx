@@ -62,17 +62,7 @@ function Doodle({
       style={{
         left: x,
         top: y,
-        perspective: 600,
-        y: springY
-      }}
-      animate={{
-        rotateZ: [rotate - 4, rotate + 4, rotate - 4],
-      }}
-      transition={{
-        duration: 6 + delay,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay,
+        rotateZ: rotate,
       }}
     >
       {shape === "rupee" && <RupeeShape size={size} color={color} />}

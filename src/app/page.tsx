@@ -97,14 +97,8 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl pb-32">
 
           {/* Card 1: Support Demo */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
-            className="h-full"
-          >
-            <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+          <div className="h-full">
+            <div className="relative h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col min-h-[300px]">
 
@@ -137,17 +131,11 @@ export default function Home() {
 
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 2: Center Highlight (The blue one) */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.15 }}
-            className="h-full z-10"
-          >
-            <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex z-10">
+          <div className="h-full z-10">
+            <div className="relative h-full flex z-10">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-[#4F46E5] dark:bg-[#4F46E5] rounded-[2.5rem] p-8 shadow-sm border border-[#4F46E5] group-hover:border-[#F4F4F8] group-hover:bg-[#5c54eb] transition-colors duration-300 flex flex-col justify-between min-h-[300px] overflow-hidden">
                 <div>
@@ -162,17 +150,11 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 3: Booking / Availability Highlight */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
-            className="h-full"
-          >
-            <div className="relative group hover:-translate-y-2 transition-transform duration-500 ease-out h-full flex">
+          <div className="h-full">
+            <div className="relative h-full flex">
               <div className="absolute -inset-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[2.5rem] blur-2xl opacity-60 transition duration-500 group-hover:opacity-100" />
               <div className="relative w-full h-full bg-white dark:bg-black/90 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-800 group-hover:border-[#4F46E5] group-hover:bg-[#F4F4F8] transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
 
@@ -202,7 +184,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
         </div>
 
