@@ -242,36 +242,40 @@ export default function DeveloperAboutPage() {
                             </div>
                         </motion.div>
 
-                        {/* Current Focus Section */}
-                        {dev.currentFocus && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="space-y-8 pt-12"
-                            >
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-8 tracking-tight italic">Current Focus</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {dev.currentFocus.map((focus, idx) => (
-                                        <SpotlightCard
-                                            key={idx}
-                                            className="p-8 rounded-[2rem] bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-3xl group hover:border-indigo-500/50 hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 shadow-xl shadow-indigo-500/5"
-                                        >
-                                            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform border border-indigo-500/20">
-                                                <focus.icon className="w-6 h-6" />
-                                            </div>
-                                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 italic tracking-tight">{focus.title}</h4>
-                                            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
-                                                {focus.description}
-                                            </p>
-                                        </SpotlightCard>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
+
                     </div>
                 </motion.section>
+
+                {/* Current Focus Section */}
+                {dev.currentFocus && (
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8 }}
+                        className="space-y-12"
+                    >
+                        <div className="text-center md:text-left">
+                            <h2 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight italic text-center">Current Focus</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {dev.currentFocus.map((focus, idx) => (
+                                <SpotlightCard
+                                    key={idx}
+                                    className="p-8 rounded-[2rem] bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-3xl group hover:border-indigo-500/50 hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 shadow-xl shadow-indigo-500/5"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform border border-indigo-500/20">
+                                        <focus.icon className="w-6 h-6" />
+                                    </div>
+                                    <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 italic tracking-tight">{focus.title}</h4>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                                        {focus.description}
+                                    </p>
+                                </SpotlightCard>
+                            ))}
+                        </div>
+                    </motion.section>
+                )}
 
                 {/* GitHub Stats Section */}
                 {(isStatsLoading || githubStats) && (
@@ -607,6 +611,9 @@ export default function DeveloperAboutPage() {
                     >
                         <p className="text-xl md:text-2xl text-slate-400 italic text-center font-medium max-w-2xl mx-auto leading-relaxed">
                             "{dev.quote}"
+                        </p>
+                        <p className="text-center mt-6 text-slate-500 dark:text-slate-400 font-bold tracking-tight">
+                            — {dev.name}
                         </p>
                     </motion.div>
                 )}
