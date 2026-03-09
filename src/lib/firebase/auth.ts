@@ -19,8 +19,8 @@ import { doc, setDoc, updateDoc, Timestamp, deleteDoc, getDoc } from "firebase/f
 import { auth, db } from "./config";
 
 export async function signUpWithEmail(
-  email: string, 
-  password: string, 
+  email: string,
+  password: string,
   firstName: string,
   lastName: string,
   username: string,
@@ -32,14 +32,19 @@ export async function signUpWithEmail(
   branch?: string,
   address?: string,
 ): Promise<User | null> {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('sessionToken');
+  }
+
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  
+
   if (userCredential.user) {
     const user = userCredential.user;
     const fullName = `${firstName} ${lastName}`;
     await updateProfile(user, { displayName: fullName });
 
     // Base user data
+    const sessionToken = crypto.randomUUID();
     const userData: { [key: string]: any } = {
       firstName: firstName,
       lastName: lastName,
@@ -50,8 +55,9 @@ export async function signUpWithEmail(
       uid: user.uid,
       initials: '',
       role: role,
+      sessionToken: sessionToken,
     };
-    
+
     if (role === 'bank') {
       userData.bankName = bankName;
       userData.branch = branch;
@@ -60,40 +66,54 @@ export async function signUpWithEmail(
       userData.ifscCode = ifscCode;
     }
 
+    // Set the local storage token FIRST so the FirebaseErrorListener sees the correct token
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sessionToken', sessionToken);
+    }
+
     // Create user document in Firestore
     const userDocRef = doc(db, "users", user.uid);
     await setDoc(userDocRef, userData);
-    
+
     if (role !== 'bank') {
-        await sendEmailVerification(user);
+      await sendEmailVerification(user);
     }
-    
+
     return user;
   }
   return null;
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User | null> {
+  if (typeof window !== 'undefined') {
+    // Clear any stale session token before starting the sign in process
+    // This prevents race conditions where the old token triggers a mismatch before the new one is set.
+    localStorage.removeItem('sessionToken');
+  }
+
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   if (userCredential.user) {
     const user = userCredential.user;
     const userDocRef = doc(db, "users", user.uid);
-    
+
     const userDoc = await getDoc(userDocRef);
     const userData = userDoc.data();
 
-    if (userData && userData.role === 'customer') {
+    // Generate a session token for both customer and bank roles
+    if (userData && (userData.role === 'customer' || userData.role === 'bank')) {
       const sessionToken = crypto.randomUUID();
-      await updateDoc(userDocRef, { sessionToken });
+      // Set the local storage token FIRST so the FirebaseErrorListener sees the correct token
+      // when the updateDoc fires the onSnapshot listener.
       if (typeof window !== 'undefined') {
         localStorage.setItem('sessionToken', sessionToken);
       }
-    } else if (userDoc.exists() && userData?.role !== 'customer') {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('sessionToken');
-        }
+      await updateDoc(userDocRef, { sessionToken });
+    } else if (userDoc.exists() && userData?.role !== 'customer' && userData?.role !== 'bank') {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('sessionToken');
+      }
     } else if (!userDoc.exists()) {
-       // This case is primarily for developers created manually in Firebase console.
+      // This case is primarily for developers created manually in Firebase console.
     }
   }
   return userCredential.user;
@@ -158,7 +178,7 @@ export async function changeUserPassword(currentPassword: string, newPassword: s
   }
   // Re-authenticate user before changing password for security
   await reauthenticateUser(currentPassword);
-  
+
   // Update password
   await updatePassword(user, newPassword);
 }

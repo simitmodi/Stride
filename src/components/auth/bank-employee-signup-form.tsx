@@ -43,7 +43,7 @@ const formSchema = z.object({
 export function BankEmployeeSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  
+
   const [branches, setBranches] = useState<{ BRANCH: string; IFSC: string; ADDRESS: string; }[]>([]);
   const uniqueBanks = Array.from(new Set(bankData.map((item) => item.BANK))).sort();
 
@@ -90,11 +90,11 @@ export function BankEmployeeSignUpForm() {
     setIsLoading(true);
     try {
       const user = await signUpWithEmail(
-        values.email, 
-        values.password, 
-        values.firstName, 
-        values.lastName, 
-        values.username, 
+        values.email,
+        values.password,
+        values.firstName,
+        values.lastName,
+        values.username,
         new Date(), // Placeholder DOB
         'bank',
         values.bankName,
@@ -110,6 +110,11 @@ export function BankEmployeeSignUpForm() {
         });
         form.reset();
         setBranches([]);
+
+        // Let we need to wait a tiny bit for the sessionToken listener to not get mad
+        setTimeout(() => {
+          router.push('/dashboard/bank');
+        }, 100);
       } else {
         throw new Error("User creation failed unexpectedly.");
       }
@@ -203,26 +208,26 @@ export function BankEmployeeSignUpForm() {
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="bankName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bank Name</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a bank" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {uniqueBanks.map((bank) => (
-                      <SelectItem key={bank} value={bank}>
-                        {bank}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a bank" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {uniqueBanks.map((bank) => (
+                    <SelectItem key={bank} value={bank}>
+                      {bank}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -233,20 +238,20 @@ export function BankEmployeeSignUpForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Branch</FormLabel>
-                <Select onValueChange={handleBranchChange} value={field.value} disabled={!selectedBank}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a branch" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {branches.map((b) => (
-                      <SelectItem key={b.IFSC} value={b.BRANCH}>
-                        {b.BRANCH}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Select onValueChange={handleBranchChange} value={field.value} disabled={!selectedBank}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a branch" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {branches.map((b) => (
+                    <SelectItem key={b.IFSC} value={b.BRANCH}>
+                      {b.BRANCH}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -264,7 +269,7 @@ export function BankEmployeeSignUpForm() {
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="address"
           render={({ field }) => (

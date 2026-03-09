@@ -52,14 +52,23 @@ export default function BankLoginPage() {
 
           <div className="w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-lg">
             <BankLoginForm />
-            <p className="mt-6 text-center text-sm text-gray-500">
+            <div className="mt-6 flex flex-col gap-2 text-center text-sm text-gray-500">
+              <p>
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/signup/bank"
+                  className="font-medium text-indigo-600 underline-offset-4 hover:underline transition-colors"
+                >
+                  Sign up First
+                </Link>
+              </p>
               <Link
                 href="/login/customer"
-                className="font-medium text-indigo-600 underline-offset-4 hover:underline transition-colors block text-center"
+                className="font-medium text-indigo-600 underline-offset-4 hover:underline transition-colors block text-center mt-2 pt-4 border-t border-gray-100"
               >
-                Not a bank employee?
+                Not a bank employee? Go to Customer Login
               </Link>
-            </p>
+            </div>
           </div>
 
           <div className="mt-10 text-center md:text-left text-sm font-medium">
