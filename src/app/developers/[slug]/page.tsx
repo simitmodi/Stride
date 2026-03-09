@@ -22,7 +22,17 @@ import {
     ArrowRight,
     Star,
     GitPullRequest,
-    Box
+    Box,
+    Terminal,
+    Flame,
+    Atom,
+    Layers,
+    Coffee,
+    FileText,
+    Code2,
+    Webhook,
+    Binary,
+    PenTool
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -231,6 +241,35 @@ export default function DeveloperAboutPage() {
                                 ))}
                             </div>
                         </motion.div>
+
+                        {/* Current Focus Section */}
+                        {dev.currentFocus && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="space-y-8 pt-12"
+                            >
+                                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-8 tracking-tight italic">Current Focus</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {dev.currentFocus.map((focus, idx) => (
+                                        <SpotlightCard
+                                            key={idx}
+                                            className="p-8 rounded-[2rem] bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-3xl group hover:border-indigo-500/50 hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 shadow-xl shadow-indigo-500/5"
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform border border-indigo-500/20">
+                                                <focus.icon className="w-6 h-6" />
+                                            </div>
+                                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 italic tracking-tight">{focus.title}</h4>
+                                            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                                                {focus.description}
+                                            </p>
+                                        </SpotlightCard>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
                     </div>
                 </motion.section>
 
@@ -248,7 +287,20 @@ export default function DeveloperAboutPage() {
                             }}
                             className="relative"
                         >
-                            <h2 className="text-4xl font-black text-slate-900 dark:text-white mb-12 tracking-tight italic">GitHub Presence</h2>
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight italic">GitHub Presence</h2>
+                                {dev.contact.github && (
+                                    <Link href={dev.contact.github} target="_blank">
+                                        <motion.div
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 h-10 md:px-8 md:h-12 flex items-center justify-center font-bold shadow-lg shadow-indigo-500/20 transition-all border-none group/btn text-sm md:text-base"
+                                        >
+                                            View GitHub Profile <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                        </motion.div>
+                                    </Link>
+                                )}
+                            </div>
 
                             {isStatsLoading ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
@@ -281,6 +333,36 @@ export default function DeveloperAboutPage() {
                             )}
                         </motion.section>
                     </div>
+                )}
+
+                {/* Highlights Section */}
+                {dev.highlights && (
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8 }}
+                        className="space-y-12"
+                    >
+                        <h3 className="text-4xl font-black text-slate-900 dark:text-white mb-12 tracking-tight italic">Key Highlights</h3>
+                        <div className="grid grid-cols-1 gap-6">
+                            {dev.highlights.map((highlight, idx) => (
+                                <SpotlightCard
+                                    key={idx}
+                                    className="p-8 rounded-[2rem] bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-3xl group hover:border-indigo-500/50 hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 shadow-xl shadow-indigo-500/5"
+                                >
+                                    <div className="flex items-center gap-8">
+                                        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform border border-indigo-500/20 shrink-0">
+                                            <highlight.icon className="w-8 h-8" />
+                                        </div>
+                                        <p className="text-xl text-slate-700 dark:text-slate-300 font-bold leading-relaxed italic">
+                                            {highlight.text}
+                                        </p>
+                                    </div>
+                                </SpotlightCard>
+                            ))}
+                        </div>
+                    </motion.section>
                 )}
 
                 {/* Education Module */}
@@ -368,17 +450,30 @@ export default function DeveloperAboutPage() {
                                 <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white italic tracking-tighter">Technical Stack</h2>
                                 <p className="text-slate-600 dark:text-slate-400 font-bold">Expertise in modern web technologies and infrastructure.</p>
                             </div>
-                            {dev.contact.portfolio && (
-                                <Link href={dev.contact.portfolio} target="_blank">
-                                    <motion.div
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:text-black dark:hover:bg-slate-200 px-8 h-12 flex items-center justify-center font-bold shadow-lg shadow-indigo-500/20 transition-all border-none group/btn"
-                                    >
-                                        View Portfolio <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                                    </motion.div>
-                                </Link>
-                            )}
+                            <div className="flex flex-wrap gap-4">
+                                {dev.resumeUrl && (
+                                    <Link href={dev.resumeUrl} target="_blank">
+                                        <motion.div
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="rounded-full bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 px-8 h-12 flex items-center justify-center font-bold shadow-lg shadow-black/10 transition-all border-none group/cv"
+                                        >
+                                            <FileText className="mr-2 w-4 h-4" /> Download CV
+                                        </motion.div>
+                                    </Link>
+                                )}
+                                {dev.contact.portfolio && (
+                                    <Link href={dev.contact.portfolio} target="_blank">
+                                        <motion.div
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:text-black dark:hover:bg-slate-200 px-8 h-12 flex items-center justify-center font-bold shadow-lg shadow-indigo-500/20 transition-all border-none group/btn"
+                                        >
+                                            View Portfolio <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                        </motion.div>
+                                    </Link>
+                                )}
+                            </div>
                         </div>
 
                         <motion.div
@@ -424,36 +519,62 @@ export default function DeveloperAboutPage() {
                             ))}
                         </motion.div>
 
+                        {/* Tools I Use Section */}
+                        {dev.tools && (
+                            <div className="space-y-8 pt-12">
+                                <h3 className="text-3xl font-black text-slate-900 dark:text-white italic tracking-tight">Tools I Use</h3>
+                                <motion.div
+                                    variants={{
+                                        hidden: { opacity: 0 },
+                                        show: {
+                                            opacity: 1,
+                                            transition: { staggerChildren: 0.05 }
+                                        }
+                                    }}
+                                    initial="hidden"
+                                    whileInView="show"
+                                    viewport={{ once: true }}
+                                    className="flex flex-wrap gap-4"
+                                >
+                                    {dev.tools.map((tool) => (
+                                        <motion.div
+                                            key={tool.name}
+                                            variants={{
+                                                hidden: { opacity: 0, scale: 0.9 },
+                                                show: { opacity: 1, scale: 1 }
+                                            }}
+                                            className="group"
+                                        >
+                                            <SpotlightCard className="px-6 py-4 rounded-2xl bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl flex items-center gap-4 hover:border-indigo-500/50 transition-all">
+                                                <div className={`p-2 rounded-lg ${tool.color}/10 ${tool.color.replace('bg-', 'text-')} group-hover:scale-110 transition-transform`}>
+                                                    <tool.icon className="w-5 h-5" />
+                                                </div>
+                                                <span className="font-bold text-slate-800 dark:text-slate-200">{tool.name}</span>
+                                            </SpotlightCard>
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            </div>
+                        )}
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-slate-200 dark:border-white/5">
                             <div className="space-y-6">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white italic tracking-tight">Interests</h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="flex flex-wrap gap-3">
                                     {dev.interests.map((interest, idx) => {
                                         const isObject = typeof interest === "object";
                                         const title = isObject ? interest.title : interest;
-                                        const desc = isObject ? interest.description : null;
-                                        const InterestIcon = isObject ? interest.icon : Sparkles;
 
                                         return (
                                             <SpotlightCard
                                                 key={idx}
-                                                className="relative group/interest p-6 rounded-3xl bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl"
+                                                className="relative group/interest px-6 py-3 rounded-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl shadow-sm"
                                             >
-                                                <div className="absolute -inset-24 bg-indigo-500/5 blur-3xl rounded-full opacity-0 group-hover/interest:opacity-100 transition-opacity pointer-events-none" />
-                                                <div className="relative z-10 flex items-start gap-4">
-                                                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-500/10 group-hover/interest:scale-110 transition-transform">
-                                                        <InterestIcon className="w-5 h-5" />
-                                                    </div>
-                                                    <div className="space-y-1.5 pt-0.5">
-                                                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white leading-none tracking-tight">
-                                                            {title}
-                                                        </h4>
-                                                        {desc && (
-                                                            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold leading-relaxed line-clamp-2">
-                                                                {desc}
-                                                            </p>
-                                                        )}
-                                                    </div>
+                                                <div className="absolute -inset-10 bg-indigo-500/5 blur-2xl rounded-full opacity-0 group-hover/interest:opacity-100 transition-opacity pointer-events-none" />
+                                                <div className="relative z-10">
+                                                    <h4 className="text-base font-bold text-slate-800 dark:text-slate-200 tracking-tight">
+                                                        {title}
+                                                    </h4>
                                                 </div>
                                             </SpotlightCard>
                                         );
@@ -474,6 +595,21 @@ export default function DeveloperAboutPage() {
                         </div>
                     </div>
                 </motion.section>
+
+                {/* Final Quote Section */}
+                {dev.quote && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1 }}
+                        className="py-12 border-t border-slate-200 dark:border-white/5"
+                    >
+                        <p className="text-xl md:text-2xl text-slate-400 italic text-center font-medium max-w-2xl mx-auto leading-relaxed">
+                            "{dev.quote}"
+                        </p>
+                    </motion.div>
+                )}
             </main>
         </div>
     );
