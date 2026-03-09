@@ -19,22 +19,6 @@ import { isAppointmentUpcoming } from "@/lib/utils";
 
 const INDIGO = "#4F46E5";
 
-const BANKING_TIPS = [
-  "Prepare your documents 48 hours before your appointment for a smoother experience.",
-  "Check your bank's mobile app for real-time status updates on your service requests.",
-  "Consider enabling two-factor authentication for enhanced security on all your banking apps.",
-  "Always shield your PIN when using ATMs or point-of-sale terminals.",
-  "Regularly review your monthly statements to detect any unauthorized transactions early.",
-  "Did you know? Most basic document verifications take less than 15 minutes if all papers are ready.",
-  "Keep your contact information updated with the bank to receive important alerts.",
-  "Understand your credit score; it's a vital part of your financial health.",
-  "Use the document checklist feature to ensure you don't miss any critical papers.",
-  "Digital banking is available 24/7—consider using it for routine balance checks and transfers.",
-  "Plan your branch visits during mid-week to avoid the weekend rush.",
-  "Setting up automatic bill payments can help you avoid late fees and save time.",
-  "Always log out from your online banking session once you've finished your transactions."
-];
-
 interface AppointmentData {
   id: string;
   customAppointmentId: string;
@@ -195,7 +179,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
             </div>
 
             <div className="flex-shrink-0 ml-auto flex flex-col gap-2 relative z-10">
-               <button
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onRegisterPasskey();
@@ -217,8 +201,8 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
 
 
 // ── Empty State Widget (Identical to CountdownWidget Styling) ───────────────
-function EmptyStateWidget({ upcomingCount, completedCount, onRegisterPasskey }: { 
-  upcomingCount: number; 
+function EmptyStateWidget({ upcomingCount, completedCount, onRegisterPasskey }: {
+  upcomingCount: number;
   completedCount: number;
   onRegisterPasskey: () => void;
 }) {
@@ -382,10 +366,10 @@ export default function CustomerDashboardPage() {
       if (!isPasskeySupported()) {
         throw new Error("Passkeys are not supported on this browser.");
       }
-      
+
       const credential = await registerPasskey(user.uid, user.email || user.uid, user.displayName || "Stride User");
       console.log("Registered Passkey:", credential);
-      
+
       toast({
         title: "Passkey Registered",
         description: "Secure login successful. You can now use biometrics.",
@@ -435,12 +419,6 @@ export default function CustomerDashboardPage() {
       Math.abs(a.date.toDate().getTime() - now) - Math.abs(b.date.toDate().getTime() - now)
     )
     , [allAppointments, now]);
-
-  // Dynamic Tip of the Day selection logic
-  const dailyTip = useMemo(() => {
-    const dayIndex = Math.floor(now / (1000 * 60 * 60 * 24));
-    return BANKING_TIPS[dayIndex % BANKING_TIPS.length];
-  }, [now]);
 
   return (
     <div className="w-full min-h-screen pb-12 relative overflow-hidden">
@@ -528,14 +506,6 @@ export default function CustomerDashboardPage() {
             )}
           </div>
 
-          {/* Tips card */}
-          <div className="rounded-2xl p-5 text-white relative z-10" style={{ background: `linear-gradient(135deg, ${INDIGO}, #7c3aed)` }}>
-            <p className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2">Tip of the day</p>
-            <p className="font-bold text-sm leading-relaxed">{dailyTip}</p>
-            <Link href="/dashboard/customer/document-checklist" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold opacity-80 hover:opacity-100 transition-opacity">
-              View checklist <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
         </div>
       </div>
 

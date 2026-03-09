@@ -1,45 +1,23 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {
-    addDays,
-    format,
-    isSameDay,
-    startOfDay,
-    startOfWeek,
-    isToday,
-    parse,
-    isAfter,
-} from "date-fns";
-import { Button } from "./ui/button";
-import {
-    Calendar as CalendarIcon,
-    Bell,
-    Loader2,
-} from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-
-import { Card, CardContent } from "./ui/card";
-import { Calendar } from "./ui/calendar";
+import { format, isSameDay, startOfDay } from "date-fns";
+import { Loader2, CalendarDays, FileText, CalendarPlus } from "lucide-react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import {
-    doc,
-    collection,
-    query,
-    where,
-    getDocs,
-    getDoc,
-    Timestamp,
-} from "firebase/firestore";
+import { doc, collection, query, where, getDocs, getDoc, Timestamp } from "firebase/firestore";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { AppointmentDetailsModal } from "@/components/appointment-details-modal";
 import { AppointmentCard } from "./appointment-card";
 import ShinyText from "./ShinyText";
+import ThreeMonthCalendar from "./three-month-calendar";
+import { isAppointmentUpcoming } from "@/lib/utils";
 
-interface AppointmentData {
+const INDIGO = "#4F46E5";
+
+export interface AppointmentData {
     id: string;
     customAppointmentId: string;
-    customerName?: string; // Additional field for bank view
+    customerName?: string;
     bankName: string;
     branch: string;
     date: Timestamp;
@@ -49,20 +27,21 @@ interface AppointmentData {
     deleted?: boolean;
 }
 
-export default function BankUpcomingAppointments() {
-    const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
-    const [days, setDays] = useState<Date[]>([]);
-    const [month, setMonth] = useState(new Date());
+export default function BankUpcomingAppointments({ calendarJumpDate }: { calendarJumpDate?: Date | null }) {
+    const todayDate = useMemo(() => startOfDay(new Date()), []);
+
+    // Calendar-controlled state (lifted up here)
+    const [selectedDate, setSelectedDate] = useState<Date>(todayDate);
+    const [calendarMonth, setCalendarMonth] = useState(todayDate.getMonth());
+    const [calendarYear, setCalendarYear] = useState(todayDate.getFullYear());
 
     const [appointments, setAppointments] = useState<AppointmentData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData | null>(null);
 
-    const { user, isUserLoading } = useUser();
+    const { user } = useUser();
     const firestore = useFirestore();
-
     const userDocRef = useMemoFirebase(
         () => (user ? doc(firestore, "users", user.uid) : null),
         [user, firestore]
@@ -70,16 +49,8 @@ export default function BankUpcomingAppointments() {
     const { data: bankUserData, isLoading: isBankUserLoading } = useDoc(userDocRef);
 
     useEffect(() => {
-        const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
-        setDays(Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i)));
-    }, [selectedDate]);
-
-    useEffect(() => {
         const fetchAppointments = async () => {
-            if (isBankUserLoading || !bankUserData) {
-                return;
-            }
-
+            if (isBankUserLoading || !bankUserData) return;
             setIsLoading(true);
             setError(null);
 
@@ -100,7 +71,7 @@ export default function BankUpcomingAppointments() {
                 );
                 const appointmentSnapshots = await getDocs(q);
 
-                const fetchedAppointments: AppointmentData[] = [];
+                const fetched: AppointmentData[] = [];
 
                 for (const docSnapshot of appointmentSnapshots.docs) {
                     const data = docSnapshot.data();
@@ -115,7 +86,7 @@ export default function BankUpcomingAppointments() {
                         }
 
                         // Hack to swap bankName with customer name for the AppointmentCard component to render the Customer's name nicely
-                        fetchedAppointments.push({
+                        fetched.push({
                             id: docSnapshot.id,
                             ...data,
                             bankName: customerName,
@@ -123,178 +94,143 @@ export default function BankUpcomingAppointments() {
                         } as AppointmentData);
                     }
                 }
-
-                fetchedAppointments.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
-                setAppointments(fetchedAppointments);
-            } catch (e: any) {
-                console.error("Error fetching appointments:", e);
-                setError("Could not load appointments. Please try again later.");
+                fetched.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+                setAppointments(fetched);
+            } catch (err) {
+                console.error(err);
+                setError("Could not load appointments.");
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchAppointments();
     }, [bankUserData, isBankUserLoading, firestore]);
 
+    const handleUpdate = (updated: AppointmentData) =>
+        setAppointments((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
 
-    const renderGroupedAppointments = (appointmentsToGroup: AppointmentData[]) => {
-        const today = startOfDay(new Date());
-        const upcomingAppointments = appointmentsToGroup.filter(apt => !isAfter(today, startOfDay(apt.date.toDate())));
+    const handleCancel = (id: string) =>
+        setAppointments((prev) => prev.filter((a) => a.id !== id));
 
-        if (upcomingAppointments.length === 0) {
-            return (
-                <p className="text-center text-foreground mt-8">
-                    No upcoming appointments scheduled.
-                </p>
-            );
-        }
+    // Appointments for the currently selected date
+    const selectedDateAppointments = useMemo(
+        () => appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate)),
+        [appointments, selectedDate]
+    );
 
-        const grouped = upcomingAppointments.reduce((acc, apt) => {
-            const dateKey = format(apt.date.toDate(), 'yyyy-MM-dd');
-            if (!acc[dateKey]) {
-                acc[dateKey] = [];
-            }
-            acc[dateKey].push(apt);
-            return acc;
-        }, {} as Record<string, AppointmentData[]>);
+    // All OTHER upcoming appointments (not on selected date, not in the past)
+    const otherUpcoming = useMemo(() => {
+        return appointments.filter((apt) => {
+            const d = apt.date.toDate();
+            return isAppointmentUpcoming(d, apt.time) && !isSameDay(d, selectedDate);
+        });
+    }, [appointments, selectedDate]);
 
-        return Object.keys(grouped).sort().map(dateKey => (
-            <div key={dateKey} className="mb-6">
-                <h3 className="text-xl font-semibold text-primary/80 mb-3">{format(parse(dateKey, 'yyyy-MM-dd', new Date()), 'EEEE, MMMM do')}</h3>
-                <div className="space-y-4">
-                    {grouped[dateKey].map((apt) => (
-                        <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
-                    ))}
-                </div>
-            </div>
-        ));
+    // Jump calendar to a date and select it
+    const jumpToDate = (date: Date) => {
+        setCalendarMonth(date.getMonth());
+        setCalendarYear(date.getFullYear());
+        setSelectedDate(date);
     };
 
-    const renderAppointmentContent = () => {
-        if (isLoading || isBankUserLoading) {
-            return (
-                <div className="flex items-center justify-center p-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <p className="ml-4">Loading appointments...</p>
-                </div>
-            );
-        }
+    // External jump trigger (from parent — e.g. "Next up" click)
+    useEffect(() => {
+        if (calendarJumpDate) jumpToDate(startOfDay(calendarJumpDate));
+    }, [calendarJumpDate]);
 
-        if (error) {
-            return (
-                <p className="text-center text-destructive mt-8">{error}</p>
-            );
-        }
-
-        if (isToday(selectedDate)) {
-            return renderGroupedAppointments(appointments);
-        } else {
-            const filteredAppointments = appointments.filter((apt) => isSameDay(apt.date.toDate(), selectedDate));
-            if (filteredAppointments.length === 0) {
-                return (
-                    <p className="text-center text-foreground mt-8">
-                        No appointments scheduled for this day.
-                    </p>
-                );
-            }
-            return (
-                <div className="space-y-4">
-                    {filteredAppointments.map((apt) => (
-                        <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
-                    ))}
-                </div>
-            );
-        }
-    };
-
-    const headingText = isToday(selectedDate)
-        ? "Upcoming Appointments"
-        : `Appointments for ${format(selectedDate, "PPP")}`;
-
-    if (days.length === 0 && (isLoading || isBankUserLoading)) {
+    if (isLoading || isBankUserLoading) {
         return (
-            <div className="w-full max-w-4xl mx-auto">
-                <div className="flex items-center justify-center p-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                </div>
+            <div className="flex items-center justify-center p-12">
+                <Loader2 className="h-8 w-8 animate-spin" style={{ color: INDIGO }} />
+                <p className="ml-4 text-slate-500">Loading appointments…</p>
             </div>
         );
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto">
-            <Card className="bg-card shadow-lg rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-100">
-                <CardContent className="p-4">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div className="flex justify-between items-center flex-grow overflow-x-auto w-full md:w-auto py-4 px-2">
-                            {days.map((day) => {
-                                const dayIsToday = isSameDay(day, startOfDay(new Date()));
-                                const dayIsSelected = isSameDay(day, selectedDate);
+        <div className="w-full space-y-8">
+            {/* ── 1. Calendar Container ── */}
+            <div className="rounded-2xl bg-white shadow-sm border border-[#e2e8f0] overflow-hidden relative z-10">
+                <ThreeMonthCalendar
+                    appointments={appointments}
+                    selectedDate={selectedDate}
+                    centerMonth={calendarMonth}
+                    centerYear={calendarYear}
+                    onCenterChange={(m, y) => { setCalendarMonth(m); setCalendarYear(y); }}
+                    onSelectDate={(d) => setSelectedDate(d)}
+                    onAppointmentClick={(apt) => setSelectedAppointment(apt)}
+                    standalone={false}
+                />
+            </div>
 
-                                return (
-                                    <Button
-                                        key={day.toString()}
-                                        variant="ghost"
-                                        className={`relative flex flex-col h-16 w-16 rounded-lg p-2 transition-all duration-300 justify-center items-center shrink-0
-                      ${dayIsToday ? 'bg-primary text-primary-foreground' : ''} 
-                      ${dayIsSelected && !dayIsToday ? 'ring-2 ring-primary' : ''}
-                      border border-transparent`}
-                                        onClick={() => setSelectedDate(day)}
-                                    >
-                                        <span className="text-sm uppercase">
-                                            {format(day, "eee")}
-                                        </span>
-                                        <span className="text-2xl font-bold">
-                                            {format(day, "d")}
-                                        </span>
-                                    </Button>
-                                );
-                            })}
+            {/* ── 2. Daily View Container ── */}
+            <div className="p-6 md:p-8 rounded-2xl bg-white shadow-sm border border-[#e2e8f0] relative z-10">
+                <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="h-12 w-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm">
+                            <CalendarDays className="h-6 w-6" style={{ color: INDIGO }} />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                variant="ghost"
-                                className="h-16 rounded-lg transition-all duration-300"
-                                onClick={() => setSelectedDate(startOfDay(new Date()))}
-                            >
-                                Today
-                            </Button>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" className="h-12 w-12 rounded-full p-0 flex justify-center items-center">
-                                        <CalendarIcon className="h-6 w-6" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0 bg-card/75" style={{ backdropFilter: 'blur(12px)' }}>
-                                    <Calendar
-                                        mode="single"
-                                        selected={selectedDate}
-                                        onSelect={(d) => {
-                                            const newDate = d ? startOfDay(d) : startOfDay(new Date());
-                                            setSelectedDate(newDate);
-                                            setMonth(newDate);
-                                        }}
-                                        month={month}
-                                        onMonthChange={setMonth}
-                                        captionLayout="dropdown-buttons"
-                                        fromYear={new Date().getFullYear()}
-                                        toYear={new Date().getFullYear() + 1}
-                                        disabled={(date) => date < startOfDay(new Date())}
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
+                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
+                            <ShinyText
+                                text={`Appointments for ${format(selectedDate, "MMMM d, yyyy")}`}
+                                disabled={false}
+                                speed={3}
+                                className="font-bold"
+                            />
+                        </h2>
                     </div>
-                </CardContent>
-            </Card>
 
-            <div className="mt-8">
-                <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-4">
-                    <Bell className="h-6 w-6" />
-                    <ShinyText text={headingText} disabled={false} speed={3} className="custom-class" />
-                </h2>
-                {renderAppointmentContent()}
+                    {error && (
+                        <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm text-center mb-6">
+                            {error}
+                        </div>
+                    )}
+
+                    {selectedDateAppointments.length === 0 ? (
+                        <div
+                            key={selectedDate.toISOString()}
+                            className="group relative overflow-hidden flex flex-col md:flex-row items-center gap-6 p-8 rounded-2xl bg-white border border-[#e2e8f0] hover:bg-slate-50/50 transition-all duration-300"
+                        >
+                            {/* Icon Container */}
+                            <div className="relative flex-shrink-0">
+                                <div className="relative w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={INDIGO} strokeWidth="1.5">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* Text Content */}
+                            <div className="flex-1 text-center md:text-left">
+                                <h3 className="text-xl font-bold text-slate-900 mb-1">Schedule is clear</h3>
+                                <p className="text-slate-400 text-sm font-medium max-w-sm leading-relaxed">No appointments booked for this day. Enjoy the open schedule!</p>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center gap-3 relative z-10">
+                                <a href="/dashboard/bank/document-checklist"
+                                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95 shadow-sm">
+                                    <FileText className="h-4 w-4" />
+                                    Docs
+                                </a>
+                                <a href="/dashboard/bank/appointment-scheduling"
+                                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all active:scale-95 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                                    style={{ background: INDIGO }}>
+                                    <CalendarPlus className="h-4 w-4" />
+                                    Schedule
+                                </a>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {selectedDateAppointments.map((apt) => (
+                                <AppointmentCard key={apt.id} appointment={apt} onCardClick={() => setSelectedAppointment(apt)} />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {selectedAppointment && (
@@ -307,3 +243,5 @@ export default function BankUpcomingAppointments() {
         </div>
     );
 }
+
+// Stride: Professional Financial Connectivity
