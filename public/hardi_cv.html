@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,8 +37,8 @@
             width: 210mm;
             min-height: 297mm;
             background-color: var(--bg-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 15mm 15mm;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 12mm 15mm;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -48,11 +49,11 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .name-title h1 {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: 1px;
@@ -60,11 +61,11 @@
         }
 
         .name-title h2 {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
             letter-spacing: 1.5px;
             color: var(--text-light);
-            margin-top: 8px;
+            margin-top: 4px;
             text-transform: uppercase;
         }
 
@@ -83,7 +84,7 @@
             justify-content: flex-end;
             gap: 8px;
         }
-        
+
         .contact-item a {
             color: inherit;
             text-decoration: none;
@@ -100,7 +101,7 @@
             width: 100%;
             height: 1px;
             background-color: var(--divider);
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .section-title {
@@ -109,19 +110,19 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #222;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         p {
             font-size: 10px;
             color: var(--text-light);
-            line-height: 1.6;
+            line-height: 1.5;
             text-align: justify;
         }
 
         /* --- About Me / Journey --- */
         .about-section {
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         /* --- Two Column Layout --- */
@@ -138,10 +139,17 @@
             flex: 0.8;
         }
 
+        /* --- Projects Grid --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 40px;
+        }
+
         /* --- Experience / Projects Timeline --- */
         .timeline-item {
             display: flex;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .timeline-date {
@@ -171,22 +179,22 @@
             color: var(--text-lighter);
             margin-bottom: 8px;
         }
-        
+
         .timeline-content ul {
             padding-left: 15px;
-            margin-top: 5px;
+            margin-top: 3px;
         }
-        
+
         .timeline-content li {
             font-size: 10px;
             color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 3px;
+            line-height: 1.5;
+            margin-bottom: 2px;
         }
 
         /* --- Education & Expertise Sections --- */
         .sub-section {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .expertise-list {
@@ -243,7 +251,7 @@
             color: var(--text-light);
             line-height: 1.4;
         }
-        
+
         .print-button {
             position: fixed;
             top: 20px;
@@ -256,7 +264,7 @@
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         @media print {
@@ -264,46 +272,61 @@
                 background-color: white;
                 padding: 0;
             }
+
             .a4-container {
                 box-shadow: none;
                 width: 100%;
                 height: auto;
                 padding: 0;
             }
+
             .print-button {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body>
 
     <button class="print-button" onclick="window.print()">Save as PDF / Print</button>
 
     <div class="a4-container">
-        
+
         <!-- Header -->
         <header>
             <div class="name-title">
                 <h1>HARDI<br>PATEL</h1>
                 <h2>COMPUTER ENGINEERING STUDENT</h2>
             </div>
-            
+
             <div class="contact-info">
                 <div class="contact-item">
-                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <svg class="contact-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
                     <a href="mailto:hardi.2510p@gmail.com">hardi.2510p@gmail.com</a>
                 </div>
                 <div class="contact-item">
-                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                    <svg class="contact-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                    </svg>
                     <a href="https://linkedin.com/in/hardipatel2510">linkedin.com/in/hardipatel2510</a>
                 </div>
                 <div class="contact-item">
-                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                    <svg class="contact-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                    </svg>
                     <a href="https://github.com/hardipatel2510">github.com/hardipatel2510</a>
                 </div>
                 <div class="contact-item">
-                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                    <svg class="contact-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                    </svg>
                     <span>Ahmedabad, India</span>
                 </div>
             </div>
@@ -311,109 +334,208 @@
 
         <div class="section-divider"></div>
 
-        <!-- About Me -->
-        <div class="about-section">
-            <h3 class="section-title">My Tech Journey</h3>
-            <p>
-                My path into technology was sparked by a fundamental curiosity about the inner workings of digital systems. As a Computer Engineering student, I have transitioned from conceptual learning to active development, focusing on building user-centric web applications and engineering solutions for real-world challenges. I am dedicated to continuous growth and leveraging modern tools to create impactful software.
-            </p>
+        <!-- Profile & Philosophy Intro -->
+        <div class="about-section" style="display: flex; gap: 40px; align-items: stretch;">
+            <div style="flex: 1.2;">
+                <h3 class="section-title">Developer Profile</h3>
+                <p>
+                    I engineer sophisticated digital solutions by bridging the gap between complex scalable
+                    architectures and intuitive, real-world user experiences. My focus isn't just on writing syntax—it's
+                    on conceptualizing and building resilient systems that solve tangible problems, prioritizing clean
+                    code, performance, and robust technical designs.
+                </p>
+            </div>
+            <div style="flex: 0.8;">
+                <h3 class="section-title">Engineering Philosophy</h3>
+                <ul
+                    style="list-style: none; padding: 0; margin: 0; font-size: 10px; color: var(--text-light); line-height: 1.6;">
+                    <li style="margin-bottom: 5px;"><strong><span style="color: var(--text-main);">◆</span> Systems
+                            Thinker:</strong> Designing for the whole infrastructure, not just isolated components.</li>
+                    <li style="margin-bottom: 5px;"><strong><span style="color: var(--text-main);">◆</span> Logic &
+                            Precision:</strong> Balancing backend rigor with flawless frontend UI.</li>
+                    <li><strong><span style="color: var(--text-main);">◆</span> Adaptable Edge:</strong> Rapidly
+                        mastering modern full-stack paradigms.</li>
+                </ul>
+            </div>
         </div>
 
         <div class="section-divider"></div>
 
-        <!-- Two Columns -->
-        <div class="two-column">
-            
-            <!-- Left Column: Experience / Projects -->
-            <div class="col-left">
-                <h3 class="section-title">Projects</h3>
-                
+        <!-- Projects Section (Full Width, 2 Columns) -->
+        <div class="projects-section">
+            <h3 class="section-title">Projects</h3>
+            <div class="projects-grid">
                 <div class="timeline-item">
-                    <div class="timeline-date">2024</div>
+                    <div class="timeline-date">2026 - Present</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">ANTRIX</div>
+                        <div class="timeline-subtitle">Space Event Viewer (WP Project)</div>
+                        <ul>
+                            <li>Developing an interactive web application to visualize and track upcoming space events.
+                            </li>
+                            <li>Integrating external APIs to fetch real-time astronomical data and mission schedules.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2026 - Present</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">AJP PROJECT</div>
+                        <div class="timeline-subtitle">Advanced Java Programming</div>
+                        <ul>
+                            <li>Designing a robust backend architecture utilizing advanced Java concepts and design
+                                patterns.</li>
+                            <li>Implementing complex logic, multithreading, and efficient memory management techniques.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2024 - 2026</div>
                     <div class="timeline-content">
                         <div class="timeline-title">STRIDE</div>
                         <div class="timeline-subtitle">Smart Queue Management System</div>
                         <ul>
-                            <li>Architected a modern digital platform to streamline institutional banking workflows and eliminate physical wait times.</li>
-                            <li>Prioritized user experience by implementing interactive, responsive UI components using React and Next.js.</li>
-                            <li>Focused on enhancing service efficiency through intuitive dashboard designs and live status tracking.</li>
+                            <li>Architected a modern digital platform to streamline institutional banking workflows and
+                                eliminate physical wait times.</li>
+                            <li>Prioritized user experience by implementing interactive, responsive UI components using
+                                React and Next.js.</li>
+                            <li>Focused on enhancing service efficiency through intuitive dashboard designs and live
+                                status tracking.</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-date">2023 - 2024</div>
+                    <div class="timeline-date">2026 - Present</div>
                     <div class="timeline-content">
-                        <div class="timeline-title">DATA ENCRYPTION PROJECT</div>
-                        <div class="timeline-subtitle">Academic Security Research</div>
+                        <div class="timeline-title">SAFEVOICES</div>
+                        <div class="timeline-subtitle">Complaint Management System</div>
                         <ul>
-                            <li>Developed a secure data handling module implementing core encryption algorithms to protect sensitive information.</li>
-                            <li>Investigated cybersecurity best practices and explored techniques for robust data transmission.</li>
-                            <li>Strengthened foundational knowledge in secure software development lifecycles.</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="section-divider"></div>
-                
-                <h3 class="section-title">Currently Learning</h3>
-                
-                <div class="timeline-item">
-                    <div class="timeline-date">2024 - Present</div>
-                    <div class="timeline-content">
-                        <div class="timeline-title">ADVANCED CONCEPTS</div>
-                        <div class="timeline-subtitle">Self-Directed Study</div>
-                        <ul>
-                            <li>Advanced Java Programming and scalable System Design principles.</li>
-                            <li>Modern frontend architectural patterns and state management.</li>
-                            <li>Fullstack development workflows and backend infrastructure setups via Node and Firebase.</li>
-                            <li>Complex algorithmic problem solving and optimization techniques.</li>
+                            <li>Architected a comprehensive platform with role-based dashboards for Users, Action
+                                Takers, and Admins.</li>
+                            <li>Engineered secure authentication and real-time database integrations using Firebase
+                                Firestore and complex queries.</li>
+                            <li>Created intuitive interfaces for case investigation tracking and detailed reporting to
+                                streamline workflows.</li>
                         </ul>
                     </div>
                 </div>
 
+                <div class="timeline-item">
+                    <div class="timeline-date">2025 - 2026</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">WEATHERX</div>
+                        <div class="timeline-subtitle">Mobile-First Weather Dashboard</div>
+                        <ul>
+                            <li>Developed a highly responsive weather dashboard inspired by Apple Weather using Next.js,
+                                React, and TypeScript.</li>
+                            <li>Implemented dynamic theming based on local time zones and integrated smooth gradual blur
+                                effects for premium glassmorphism.</li>
+                            <li>Built features for viewing detailed forecasts and saving multiple locations using
+                                cookies for persistent user experience.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2023 - 2026</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">PORTFOLIO</div>
+                        <div class="timeline-subtitle">Interactive Developer Profile</div>
+                        <ul>
+                            <li>Designed and developed a responsive personal portfolio using React, Next.js, and
+                                TypeScript.</li>
+                            <li>Implemented smooth interactive layouts and engaging user interfaces using Framer Motion.
+                            </li>
+                            <li>Hosted on Vercel with integrated CI/CD pipelines for continuous deployment and
+                                performance optimization.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!-- Right Column: Education & Expertise -->
-            <div class="col-right">
-                
+        <div class="section-divider"></div>
+
+        <!-- Two Columns for Remaining Content -->
+        <div class="two-column">
+
+            <!-- Left Column: Education / Learning -->
+            <div class="col-left">
                 <div class="sub-section">
                     <h3 class="section-title">Education</h3>
                     <div class="timeline-item" style="margin-bottom: 15px;">
                         <div class="timeline-date">2023-2027</div>
                         <div class="timeline-content">
                             <div class="timeline-title">BACHELOR OF ENGINEERING</div>
-                            <div class="timeline-subtitle">Computer Engineering <br> SAL Institute of Technology (GTU)</div>
+                            <div class="timeline-subtitle">Computer Engineering <br> SAL Institute of Technology (GTU)
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="sub-section">
+                    <h3 class="section-title">Currently Learning</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024 - Present</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">ADVANCED CONCEPTS</div>
+                            <div class="timeline-subtitle">Self-Directed Study</div>
+                            <ul>
+                                <li>Advanced Java Programming and scalable System Design principles.</li>
+                                <li>Modern frontend architectural patterns and state management.</li>
+                                <li>Fullstack development workflows and backend infrastructure setups via Node and
+                                    Firebase.</li>
+                                <li>Complex algorithmic problem solving and optimization techniques.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Skills / Tools -->
+            <div class="col-right">
 
                 <div class="sub-section">
                     <h3 class="section-title">Technical Skills</h3>
                     <ul class="expertise-list">
                         <li class="expertise-item">
                             <span>React / Next.js</span>
-                            <div class="expertise-bar"><div class="expertise-fill" style="width: 85%;"></div></div>
+                            <div class="expertise-bar">
+                                <div class="expertise-fill" style="width: 85%;"></div>
+                            </div>
                         </li>
                         <li class="expertise-item">
                             <span>Java / C++</span>
-                            <div class="expertise-bar"><div class="expertise-fill" style="width: 80%;"></div></div>
+                            <div class="expertise-bar">
+                                <div class="expertise-fill" style="width: 80%;"></div>
+                            </div>
                         </li>
                         <li class="expertise-item">
                             <span>HTML5 / CSS3</span>
-                            <div class="expertise-bar"><div class="expertise-fill" style="width: 90%;"></div></div>
+                            <div class="expertise-bar">
+                                <div class="expertise-fill" style="width: 90%;"></div>
+                            </div>
                         </li>
                         <li class="expertise-item">
                             <span>DSA & Logic</span>
-                            <div class="expertise-bar"><div class="expertise-fill" style="width: 75%;"></div></div>
+                            <div class="expertise-bar">
+                                <div class="expertise-fill" style="width: 75%;"></div>
+                            </div>
                         </li>
                         <li class="expertise-item">
                             <span>SQL / DB Basics</span>
-                            <div class="expertise-bar"><div class="expertise-fill" style="width: 70%;"></div></div>
+                            <div class="expertise-bar">
+                                <div class="expertise-fill" style="width: 70%;"></div>
+                            </div>
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="sub-section">
                     <h3 class="section-title">Tools</h3>
                     <ul class="expertise-list">
@@ -423,7 +545,7 @@
                         <li class="expertise-item"><span>Figma</span></li>
                     </ul>
                 </div>
-                
+
                 <div class="sub-section" style="margin-top: 20px;">
                     <div class="section-divider" style="margin: 10px 0;"></div>
                     <div class="reference-grid">
@@ -447,4 +569,5 @@
     </div>
 
 </body>
+
 </html>
