@@ -13,6 +13,7 @@ import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, 
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { motion, AnimatePresence } from "framer-motion";
+import { isAppointmentUpcoming } from "@/lib/utils";
 
 const INDIGO = "#4F46E5";
 
@@ -406,8 +407,8 @@ export default function CustomerDashboardPage() {
   }, [user, userData, isUserDocLoading, firestore]);
 
   const today = useMemo(() => startOfDay(new Date()), []);
-  const upcoming = useMemo(() => allAppointments.filter(a => !a.deleted && !isAfter(today, startOfDay(a.date.toDate()))), [allAppointments, today]);
-  const past = useMemo(() => allAppointments.filter(a => isBefore(startOfDay(a.date.toDate()), today) || a.deleted), [allAppointments, today]);
+  const upcoming = useMemo(() => allAppointments.filter(a => !a.deleted && isAppointmentUpcoming(a.date.toDate(), a.time)), [allAppointments]);
+  const past = useMemo(() => allAppointments.filter(a => a.deleted || !isAppointmentUpcoming(a.date.toDate(), a.time)), [allAppointments]);
   const nextAppt = upcoming[0] ?? null;
   const now = useMemo(() => new Date().getTime(), []);
 

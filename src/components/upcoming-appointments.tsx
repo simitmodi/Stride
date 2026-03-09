@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { format, isSameDay, startOfDay, isAfter } from "date-fns";
+import { format, isSameDay, startOfDay } from "date-fns";
 import { Loader2, CalendarDays, FileText, CalendarPlus } from "lucide-react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
@@ -10,6 +10,7 @@ import { CustomerAppointmentDetailsModal } from "./customer-appointment-details-
 import { AppointmentCard } from "./appointment-card";
 import ShinyText from "./ShinyText";
 import ThreeMonthCalendar from "./three-month-calendar";
+import { isAppointmentUpcoming } from "@/lib/utils";
 
 const INDIGO = "#4F46E5";
 
@@ -91,10 +92,10 @@ export default function UpcomingAppointments({ calendarJumpDate }: { calendarJum
   // All OTHER upcoming appointments (not on selected date, not in the past)
   const otherUpcoming = useMemo(() => {
     return appointments.filter((apt) => {
-      const d = startOfDay(apt.date.toDate());
-      return !isAfter(todayDate, d) && !isSameDay(d, selectedDate);
+      const d = apt.date.toDate();
+      return isAppointmentUpcoming(d, apt.time) && !isSameDay(d, selectedDate);
     });
-  }, [appointments, selectedDate, todayDate]);
+  }, [appointments, selectedDate]);
 
   // Jump calendar to a date and select it
   const jumpToDate = (date: Date) => {
