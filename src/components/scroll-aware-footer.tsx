@@ -14,7 +14,10 @@ export function ScrollAwareFooter() {
   }, []);
 
   // Hide footer on specific pages where we want a full-height app feel
-  if (pathname === '/dashboard/customer/document-checklist') {
+  if (
+    pathname === '/dashboard/customer/document-checklist' ||
+    pathname === '/dashboard/customer/appointment-scheduling'
+  ) {
     return null;
   }
 
