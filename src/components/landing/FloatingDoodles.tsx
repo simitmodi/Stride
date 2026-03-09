@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { useEffect } from "react";
 
 const doodles = [
@@ -34,27 +34,38 @@ const doodles = [
 ];
 
 export function FloatingDoodles() {
+  const { scrollY } = useScroll();
+
   return (
     <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden" aria-hidden="true">
       {doodles.map((d, i) => (
-        <Doodle key={i} {...d} />
+        <Doodle key={i} {...d} scrollY={scrollY} />
       ))}
     </div>
   );
 }
 
 function Doodle({
-  shape, x, y, size, color, rotate, delay,
+  shape, x, y, size, color, rotate, delay, scrollY
 }: {
   shape: string; x: string; y: string; size: number; color: string;
-  rotate: number; delay: number;
+  rotate: number; delay: number; scrollY: any;
 }) {
+  // Calculate parallax intensity based on size/pos to create depth
+  const speed = (size / 50) * 100;
+  const parallaxY = useTransform(scrollY, [0, 1000], [0, -speed]);
+  const springY = useSpring(parallaxY, { stiffness: 100, damping: 30 });
+
   return (
     <motion.div
       className="absolute"
-      style={{ left: x, top: y, perspective: 600 }}
+      style={{
+        left: x,
+        top: y,
+        perspective: 600,
+        y: springY
+      }}
       animate={{
-        y: [-8, 8, -8],
         rotateZ: [rotate - 4, rotate + 4, rotate - 4],
       }}
       transition={{

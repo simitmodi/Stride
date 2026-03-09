@@ -320,6 +320,7 @@ export default function ProfilePage() {
   };
 
   const handleUpdateEmail = async (newEmail: string) => {
+    if (!user) return;
     try {
       await updateUserEmail(newEmail);
       await updateUserProfile(user.uid, { email: newEmail });
@@ -418,11 +419,9 @@ export default function ProfilePage() {
         });
       }
     } finally {
-      if (error.code !== 'auth/requires-recent-login') {
-        setIsDeleting(false);
-        setDeleteConfirm("");
-        setDeletePassword("");
-      }
+      setIsDeleting(false);
+      setDeleteConfirm("");
+      setDeletePassword("");
     }
   };
 
@@ -521,7 +520,9 @@ export default function ProfilePage() {
 
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
     dobDate = dobTimestamp.toDate();
-    formattedDob = format(dobDate, 'dd/MM/yyyy');
+    if (dobDate) {
+      formattedDob = format(dobDate, 'dd/MM/yyyy');
+    }
   }
 
 
