@@ -133,6 +133,10 @@ export function BankLoginForm() {
             setIsLoading(true);
             try {
               await authenticateWithPasskey();
+              
+              // Phase 1: Demo Session Bypass
+              sessionStorage.setItem("passkey_authenticated", "true");
+              
               router.push("/dashboard/bank");
             } catch (err) {
               // handle error

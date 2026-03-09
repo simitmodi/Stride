@@ -109,6 +109,9 @@ export function CustomerLoginForm() {
         description: "Secure login successful via biometric verification.",
       });
       
+      // Phase 1: Demo Session Bypass
+      sessionStorage.setItem("passkey_authenticated", "true");
+      
       // Navigate to dashboard (Mock login)
       router.push("/dashboard/customer");
       
