@@ -206,7 +206,13 @@ export default function DeveloperAboutPage() {
                         >
                             <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 blur-2xl rounded-3xl" />
                             <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden border-2 border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl group-hover:border-indigo-500/50 transition-colors duration-500 shadow-2xl flex items-center justify-center">
-                                {githubStats?.avatarUrl ? (
+                                {dev.image ? (
+                                    <img
+                                        src={dev.image}
+                                        alt={dev.name}
+                                        className="h-full w-full object-cover transition-transform group-hover:scale-110 duration-500"
+                                    />
+                                ) : githubStats?.avatarUrl ? (
                                     <img
                                         src={githubStats.avatarUrl}
                                         alt={dev.name}

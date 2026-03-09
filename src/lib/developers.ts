@@ -59,6 +59,7 @@ export interface DeveloperData {
     interests: (string | { title: string; description: string; icon: LucideIcon })[];
     languages: string[];
     icon: LucideIcon;
+    image?: string;
     brandColor: string;
     currentFocus?: {
         title: string;
@@ -238,7 +239,7 @@ export const developersData: Record<string, DeveloperData> = {
         name: "Ankit Nandoliya",
         slug: "ankit",
         role: "Frontend & UI Design",
-        bio: "Specialized in bridge-building between design and code, implementing precise layouts and fluid interactive elements.",
+        bio: "I am Ankit Nandoliya. During the development of Stride, I personally led the design phase, taking the project from a high-level concept to a finished, user-centric appointment system.\n\nI focus on building robust applications that solve real-world problems. My work is centered on technical precision and creating fluid interactive elements to deliver efficient, high-quality digital experiences.",
         summary: "Bridging tech and art with fluid motion and responsive code. Expert in Framer Motion and interaction design.",
         objective: "To translate complex aesthetic visions into functional, interactive code that feels alive and responsive.",
         contact: {
@@ -260,13 +261,23 @@ export const developersData: Record<string, DeveloperData> = {
             { name: "React", icon: Atom, color: "bg-blue-500" },
             { name: "Tailwind", icon: Palette, color: "bg-cyan-500" },
             { name: "Motion", icon: Sparkles, color: "bg-pink-600" },
-            { name: "Git", icon: Github, color: "bg-orange-600" }
+            { name: "Git", icon: Github, color: "bg-orange-600" },
+            { name: "HTML", icon: Globe, color: "bg-orange-500" },
+            { name: "CSS", icon: Compass, color: "bg-blue-500" },
+            { name: "JavaScript", icon: Code2, color: "bg-yellow-500" },
+            { name: "C", icon: Terminal, color: "bg-slate-600" },
+            { name: "C++", icon: Binary, color: "bg-indigo-600" },
+            { name: "Java", icon: Coffee, color: "bg-red-600" },
+            { name: "Python", icon: Webhook, color: "bg-green-600" },
+            { name: "DBMS", icon: Database, color: "bg-purple-600" },
+            { name: "Data Structures", icon: Layers, color: "bg-cyan-600" }
         ],
         softSkills: ["Critical Thinking", "Self Learning", "Communication", "Efficiency"],
         skillSet: ["Interactive Layouts", "Code Architecture", "UI Polish", "Responsive Flow"],
-        interests: ["Bridging Tech & Art", "Performance", "Clean Code"],
+        interests: ["Bridging Tech & Art", "Performance", "Bikes", "Tech Devices"],
         languages: ["English", "Gujarati", "Hindi"],
         icon: Binary,
+        image: "/developers/ankit.jpg",
         brandColor: "from-emerald-500 to-teal-600"
     },
     sharvi: {
