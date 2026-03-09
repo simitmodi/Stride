@@ -9,7 +9,9 @@ import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
-import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark } from "lucide-react";
+import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark, Fingerprint } from "lucide-react";
+import { registerPasskey, isPasskeySupported } from "@/lib/auth/passkeys";
+import { useToast } from "@/hooks/use-toast";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { motion, AnimatePresence } from "framer-motion";
@@ -104,11 +106,12 @@ function DigitalTimer({ days, hrs, mins, sec }: { days: string; hrs: string; min
 
 
 // ── Countdown + Stats widget (balanced 3-column) ──────────────────────────────
-function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
+function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRegisterPasskey }: {
   nextAppt: AppointmentData;
   upcomingCount: number;
   completedCount: number;
   onOpen: () => void;
+  onRegisterPasskey: () => void;
 }) {
   const target = useMemo(() => nextAppt.date.toDate(), [nextAppt]);
   const [secs, setSecs] = useState(() => differenceInSeconds(target, new Date()));
@@ -191,9 +194,20 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
               </p>
             </div>
 
-            <span className="flex-shrink-0 ml-auto px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-slate-50 transition-all active:scale-95 shadow-xl whitespace-nowrap relative z-10">
-              Details →
-            </span>
+            <div className="flex-shrink-0 ml-auto flex flex-col gap-2 relative z-10">
+               <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRegisterPasskey();
+                }}
+                className="px-6 py-2 rounded-xl bg-white/10 text-white font-bold text-xs border border-white/20 hover:bg-white/20 transition-all flex items-center gap-2">
+                <Fingerprint className="h-4 w-4" />
+                Setup Passkey
+              </button>
+              <span className="px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-slate-50 transition-all active:scale-95 shadow-xl whitespace-nowrap text-center">
+                Details →
+              </span>
+            </div>
           </div>
         </div>
       </button>
@@ -203,7 +217,11 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen }: {
 
 
 // ── Empty State Widget (Identical to CountdownWidget Styling) ───────────────
-function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: number; completedCount: number }) {
+function EmptyStateWidget({ upcomingCount, completedCount, onRegisterPasskey }: { 
+  upcomingCount: number; 
+  completedCount: number;
+  onRegisterPasskey: () => void;
+}) {
   return (
     <div className="px-4 md:px-8 mb-7">
       <div className="banner-btn w-full text-left rounded-3xl overflow-hidden relative"
@@ -212,11 +230,6 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
         }}
       >
-        {/* Floating background objects */}
-        <div className="absolute top-0 left-0 w-48 h-48 bg-white/10 rounded-full floating-bg-object pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full floating-bg-object2 pointer-events-none" />
-
-        {/* Shimmer */}
         <div className="pointer-events-none absolute top-0 bottom-0 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", zIndex: 1 }} />
 
@@ -239,25 +252,18 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
             </div>
           </div>
 
-          {/* CENTER: Ambient Message (Silky Smooth Animation) */}
+          {/* CENTER: Ambient Message */}
           <div className="flex flex-col justify-center items-center px-10 py-5 flex-1 text-center"
             style={{ background: "rgba(0,0,0,0.15)" }}>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/40 mb-4">Status Update</p>
             <div className="flex flex-col items-center">
-              <div className="flex flex-col items-center">
-                <h2 className="text-2xl font-black text-white tracking-tight">
-                  Schedule Clear
-                </h2>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-1">
-                  Everything is in order
-                </p>
-              </div>
+              <h2 className="text-2xl font-black text-white tracking-tight">Schedule Clear</h2>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-1">Everything is in order</p>
             </div>
           </div>
 
           {/* RIGHT: Actions */}
           <div className="flex items-center gap-6 px-10 py-5 flex-1 relative overflow-hidden">
-            {/* Decoration */}
             <div className="absolute -right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-10">
               <Landmark className="h-24 w-24 text-white" />
             </div>
@@ -269,13 +275,15 @@ function EmptyStateWidget({ upcomingCount, completedCount }: { upcomingCount: nu
             </div>
 
             <div className="flex-shrink-0 ml-auto flex flex-col gap-2 relative z-10">
+              <button
+                onClick={onRegisterPasskey}
+                className="px-6 py-2.5 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-slate-50 transition-all active:scale-95 flex items-center gap-2">
+                <Fingerprint className="h-4 w-4" />
+                Setup Passkey
+              </button>
               <Link href="/dashboard/customer/appointment-scheduling"
-                className="px-6 py-2.5 rounded-2xl bg-white text-[#312e81] font-bold text-sm shadow-xl hover:bg-slate-50 transition-all active:scale-95 whitespace-nowrap text-center">
+                className="px-6 py-2.5 rounded-2xl bg-white/20 text-white font-bold text-sm border border-white/30 backdrop-blur-sm transition-all hover:bg-white/30 active:scale-95 whitespace-nowrap text-center">
                 Book Now
-              </Link>
-              <Link href="/dashboard/customer/document-checklist"
-                className="px-6 py-2.5 rounded-2xl bg-white/20 text-white font-bold text-sm border border-white/30 backdrop-blur-sm transition-all hover:bg-white/30 active:scale-95 whitespace-nowrap text-center text-shadow-sm">
-                Checklist →
               </Link>
             </div>
           </div>
@@ -363,8 +371,35 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
 export default function CustomerDashboardPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
+
   const userDocRef = useMemoFirebase(() => user ? doc(firestore, "users", user.uid) : null, [user, firestore]);
   const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
+
+  async function handleRegisterPasskey() {
+    if (!user) return;
+    try {
+      if (!isPasskeySupported()) {
+        throw new Error("Passkeys are not supported on this browser.");
+      }
+      
+      const credential = await registerPasskey(user.uid, user.email || user.uid, user.displayName || "Stride User");
+      console.log("Registered Passkey:", credential);
+      
+      toast({
+        title: "Passkey Registered",
+        description: "Secure login successful. You can now use biometrics.",
+      });
+    } catch (error: any) {
+      if (error.name !== 'NotAllowedError') {
+        toast({
+          variant: "destructive",
+          title: "Setup Failed",
+          description: error.message || "Failed to register Passkey.",
+        });
+      }
+    }
+  }
 
   const [allAppointments, setAllAppointments] = useState<AppointmentData[]>([]);
   const [timelineOpen, setTimelineOpen] = useState(true);
@@ -433,12 +468,14 @@ export default function CustomerDashboardPage() {
             upcomingCount={upcoming.length}
             completedCount={past.filter(a => !a.deleted).length}
             onOpen={() => { setJumpTarget(nextAppt.date.toDate()); setModalAppt(nextAppt); }}
+            onRegisterPasskey={handleRegisterPasskey}
           />
         ) : (
           /* Option 2: Ambient Focus Empty State (Standardized) */
           <EmptyStateWidget
             upcomingCount={upcoming.length}
             completedCount={past.filter(a => !a.deleted).length}
+            onRegisterPasskey={handleRegisterPasskey}
           />
         )}
       </div>

@@ -18,7 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { signInWithEmail, signOutUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Fingerprint } from "lucide-react";
+import { isPasskeySupported, authenticateWithPasskey } from "@/lib/auth/passkeys";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
@@ -115,6 +116,35 @@ export function BankLoginForm() {
         >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Login
+        </Button>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-white/10" />
+          </div>
+          <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest text-foreground/40">
+            <span className="bg-card px-3">or</span>
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          onClick={async () => {
+            setIsLoading(true);
+            try {
+              await authenticateWithPasskey();
+              router.push("/dashboard/bank");
+            } catch (err) {
+              // handle error
+            } finally {
+              setIsLoading(false);
+            }
+          }}
+          variant="outline"
+          className="w-full h-11 transition-all duration-300 hover:bg-primary hover:text-white group border-white/10"
+        >
+          <Fingerprint className="mr-2 h-5 w-5 text-primary group-hover:text-white" />
+          Sign in with Passkey
         </Button>
       </form>
     </Form>

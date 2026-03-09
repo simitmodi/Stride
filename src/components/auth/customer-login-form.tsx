@@ -9,7 +9,8 @@ import { signInWithEmail, sendPasswordReset } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Loader2, Mail, Lock, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Loader2, Mail, Lock, Eye, EyeOff, Sparkles, Fingerprint } from "lucide-react";
+import { isPasskeySupported, authenticateWithPasskey } from "@/lib/auth/passkeys";
 import {
   Dialog,
   DialogContent,
@@ -85,6 +86,40 @@ export function CustomerLoginForm() {
           "Access to this account has been temporarily disabled due to many failed login attempts.";
       }
       toast({ variant: "destructive", title: "Login Failed", description });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handlePasskeyLogin() {
+    setIsLoading(true);
+    try {
+      if (!isPasskeySupported()) {
+        throw new Error("Passkeys are not supported on this browser.");
+      }
+      
+      const credential = await authenticateWithPasskey();
+      
+      // In a real app, you would send 'credential' to your server to verify the signature
+      // and issue a Firebase Custom Token. 
+      // For this demonstration, we'll assume successful verification.
+      
+      toast({
+        title: "Passkey Authenticated",
+        description: "Secure login successful via biometric verification.",
+      });
+      
+      // Navigate to dashboard (Mock login)
+      router.push("/dashboard/customer");
+      
+    } catch (error: any) {
+      if (error.name !== 'NotAllowedError') { // Ignore user cancellation
+        toast({
+          variant: "destructive",
+          title: "Passkey Failed",
+          description: error.message || "Failed to authenticate with Passkey.",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -326,6 +361,35 @@ export function CustomerLoginForm() {
               <Sparkles className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
             </>
           )}
+        </button>
+      </motion.div>
+
+      {/* ── Passkey / Alternative ── */}
+      <motion.div variants={itemVariants} className="pt-2">
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-gray-100" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-[#F4F4F8] px-4 text-gray-400 font-bold tracking-widest">or continue with</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handlePasskeyLogin}
+          disabled={isLoading}
+          className="
+            group w-full flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white 
+            py-4 text-sm font-bold text-gray-700 shadow-sm transition-all duration-300
+            hover:bg-gray-50 hover:border-gray-300 hover:shadow-md active:scale-[0.98]
+            disabled:opacity-50
+          "
+        >
+          <div className="p-1 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+            <Fingerprint className="h-5 w-5" />
+          </div>
+          <span>Sign in with Passkey</span>
         </button>
       </motion.div>
     </motion.form>
