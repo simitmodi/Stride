@@ -195,15 +195,24 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
             </div>
 
             <div className="flex-shrink-0 ml-auto flex flex-col gap-2 relative z-10">
-               <button
+               <div
+                role="button"
+                tabIndex={0}
                 onClick={(e) => {
                   e.stopPropagation();
                   onRegisterPasskey();
                 }}
-                className="px-6 py-2 rounded-xl bg-white/10 text-white font-bold text-xs border border-white/20 hover:bg-white/20 transition-all flex items-center gap-2">
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onRegisterPasskey();
+                  }
+                }}
+                className="px-6 py-2 rounded-xl bg-white/10 text-white font-bold text-xs border border-white/20 hover:bg-white/20 transition-all flex items-center gap-2 cursor-pointer">
                 <Fingerprint className="h-4 w-4" />
                 Setup Passkey
-              </button>
+              </div>
               <span className="px-6 py-3 rounded-2xl text-sm font-bold bg-white text-[#312e81] hover:bg-slate-50 transition-all active:scale-95 shadow-xl whitespace-nowrap text-center">
                 Details →
               </span>
@@ -296,14 +305,17 @@ function EmptyStateWidget({ upcomingCount, completedCount, onRegisterPasskey }: 
 
 // ── Activity Timeline ────────────────────────────────────────────────────────
 function ActivityTimeline({ items }: { items: AppointmentData[] }) {
-  const events = useMemo(() => items.slice(0, 6).map(apt => ({
-    ...apt,
-    label: apt.deleted ? "Cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date()))
-      ? "Completed" : "Upcoming",
-    status: apt.deleted ? "cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "completed" : "upcoming",
-    color: apt.deleted ? "#f87171" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "#10b981" : INDIGO,
-    icon: apt.deleted ? "✕" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "✓" : "◎",
-  })), [items]);
+  const events = useMemo(() => {
+    const sortedItems = [...items].sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime());
+    return sortedItems.slice(0, 6).map(apt => ({
+      ...apt,
+      label: apt.deleted ? "Cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date()))
+        ? "Completed" : "Upcoming",
+      status: apt.deleted ? "cancelled" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "completed" : "upcoming",
+      color: apt.deleted ? "#f87171" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "#10b981" : INDIGO,
+      icon: apt.deleted ? "✕" : isBefore(startOfDay(apt.date.toDate()), startOfDay(new Date())) ? "✓" : "◎",
+    }));
+  }, [items]);
 
   if (events.length === 0) return (
     <p className="text-sm text-slate-400 text-center py-4">No activity yet.</p>

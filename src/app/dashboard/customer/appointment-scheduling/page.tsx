@@ -274,15 +274,17 @@ export default function AppointmentSchedulingPage() {
   };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const query = new URLSearchParams({
-      bankName: data.bankName,
-      branch: data.branch,
-      address: data.address,
-      date: data.date.toISOString(),
-      time: data.time,
-      accountNumber: data.accountNumber,
-    }).toString();
-    router.push(`/dashboard/customer/appointment-scheduling/appointment-details?${query}`);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('appointmentData', JSON.stringify({
+        bankName: data.bankName,
+        branch: data.branch,
+        address: data.address,
+        date: data.date.toISOString(),
+        time: data.time,
+        accountNumber: data.accountNumber,
+      }));
+    }
+    router.push(`/dashboard/customer/appointment-scheduling/appointment-details`);
   };
 
   const stepVariants: any = {
@@ -308,7 +310,7 @@ export default function AppointmentSchedulingPage() {
         <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" />
       </div>
 
-      <div className="relative z-10 flex w-full h-full flex-col md:flex-row justify-center gap-8 p-4 md:p-8">
+      <div className="relative z-10 flex w-full h-full flex-col md:flex-row justify-center gap-8 px-4 py-8 md:px-8 md:py-8 md:pb-16">
         
         {/* ── Main Wizard Area ── */}
         <div className="w-full max-w-3xl flex flex-col h-full">
