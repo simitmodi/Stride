@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ShinyText from '@/components/ShinyText';
-import FluidGlass from '@/components/FluidGlass';
 import { cn } from '@/lib/utils';
 
 /* ─── Spring configs ─── */
@@ -667,3 +666,5 @@ export default function DocumentChecklistPage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

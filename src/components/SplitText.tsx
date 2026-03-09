@@ -62,7 +62,7 @@ const AnimatedSplitText: React.FC<SplitTextProps> = ({
       if (el._rbsplitInstance) {
         try {
           el._rbsplitInstance.revert();
-        } catch (_) {}
+        } catch (_) { }
         el._rbsplitInstance = undefined;
       }
 
@@ -126,7 +126,7 @@ const AnimatedSplitText: React.FC<SplitTextProps> = ({
         });
         try {
           splitInstance.revert();
-        } catch (_) {}
+        } catch (_) { }
         el._rbsplitInstance = undefined;
       };
     },
@@ -151,11 +151,13 @@ const AnimatedSplitText: React.FC<SplitTextProps> = ({
   const renderTag = () => {
     const style: React.CSSProperties = {
       textAlign,
-      overflow: 'hidden',
+      overflow: 'visible',
       display: 'inline-block',
       whiteSpace: 'normal',
       wordWrap: 'break-word',
-      willChange: 'transform, opacity'
+      willChange: 'transform, opacity',
+      paddingBottom: '0.15em',
+      marginTop: '-0.15em'
     };
     const classes = `split-parent ${className}`;
     switch (tag) {
@@ -207,3 +209,5 @@ const AnimatedSplitText: React.FC<SplitTextProps> = ({
 };
 
 export default AnimatedSplitText;
+
+// Stride: Professional Financial Connectivity

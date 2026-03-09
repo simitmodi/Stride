@@ -126,3 +126,5 @@ export {
   type CheckboxIndicatorProps,
   type CheckboxContextType,
 };
+
+// Stride: Professional Financial Connectivity

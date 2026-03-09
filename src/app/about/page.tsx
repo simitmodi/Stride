@@ -1,101 +1,170 @@
+"use client";
 
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Home } from 'lucide-react';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Home,
+  LayoutDashboard,
+  Bell,
+  FileCheck,
+  CalendarRange,
+  Lightbulb,
+  ArrowRight
+} from "lucide-react";
 import Logo from '@/lib/Logo.png';
+import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 
 export default function AboutPage() {
-  const professionalBg = PlaceHolderImages.find(
-    (p) => p.id === 'professional-bg-1'
-  );
+  const pillars = [
+    {
+      title: "Elite Dashboards",
+      description: "A personalized command center for your financial agenda.",
+      Icon: LayoutDashboard,
+      color: "bg-indigo-500/20 text-indigo-500",
+      delay: 0.1,
+    },
+    {
+      title: "Instant Intelligence",
+      description: "Proactive notifications and live status updates.",
+      Icon: Bell,
+      color: "bg-blue-500/20 text-blue-500",
+      delay: 0.2,
+    },
+    {
+      title: "Document Mastery",
+      description: "Precision guidance to ensure first-visit success.",
+      Icon: FileCheck,
+      color: "bg-emerald-500/20 text-emerald-500",
+      delay: 0.3,
+    },
+    {
+      title: "Calendar Synchronicity",
+      description: "Seamless integration with your professional life.",
+      Icon: CalendarRange,
+      color: "bg-purple-500/20 text-purple-500",
+      delay: 0.4,
+    },
+    {
+      title: "Data-Driven Insight",
+      description: "Intelligent time suggestions to eliminate the wait.",
+      Icon: Lightbulb,
+      color: "bg-amber-500/20 text-amber-500",
+      delay: 0.5,
+    },
+  ];
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background p-4">
-      {professionalBg && (
-        <Image
-          src={professionalBg.imageUrl}
-          alt={professionalBg.description}
-          fill
-          className="object-cover"
-          style={{ filter: 'blur(8px)' }}
-          data-ai-hint={professionalBg.imageHint}
-          priority
-        />
-      )}
-      <div className="absolute inset-0 bg-card/75" />
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background">
+      <FloatingDoodles />
 
-      <main className="relative z-10 flex w-full max-w-4xl flex-col items-center">
-        <div className="group relative w-full">
-          <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-75 blur-lg transition-all duration-500 group-hover:opacity-100 group-hover:blur-2xl"></div>
-          <div
-            className="relative w-full rounded-xl bg-card p-8 shadow-lg md:p-12 transform-gpu"
-            style={{ backdropFilter: 'blur(12px)' }}
-          >
-            <div className="flex flex-col gap-6 text-foreground items-center">
-              <div className="flex items-center gap-3">
-                <Image src={Logo} alt="Stride Logo" width={200} height={200} />
-              </div>
+      <main className="relative z-10 w-full max-w-7xl px-4 md:px-8 py-20 flex flex-col items-center">
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
+            About Stride
+          </h1>
+          <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">
+            Simplifying banking appointments with smarter scheduling and better preparation.
+          </p>
+        </motion.div>
 
-              <p className="text-base text-foreground/80 md:text-lg">
-                Stride is a data-driven platform designed to simplify the process
-                of banking appointments for users across India. It enables users
-                to schedule appointments efficiently, provides step-by-step
-                guidance on required documents, and reduces unnecessary trips to
-                the bank. Users can access a personalized dashboard displaying
-                upcoming visits, appointment reminders, and important
-                notifications. Stride also integrates a calendar view to track all
-                scheduled activities, ensuring users never miss a banking task. By
-                connecting users with banks digitally, Stride streamlines the
-                workflow for both customers and bank staff, making the entire
-                process transparent, organized, and hassle-free. With Stride,
-                banking becomes faster, smarter, and more predictable.
-              </p>
+        {/* Main Glass Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
+          className="relative w-full group"
+        >
+          {/* Subtle Outer Glow */}
+          <div className="absolute -inset-1 bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 rounded-[2.5rem] blur-2xl opacity-50 pointer-events-none" />
 
-              <ul className="mt-4 grid grid-cols-1 gap-4 text-foreground/80 md:grid-cols-2">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Personalized dashboards for individual users.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Real-time updates and notifications for appointments.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Step-by-step guidance for document preparation.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Calendar integration for easy planning.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Efficient communication between users and bank staff.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Data-driven suggestions to reduce waiting times.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-primary">&#10003;</span>
-                  <span>Secure and reliable platform ensuring user privacy.</span>
-                </li>
-              </ul>
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-[2.5rem] border border-white/20 dark:border-white/10 bg-white/40 dark:bg-slate-950/40 backdrop-blur-[120px] shadow-2xl">
+
+            {/* Left Column: The Narrative */}
+            <div className="p-8 md:p-12 lg:border-r border-white/20 dark:border-white/10 flex flex-col justify-center">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
+              >
+                <Image src={Logo} alt="Stride Logo" width={180} height={60} className="mb-10 brightness-0 dark:brightness-100 opacity-80" />
+
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+                  Architecture of Modern Banking.
+                </h2>
+
+                <div className="space-y-6 text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                  <p>
+                    Stride is an intelligent ecosystem architected to redefine the Indian banking experience.
+                    By bridging the gap between legacy institutional processes and modern digital convenience,
+                    we empower customers to navigate their financial lives with unprecedented clarity and speed.
+                  </p>
+                  <p>
+                    By connecting users with banks digitally, Stride streamlines the workflow for both customers
+                    and bank staff, making the entire process transparent, organized, and hassle-free.
+                  </p>
+                </div>
+
+                <div className="mt-10">
+                  <Button asChild className="rounded-full px-8 h-12 bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20">
+                    <Link href="/login">Get Started <ArrowRight className="w-4 h-4 ml-2" /></Link>
+                  </Button>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-8">
-          <Button asChild variant="outline" size="icon" className="h-12 w-12 bg-card/5">
+            {/* Right Column: The Pillars */}
+            <div className="p-8 md:p-12 bg-white/20 dark:bg-slate-900/40 flex flex-col justify-center gap-8">
+              {pillars.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.3 + i * 0.1 }}
+                  className="flex items-start gap-5 group/item"
+                >
+                  <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center shrink-0 border border-white/20 shadow-lg transition-transform group-hover/item:scale-110 drop-shadow-sm`}>
+                    <item.Icon className="w-7 h-7" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1 tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-normal">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+          </div>
+        </motion.div>
+
+        {/* Footer Navigation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="mt-16"
+        >
+          <Button asChild variant="ghost" size="lg" className="rounded-full text-slate-400 hover:text-primary hover:bg-primary/5">
             <Link href="/">
-              <Home className="h-6 w-6" />
-              <span className="sr-only">Back to Home</span>
+              <Home className="h-5 w-5 mr-3" />
+              <span>Return Home</span>
             </Link>
           </Button>
-        </div>
+        </motion.div>
       </main>
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

@@ -17,14 +17,14 @@ interface AppointmentData {
 }
 
 interface AppointmentCardProps {
-    appointment: AppointmentData;
-    onCardClick: () => void;
+  appointment: AppointmentData;
+  onCardClick: () => void;
 }
 
 export function AppointmentCard({ appointment, onCardClick }: AppointmentCardProps) {
   return (
-    <Card 
-      className="bg-card/75 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer"
+    <Card
+      className="bg-white border-[#e2e8f0] transition-all duration-300 hover:shadow-md cursor-pointer rounded-xl"
       onClick={onCardClick}
     >
       <CardContent className="p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
@@ -43,3 +43,5 @@ export function AppointmentCard({ appointment, onCardClick }: AppointmentCardPro
   );
 }
 
+
+// Stride: Professional Financial Connectivity

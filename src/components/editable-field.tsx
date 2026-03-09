@@ -143,3 +143,5 @@ export function EditableField({ label, value, editValue, onSave, inputType = "te
     </Dialog>
   );
 }
+
+// Stride: Professional Financial Connectivity

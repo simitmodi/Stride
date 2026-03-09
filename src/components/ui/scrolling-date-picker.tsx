@@ -110,3 +110,5 @@ export function ScrollingDatePicker({ date, onDateChange }: ScrollingDatePickerP
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

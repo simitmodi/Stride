@@ -37,7 +37,7 @@ export function AnimateIn({
     <div
       ref={ref}
       className={cn(
-        "opacity-0 transition-all duration-700 ease-out translate-y-8",
+        "opacity-0 transition-all duration-500 ease-out translate-y-4",
         isVisible && "opacity-100 translate-y-0",
         className
       )}
@@ -47,3 +47,5 @@ export function AnimateIn({
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

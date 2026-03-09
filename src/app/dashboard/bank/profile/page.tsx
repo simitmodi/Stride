@@ -34,7 +34,7 @@ export default function BankProfilePage() {
     () => (user ? doc(firestore, "users", user.uid) : null),
     [user, firestore]
   );
-  
+
   const { data: userData, isLoading: isFirestoreLoading, error: firestoreError } = useDoc(userDocRef);
 
   const branchesForSelectedBank = useMemo(() => {
@@ -64,7 +64,7 @@ export default function BankProfilePage() {
         const lastName = lastNameParts.join(' ');
         updates['firstName'] = firstName;
         updates['lastName'] = lastName;
-        if(auth.currentUser) {
+        if (auth.currentUser) {
           await updateProfile(auth.currentUser, { displayName: value as string });
         }
       } else if (field === 'dateOfBirth' && value instanceof Date) {
@@ -80,9 +80,9 @@ export default function BankProfilePage() {
       else {
         updates[field] = value;
       }
-      
+
       await updateUserProfile(user.uid, updates);
-      
+
       toast({
         title: "Profile Updated",
         description: `Your ${field.replace(/([A-Z])/g, ' $1')} has been updated.`,
@@ -96,16 +96,16 @@ export default function BankProfilePage() {
       });
     }
   };
-  
+
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "";
     const nameParts = name.split(" ");
     if (nameParts.length > 1 && nameParts[nameParts.length - 1][0]) {
       return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
     }
-    return name.length > 1 ? name.substring(0,2).toUpperCase() : name.toUpperCase();
+    return name.length > 1 ? name.substring(0, 2).toUpperCase() : name.toUpperCase();
   };
-  
+
   if (isUserLoading || isFirestoreLoading) {
     return (
       <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center bg-background" style={{ backgroundColor: '#BFBAB0' }}>
@@ -115,7 +115,7 @@ export default function BankProfilePage() {
   }
 
   if (!user || !userData) {
-     if (firestoreError) {
+    if (firestoreError) {
       console.error("Firestore error:", firestoreError);
     }
     return null;
@@ -127,69 +127,71 @@ export default function BankProfilePage() {
   const dobTimestamp = userData?.dateOfBirth;
 
   if (dobTimestamp && typeof dobTimestamp.toDate === 'function') {
-      dobDate = dobTimestamp.toDate();
+    dobDate = dobTimestamp.toDate();
+    if (dobDate) {
       formattedDob = format(dobDate, 'dd/MM/yyyy');
+    }
   }
 
   const renderContent = () => (
     <Card className="w-full shadow-lg" style={{ backgroundColor: '#D0CBC1' }}>
       <CardHeader>
-        <CardTitle className="text-3xl font-bold font-headline" style={{color: "#092910"}}>Account Settings</CardTitle>
+        <CardTitle className="text-3xl font-bold font-headline" style={{ color: "#092910" }}>Account Settings</CardTitle>
         <CardDescription className="font-body text-foreground/80">Manage your personal information</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 text-sm font-body">
-         <EditableField
-            label="Full Name"
-            value={userData.displayName || "N/A"}
-            onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
-          />
-        <Separator className="bg-primary/20"/>
         <EditableField
-            label="Bank Name"
-            value={userData.bankName || "N/A"}
-            onSave={(newValue) => handleUpdateProfile('bankName', newValue)}
-            inputType="select"
-            options={uniqueBanks}
-            disabled={!!userData.bankName}
-          />
-        <Separator className="bg-primary/20"/>
-        <EditableField
-            label="Branch"
-            value={userData.branch || "N/A"}
-            onSave={(newValue) => handleUpdateProfile('branch', newValue)}
-            inputType="select"
-            options={branchesForSelectedBank}
-            disabled={!userData.bankName || !!userData.branch}
-            placeholder={!userData.bankName ? "Select a bank first" : "Select a branch"}
+          label="Full Name"
+          value={userData.displayName || "N/A"}
+          onSave={(newValue) => handleUpdateProfile('displayName', newValue)}
         />
-        <Separator className="bg-primary/20"/>
-         <EditableField
-            label="DOB"
-            value={formattedDob}
-            dateValue={dobDate}
-            onSave={(newValue) => handleUpdateProfile('dateOfBirth', newValue)}
-            inputType="date"
-          />
-        <Separator className="bg-primary/20"/>
+        <Separator className="bg-primary/20" />
         <EditableField
-            label="IFSC Code"
-            value={userData.ifscCode || "N/A"}
-            onSave={(newValue) => {}}
-            disabled={true}
-          />
-        <Separator className="bg-primary/20"/>
-         <EditableField
-            label="Designation"
-            value={userData.designation || "N/A"}
-            onSave={(newValue) => handleUpdateProfile('designation', newValue)}
-          />
-         <Separator className="bg-primary/20"/>
-         <EditableField
-            label="Address"
-            value={userData.address || "N/A"}
-            onSave={(newValue) => {}}
-            disabled={true}
-          />
+          label="Bank Name"
+          value={userData.bankName || "N/A"}
+          onSave={(newValue) => handleUpdateProfile('bankName', newValue)}
+          inputType="select"
+          options={uniqueBanks}
+          disabled={!!userData.bankName}
+        />
+        <Separator className="bg-primary/20" />
+        <EditableField
+          label="Branch"
+          value={userData.branch || "N/A"}
+          onSave={(newValue) => handleUpdateProfile('branch', newValue)}
+          inputType="select"
+          options={branchesForSelectedBank}
+          disabled={!userData.bankName || !!userData.branch}
+          placeholder={!userData.bankName ? "Select a bank first" : "Select a branch"}
+        />
+        <Separator className="bg-primary/20" />
+        <EditableField
+          label="DOB"
+          value={formattedDob}
+          dateValue={dobDate}
+          onSave={(newValue) => handleUpdateProfile('dateOfBirth', newValue)}
+          inputType="date"
+        />
+        <Separator className="bg-primary/20" />
+        <EditableField
+          label="IFSC Code"
+          value={userData.ifscCode || "N/A"}
+          onSave={(newValue) => { }}
+          disabled={true}
+        />
+        <Separator className="bg-primary/20" />
+        <EditableField
+          label="Designation"
+          value={userData.designation || "N/A"}
+          onSave={(newValue) => handleUpdateProfile('designation', newValue)}
+        />
+        <Separator className="bg-primary/20" />
+        <EditableField
+          label="Address"
+          value={userData.address || "N/A"}
+          onSave={(newValue) => { }}
+          disabled={true}
+        />
       </CardContent>
     </Card>
   );
@@ -214,8 +216,8 @@ export default function BankProfilePage() {
             <Button
               variant="ghost"
               className={`justify-start items-center gap-3 text-base h-12 px-4 transition-all
-                ${activeView === 'account' 
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' 
+                ${activeView === 'account'
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground'
                   : 'text-foreground hover:bg-accent/50'
                 }`}
               onClick={() => setActiveView("account")}
@@ -235,3 +237,5 @@ export default function BankProfilePage() {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

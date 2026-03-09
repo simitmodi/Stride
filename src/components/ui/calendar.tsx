@@ -109,3 +109,5 @@ function Calendar({
 Calendar.displayName = "Calendar"
 
 export { Calendar }
+
+// Stride: Professional Financial Connectivity

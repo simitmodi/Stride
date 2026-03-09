@@ -28,28 +28,41 @@ export default function FirebaseErrorListener() {
     const localSessionToken = localStorage.getItem('sessionToken');
 
     // If there is no local token but there is one in the DB,
-    // it means this is a fresh login, so we should set the local token.
+    // it means this is a fresh login or a page reload where we need that token
     if (!localSessionToken && userData.sessionToken) {
       localStorage.setItem('sessionToken', userData.sessionToken);
       return;
     }
 
-    // If the tokens don't match, it means another device has logged in.
+    // If the tokens don't match, it might be a login on another device.
+    // However, during sign-in, there's a race condition where the local token is updated
+    // but the Firestore listener still has the old one.
+    // We use a debounce to allow the listener to synchronize.
     if (localSessionToken && userData.sessionToken && localSessionToken !== userData.sessionToken) {
-      // Clear the local token to prevent re-triggering on the login page
-      localStorage.removeItem('sessionToken');
+      const timeout = setTimeout(() => {
+        // Re-check after the delay
+        const latestLocalToken = localStorage.getItem('sessionToken');
+        if (latestLocalToken && userData.sessionToken && latestLocalToken !== userData.sessionToken) {
+          // Clear the local token to prevent re-triggering on the login page
+          localStorage.removeItem('sessionToken');
 
-      signOutUser().then(() => {
-        toast({
-          title: 'Session Expired',
-          description: 'You have been logged out because you signed in on another device.',
-          variant: 'destructive',
-        });
-        // Redirect to login page after signing out
-        router.push('/login');
-      });
+          signOutUser().then(() => {
+            toast({
+              title: 'Session Expired',
+              description: 'You have been logged out because you signed in on another device.',
+              variant: 'destructive',
+            });
+            // Redirect to login page after signing out
+            router.push('/login');
+          });
+        }
+      }, 2000); // 2-second buffer for Firestore hydration
+
+      return () => clearTimeout(timeout);
     }
   }, [user, userData, isUserLoading, toast, router]);
 
   return null; // This component does not render anything
 }
+
+// Stride: Professional Financial Connectivity

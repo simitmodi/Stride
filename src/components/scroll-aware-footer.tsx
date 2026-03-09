@@ -19,5 +19,7 @@ export function ScrollAwareFooter() {
   if (pathname?.startsWith("/login")) return null;
   if (pathname?.startsWith("/signup")) return null;
 
-  return <Footer />;
+  return isClient ? <Footer /> : null;
 }
+
+// Stride: Professional Financial Connectivity

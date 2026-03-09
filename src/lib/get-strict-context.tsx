@@ -34,3 +34,5 @@ function getStrictContext<T>(
 }
 
 export { getStrictContext };
+
+// Stride: Professional Financial Connectivity

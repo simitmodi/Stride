@@ -200,3 +200,5 @@ export async function deleteUserAccount(password: string): Promise<void> {
   // Finally, delete the user from Firebase Authentication
   await deleteUser(user);
 }
+
+// Stride: Professional Financial Connectivity

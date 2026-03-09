@@ -254,3 +254,5 @@ export {
   MenubarSub,
   MenubarShortcut,
 }
+
+// Stride: Professional Financial Connectivity

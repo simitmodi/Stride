@@ -35,3 +35,5 @@ export function PasswordStrength({ password }: { password?: string }) {
     </div>
   );
 }
+
+// Stride: Professional Financial Connectivity

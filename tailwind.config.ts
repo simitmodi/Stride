@@ -129,3 +129,5 @@ export default {
     }
   ],
 } satisfies Config;
+
+// Stride: Professional Financial Connectivity
