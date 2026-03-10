@@ -1,6 +1,3 @@
-
-'use client';
-
 import { UserRoundCog, Landmark, CreditCard, RectangleEllipsis } from 'lucide-react';
 import type { ComponentType } from 'react';
 

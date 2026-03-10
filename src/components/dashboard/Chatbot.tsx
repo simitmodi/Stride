@@ -5,10 +5,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import ReactMarkdown from "react-markdown";
+import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
+import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { useDoc } from "@/firebase/firestore/use-doc";
+import { format } from "date-fns";
+import { isAppointmentUpcoming } from "@/lib/utils";
 
 interface Message {
     role: "user" | "model";
     text: string;
+}
+
+interface AppointmentData {
+  id: string;
+  bankName: string;
+  branch: string;
+  date: Timestamp;
+  time: string;
+  specificService: string;
+  deleted?: boolean;
 }
 
 export default function Chatbot() {
@@ -19,6 +35,29 @@ export default function Chatbot() {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const { user, isUserLoading } = useUser();
+    const firestore = useFirestore();
+    const userDocRef = useMemoFirebase(() => user ? doc(firestore, "users", user.uid) : null, [user, firestore]);
+    const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
+    const [allAppointments, setAllAppointments] = useState<AppointmentData[]>([]);
+
+    useEffect(() => {
+        const fetchApps = async () => {
+            if (isUserDocLoading || !user) return;
+            const ids = userData?.appointmentIds;
+            if (!ids || ids.length === 0) return;
+            try {
+                const q = query(collection(firestore, "appointments"), where("__name__", "in", ids));
+                const snap = await getDocs(q);
+                const items: AppointmentData[] = [];
+                snap.forEach(d => { const data = d.data(); if (data.date?.toDate) items.push({ id: d.id, ...data } as AppointmentData); });
+                items.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+                setAllAppointments(items);
+            } catch (e) { console.error("Error fetching appointments for chat context", e); }
+        };
+        fetchApps();
+    }, [user, userData, isUserDocLoading, firestore]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,10 +78,18 @@ export default function Chatbot() {
         setIsLoading(true);
 
         try {
+            const upcomingAppointments = allAppointments.filter(a => !a.deleted && isAppointmentUpcoming(a.date.toDate(), a.time));
+            const appointmentContext = upcomingAppointments.length 
+                ? upcomingAppointments.map(a => `- ${a.specificService} at ${a.bankName} (${a.branch}) on ${format(a.date.toDate(), "MMM d, yyyy")} at ${a.time}`).join('\n')
+                : "No upcoming appointments currently scheduled.";
+
             const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messages: newMessages }),
+                body: JSON.stringify({ 
+                    messages: newMessages,
+                    appointmentContext 
+                }),
             });
 
             if (!response.ok) {
@@ -72,7 +119,7 @@ export default function Chatbot() {
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ duration: 0.2 }}
                         style={{ transformOrigin: "bottom right" }}
-                        className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-border bg-background/80 shadow-2xl backdrop-blur-xl sm:w-[400px]"
+                        className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-border bg-background/80 shadow-2xl backdrop-blur-xl sm:w-[500px]"
                     >
                         <div className="flex items-center justify-between border-b border-border bg-card p-4">
                             <div className="flex items-center gap-2">
@@ -99,12 +146,29 @@ export default function Chatbot() {
                                         }`}
                                 >
                                     <div
-                                        className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${msg.role === "user"
+                                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm overflow-hidden ${msg.role === "user"
                                                 ? "bg-primary text-primary-foreground rounded-tr-sm"
                                                 : "bg-muted text-foreground rounded-tl-sm"
                                             }`}
                                     >
-                                        {msg.text}
+                                        {msg.role === "user" ? (
+                                            msg.text
+                                        ) : (
+                                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                                                <ReactMarkdown 
+                                                    components={{
+                                                    a: ({ node, ...props }) => <a {...props} className="text-blue-600 hover:text-blue-800 underline font-medium" target="_blank" rel="noopener noreferrer" />,
+                                                    ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-4 my-2 space-y-1" />,
+                                                    ol: ({ node, ...props }) => <ol {...props} className="list-decimal pl-4 my-2 space-y-1" />,
+                                                    li: ({ node, ...props }) => <li {...props} className="leading-snug" />,
+                                                    p: ({ node, ...props }) => <p {...props} className="mb-2 last:mb-0 leading-relaxed" />,
+                                                    strong: ({ node, ...props }) => <strong {...props} className="font-semibold text-foreground" />
+                                                }}
+                                            >
+                                                {msg.text}
+                                            </ReactMarkdown>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
