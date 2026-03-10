@@ -26,20 +26,20 @@ export default function CustomerLoginPage() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="flex h-screen w-full bg-[#111111] overflow-hidden"
     >
       {/* Left Column - Form */}
-      <motion.div 
+      <motion.div
         initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="flex lg:flex-1 w-full flex-col px-8 lg:p-12 xl:p-24 relative z-10 bg-[#F4F4F8] rounded-r-[40px] shadow-[8px_0_30px_rgba(0,0,0,0.1)] h-full overflow-y-auto scrollbar-hide items-center"
       >
         <div className="min-h-full flex flex-col py-12 w-full items-center">
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
