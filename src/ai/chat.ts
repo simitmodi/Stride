@@ -14,16 +14,40 @@ export const customerChatFlow = ai.defineFlow(
     },
     async (messages) => {
         // Format messages for Genkit
-        const formattedMessages = messages.map(m => ({
+        let formattedMessages = messages.map(m => ({
             role: m.role,
             content: [{ text: m.text }]
         }));
 
-        const { text } = await ai.generate({
-            system: "You are a helpful customer support and financial assistant for Stride, a Professional Financial Connectivity platform. Be concise, polite, and professional. You act as an AI embedded inside the user's dashboard answering questions they might have about their experience.",
+        // Gemini requires the first message in history to be from the 'user'
+        while (formattedMessages.length > 0 && formattedMessages[0].role !== 'user') {
+            formattedMessages.shift();
+        }
+
+        const result = await ai.generate({
+            system: `You are the Stride Assistant, a professional financial connectivity specialist. 
+            
+Stride is a platform that revolutionizes bank appointment booking. 
+
+Key Platform Knowledge:
+- Stride solves banking hassles by providing a digital platform for booking and managing appointments.
+- Customers can use the Customer Portal to:
+    - View available appointment slots in real-time.
+    - Book new appointments and manage existing ones.
+    - Access a 'Document Checklist' to prepare for their visit.
+- Bank Staff use the Staff Portal to:
+    - Manage their personal availability.
+    - View, approve, or decline appointment requests.
+- The platform uses Firebase for real-time updates and secure authentication.
+- Stride supports multiple languages (English, Hindi, Bengali, Tamil, etc.).
+
+Your Goal:
+- Be concise, professional, and helpful.
+- Help users navigate their Stride dashboard.
+- If users ask for financial transactions (like transferring money), politely explain that Stride manages the *connectivity and appointments* for the bank, and they should contact their branch directly for specific financial services.`,
             messages: formattedMessages,
         });
 
-        return text;
+        return result.text;
     }
 );
