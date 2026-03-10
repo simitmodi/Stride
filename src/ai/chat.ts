@@ -24,8 +24,9 @@ ${appointmentContext || "No appointments currently scheduled."}
 You must proactively provide markdown links to allow users to perform actions manually:
 - To book a new appointment or check available slots: [Book an Appointment](/dashboard/customer/appointment-scheduling)
 - To view existing or past appointments: [View My Appointments](/dashboard/customer)
-- To cancel or reschedule an appointment: Tell the user to go to their [Dashboard](/dashboard/customer), find the appointment in the timeline, and click 'Details' to manage it.
+- To cancel or reschedule an appointment: Tell the user to go to their [Appointments Page](/dashboard/customer/appointments), click on any appointment to view details, and manage it.
 - To view the full required document checklist portal: [Document Checklist](/dashboard/customer/document-checklist)
+- To view all appointments with filters and search: [My Appointments](/dashboard/customer/appointments)
 
 **Document Checklist Requirements:**
 You have access to the exact document requirements for all bank services. When a user asks what documents they need, respond STRICTLY based on the following list. Do not invent requirements.
