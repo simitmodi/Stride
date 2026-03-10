@@ -15,11 +15,16 @@ export function ScrollAwareFooter() {
   if (!isClient) return null;
 
   // Hide footer on specific pages where we want a full-height app feel
-  if (pathname === '/dashboard/customer/document-checklist') return null;
-  if (pathname?.startsWith("/login")) return null;
-  if (pathname?.startsWith("/signup")) return null;
+  const excludedPaths = [
+    '/dashboard/customer/document-checklist',
+    '/dashboard/customer/appointment-scheduling'
+  ];
 
-  return isClient ? <Footer /> : null;
+  if (excludedPaths.includes(pathname) || pathname?.startsWith("/login") || pathname?.startsWith("/signup")) {
+    return null;
+  }
+
+  return <Footer />;
 }
 
 // Stride: Professional Financial Connectivity

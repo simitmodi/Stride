@@ -20,10 +20,14 @@ service cloud.firestore {
 
     // Rules for the 'appointments' collection
     match /appointments/{appointmentId} {
-      // Allow users to manage their own appointments
-      allow read, create, update, delete: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      // Allow bank employees to list appointments for their branch
-      allow list: if isBankEmployee();
+      // Allow authenticated users to read appointments to check slot availability
+      allow read: if request.auth != null;
+      // Allow users to create their own appointments
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      // Allow users to update their own appointments
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      // Allow users to delete their own appointments
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
   }
 }
