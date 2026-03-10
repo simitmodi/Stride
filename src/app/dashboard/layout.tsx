@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
 import Header from "@/components/header";
+import Chatbot from "@/components/dashboard/Chatbot";
 import { Loader2 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -50,6 +51,7 @@ export default function DashboardLayout({
       <main className="flex flex-1 flex-col p-4 md:p-8 pt-6">
         {children}
       </main>
+      <Chatbot />
     </div>
   );
 }
