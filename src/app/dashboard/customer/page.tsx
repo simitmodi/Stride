@@ -114,9 +114,11 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
 
   return (
     <div className="px-4 md:px-8 mb-7">
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={onOpen}
-        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative"
+        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
@@ -194,7 +196,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
             </div>
           </div>
         </div>
-      </button>
+      </div>
     </div>
   );
 }
