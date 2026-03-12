@@ -7,8 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogClose,
   DialogDescription,
 } from '@/components/ui/dialog';
 import {
@@ -32,15 +30,14 @@ import {
 } from '@/components/ui/select';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Separator } from '@/components/ui/separator';
-import { Label } from './ui/label';
+import { Label } from '@/components/ui/label';
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore } from '@/firebase/provider';
-import { doc, updateDoc, Timestamp, getDoc } from 'firebase/firestore';
-import { Loader2, Calendar as CalendarIcon, Clock, Pencil, Trash2 } from 'lucide-react';
+import { doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { format, addHours, isAfter, isSaturday, isSunday, startOfDay, parse } from 'date-fns';
 import { cn } from '@/lib/utils';
-
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Calendar as CalendarIcon, Clock, Pencil, Trash2, Loader2, Info } from 'lucide-react';
 
 interface AppointmentData {
   id: string;
@@ -64,10 +61,15 @@ interface CustomerAppointmentDetailsModalProps {
   onAppointmentCancel: (appointmentId: string) => void;
 }
 
-const DetailItem = ({ label, value }: { label: string; value: string | undefined }) => (
-    <div className="flex flex-col sm:flex-row sm:justify-between">
-      <dt className="font-semibold text-foreground/80">{label}</dt>
-      <dd className="sm:text-right text-foreground">{value || 'N/A'}</dd>
+const DetailItem = ({ label, value, icon: Icon }: { label: string; value: string | undefined; icon?: any }) => (
+    <div className="grid grid-cols-[120px_1fr] items-start gap-4 py-2 border-b border-[#5927bb]/5 last:border-0 group">
+      <dt className="text-[13px] font-bold text-[#5927bb]/70 flex items-center gap-2 pt-0.5">
+        {Icon && <Icon className="w-3.5 h-3.5 opacity-80" />}
+        {label}
+      </dt>
+      <dd className="text-[15px] font-semibold text-foreground/90 leading-relaxed tracking-tight group-hover:text-[#5927bb] transition-colors">
+        {value || 'N/A'}
+      </dd>
     </div>
 );
 
@@ -88,12 +90,11 @@ export function CustomerAppointmentDetailsModal({
   const [newDate, setNewDate] = useState<Date | undefined>(() => appointment.date.toDate());
   const [newTime, setNewTime] = useState(appointment.time);
   
-  // This effect synchronizes the modal's state when a new appointment is passed in.
   useEffect(() => {
     if (isOpen) {
       setNewDate(appointment.date.toDate());
       setNewTime(appointment.time);
-      setIsEditing(false); // Reset edit mode when modal reopens for a new appointment
+      setIsEditing(false);
     }
   }, [isOpen, appointment]);
 
@@ -212,51 +213,81 @@ export function CustomerAppointmentDetailsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl" style={{ backgroundColor: '#D0CBC1' }}>
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-primary text-center">Appointment Details</DialogTitle>
-        </DialogHeader>
-        <div className="py-4 space-y-6">
+      <DialogContent className="w-[68vw] max-w-[95vw] p-0 overflow-hidden border-none bg-[#f8f9fc] rounded-[2.5rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] antialiased">
+        <div className="relative p-6 sm:p-8 flex flex-col">
+          <DialogHeader className="mb-4 relative">
+            <DialogTitle className="text-3xl font-extrabold tracking-tight text-center text-[#5927bb]">
+              Appointment Details
+            </DialogTitle>
+          </DialogHeader>
+
+          <AnimatePresence mode="wait">
             {!isEditing ? (
-              <>
-                <div className="space-y-4 rounded-lg border border-foreground/20 bg-background/5 p-4">
-                  <dl className="space-y-3">
-                      <DetailItem label="Appointment ID" value={appointment.customAppointmentId} />
-                      <DetailItem label="Bank" value={`${appointment.bankName} - ${appointment.branch}`} />
-                      <DetailItem label="Address" value={appointment.address} />
-                      <DetailItem label="Date & Time" value={`${format(appointment.date.toDate(), 'PPP')} at ${appointment.time}`} />
-                      <DetailItem label="Service" value={`${appointment.serviceCategory} - ${appointment.specificService}`} />
-                  </dl>
+              <motion.div 
+                key="details"
+                initial={{ opacity: 0, scale: 0.99, y: 5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="flex-1 flex flex-col gap-4"
+              >
+                {/* Appointment ID - Full Width */}
+                <div className="p-4 sm:p-5 rounded-[2rem] bg-white border border-black/5 shadow-sm">
+                  <DetailItem label="Appointment ID" value={appointment.customAppointmentId} />
                 </div>
-                {appointment.confirmedDocuments && appointment.confirmedDocuments.length > 0 && (
-                  <div className="space-y-2 rounded-lg border border-foreground/20 bg-background/5 p-4">
-                    <h4 className="font-semibold text-foreground/80">Documents to Bring:</h4>
-                    <ul className="list-disc list-inside space-y-1 text-foreground">
-                        {appointment.confirmedDocuments.map((doc, index) => (
-                            <li key={index}>{doc.startsWith('documents.') ? doc.split('.').slice(1).join('.') : doc}</li>
-                        ))}
-                    </ul>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Details Box */}
+                  <div className="p-5 sm:p-6 rounded-[2rem] bg-white border border-black/5 shadow-sm">
+                    <DetailItem label="Bank" value={appointment.bankName} />
+                    <DetailItem label="Address" value={appointment.address} />
+                    <DetailItem 
+                      label="Date & Time" 
+                      value={`${format(appointment.date.toDate(), 'MMMM do, yyyy')} at ${appointment.time}`} 
+                    />
+                    <DetailItem label="Service" value={`${appointment.serviceCategory} - ${appointment.specificService}`} />
                   </div>
-                )}
-              </>
+
+                  {/* Documents Box */}
+                  {appointment.confirmedDocuments && appointment.confirmedDocuments.length > 0 && (
+                    <div className="p-5 sm:p-6 rounded-[2rem] bg-white border border-black/5 shadow-sm">
+                      <h4 className="font-bold text-[#4a5568] text-base mb-3">Documents to Bring:</h4>
+                      <ul className="space-y-2">
+                        {appointment.confirmedDocuments.map((doc, index) => (
+                          <li key={index} className="flex items-start gap-3 text-[15px] font-medium text-foreground/80 group">
+                            <div className="w-1.5 h-1.5 rounded-full bg-black/60 mt-2 shrink-0" />
+                            <span className="break-words">{doc.startsWith('documents.') ? doc.split('.').slice(1).join('.') : doc}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             ) : (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                    <Label style={{ color: '#000F00' }}>Date</Label>
+              <motion.div 
+                key="editing"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-6"
+              >
+                <div className="space-y-5 p-7 rounded-[1.5rem] bg-muted/30 border-2 border-[#5927bb]/10">
+                  <div className="space-y-2">
+                    <Label className="text-[#5927bb] font-bold text-sm ml-1">Reschedule Date</Label>
                     <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
                             className={cn(
-                              'w-full justify-start text-left font-normal',
-                              !newDate && 'text-foreground/80'
+                              'w-full justify-start text-left font-medium rounded-2xl h-14 border-[#5927bb]/20 hover:border-[#5927bb] hover:bg-[#5927bb]/5 transition-all shadow-sm px-5',
+                              !newDate && 'text-muted-foreground'
                             )}
                           >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <CalendarIcon className="mr-3 h-5 w-5 text-[#5927bb]" />
                             {newDate ? format(newDate, 'PPP') : <span>Pick a date</span>}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
+                        <PopoverContent className="w-auto p-0 rounded-[1.5rem] border-none shadow-2xl overflow-hidden" align="start">
                           <Calendar
                             mode="single"
                             selected={newDate}
@@ -266,81 +297,101 @@ export function CustomerAppointmentDetailsModal({
                           />
                         </PopoverContent>
                       </Popover>
-                </div>
-                <div className="space-y-2">
-                    <Label style={{ color: '#000F00' }}>Time</Label>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[#5927bb] font-bold text-sm ml-1">Preferred Time</Label>
                     <Select onValueChange={setNewTime} defaultValue={newTime}>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-2xl h-14 border-[#5927bb]/20 hover:border-[#5927bb] hover:bg-[#5927bb]/5 transition-all shadow-sm px-5">
                             <div className="flex items-center">
-                                <Clock className="mr-2 h-4 w-4" />
+                                <Clock className="mr-3 h-5 w-5 text-[#5927bb]" />
                                 <SelectValue placeholder="Select a new time slot" />
                             </div>
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="rounded-2xl border-none shadow-xl max-h-[300px]">
                             {timeSlots.map((slot) => (
-                                <SelectItem key={slot} value={slot}>
+                                <SelectItem key={slot} value={slot} className="rounded-xl py-3 focus:bg-[#5927bb]/10">
                                     {slot}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             )}
-        </div>
-        <Separator className="bg-primary/20" />
-        <DialogFooter className="pt-4 flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2">
-            <div>
-            {isActionable && !isEditing && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Cancel Appointment
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action will cancel your appointment. This cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Back</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
-                      {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Yes, Cancel
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
-            </div>
-            <div className='flex justify-end gap-2'>
-              {isEditing ? (
-                  <>
-                      <Button variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
-                      <Button onClick={handleUpdateAppointment} disabled={isUpdating}>
-                          {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                          Save Changes
+          </AnimatePresence>
+
+          <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between">
+              {!isEditing ? (
+                <>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button 
+                        disabled={isDeleting}
+                        className="bg-[#ef4444] hover:bg-[#dc2626] text-white rounded-2xl px-6 h-12 font-bold shadow-lg shadow-red-500/20 transition-all active:scale-95 flex items-center gap-2"
+                      >
+                        {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                        Cancel Appointment
                       </Button>
-                  </>
-              ) : (
-                  <>
-                    <DialogClose asChild>
-                        <Button variant="secondary">Close</Button>
-                    </DialogClose>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="rounded-[2rem] border-none p-10 shadow-2xl">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-2xl font-black text-[#5927bb]">Cancel Appointment?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-lg font-medium">
+                          Are you sure? This action will permanently remove your scheduled slot.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="mt-8">
+                        <AlertDialogCancel className="rounded-2xl h-12 px-8 font-bold border-2 border-muted hover:bg-muted/50 transition-all">Go Back</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={handleDelete}
+                          className="bg-red-500 hover:bg-red-600 rounded-2xl h-12 px-8 font-bold shadow-lg shadow-red-500/20 transition-all"
+                        >
+                          Confirm Cancellation
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <div className="flex items-center gap-4">
+                    <Button 
+                      variant="outline" 
+                      onClick={onClose}
+                      className="bg-white rounded-2xl px-8 h-12 border border-black/10 hover:bg-black/5 font-bold transition-all text-black/70"
+                    >
+                      Close
+                    </Button>
                     {isActionable && (
-                        <Button onClick={() => setIsEditing(true)}>
-                            <Pencil className="mr-2 h-4 w-4" />
+                        <Button 
+                          onClick={() => setIsEditing(true)}
+                          className="bg-[#5927bb] hover:bg-[#5927bb]/90 text-white rounded-2xl px-10 h-12 font-bold shadow-lg shadow-[#5927bb]/20 transition-all active:scale-95 flex items-center gap-2"
+                        >
+                            <Pencil className="w-4 h-4" />
                             Edit
                         </Button>
                     )}
-                  </>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-end w-full gap-4">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setIsEditing(false)}
+                    className="rounded-2xl px-8 h-12 font-bold hover:bg-red-50 text-red-500 transition-all"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleUpdateAppointment} 
+                    disabled={isUpdating}
+                    className="bg-[#5927bb] hover:bg-[#5927bb]/90 text-white rounded-2xl px-10 h-12 font-bold shadow-lg shadow-[#5927bb]/20 transition-all active:scale-95"
+                  >
+                    {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save Changes'}
+                  </Button>
+                </div>
               )}
             </div>
-        </DialogFooter>
+          </div>
       </DialogContent>
     </Dialog>
   );
