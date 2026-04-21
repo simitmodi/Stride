@@ -17,9 +17,9 @@ export default function RootHeader() {
   const { user, isUserLoading } = useUser();
   const pathname = usePathname();
 
-  // Do not render a header on the root page or while the user's
+  // Do not render a header on the root page, login pages, or while the user's
   // authentication status is still loading.
-  if (pathname === '/' || isUserLoading) {
+  if (pathname === '/' || pathname.startsWith('/login') || isUserLoading) {
     return null;
   }
 
