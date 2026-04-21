@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageSquare, Send, Loader2, X } from "lucide-react";
+import { Bell, MessageSquare, Send, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +11,7 @@ import { useDoc } from "@/firebase/firestore/use-doc";
 import { format } from "date-fns";
 import { isAppointmentUpcoming } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { emitStrideNotification } from "@/lib/notifications/client";
 
 interface Message {
     role: "user" | "model";
@@ -96,13 +97,25 @@ export default function Chatbot({ className, onClose }: { className?: string; on
             }
 
             const data = await response.json();
-            setMessages((prev) => [...prev, { role: "model", text: data.text }]);
+            const assistantText = String(data.text ?? "I have a new update for your dashboard.");
+            setMessages((prev) => [...prev, { role: "model", text: assistantText }]);
+            emitStrideNotification({
+                title: "Stride Assistant",
+                body: "You received a new assistant response.",
+                url: "/dashboard",
+            });
         } catch (error) {
             console.error(error);
+            const fallbackText = "Sorry, I am having trouble connecting right now. Please try again later.";
             setMessages((prev) => [
                 ...prev,
-                { role: "model", text: "Sorry, I am having trouble connecting right now. Please try again later." }
+                { role: "model", text: fallbackText }
             ]);
+            emitStrideNotification({
+                title: "Stride Assistant",
+                body: "The assistant encountered a connection issue.",
+                url: "/dashboard",
+            });
         } finally {
             setIsLoading(false);
         }
@@ -117,17 +130,28 @@ export default function Chatbot({ className, onClose }: { className?: string; on
                     </div>
                     <h3 className="font-semibold text-foreground">Stride Assistant</h3>
                 </div>
-                {onClose && (
+                <div className="flex items-center gap-1">
                     <Button
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-full"
-                        onClick={onClose}
-                        aria-label="Close chat"
+                        onClick={() => window.dispatchEvent(new Event("stride:enable-notifications"))}
+                        aria-label="Enable notifications"
                     >
-                        <X className="h-4 w-4" />
+                        <Bell className="h-4 w-4" />
                     </Button>
-                )}
+                    {onClose && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-full"
+                            onClick={onClose}
+                            aria-label="Close chat"
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
+                </div>
             </div>
 
             <div className="flex-1 space-y-4 overflow-y-auto p-4">

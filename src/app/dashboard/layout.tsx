@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
 import Header from "@/components/header";
 import Chatbot from "@/components/dashboard/Chatbot";
+import NotificationManager from "@/components/notifications/NotificationManager";
 import { Button } from "@/components/ui/button";
 import { Loader2, MessageSquare } from 'lucide-react';
 
@@ -49,6 +50,7 @@ export default function DashboardLayout({
   // If user is logged in, render the dashboard.
   return (
     <div className="dashboard-theme flex min-h-screen w-full flex-col">
+      <NotificationManager />
       <Header />
       <main className={`flex flex-1 flex-col p-4 md:p-8 pt-6 transition-[padding] duration-300 ${isChatOpen ? "xl:pr-[430px]" : ""}`}>
         {children}
