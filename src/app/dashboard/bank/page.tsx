@@ -267,10 +267,6 @@ function EmptyStateWidget({ upcomingCount, completedCount, onRegisterPasskey }: 
                 <Fingerprint className="h-4 w-4" />
                 Setup Passkey
               </button>
-              <Link href="/dashboard/bank/appointment-scheduling"
-                className="px-6 py-2.5 rounded-2xl bg-white/20 text-white font-bold text-sm border border-white/30 backdrop-blur-sm transition-all hover:bg-white/30 active:scale-95 whitespace-nowrap text-center">
-                Book Now
-              </Link>
             </div>
           </div>
         </div>
@@ -504,17 +500,6 @@ export default function BankDashboardPage() {
 
         {/* Right — Sidebar */}
         <div className="w-full xl:w-80 flex-shrink-0 flex flex-col gap-5">
-
-          {/* Quick actions */}
-          <div className="rounded-2xl bg-white p-5 shadow-sm relative z-10" style={{ border: "1px solid #e2e8f0" }}>
-            <p className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Quick Actions</p>
-            <div className="flex flex-col gap-3">
-              <QuickActionCard filled href="/dashboard/bank/appointment-scheduling"
-                icon={<CalendarCheck className="h-5 w-5" />} label="Schedule Ops" sub="Manage appointments" />
-              <QuickActionCard href="/dashboard/bank/document-checklist"
-                icon={<FileText className="h-5 w-5" />} label="Document Checklist" sub="Verify required documents" />
-            </div>
-          </div>
 
           {/* ── Activity Timeline ── */}
           <div className="rounded-2xl bg-white shadow-sm overflow-hidden" style={{ border: "1px solid #e2e8f0" }}>
