@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Send, Loader2 } from "lucide-react";
+import { Bell, MessageSquare, Send, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +10,8 @@ import { doc, collection, query, where, getDocs, Timestamp } from "firebase/fire
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { format } from "date-fns";
 import { isAppointmentUpcoming } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { emitStrideNotification } from "@/lib/notifications/client";
 
 interface Message {
     role: "user" | "model";
@@ -27,8 +28,7 @@ interface AppointmentData {
   deleted?: boolean;
 }
 
-export default function Chatbot() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function Chatbot({ className, onClose }: { className?: string; onClose?: () => void }) {
     const [messages, setMessages] = useState<Message[]>([
         { role: "model", text: "Hello! How can I help you with your Stride dashboard today?" }
     ]);
@@ -65,7 +65,7 @@ export default function Chatbot() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, isOpen, isLoading]);
+    }, [messages, isLoading]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -97,130 +97,126 @@ export default function Chatbot() {
             }
 
             const data = await response.json();
-            setMessages((prev) => [...prev, { role: "model", text: data.text }]);
+            const assistantText = String(data.text ?? "I have a new update for your dashboard.");
+            setMessages((prev) => [...prev, { role: "model", text: assistantText }]);
+            emitStrideNotification({
+                title: "Stride Assistant",
+                body: "You received a new assistant response.",
+                url: "/dashboard",
+            });
         } catch (error) {
             console.error(error);
+            const fallbackText = "Sorry, I am having trouble connecting right now. Please try again later.";
             setMessages((prev) => [
                 ...prev,
-                { role: "model", text: "Sorry, I am having trouble connecting right now. Please try again later." }
+                { role: "model", text: fallbackText }
             ]);
+            emitStrideNotification({
+                title: "Stride Assistant",
+                body: "The assistant encountered a connection issue.",
+                url: "/dashboard",
+            });
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50">
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        transition={{ duration: 0.2 }}
-                        style={{ transformOrigin: "bottom right" }}
-                        className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-border bg-background/80 shadow-2xl backdrop-blur-xl sm:w-[500px]"
+        <div className={cn("flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-border bg-background/80 shadow-2xl backdrop-blur-xl", className)}>
+            <div className="flex items-center justify-between border-b border-border bg-card p-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                        <MessageSquare className="h-4 w-4 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-foreground">Stride Assistant</h3>
+                </div>
+                <div className="flex items-center gap-1">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => window.dispatchEvent(new Event("stride:enable-notifications"))}
+                        aria-label="Enable notifications"
                     >
-                        <div className="flex items-center justify-between border-b border-border bg-card p-4">
-                            <div className="flex items-center gap-2">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                                    <MessageSquare className="h-4 w-4 text-primary" />
-                                </div>
-                                <h3 className="font-semibold text-foreground">Stride Assistant</h3>
-                            </div>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 rounded-full"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
-                        </div>
+                        <Bell className="h-4 w-4" />
+                    </Button>
+                    {onClose && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-full"
+                            onClick={onClose}
+                            aria-label="Close chat"
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
+                </div>
+            </div>
 
-                        <div className="flex-1 space-y-4 overflow-y-auto p-4">
-                            {messages.map((msg, i) => (
-                                <div
-                                    key={i}
-                                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
-                                        }`}
-                                >
-                                    <div
-                                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm overflow-hidden ${msg.role === "user"
-                                                ? "bg-primary text-primary-foreground rounded-tr-sm"
-                                                : "bg-muted text-foreground rounded-tl-sm"
-                                            }`}
+            <div className="flex-1 space-y-4 overflow-y-auto p-4">
+                {messages.map((msg, i) => (
+                    <div
+                        key={i}
+                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+                            }`}
+                    >
+                        <div
+                            className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm overflow-hidden ${msg.role === "user"
+                                    ? "bg-primary text-primary-foreground rounded-tr-sm"
+                                    : "bg-muted text-foreground rounded-tl-sm"
+                                }`}
+                        >
+                            {msg.role === "user" ? (
+                                msg.text
+                            ) : (
+                                <div className="prose prose-sm dark:prose-invert max-w-none">
+                                    <ReactMarkdown
+                                        components={{
+                                            a: ({ node, ...props }) => <a {...props} className="text-blue-600 hover:text-blue-800 underline font-medium" target="_blank" rel="noopener noreferrer" />,
+                                            ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-4 my-2 space-y-1" />,
+                                            ol: ({ node, ...props }) => <ol {...props} className="list-decimal pl-4 my-2 space-y-1" />,
+                                            li: ({ node, ...props }) => <li {...props} className="leading-snug" />,
+                                            p: ({ node, ...props }) => <p {...props} className="mb-2 last:mb-0 leading-relaxed" />,
+                                            strong: ({ node, ...props }) => <strong {...props} className="font-semibold text-foreground" />
+                                        }}
                                     >
-                                        {msg.role === "user" ? (
-                                            msg.text
-                                        ) : (
-                                            <div className="prose prose-sm dark:prose-invert max-w-none">
-                                                <ReactMarkdown 
-                                                    components={{
-                                                    a: ({ node, ...props }) => <a {...props} className="text-blue-600 hover:text-blue-800 underline font-medium" target="_blank" rel="noopener noreferrer" />,
-                                                    ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-4 my-2 space-y-1" />,
-                                                    ol: ({ node, ...props }) => <ol {...props} className="list-decimal pl-4 my-2 space-y-1" />,
-                                                    li: ({ node, ...props }) => <li {...props} className="leading-snug" />,
-                                                    p: ({ node, ...props }) => <p {...props} className="mb-2 last:mb-0 leading-relaxed" />,
-                                                    strong: ({ node, ...props }) => <strong {...props} className="font-semibold text-foreground" />
-                                                }}
-                                            >
-                                                {msg.text}
-                                            </ReactMarkdown>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                            {isLoading && (
-                                <div className="flex justify-start">
-                                    <div className="max-w-[80%] rounded-2xl rounded-tl-sm bg-muted px-4 py-2 text-foreground">
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                    </div>
+                                        {msg.text}
+                                    </ReactMarkdown>
                                 </div>
                             )}
-                            <div ref={messagesEndRef} />
                         </div>
-
-                        <div className="border-t border-border bg-background p-4">
-                            <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                                <Input
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    placeholder="Type your message..."
-                                    className="flex-1 bg-muted/50 focus-visible:ring-1"
-                                    disabled={isLoading}
-                                />
-                                <Button
-                                    type="submit"
-                                    size="icon"
-                                    disabled={!input.trim() || isLoading}
-                                    className="h-10 w-10 shrink-0 rounded-full"
-                                >
-                                    <Send className="h-4 w-4" />
-                                </Button>
-                            </form>
+                    </div>
+                ))}
+                {isLoading && (
+                    <div className="flex justify-start">
+                        <div className="max-w-[80%] rounded-2xl rounded-tl-sm bg-muted px-4 py-2 text-foreground">
+                            <Loader2 className="h-4 w-4 animate-spin" />
                         </div>
-                    </motion.div>
+                    </div>
                 )}
-            </AnimatePresence>
+                <div ref={messagesEndRef} />
+            </div>
 
-            {!isOpen && (
-                <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
+            <div className="border-t border-border bg-background p-4">
+                <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                    <Input
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your message..."
+                        className="flex-1 bg-muted/50 focus-visible:ring-1"
+                        disabled={isLoading}
+                    />
                     <Button
+                        type="submit"
                         size="icon"
-                        className="h-14 w-14 rounded-full shadow-xl"
-                        onClick={() => setIsOpen(true)}
+                        disabled={!input.trim() || isLoading}
+                        className="h-10 w-10 shrink-0 rounded-full"
                     >
-                        <MessageSquare className="h-6 w-6" />
+                        <Send className="h-4 w-4" />
                     </Button>
-                </motion.div>
-            )}
+                </form>
+            </div>
         </div>
     );
 }
