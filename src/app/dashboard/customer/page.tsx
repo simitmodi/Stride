@@ -16,6 +16,7 @@ import { CustomerAppointmentDetailsModal } from "@/components/customer-appointme
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { motion, AnimatePresence } from "framer-motion";
 import { isAppointmentUpcoming } from "@/lib/utils";
+import { ChatWidget } from "@/components/chat-widget";
 
 const INDIGO = "#4F46E5";
 
@@ -118,7 +119,13 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
         role="button"
         tabIndex={0}
         onClick={onOpen}
-        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onOpen();
+          }
+        }}
+        className="banner-btn block w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
@@ -527,6 +534,9 @@ export default function CustomerDashboardPage() {
           onAppointmentCancel={(id) => setAllAppointments(prev => prev.filter(a => a.id !== id))}
         />
       )}
+
+      {/* AI Chat Widget */}
+      <ChatWidget />
     </div>
   );
 }
