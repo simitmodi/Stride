@@ -33,27 +33,6 @@ Stride eliminates the frustrations of traditional bank visits by:
 
 ---
 
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server (port 9002)
-npm run dev
-
-# Start Genkit AI development server
-npm run genkit:dev
-
-# Build for production
-npm run build
-
-# Type-check
-npm run typecheck
-```
-
----
-
 ## 🏗️ Architecture Overview
 
 ### **Tech Stack**
