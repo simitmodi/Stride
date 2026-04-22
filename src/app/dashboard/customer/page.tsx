@@ -9,7 +9,7 @@ import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
 import { doc, collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { useDoc } from "@/firebase/firestore/use-doc";
 import { format, isBefore, startOfDay, isAfter, differenceInSeconds } from "date-fns";
-import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark, Fingerprint } from "lucide-react";
+import { CalendarCheck, FileText, ArrowRight, Clock, CheckCircle2, ChevronDown, ChevronUp, XCircle, Landmark, Fingerprint, List } from "lucide-react";
 import { registerPasskey, isPasskeySupported } from "@/lib/auth/passkeys";
 import { useToast } from "@/hooks/use-toast";
 import { CustomerAppointmentDetailsModal } from "@/components/customer-appointment-details-modal";
@@ -119,6 +119,7 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
         role="button"
         tabIndex={0}
         onClick={onOpen}
+<<<<<<< HEAD
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -126,6 +127,9 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
           }
         }}
         className="banner-btn block w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
+=======
+        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
+>>>>>>> 9d31264480e228e41804987d43977df3d3b8bcf8
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
@@ -485,7 +489,10 @@ export default function CustomerDashboardPage() {
           <div className="rounded-2xl bg-white p-5 shadow-sm relative z-10" style={{ border: "1px solid #e2e8f0" }}>
             <p className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Quick Actions</p>
             <div className="flex flex-col gap-3">
-              <QuickActionCard filled href="/dashboard/customer/appointment-scheduling"
+              <QuickActionCard href="/dashboard/customer/appointments"
+                icon={<List className="h-5 w-5" />} label="My Appointments" sub="All History & Manage" />
+              
+              <QuickActionCard href="/dashboard/customer/appointment-scheduling"
                 icon={<CalendarCheck className="h-5 w-5" />} label="Book Appointment" sub="Schedule a new visit" />
               <QuickActionCard href="/dashboard/customer/document-checklist"
                 icon={<FileText className="h-5 w-5" />} label="Document Checklist" sub="Review required documents" />
