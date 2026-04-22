@@ -119,7 +119,6 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
         role="button"
         tabIndex={0}
         onClick={onOpen}
-<<<<<<< HEAD
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -127,9 +126,6 @@ function CountdownWidget({ nextAppt, upcomingCount, completedCount, onOpen, onRe
           }
         }}
         className="banner-btn block w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
-=======
-        className="banner-btn w-full text-left rounded-3xl overflow-hidden relative cursor-pointer"
->>>>>>> 9d31264480e228e41804987d43977df3d3b8bcf8
         style={{
           background: `linear-gradient(135deg, ${INDIGO} 0%, #6d28d9 50%, #4338ca 100%)`,
           boxShadow: `0 8px 32px ${INDIGO}40, 0 2px 8px rgba(0,0,0,0.18)`,
