@@ -74,7 +74,7 @@ function TimelineView({ appointments, onSelect }: { appointments: AppointmentDat
   return (
     <div className="relative pl-6 space-y-0">
       {/* Vertical connector */}
-      <div className="absolute left-[19px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-200 via-indigo-100 to-slate-100" />
+      <div className="absolute left-[43px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-200 via-indigo-100 to-slate-100" />
 
       {appointments.map((apt, i) => {
         const status = getStatus(apt);

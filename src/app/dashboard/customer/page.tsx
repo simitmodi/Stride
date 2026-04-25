@@ -16,7 +16,6 @@ import { CustomerAppointmentDetailsModal } from "@/components/customer-appointme
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { motion, AnimatePresence } from "framer-motion";
 import { isAppointmentUpcoming } from "@/lib/utils";
-import { ChatWidget } from "@/components/chat-widget";
 
 const INDIGO = "#4F46E5";
 
@@ -535,8 +534,6 @@ export default function CustomerDashboardPage() {
         />
       )}
 
-      {/* AI Chat Widget */}
-      <ChatWidget />
     </div>
   );
 }
