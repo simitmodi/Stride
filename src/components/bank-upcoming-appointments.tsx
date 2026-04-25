@@ -208,20 +208,7 @@ export default function BankUpcomingAppointments({ calendarJumpDate }: { calenda
                                 <p className="text-slate-400 text-sm font-medium max-w-sm leading-relaxed">No appointments booked for this day. Enjoy the open schedule!</p>
                             </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-3 relative z-10">
-                                <a href="/dashboard/bank/document-checklist"
-                                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95 shadow-sm">
-                                    <FileText className="h-4 w-4" />
-                                    Docs
-                                </a>
-                                <a href="/dashboard/bank/appointment-scheduling"
-                                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-white transition-all active:scale-95 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-                                    style={{ background: INDIGO }}>
-                                    <CalendarPlus className="h-4 w-4" />
-                                    Schedule
-                                </a>
-                            </div>
+                            {/* Action Buttons disabled */}
                         </div>
                     ) : (
                         <div className="space-y-4">

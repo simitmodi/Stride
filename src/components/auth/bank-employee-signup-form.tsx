@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail } from "@/lib/firebase/auth";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import {
   Select,
@@ -43,6 +44,7 @@ const formSchema = z.object({
 export function BankEmployeeSignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const [branches, setBranches] = useState<{ BRANCH: string; IFSC: string; ADDRESS: string; }[]>([]);
   const uniqueBanks = Array.from(new Set(bankData.map((item) => item.BANK))).sort();

@@ -248,7 +248,7 @@ export const developersData: Record<string, DeveloperData> = {
             linkedin: "https://www.linkedin.com/in/ankit-nandoliya-425a1429b/",
             github: "https://github.com/ankit5287",
             instagram: "https://www.instagram.com/ankit_n2/",
-            portfolio: "https://ankit52.vercel.app/"
+            portfolio: "https://ankit-nandoliya.vercel.app"
         },
         education: {
             school: "SAL Institute of Technology and Engineering Research (GTU)",

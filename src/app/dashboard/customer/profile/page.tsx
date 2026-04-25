@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Bell, User, LogOut, ChevronRight, Trash2, Pencil, KeyRound, Eye, EyeOff, CalendarCheck, ArrowUpDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { enablePushNotifications, registerStrideServiceWorker } from "@/lib/notifications/client";
 import { Loader2 } from "lucide-react";
 import { format, isAfter, startOfDay, parse, isBefore } from "date-fns";
 import { EditableField } from "@/components/editable-field";
@@ -264,6 +265,63 @@ export default function ProfilePage() {
   const [reauthPassword, setReauthPassword] = useState("");
   const [isReauthing, setIsReauthing] = useState(false);
   const [onReauthSuccess, setOnReauthSuccess] = useState<(() => Promise<void>) | null>(null);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(typeof window !== "undefined" && "Notification" in window ? Notification.permission : "default");
+  const [isNotificationLoading, setIsNotificationLoading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      return;
+    }
+    setNotificationPermission(Notification.permission);
+  }, []);
+
+  const handleEnableBrowserNotifications = async () => {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      toast({
+        variant: "destructive",
+        title: "Unsupported Browser",
+        description: "Your browser does not support notifications.",
+      });
+      return;
+    }
+
+    setIsNotificationLoading(true);
+    try {
+      const registration = await registerStrideServiceWorker();
+      if (!registration) {
+        throw new Error("Service worker registration failed.");
+      }
+      const enabled = await enablePushNotifications();
+      setNotificationPermission(Notification.permission);
+
+      if (enabled && Notification.permission === "granted") {
+        toast({
+          title: "Notifications enabled",
+          description: "You will receive browser push alerts and reminders.",
+        });
+      } else if (Notification.permission === "denied") {
+        toast({
+          variant: "destructive",
+          title: "Notifications blocked",
+          description: "Please allow notifications in your browser settings.",
+        });
+      } else {
+        toast({
+          title: "Notification request dismissed",
+          description: "You can enable notifications later from the same tab.",
+        });
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to enable notifications",
+        description: error?.message || "Please try again later.",
+      });
+    } finally {
+      setIsNotificationLoading(false);
+    }
+  };
 
 
   const userDocRef = useMemoFirebase(
@@ -605,10 +663,53 @@ export default function ProfilePage() {
           <Card className="w-full bg-card/75 border border-primary/20 shadow-lg">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-primary font-headline">Notifications</CardTitle>
-              <CardDescription className="text-foreground/80 font-body">This feature will be added soon</CardDescription>
+              <CardDescription className="text-foreground/80 font-body">Enable browser alerts for reminders, appointment updates, and assistant messages.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-center text-foreground/60 py-12">Notifications will be intoduced in Version 1.1</p>
+              <div className="space-y-6">
+                <div className="rounded-3xl border border-border bg-background/80 p-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-lg font-semibold text-foreground">Browser Push Notifications</p>
+                      <p className="text-sm text-foreground/70 mt-1">Allow Stride to send you system notifications even when the dashboard tab is hidden.</p>
+                    </div>
+                    <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+                      {notificationPermission === "granted"
+                        ? "Enabled"
+                        : notificationPermission === "denied"
+                        ? "Blocked"
+                        : "Not requested"
+                      }
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <Button
+                      onClick={handleEnableBrowserNotifications}
+                      disabled={isNotificationLoading || notificationPermission === "granted"}
+                    >
+                      {notificationPermission === "granted"
+                        ? "Notifications enabled"
+                        : isNotificationLoading
+                        ? "Enabling..."
+                        : "Enable browser notifications"
+                      }
+                    </Button>
+                    {notificationPermission === "denied" && (
+                      <p className="text-sm text-foreground/70 max-w-xl">
+                        Notifications are blocked in your browser. Open your browser settings and allow notifications for this site to receive reminders and alerts.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-border bg-background/80 p-6">
+                  <p className="text-lg font-semibold text-foreground">Attention indicators</p>
+                  <p className="text-sm text-foreground/70 mt-1">
+                    When notifications are enabled, Stride will also update the tab title and favicon to alert you of new activity while the tab is not visible.
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         );

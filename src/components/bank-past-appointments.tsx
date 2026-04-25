@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Archive, Loader2 } from "lucide-react";
 import { useUser, useFirestore, useMemoFirebase } from "@/firebase/provider";
-import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, Timestamp, doc } from "firebase/firestore";
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardTitle, CardDescription } from "./ui/card";
 import { format, isBefore, startOfDay } from 'date-fns';
@@ -62,7 +62,10 @@ export default function BankPastAppointments() {
                     throw new Error("User document not found.");
                 }
 
-                const userData = userDoc.data();
+                const userData = userDoc.data() as { bankName?: string, branch?: string } | undefined;
+                if (!userData) {
+                    throw new Error("User data is inaccessible.");
+                }
                 const { bankName, branch } = userData;
 
                 if (!bankName || !branch) {

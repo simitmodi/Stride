@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { checklistData } from '@/lib/document-checklist-data';
 import type { ChecklistItem as ChecklistItemType } from '@/lib/document-checklist-data';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, FileText, CheckCircle2, Circle, Info, LayoutList, ChevronLeft, Check } from 'lucide-react';
+import { ArrowRight, ChevronRight, CheckCircle2, Circle, Info, LayoutList, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ShinyText from '@/components/ShinyText';
+import { FloatingDoodles } from '@/components/landing/FloatingDoodles';
 import { cn } from '@/lib/utils';
 
 /* ─── Spring configs ─── */
@@ -53,185 +54,6 @@ const contentRowVariants = {
       delay: 0.08 * i,
     },
   }),
-};
-
-/* ─── Side Background Decorations (Floating 3D elements for wide screens) ─── */
-const SideDecorations = () => {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden hidden xl:block">
-      {/* --- LEFT SIDE --- */}
-      <motion.div 
-        initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [-20, 20, -20], rotate: [0, 5, -5, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-[2%] top-[15%] w-[380px] h-[380px] opacity-100"
-        style={{ perspective: 1000 }}
-      >
-        <div 
-          className="w-full h-full rounded-full border-[32px] border-white/60 backdrop-blur-xl shadow-[0_30px_80px_rgba(79,70,229,0.25)] flex items-center justify-center relative" 
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(55deg) rotateY(15deg) rotateZ(-10deg)' }}
-        >
-          {/* Inner ring */}
-          <div className="absolute w-[240px] h-[240px] rounded-full border-[16px] border-indigo-200/70 shadow-inner" style={{ transform: 'translateZ(50px)' }} />
-          {/* Glowing core */}
-          <div className="absolute w-[140px] h-[140px] rounded-full bg-gradient-to-tr from-indigo-500/60 to-violet-500/60 blur-xl shadow-[0_0_60px_rgba(99,102,241,0.6)]" style={{ transform: 'translateZ(90px)' }} />
-          {/* Floating icon inside */}
-          <LayoutList className="absolute w-16 h-16 text-indigo-500" style={{ transform: 'translateZ(140px)' }} />
-        </div>
-      </motion.div>
-
-      <motion.div 
-        initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute left-[5%] bottom-[10%] w-[260px] h-[260px] opacity-90"
-        style={{ perspective: 1000 }}
-      >
-        <div 
-          className="w-full h-full rounded-[40px] bg-white/40 backdrop-blur-xl border-2 border-white/80 shadow-2xl shadow-indigo-900/20 flex items-center justify-center relative" 
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(30deg) rotateY(-20deg) rotateZ(15deg)' }}
-        >
-          <div className="absolute inset-5 rounded-[32px] border-[3px] border-dashed border-indigo-400/60" style={{ transform: 'translateZ(30px)' }} />
-          <FileText className="w-24 h-24 text-indigo-400" style={{ transform: 'translateZ(70px)' }} />
-        </div>
-      </motion.div>
-
-      {/* --- RIGHT SIDE --- */}
-      <motion.div 
-        initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [30, -30, 30], rotate: [0, -8, 8, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute right-[2%] top-[12%] w-[360px] h-[360px] opacity-100"
-        style={{ perspective: 1000 }}
-      >
-        <div 
-          className="w-full h-full bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-xl rounded-tr-[100px] rounded-bl-[100px] rounded-tl-[40px] rounded-br-[40px] border-2 border-white/90 shadow-[0_40px_100px_rgba(139,92,246,0.25)] flex items-center justify-center relative" 
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-25deg) rotateY(-20deg) rotateZ(5deg)' }}
-        >
-          <div className="w-[240px] h-[240px] bg-gradient-to-tr from-violet-400/50 to-rose-400/50 rounded-full blur-3xl absolute shadow-[0_0_80px_rgba(244,63,94,0.4)]" style={{ transform: 'translateZ(0px)' }} />
-          <div className="w-[300px] h-[300px] border-[3px] border-dashed border-white/80 rounded-tr-[90px] rounded-bl-[90px] rounded-tl-[32px] rounded-br-[32px] absolute" style={{ transform: 'translateZ(40px)' }} />
-          <CheckCircle2 className="w-28 h-28 text-violet-500" style={{ transform: 'translateZ(90px)' }} />
-        </div>
-      </motion.div>
-
-      <motion.div 
-        initial={{ y: 0, rotate: 0 }}
-        animate={{ y: [-25, 25, -25], rotate: [0, 15, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        className="absolute right-[6%] bottom-[12%] w-[240px] h-[240px] opacity-90"
-        style={{ perspective: 1000 }}
-      >
-        <div 
-          className="w-full h-full rounded-full border-[16px] border-rose-200/60 backdrop-blur-xl relative flex items-center justify-center shadow-[0_20px_60px_rgba(244,63,94,0.2)]" 
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(45deg) rotateY(30deg) rotateZ(-15deg)' }}
-        >
-           <div className="absolute w-[160px] h-[160px] rounded-full border-[8px] border-rose-300/70" style={{ transform: 'translateZ(35px)' }}/>
-           <div className="absolute w-[80px] h-[80px] rounded-full bg-rose-500/50 blur-xl shadow-[0_0_50px_rgba(244,63,94,0.6)]" style={{ transform: 'translateZ(70px)' }}/>
-           <Circle className="absolute w-14 h-14 text-rose-500" style={{ transform: 'translateZ(100px)' }} />
-        </div>
-      </motion.div>
-    </div>
-  );
-};
-
-/* ─── Document Illustration (3D-like / Animated) ─── */
-const DocumentIllustration = ({ activeCategory }: { activeCategory: number }) => {
-  return (
-    <div className="relative w-full aspect-square flex items-center justify-center select-none pointer-events-none" style={{ perspective: 1000 }}>
-      {/* Glow background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-violet-50/50 rounded-full blur-3xl scale-75" />
-
-      <motion.div
-        key={`doc-stack-${activeCategory}`}
-        initial={{ rotateX: 60, rotateZ: -20, y: 50, opacity: 0 }}
-        animate={{ rotateX: 60, rotateZ: -30, y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="relative w-48 h-64 xl:mt-12"
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        {/* Document Layers (bottom to top) */}
-        {[0, 1, 2, 3].map((layerIndex) => (
-          <motion.div
-            key={layerIndex}
-            initial={{ z: 0, y: 0, opacity: 0 }}
-            animate={{ 
-              z: layerIndex * 25,
-              y: -layerIndex * 15,
-              x: layerIndex * 12,
-              opacity: 1
-            }}
-            transition={{ type: "spring", stiffness: 120, damping: 15, delay: layerIndex * 0.1 }}
-            className={cn(
-              "absolute inset-0 rounded-2xl border flex items-center justify-center shadow-xl backdrop-blur-sm",
-              layerIndex === 3 ? "bg-white/95 border-indigo-100 shadow-indigo-600/10" :
-              layerIndex === 2 ? "bg-white/60 border-white/80 shadow-slate-900/5" :
-              layerIndex === 1 ? "bg-white/40 border-white/60 shadow-slate-900/5" :
-              "bg-white/20 border-white/40 shadow-slate-900/5"
-            )}
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {layerIndex === 3 && (
-              <div className="w-full h-full p-5 flex flex-col gap-4">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center shadow-sm">
-                  <FileText className="w-5 h-5 text-indigo-500" />
-                </div>
-                <div className="space-y-3 mt-2">
-                  <div className="h-1.5 w-3/4 rounded-full bg-slate-200" />
-                  <div className="h-1.5 w-full rounded-full bg-slate-100" />
-                  <div className="h-1.5 w-5/6 rounded-full bg-slate-100" />
-                  <div className="h-1.5 w-4/6 rounded-full bg-slate-100" />
-                </div>
-                <div className="mt-auto flex justify-between items-center">
-                  <div className="flex -space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-indigo-100 border-2 border-white" />
-                    <div className="w-6 h-6 rounded-full bg-violet-100 border-2 border-white" />
-                    <div className="w-6 h-6 rounded-full bg-rose-100 border-2 border-white" />
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center shadow-md">
-                    <CheckCircle2 className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {layerIndex < 3 && (
-              <div className="absolute inset-x-5 top-5 bottom-8 border-2 border-dashed border-slate-200/50 rounded-xl" />
-            )}
-          </motion.div>
-        ))}
-
-        {/* Floating badges */}
-        <motion.div
-           initial={{ z: 120, opacity: 0, scale: 0.5 }}
-           animate={{ z: 120, opacity: 1, scale: 1, y: [-5, 5, -5] }}
-           transition={{ 
-             y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-             opacity: { delay: 0.6 },
-             scale: { delay: 0.6, type: "spring" }
-           }}
-           className="absolute -right-6 -top-2 w-14 h-14 bg-white rounded-2xl shadow-xl shadow-rose-500/10 border border-rose-100 flex items-center justify-center"
-           style={{ transformStyle: 'preserve-3d' }}
-        >
-          <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center">
-            <span className="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50" />
-          </div>
-        </motion.div>
-
-        <motion.div
-           initial={{ z: 90, opacity: 0, scale: 0.5 }}
-           animate={{ z: 90, opacity: 1, scale: 1, y: [5, -5, 5] }}
-           transition={{ 
-             y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-             opacity: { delay: 0.8 },
-             scale: { delay: 0.8, type: "spring" }
-           }}
-           className="absolute -left-8 top-20 w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl shadow-violet-500/10 border border-violet-100 flex items-center justify-center"
-           style={{ transformStyle: 'preserve-3d' }}
-        >
-          <LayoutList className="w-7 h-7 text-violet-500" />
-        </motion.div>
-      </motion.div>
-    </div>
-  );
 };
 
 /* ─── Detail Content Renderer ─── */
@@ -400,15 +222,18 @@ export default function DocumentChecklistPage() {
   const optionalCount = selectedItem.content.filter(c => c.type === 'optional').length;
 
   return (
-    <div className="h-screen w-full bg-[#F4F4F8] relative overflow-hidden flex flex-col">
-      {/* ─── Background Decorative Elements ─── */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/15 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-[25%] right-[-15%] w-[60%] h-[60%] bg-violet-500/15 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-[-15%] left-[15%] w-[40%] h-[40%] bg-rose-500/15 rounded-full blur-[140px] pointer-events-none" />
+    <div className="w-full min-h-screen pb-12 relative overflow-hidden flex flex-col">
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <FloatingDoodles />
       </div>
-
-      <SideDecorations />
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
+        <style>{`
+          .ambient-glow { filter: blur(140px); border-radius: 9999px; position: fixed; }
+        `}</style>
+        <div className="ambient-glow w-[50vw] h-[50vh] bg-indigo-500/10 top-[-10%] left-[-10%]" />
+        <div className="ambient-glow w-[40vw] h-[40vh] bg-purple-500/10 bottom-[10%] right-[-5%]" />
+        <div className="ambient-glow w-[30vw] h-[30vh] bg-blue-400/5 top-[40%] right-[30%]" />
+      </div>
 
       {/* ─── Main Content: Split Layout ─── */}
       <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-[104px] pb-[160px] relative z-10 flex-1 flex flex-col min-h-0">
@@ -580,14 +405,9 @@ export default function DocumentChecklistPage() {
                 </div>
 
                 {/* Detail Content */}
-                <div className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col xl:flex-row gap-8 xl:gap-12 min-h-[300px] relative">
+                <div className="px-6 sm:px-8 py-6 sm:py-8 min-h-[300px] relative">
                   <div className="flex-1 relative z-10">
                     <DetailContent key={`${activeCategory}-${activeItem}`} item={selectedItem} />
-                  </div>
-                  
-                  {/* Decorative 3D Illustration to fill empty space */}
-                  <div className="hidden xl:flex w-[280px] shrink-0 items-center justify-center relative z-0">
-                    <DocumentIllustration activeCategory={activeCategory} />
                   </div>
                 </div>
 
