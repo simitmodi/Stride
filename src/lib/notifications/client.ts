@@ -77,11 +77,16 @@ export async function enablePushNotifications() {
   }
 
   try {
-    await fetch("/api/notifications/subscribe", {
+    const response = await fetch("/api/notifications/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(subscription),
     });
+
+    if (!response.ok) {
+      console.error("Failed to store push subscription", await response.text());
+      return false;
+    }
   } catch (error) {
     console.error("Failed to store push subscription", error);
     return false;
