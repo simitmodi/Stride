@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   enablePushNotifications,
   registerStrideServiceWorker,
-  sendWebPushNotification,
   type StrideNotificationPayload,
 } from "@/lib/notifications/client";
 
@@ -103,11 +102,24 @@ export default function NotificationManager() {
 
       try {
         if (document.hidden) {
-          await enablePushNotifications();
-          await sendWebPushNotification(payload);
+          // Show notifications directly to avoid relying on ephemeral server-side push stores.
+          const registration = await navigator.serviceWorker.getRegistration();
+          if (registration) {
+            await registration.showNotification(payload.title, {
+              body: payload.body,
+              icon: payload.icon ?? "/icon.png",
+              badge: payload.badge ?? "/icon.png",
+              data: { url: payload.url ?? "/dashboard" },
+            });
+          } else {
+            new Notification(payload.title, {
+              body: payload.body,
+              icon: payload.icon ?? "/icon.png",
+            });
+          }
         }
       } catch (error) {
-        console.error("Web push send failed", error);
+        console.error("Notification display failed", error);
       }
     };
 

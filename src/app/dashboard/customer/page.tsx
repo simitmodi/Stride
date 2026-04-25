@@ -16,7 +16,6 @@ import { CustomerAppointmentDetailsModal } from "@/components/customer-appointme
 import { FloatingDoodles } from "@/components/landing/FloatingDoodles";
 import { motion, AnimatePresence } from "framer-motion";
 import { isAppointmentUpcoming } from "@/lib/utils";
-import { ChatWidget } from "@/components/chat-widget";
 
 const INDIGO = "#4F46E5";
 
@@ -308,7 +307,7 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
   return (
     <div className="relative pt-2 pl-3">
       {/* Dynamic Connector line with gradient */}
-      <div className="absolute left-[21px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-slate-100 via-indigo-100 to-slate-100 opacity-80" />
+      <div className="absolute left-[19px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-slate-100 via-indigo-100 to-slate-100 opacity-80" />
 
       <div className="space-y-6">
         <AnimatePresence mode="popLayout">
@@ -348,9 +347,9 @@ function ActivityTimeline({ items }: { items: AppointmentData[] }) {
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <p className="text-sm font-bold text-slate-700 leading-tight group-hover:text-indigo-600 transition-colors">{ev.specificService}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <p className="text-[11px] font-medium text-slate-400">{format(ev.date.toDate(), "MMM d")} · {ev.bankName}</p>
-                  <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md"
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[11px] font-medium text-slate-400 min-w-0 truncate">{format(ev.date.toDate(), "MMM d")} · {ev.bankName}</p>
+                  <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md shrink-0"
                     style={{ background: `${ev.color}10`, color: ev.color, border: `1px solid ${ev.color}20` }}>
                     {ev.label}
                   </span>
@@ -535,8 +534,6 @@ export default function CustomerDashboardPage() {
         />
       )}
 
-      {/* AI Chat Widget */}
-      <ChatWidget />
     </div>
   );
 }

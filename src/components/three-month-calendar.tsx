@@ -262,8 +262,9 @@ export default function ThreeMonthCalendar({
                 </button>
             </div>
 
-            {/* 3-month grid: 20 | 60 | 20 */}
-            <div className="relative overflow-hidden w-full px-2 py-4 h-[250px]">
+            {/* 3-month grid: 20 | 60 | 20
+                Fixed height was too short for months spanning 5-6 weeks, clipping the last row. */}
+            <div className="relative overflow-hidden w-full px-2 py-4 h-[320px]">
                 <AnimatePresence initial={false} custom={slideDirection}>
                     <motion.div
                         key={`${centerYear}-${centerMonth}`}
